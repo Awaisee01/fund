@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -9,7 +8,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
               <img 
-                src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
+                src="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png" 
                 alt="Funding For Scotland Logo" 
                 className="h-12 w-auto object-contain"
               />
