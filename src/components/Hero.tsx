@@ -1,6 +1,7 @@
 
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 interface HeroProps {
   title: string;
@@ -85,18 +86,42 @@ const Hero = ({
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
               <h3 className="text-2xl font-bold mb-6">Quick Eligibility Check</h3>
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg">
-                  <span>ECO4 Grants</span>
-                  <span className="text-green-300 font-semibold">Up to £25,000</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg">
-                  <span>Solar Installations</span>
-                  <span className="text-green-300 font-semibold">Up to £15,000</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg">
-                  <span>Boiler Replacement</span>
-                  <span className="text-green-300 font-semibold">Up to £7,000</span>
-                </div>
+                <Button 
+                  asChild 
+                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  variant="outline"
+                >
+                  <Link to="/eco4">
+                    ECO4
+                  </Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  variant="outline"
+                >
+                  <Link to="/solar">
+                    Solar Panels
+                  </Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  variant="outline"
+                >
+                  <Link to="/gas-boilers">
+                    Gas Boilers
+                  </Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  variant="outline"
+                >
+                  <Link to="/home-improvements">
+                    Home Improvements
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
