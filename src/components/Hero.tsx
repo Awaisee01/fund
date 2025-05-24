@@ -83,12 +83,12 @@ const Hero = ({
           </div>
           
           <div className="hidden lg:block">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <h3 className="text-2xl font-bold mb-6">Quick Eligibility Check</h3>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 aspect-square flex flex-col justify-center">
+              <h3 className="text-2xl font-bold mb-6 text-center">Quick Eligibility Check</h3>
               <div className="space-y-4">
                 <Button 
                   asChild 
-                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
                   variant="outline"
                 >
                   <Link to="/eco4">
@@ -97,7 +97,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
                   variant="outline"
                 >
                   <Link to="/solar">
@@ -106,7 +106,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
                   variant="outline"
                 >
                   <Link to="/gas-boilers">
@@ -115,7 +115,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-start p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
                   variant="outline"
                 >
                   <Link to="/home-improvements">
