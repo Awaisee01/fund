@@ -64,10 +64,10 @@ const Hero = ({
                 className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 text-lg"
                 asChild
               >
-                <a href={ctaLink}>
+                <Link to={ctaLink}>
                   {ctaText}
                   <ArrowRight className="ml-2 h-5 w-5" />
-                </a>
+                </Link>
               </Button>
               <Button 
                 size="lg" 
@@ -75,9 +75,10 @@ const Hero = ({
                 className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 text-lg"
                 asChild
               >
-                <a href="tel:+441234567890">
-                  Call Now: 0123 456 7890
-                </a>
+                <Link to="/contact">
+                  Submit Enquiry Form
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Phone, Mail, MapPin, Clock, CheckCircle } from 'lucide-react';
+import { Mail, MapPin, Clock, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Contact = () => {
@@ -42,7 +42,7 @@ const Contact = () => {
             Get Your Free Consultation
           </h1>
           <p className="text-xl lg:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
-            Ready to access thousands in grants and funding? Our expert team will assess your eligibility 
+            Ready to access thousands in grants and funding? Submit your enquiry below and our expert team will assess your eligibility 
             and guide you through the entire process - completely free of charge.
           </p>
         </div>
@@ -153,16 +153,6 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">Phone</h3>
-                      <p className="text-gray-600">0123 456 7890</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                       <Mail className="w-6 h-6 text-green-600" />
                     </div>
@@ -187,8 +177,8 @@ const Contact = () => {
                       <Clock className="w-6 h-6 text-orange-600" />
                     </div>
                     <div>
-                      <h3 className="font-semibold">Business Hours</h3>
-                      <p className="text-gray-600">Mon-Fri: 8AM-6PM<br />Sat: 9AM-4PM</p>
+                      <h3 className="font-semibold">Response Time</h3>
+                      <p className="text-gray-600">We respond to all enquiries<br />within 24 hours</p>
                     </div>
                   </div>
                 </CardContent>
@@ -201,7 +191,7 @@ const Contact = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {[
-                      "We'll call you within 24 hours to discuss your needs",
+                      "We'll email you within 24 hours to discuss your needs",
                       "Free property assessment and eligibility check",
                       "Detailed explanation of available funding options",
                       "Professional installation arranged at no cost to you"

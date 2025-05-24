@@ -19,13 +19,13 @@ const Footer = () => {
             </p>
             <div className="space-y-2">
               <p className="text-gray-300">
-                <span className="font-semibold">Phone:</span> 0123 456 7890
-              </p>
-              <p className="text-gray-300">
                 <span className="font-semibold">Email:</span> info@fundingforscotland.co.uk
               </p>
               <p className="text-gray-300">
                 <span className="font-semibold">Address:</span> Glasgow, Scotland
+              </p>
+              <p className="text-gray-300">
+                <span className="font-semibold">Contact:</span> Use our enquiry form for all enquiries
               </p>
             </div>
           </div>

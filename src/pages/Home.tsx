@@ -117,9 +117,10 @@ const Home = () => {
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold" asChild>
-              <a href="tel:+441234567890">
-                Call: 0123 456 7890
-              </a>
+              <Link to="/contact">
+                Submit Enquiry Form
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
           </div>
         </div>
