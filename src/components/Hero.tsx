@@ -60,31 +60,6 @@ const Hero = ({
           </div>
           
           <div className="hidden lg:block relative">
-            {/* Arrow and "Start here" text */}
-            <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 z-10">
-              <span className="text-white font-semibold text-lg whitespace-nowrap">Start here</span>
-              <svg 
-                width="60" 
-                height="40" 
-                viewBox="0 0 60 40" 
-                fill="none" 
-                className="text-white"
-              >
-                <path 
-                  d="M5 20 Q20 5 35 15 Q45 20 50 25 L45 28 L55 35 L45 32 L40 28 Q30 23 20 25 Q10 27 5 20" 
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  className="opacity-90"
-                />
-                <polygon 
-                  points="50,25 55,35 45,32" 
-                  fill="currentColor"
-                  className="opacity-90"
-                />
-              </svg>
-            </div>
-            
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20 flex flex-col justify-center">
               <h3 className="text-2xl font-bold mb-6 text-center">Quick Eligibility Check</h3>
               <div className="space-y-4">
