@@ -1,4 +1,3 @@
-
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,30 +9,26 @@ const Home = () => {
   const services = [
     {
       icon: HomeIcon,
-      title: "ECO4 Grants",
-      description: "Access up to £25,000 in government grants for insulation, heating, and energy efficiency improvements.",
-      amount: "Up to £25,000",
+      title: "ECO4 Funding",
+      description: "Heating upgrades, solar panels, and insulation completely free of charge. See if you qualify.",
       link: "/eco4"
     },
     {
       icon: Zap,
-      title: "Solar Panel Installation",
-      description: "Free solar panel installations through government schemes. Reduce your energy bills significantly.",
-      amount: "Up to £15,000",
+      title: "Solar Panels",
+      description: "Free Solar Panels through a government backed scheme to help reduce your energy bills.",
       link: "/solar"
     },
     {
       icon: Flame,
       title: "Gas Boiler Replacement",
-      description: "Replace your old boiler with a new, energy-efficient model through various funding schemes.",
-      amount: "Up to £7,000",
+      description: "Replace your old boiler with a new energy efficient model through this funding scheme.",
       link: "/gas-boilers"
     },
     {
       icon: Wrench,
       title: "Home Improvements",
-      description: "Comprehensive home improvement grants covering windows, doors, roofing, and rendering.",
-      amount: "Up to £20,000",
+      description: "Including rendering, re-roofing, windows, and doors. Access grants for home improvements here.",
       link: "/home-improvements"
     }
   ];
@@ -78,7 +73,6 @@ const Home = () => {
                       </div>
                       <div>
                         <CardTitle className="text-xl">{service.title}</CardTitle>
-                        <p className="text-green-600 font-semibold">{service.amount}</p>
                       </div>
                     </div>
                   </CardHeader>
