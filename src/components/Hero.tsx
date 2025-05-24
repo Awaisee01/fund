@@ -59,7 +59,25 @@ const Hero = ({
             )}
           </div>
           
-          <div className="hidden lg:block">
+          <div className="hidden lg:block relative">
+            {/* Arrow and "Start here" text */}
+            <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 z-10">
+              <span className="text-yellow-300 font-semibold text-lg whitespace-nowrap">Start here</span>
+              <svg 
+                width="40" 
+                height="40" 
+                viewBox="0 0 40 40" 
+                fill="none" 
+                className="text-yellow-300"
+              >
+                <path 
+                  d="M8 12 Q20 4 32 12 L28 16 L32 20 L20 28 L16 24 L20 20 Z" 
+                  fill="currentColor"
+                  className="opacity-90"
+                />
+              </svg>
+            </div>
+            
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20 flex flex-col justify-center">
               <h3 className="text-2xl font-bold mb-6 text-center">Quick Eligibility Check</h3>
               <div className="space-y-4">
