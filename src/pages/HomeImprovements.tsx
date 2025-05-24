@@ -1,7 +1,7 @@
 
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home, Window, Paintbrush2, Shield, DoorOpen, Hammer } from 'lucide-react';
+import { Home, RectangleEllipsis, Paintbrush2, Shield, DoorOpen, Hammer } from 'lucide-react';
 
 const HomeImprovements = () => {
   const benefits = [
@@ -13,7 +13,7 @@ const HomeImprovements = () => {
 
   const improvements = [
     {
-      icon: Window,
+      icon: RectangleEllipsis,
       title: "Windows & Doors",
       description: "Energy-efficient double or triple glazing, composite doors, and UPVC installations.",
       funding: "Up to £8,000"
