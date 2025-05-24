@@ -1,3 +1,4 @@
+
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,7 +46,9 @@ const Home = () => {
         description="We help people in Scotland access local authority schemes, government backed schemes, and other grants around Scotland. Chat with our advisors today and find out what you're entitled to."
         benefits={[
           "Free eligibility assessment",
-          "No fees or charges, just free advice"
+          "Nothing to pay, we're a free advice group",
+          "Guidance through the whole process",
+          "Friendly team ready to chat"
         ]}
       />
       
