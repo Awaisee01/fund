@@ -65,7 +65,7 @@ const Hero = ({
               <div className="space-y-4">
                 <Button 
                   asChild 
-                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
                   variant="outline"
                 >
                   <Link to="/eco4">
@@ -74,7 +74,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
                   variant="outline"
                 >
                   <Link to="/solar">
@@ -83,7 +83,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
                   variant="outline"
                 >
                   <Link to="/gas-boilers">
@@ -92,7 +92,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
                   variant="outline"
                 >
                   <Link to="/home-improvements">
