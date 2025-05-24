@@ -25,7 +25,7 @@ const Navigation = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <img 
-                src="/lovable-uploads/7100d1ba-171c-40b3-a20d-23372255d771.png" 
+                src="/lovable-uploads/558d03ed-3b5e-4c76-9fe1-4c368acff5ad.png" 
                 alt="Funding For Scotland Logo" 
                 className="h-12 w-auto object-contain"
               />
