@@ -1,4 +1,3 @@
-
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,13 +41,11 @@ const Home = () => {
     <div>
       <Hero
         title="Unlock Scottish Grants & Funding"
-        subtitle="For Your Home Improvements"
-        description="We help Scottish homeowners access government grants, council funding, and energy company schemes worth up to £25,000. From ECO4 grants to solar installations, we handle everything for you."
+        subtitle=""
+        description="We help people in Scotland access local authority schemes, government backed schemes, and other grants around Scotland. Chat with our advisors today and find out what you're entitled to."
         benefits={[
           "Free eligibility assessment",
-          "No upfront costs or hidden fees",
-          "Expert guidance through entire process",
-          "Access to exclusive Scottish schemes"
+          "No fees or charges, just free advice"
         ]}
       />
       
