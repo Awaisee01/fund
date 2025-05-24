@@ -83,7 +83,7 @@ const Hero = ({
           </div>
           
           <div className="hidden lg:block">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 aspect-square flex flex-col justify-center">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20 flex flex-col justify-center">
               <h3 className="text-2xl font-bold mb-6 text-center">Quick Eligibility Check</h3>
               <div className="space-y-4">
                 <Button 
