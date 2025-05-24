@@ -7,13 +7,12 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
+            <div className="flex items-center mb-4">
               <img 
                 src="/lovable-uploads/7100d1ba-171c-40b3-a20d-23372255d771.png" 
                 alt="Funding For Scotland Logo" 
-                className="w-10 h-10 object-contain"
+                className="h-12 w-auto object-contain"
               />
-              <span className="text-xl font-bold">Funding For Scotland</span>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
               Scotland's leading consultancy for homeowner grants and funding. We help you access government and local authority schemes for home improvements, energy efficiency, and renewable energy installations.

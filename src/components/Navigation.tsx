@@ -23,13 +23,12 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center">
               <img 
                 src="/lovable-uploads/7100d1ba-171c-40b3-a20d-23372255d771.png" 
                 alt="Funding For Scotland Logo" 
-                className="w-10 h-10 object-contain"
+                className="h-12 w-auto object-contain"
               />
-              <span className="text-xl font-bold text-gray-900">Funding For Scotland</span>
             </Link>
           </div>
 
