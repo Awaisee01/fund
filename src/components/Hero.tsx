@@ -57,30 +57,6 @@ const Hero = ({
                 </ul>
               </div>
             )}
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 text-lg"
-                asChild
-              >
-                <Link to={ctaLink}>
-                  {ctaText}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 text-lg"
-                asChild
-              >
-                <Link to="/contact">
-                  Submit Enquiry Form
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
           </div>
           
           <div className="hidden lg:block">
@@ -121,6 +97,19 @@ const Hero = ({
                 >
                   <Link to="/home-improvements">
                     Home Improvements
+                  </Link>
+                </Button>
+              </div>
+              
+              <div className="mt-8 text-center">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 text-lg"
+                  asChild
+                >
+                  <Link to={ctaLink}>
+                    {ctaText}
+                    <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
               </div>
