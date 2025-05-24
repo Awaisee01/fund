@@ -24,9 +24,11 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">F</span>
-              </div>
+              <img 
+                src="/lovable-uploads/7100d1ba-171c-40b3-a20d-23372255d771.png" 
+                alt="Funding For Scotland Logo" 
+                className="w-10 h-10 object-contain"
+              />
               <span className="text-xl font-bold text-gray-900">Funding For Scotland</span>
             </Link>
           </div>
