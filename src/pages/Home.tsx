@@ -104,7 +104,7 @@ const Home = () => {
             and guide you through the entire application process - completely free of charge.
           </p>
           <div className="flex justify-center">
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold" asChild>
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 px-8 py-4 text-lg font-semibold" asChild>
               <Link to="/contact">
                 Submit Enquiry Form
                 <ArrowRight className="ml-2 h-5 w-5" />
