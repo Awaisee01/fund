@@ -4,24 +4,24 @@ import { Shield, Award, Users, CheckCircle } from 'lucide-react';
 const TrustBadges = () => {
   const badges = [
     {
-      icon: Shield,
-      title: "Fully Accredited",
-      description: "Certified consultants with government recognition"
-    },
-    {
-      icon: Award,
-      title: "5-Star Service",
-      description: "Rated excellent by over 1,000 satisfied customers"
+      icon: CheckCircle,
+      title: "Free Service",
+      description: "Completely free consultation\nWe will never charge you for anything"
     },
     {
       icon: Users,
       title: "Expert Team",
-      description: "15+ years experience in Scottish funding schemes"
+      description: "10+ Years helping with Scottish grant and funding schemes"
     },
     {
-      icon: CheckCircle,
-      title: "No Upfront Costs",
-      description: "Free consultation and eligibility assessment"
+      icon: Shield,
+      title: "Fully Accredited",
+      description: "Any installers, contractors, or companies working with us have been carefully vetted"
+    },
+    {
+      icon: Award,
+      title: "5-Star Service",
+      description: "We've helped thousands of people successfully access millions in funding"
     }
   ];
 
@@ -33,7 +33,7 @@ const TrustBadges = () => {
             Why Choose Funding For Scotland?
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            We're Scotland's most trusted funding consultancy, helping homeowners access millions in grants and funding.
+            We are Scotland's trusted funding consultancy, helping homeowners, landlords, and tenants access millions in available grants and funding.
           </p>
         </div>
         
@@ -48,7 +48,7 @@ const TrustBadges = () => {
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {badge.title}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 whitespace-pre-line">
                   {badge.description}
                 </p>
               </div>
