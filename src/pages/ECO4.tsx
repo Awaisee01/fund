@@ -1,3 +1,4 @@
+
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
@@ -157,7 +158,9 @@ const ECO4 = () => {
                 'Cancer Treatment/Diagnosis',
                 'Autoimmune Conditions',
                 'Over 65 years of age',
-                'On Benefits'
+                'On Benefits',
+                'Income below £31,000 per year',
+                'Children under 5 years of age'
               ].map((condition, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
