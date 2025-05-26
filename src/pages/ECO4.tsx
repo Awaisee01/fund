@@ -1,6 +1,7 @@
+
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Home, Thermometer, Zap, Shield } from 'lucide-react';
+import { CheckCircle, Home, Thermometer, Zap, Shield, Sun } from 'lucide-react';
 
 const ECO4 = () => {
   const benefits = [
@@ -51,26 +52,11 @@ const ECO4 = () => {
               What Does ECO4 Cover?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              ECO4 is the government's flagship energy efficiency scheme, providing comprehensive home improvements 
-              to make your property warmer, more comfortable, and cheaper to heat.
+              This fully funded scheme provides a comprehensive improvement to your home's energy performance rating. Making homes more comfortable and cheaper to run.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <Card className="text-center">
-              <CardHeader>
-                <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Home className="w-8 h-8 text-blue-600" />
-                </div>
-                <CardTitle>Insulation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Loft insulation, cavity wall insulation, and solid wall insulation to keep heat in and reduce energy bills.
-                </CardDescription>
-              </CardContent>
-            </Card>
-            
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             <Card className="text-center">
               <CardHeader>
                 <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
@@ -81,6 +67,34 @@ const ECO4 = () => {
               <CardContent>
                 <CardDescription>
                   New boilers, heat pumps, and heating system upgrades to improve efficiency and reduce costs.
+                </CardDescription>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center">
+              <CardHeader>
+                <div className="w-16 h-16 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center">
+                  <Sun className="w-8 h-8 text-yellow-600" />
+                </div>
+                <CardTitle>Solar Panels</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Solar PV (photovoltaic) panels convert light (photons) to electrons making them more suitable to Scotland's climate.
+                </CardDescription>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center">
+              <CardHeader>
+                <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Home className="w-8 h-8 text-blue-600" />
+                </div>
+                <CardTitle>Insulation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Loft insulation, cavity wall insulation, and solid wall insulation to keep heat in and reduce energy bills.
                 </CardDescription>
               </CardContent>
             </Card>
