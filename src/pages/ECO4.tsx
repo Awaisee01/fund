@@ -1,5 +1,3 @@
-
-
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
@@ -149,7 +147,10 @@ const ECO4 = () => {
           
           <div className="mt-16 text-center">
             <p className="text-xl text-gray-900 max-w-4xl mx-auto">
-              You <span className="underline">do not</span> need to be on benefits to qualify for ECO4. Any <span className="underline">one</span> criteria from the two boxes below will qualify.
+              You <span className="underline">do not</span> need to be on benefits to qualify for ECO4.
+            </p>
+            <p className="text-xl text-gray-900 max-w-4xl mx-auto mt-2">
+              Any <span className="underline">one</span> criteria from the two boxes below will qualify.
             </p>
           </div>
           
@@ -206,4 +207,3 @@ const ECO4 = () => {
 };
 
 export default ECO4;
-
