@@ -1,3 +1,4 @@
+
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
@@ -146,6 +147,29 @@ const ECO4 = () => {
           </div>
           
           <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Health Conditions Include:
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                'Respiratory Conditions',
+                'Cardiovascular Conditions',
+                'Limited Mobility',
+                'Cancer Treatment/Diagnosis',
+                'Autoimmune Conditions',
+                'Blue Badge Holders',
+                'Disability',
+                'Over 65 years of age'
+              ].map((condition, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700">{condition}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Qualifying Benefits Include:
             </h3>
