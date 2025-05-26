@@ -1,7 +1,8 @@
 
+
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Home, Thermometer, Zap, Shield, Sun } from 'lucide-react';
+import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
 
 const ECO4 = () => {
   const benefits = [
@@ -15,7 +16,7 @@ const ECO4 = () => {
     {
       icon: Home,
       title: "Property Type",
-      description: "Own or privately rent your home in Scotland"
+      description: "Open to homeowners, private tenants, and landlords"
     },
     {
       icon: Thermometer,
@@ -23,14 +24,14 @@ const ECO4 = () => {
       description: "Property has EPC rating of D, E, F, or G"
     },
     {
-      icon: Shield,
-      title: "Benefits",
-      description: "Receive certain benefits or have low household income"
+      icon: Heart,
+      title: "Health Conditions",
+      description: "See list of health conditions below"
     },
     {
-      icon: Zap,
-      title: "Health Conditions",
-      description: "Vulnerable to cold or have certain health conditions"
+      icon: Shield,
+      title: "Benefits",
+      description: "Receive any of the benefits listed below or have household income below £31,000 per year"
     }
   ];
 
@@ -120,10 +121,10 @@ const ECO4 = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              ECO4 Eligibility Requirements
+              ECO4 Qualifying Criteria
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Check if you qualify for ECO4 funding. We'll verify your eligibility and handle the entire application process for you.
+              If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
             </p>
           </div>
           
@@ -176,3 +177,4 @@ const ECO4 = () => {
 };
 
 export default ECO4;
+
