@@ -145,18 +145,9 @@ const ECO4 = () => {
             })}
           </div>
           
-          <div className="mt-16 text-center">
-            <p className="text-xl text-gray-900 max-w-4xl mx-auto">
-              You <span className="underline">do not</span> need to be on benefits to qualify for ECO4.
-            </p>
-            <p className="text-xl text-gray-900 max-w-4xl mx-auto mt-2">
-              Any <span className="underline">one</span> criteria from the two boxes below will qualify.
-            </p>
-          </div>
-          
           <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Health Conditions Include:
+              Eligibility Criteria Include:
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
@@ -165,37 +156,12 @@ const ECO4 = () => {
                 'Limited Mobility',
                 'Cancer Treatment/Diagnosis',
                 'Autoimmune Conditions',
-                'Blue Badge Holders',
-                'Disability',
-                'Over 65 years of age'
+                'Over 65 years of age',
+                'On Benefits'
               ].map((condition, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
                   <span className="text-gray-700">{condition}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Qualifying Benefits Include:
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                'Universal Credit',
-                'Employment and Support Allowance',
-                'Jobseeker\'s Allowance',
-                'Income Support',
-                'Working Tax Credit',
-                'Child Tax Credit',
-                'Pension Credit',
-                'Housing Benefit',
-                'Council Tax Reduction'
-              ].map((benefit, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                  <span className="text-gray-700">{benefit}</span>
                 </div>
               ))}
             </div>
