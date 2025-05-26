@@ -1,14 +1,13 @@
-
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield } from 'lucide-react';
 
 const ECO4 = () => {
   const benefits = [
-    "Free home insulation (loft, cavity wall, solid wall)",
-    "Free heating system upgrades and replacements",
-    "Energy-efficient windows and doors",
-    "Smart heating controls and thermostats"
+    "Heating upgrades",
+    "Solar panels",
+    "Insulation",
+    "Heating controls and thermostats"
   ];
 
   const eligibilityRequirements = [
@@ -37,9 +36,9 @@ const ECO4 = () => {
   return (
     <div>
       <Hero
-        title="ECO4 Grants"
-        subtitle="Up to £25,000 in Free Home Improvements"
-        description="The ECO4 scheme provides funding for energy efficiency improvements to help reduce your heating bills and make your home warmer. As approved consultants, we'll handle your entire application process."
+        title="ECO4 Funding"
+        subtitle="Completely free heating upgrades, solar panels, and insulation"
+        description="The primary goal of the ECO4 scheme is to improve energy efficiency in homes, reduce carbon emissions, tackle fuel poverty, and support the UK's commitment to net-zero carbon emissions by 2050."
         benefits={benefits}
         ctaText="Check ECO4 Eligibility"
         backgroundImage="https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=1200&q=80"
