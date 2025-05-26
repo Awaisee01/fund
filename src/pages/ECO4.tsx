@@ -1,5 +1,3 @@
-
-
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
@@ -26,7 +24,7 @@ const ECO4 = () => {
     {
       icon: Heart,
       title: "Health Conditions",
-      description: "See list of health conditions below"
+      description: "Including respiratory conditions, cardiovascular conditions and many more. See full list below"
     },
     {
       icon: Shield,
@@ -177,4 +175,3 @@ const ECO4 = () => {
 };
 
 export default ECO4;
-
