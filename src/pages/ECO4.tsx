@@ -1,4 +1,5 @@
 
+
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
@@ -146,7 +147,13 @@ const ECO4 = () => {
             })}
           </div>
           
-          <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
+          <div className="mt-16 text-center">
+            <p className="text-xl text-gray-900 max-w-4xl mx-auto">
+              You <span className="underline">do not</span> need to be on benefits to qualify for ECO4. Any <span className="underline">one</span> criteria from the two boxes below will qualify.
+            </p>
+          </div>
+          
+          <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Health Conditions Include:
             </h3>
@@ -199,3 +206,4 @@ const ECO4 = () => {
 };
 
 export default ECO4;
+
