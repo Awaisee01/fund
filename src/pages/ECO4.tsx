@@ -1,3 +1,4 @@
+
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
@@ -41,7 +42,7 @@ const ECO4 = () => {
         description="The primary goal of the ECO4 scheme is to improve energy efficiency in homes, reduce carbon emissions, tackle fuel poverty, and support the UK's commitment to net-zero carbon emissions by 2050."
         benefits={benefits}
         ctaText="Check ECO4 Eligibility"
-        backgroundImage="/lovable-uploads/c25568e5-aa08-49fe-be66-3cb4e23aaf3c.png"
+        backgroundImage="/lovable-uploads/1f7f58ed-b181-46bc-99aa-ee7dbac4a1b7.png"
       />
       
       <section className="py-20 bg-white">
