@@ -14,7 +14,7 @@ const Footer = () => {
               />
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
-              Scotland's leading consultancy for homeowner grants and funding. We help you access government and local authority schemes for home improvements, energy efficiency, and renewable energy installations.
+              Scotland's free consultancy for residential grants and funding. We help you access government backed, local authority, and private company schemes for home improvements, energy efficiency upgrades, and renewable energy installations.
             </p>
             <div className="space-y-2">
               <p className="text-gray-300">
