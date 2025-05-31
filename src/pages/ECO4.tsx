@@ -1,9 +1,20 @@
-
+import { useEffect, useState } from 'react';
 import Hero from '@/components/Hero';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
 
 const ECO4 = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const benefits = [
     "Heating upgrades",
     "Solar panels",
@@ -36,14 +47,63 @@ const ECO4 = () => {
 
   return (
     <div>
-      <Hero
-        title="ECO4 Funding"
-        subtitle="Completely free heating upgrades, solar panels, and insulation"
-        description="The primary goal of the ECO4 scheme is to improve energy efficiency in homes, reduce carbon emissions, tackle fuel poverty, and support the UK's commitment to net-zero carbon emissions by 2050."
-        benefits={benefits}
-        ctaText="Check ECO4 Eligibility"
-        backgroundImage="/lovable-uploads/1f7f58ed-b181-46bc-99aa-ee7dbac4a1b7.png"
-      />
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-black opacity-20"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30"
+          style={{ 
+            backgroundImage: `url(/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png)`,
+            transform: `translateY(${scrollY * 0.5}px)`
+          }}
+        ></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+                ECO4 Funding
+              </h1>
+              <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
+                Completely free heating upgrades, solar panels, and insulation
+              </p>
+              <p className="text-lg mb-8 text-blue-50 leading-relaxed">
+                The primary goal of the ECO4 scheme is to improve energy efficiency in homes, reduce carbon emissions, tackle fuel poverty, and support the UK's commitment to net-zero carbon emissions by 2050.
+              </p>
+              
+              <div className="mb-8">
+                <ul className="space-y-3">
+                  {benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-center space-x-3">
+                      <CheckCircle className="h-6 w-6 text-green-300 flex-shrink-0" />
+                      <span className="text-blue-50">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            
+            <div className="hidden lg:block relative">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20 flex flex-col justify-center">
+                <h3 className="text-2xl font-bold mb-6 text-center">Quick Eligibility Check</h3>
+                <div className="space-y-4">
+                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
+                    ECO4
+                  </button>
+                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
+                    Solar Panels
+                  </button>
+                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
+                    Gas Boilers
+                  </button>
+                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
+                    Home Improvements
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
