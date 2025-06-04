@@ -28,9 +28,9 @@ const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <div>
-        <Label htmlFor="fullName" className="text-white text-sm font-medium">
+        <Label htmlFor="fullName" className="text-white text-xs font-medium">
           Full Name
         </Label>
         <Input
@@ -39,14 +39,14 @@ const ContactForm = () => {
           type="text"
           value={formData.fullName}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
           placeholder="Enter your full name"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="phone" className="text-white text-sm font-medium">
+        <Label htmlFor="phone" className="text-white text-xs font-medium">
           Phone
         </Label>
         <Input
@@ -55,14 +55,14 @@ const ContactForm = () => {
           type="tel"
           value={formData.phone}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
           placeholder="Enter your phone number"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="email" className="text-white text-sm font-medium">
+        <Label htmlFor="email" className="text-white text-xs font-medium">
           Email
         </Label>
         <Input
@@ -71,14 +71,14 @@ const ContactForm = () => {
           type="email"
           value={formData.email}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
           placeholder="Enter your email"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="address" className="text-white text-sm font-medium">
+        <Label htmlFor="address" className="text-white text-xs font-medium">
           Address
         </Label>
         <Input
@@ -87,14 +87,14 @@ const ContactForm = () => {
           type="text"
           value={formData.address}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
           placeholder="Enter your address"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="postCode" className="text-white text-sm font-medium">
+        <Label htmlFor="postCode" className="text-white text-xs font-medium">
           Post Code
         </Label>
         <Input
@@ -103,7 +103,7 @@ const ContactForm = () => {
           type="text"
           value={formData.postCode}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
           placeholder="Enter your post code"
           required
         />
@@ -111,7 +111,7 @@ const ContactForm = () => {
       
       <Button
         type="submit"
-        className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border"
+        className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm"
         variant="outline"
       >
         Submit
