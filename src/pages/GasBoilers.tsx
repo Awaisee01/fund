@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Hero from '@/components/Hero';
+import ContactForm from '@/components/ContactForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flame, ThermometerSun, PoundSterling, Shield, Wrench, Clock, CheckCircle } from 'lucide-react';
 
@@ -84,21 +84,8 @@ const GasBoilers = () => {
             
             <div className="hidden lg:block relative">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20 flex flex-col justify-center">
-                <h3 className="text-2xl font-bold mb-6 text-center">Quick Eligibility Check</h3>
-                <div className="space-y-4">
-                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
-                    ECO4
-                  </button>
-                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
-                    Solar Panels
-                  </button>
-                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
-                    Gas Boilers
-                  </button>
-                  <button className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 border rounded-lg transition-all duration-200">
-                    Home Improvements
-                  </button>
-                </div>
+                <h3 className="text-2xl font-bold mb-6 text-center">Enquire Here</h3>
+                <ContactForm />
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Hero from '@/components/Hero';
+import ContactForm from '@/components/ContactForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sun, Battery, PoundSterling, Leaf, Home, Calculator, CheckCircle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -86,45 +86,8 @@ const Solar = () => {
             
             <div className="hidden lg:block relative">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20 flex flex-col justify-center">
-                <h3 className="text-2xl font-bold mb-6 text-center">Quick Eligibility Check</h3>
-                <div className="space-y-4">
-                  <Button 
-                    asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
-                    variant="outline"
-                  >
-                    <Link to="/eco4">
-                      ECO4
-                    </Link>
-                  </Button>
-                  <Button 
-                    asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
-                    variant="outline"
-                  >
-                    <Link to="/solar">
-                      Solar Panels
-                    </Link>
-                  </Button>
-                  <Button 
-                    asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
-                    variant="outline"
-                  >
-                    <Link to="/gas-boilers">
-                      Gas Boilers
-                    </Link>
-                  </Button>
-                  <Button 
-                    asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
-                    variant="outline"
-                  >
-                    <Link to="/home-improvements">
-                      Home Improvements
-                    </Link>
-                  </Button>
-                </div>
+                <h3 className="text-2xl font-bold mb-6 text-center">Enquire Here</h3>
+                <ContactForm />
               </div>
             </div>
           </div>
