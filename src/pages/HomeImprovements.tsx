@@ -61,7 +61,7 @@ const HomeImprovements = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
                 Home Improvement Grants
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
