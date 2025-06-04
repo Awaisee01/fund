@@ -1,4 +1,3 @@
-
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,6 +35,7 @@ const Home = () => {
 
   return (
     <div>
+      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         
@@ -167,12 +167,38 @@ const Home = () => {
             Don't miss out on thousands of pounds in available grants. Our expert team will assess your eligibility 
             and guide you through the entire application process - completely free of charge.
           </p>
-          <div className="flex justify-center">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 px-8 py-4 text-lg font-semibold" asChild>
-              <Link to="/contact">
-                Submit Enquiry Form
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button 
+              asChild 
+              size="lg"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              variant="outline"
+            >
+              <Link to="/eco4">ECO4</Link>
+            </Button>
+            <Button 
+              asChild 
+              size="lg"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              variant="outline"
+            >
+              <Link to="/solar">Solar</Link>
+            </Button>
+            <Button 
+              asChild 
+              size="lg"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              variant="outline"
+            >
+              <Link to="/gas-boilers">Gas Boilers</Link>
+            </Button>
+            <Button 
+              asChild 
+              size="lg"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              variant="outline"
+            >
+              <Link to="/home-improvements">Home Improvements</Link>
             </Button>
           </div>
         </div>
