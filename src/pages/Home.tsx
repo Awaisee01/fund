@@ -2,7 +2,7 @@ import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Home as HomeIcon, Zap, Flame, Wrench } from 'lucide-react';
+import { ArrowRight, Home as HomeIcon, Zap, Flame, Wrench, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -58,7 +58,7 @@ const Home = () => {
                     "Friendly team ready to chat"
                   ].map((benefit, index) => (
                     <li key={index} className="flex items-center space-x-3">
-                      <div className="h-6 w-6 text-green-300 flex-shrink-0">✓</div>
+                      <CheckCircle className="h-6 w-6 text-green-300 flex-shrink-0" />
                       <span className="text-blue-50">{benefit}</span>
                     </li>
                   ))}
