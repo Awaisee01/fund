@@ -129,18 +129,18 @@ const Home = () => {
             {services.map((service, index) => {
               const Icon = service.icon;
               return (
-                <Card key={index} className="h-full hover:shadow-lg transition-shadow duration-300">
+                <Card key={index} className="h-full hover:shadow-lg transition-shadow duration-300 flex flex-col">
                   <CardHeader className="text-center">
                     <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <CardTitle className="text-xl">{service.title}</CardTitle>
                   </CardHeader>
-                  <CardContent className="text-center">
+                  <CardContent className="text-center flex-grow flex flex-col justify-between">
                     <CardDescription className="text-gray-600 mb-6">
                       {service.description}
                     </CardDescription>
-                    <Button asChild className="w-full">
+                    <Button asChild className="w-full mt-auto">
                       <Link to={service.link}>
                         Learn More
                         <ArrowRight className="ml-2 h-4 w-4" />
