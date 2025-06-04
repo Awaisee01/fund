@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -109,7 +108,7 @@ const ContactForm = () => {
         />
       </div>
       
-      <div className="pt-1">
+      <div className="pt-3">
         <Button
           type="submit"
           className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm"
