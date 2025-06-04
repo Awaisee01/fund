@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ContactForm from '@/components/ContactForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home, RectangleEllipsis, Paintbrush2, Shield, DoorOpen, Hammer } from 'lucide-react';
+import { Home, RectangleEllipsis, Paintbrush2, Shield, DoorOpen, Hammer, CheckCircle } from 'lucide-react';
 
 const HomeImprovements = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -76,7 +76,7 @@ const HomeImprovements = () => {
                   <ul className="space-y-3">
                     {benefits.map((benefit, index) => (
                       <li key={index} className="flex items-center space-x-3">
-                        <div className="h-6 w-6 text-green-300 flex-shrink-0">✓</div>
+                        <CheckCircle className="h-6 w-6 text-green-300 flex-shrink-0" />
                         <span className="text-blue-50">{benefit}</span>
                       </li>
                     ))}
