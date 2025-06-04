@@ -28,7 +28,7 @@ const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-2.5">
       <div>
         <Label htmlFor="fullName" className="text-white text-xs font-medium">
           Full Name
@@ -109,13 +109,15 @@ const ContactForm = () => {
         />
       </div>
       
-      <Button
-        type="submit"
-        className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm"
-        variant="outline"
-      >
-        Submit
-      </Button>
+      <div className="pt-1">
+        <Button
+          type="submit"
+          className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm"
+          variant="outline"
+        >
+          Submit
+        </Button>
+      </div>
     </form>
   );
 };
