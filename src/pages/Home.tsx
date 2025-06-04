@@ -22,7 +22,7 @@ const Home = () => {
     },
     {
       icon: Flame,
-      title: "Gas Boiler Replacement",
+      title: "Gas Boilers",
       description: "Replace your old boiler with a new energy efficient model through this funding scheme.",
       link: "/gas-boilers"
     },
