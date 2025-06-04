@@ -108,7 +108,7 @@ const ContactForm = () => {
         />
       </div>
       
-      <div className="pt-10">
+      <div className="pt-7">
         <Button
           type="submit"
           className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm"
