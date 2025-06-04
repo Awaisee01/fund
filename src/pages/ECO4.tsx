@@ -92,6 +92,62 @@ const ECO4 = () => {
         </div>
       </section>
       
+      <section className="py-20 bg-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              ECO4 Qualifying Criteria
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {eligibilityRequirements.map((requirement, index) => {
+              const Icon = requirement.icon;
+              return (
+                <div key={index} className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
+                    <Icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {requirement.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {requirement.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+          
+          <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Eligibility Criteria Include:
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                'Respiratory Conditions',
+                'Cardiovascular Conditions',
+                'Limited Mobility',
+                'Cancer Treatment/Diagnosis',
+                'Autoimmune Conditions',
+                'Over 65 years of age',
+                'On Benefits',
+                'Income below £31,000 per year',
+                'Children under 5 years of age'
+              ].map((condition, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700">{condition}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -159,62 +215,6 @@ const ECO4 = () => {
                 </CardDescription>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-      
-      <section className="py-20 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              ECO4 Qualifying Criteria
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {eligibilityRequirements.map((requirement, index) => {
-              const Icon = requirement.icon;
-              return (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {requirement.title}
-                  </h3>
-                  <p className="text-gray-600">
-                    {requirement.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-          
-          <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Eligibility Criteria Include:
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                'Respiratory Conditions',
-                'Cardiovascular Conditions',
-                'Limited Mobility',
-                'Cancer Treatment/Diagnosis',
-                'Autoimmune Conditions',
-                'Over 65 years of age',
-                'On Benefits',
-                'Income below £31,000 per year',
-                'Children under 5 years of age'
-              ].map((condition, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                  <span className="text-gray-700">{condition}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
