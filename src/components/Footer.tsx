@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -32,7 +33,7 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Services</h3>
             <ul className="space-y-2">
-              <li><Link to="/eco4" className="text-gray-300 hover:text-white transition-colors">ECO4 Grants</Link></li>
+              <li><Link to="/eco4" className="text-gray-300 hover:text-white transition-colors">ECO4 Scheme</Link></li>
               <li><Link to="/solar" className="text-gray-300 hover:text-white transition-colors">Solar Panels</Link></li>
               <li><Link to="/gas-boilers" className="text-gray-300 hover:text-white transition-colors">Gas Boilers</Link></li>
               <li><Link to="/home-improvements" className="text-gray-300 hover:text-white transition-colors">Home Improvements</Link></li>
