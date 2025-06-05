@@ -1,3 +1,4 @@
+
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -72,7 +73,7 @@ const Home = () => {
                 <div className="space-y-4">
                   <Button 
                     asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
+                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
                     variant="outline"
                   >
                     <Link to="/eco4">
@@ -81,7 +82,7 @@ const Home = () => {
                   </Button>
                   <Button 
                     asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
+                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
                     variant="outline"
                   >
                     <Link to="/solar">
@@ -90,7 +91,7 @@ const Home = () => {
                   </Button>
                   <Button 
                     asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
+                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
                     variant="outline"
                   >
                     <Link to="/gas-boilers">
@@ -99,7 +100,7 @@ const Home = () => {
                   </Button>
                   <Button 
                     asChild 
-                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20"
+                    className="w-full justify-center p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
                     variant="outline"
                   >
                     <Link to="/home-improvements">
