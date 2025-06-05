@@ -1,4 +1,5 @@
 
+
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -172,7 +173,7 @@ const Home = () => {
             <Button 
               asChild 
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
               variant="outline"
             >
               <Link to="/eco4">ECO4</Link>
@@ -180,7 +181,7 @@ const Home = () => {
             <Button 
               asChild 
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
               variant="outline"
             >
               <Link to="/solar">Solar</Link>
@@ -188,7 +189,7 @@ const Home = () => {
             <Button 
               asChild 
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
               variant="outline"
             >
               <Link to="/gas-boilers">Gas Boilers</Link>
@@ -196,7 +197,7 @@ const Home = () => {
             <Button 
               asChild 
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20"
+              className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105"
               variant="outline"
             >
               <Link to="/home-improvements">Home Improvements</Link>
@@ -209,3 +210,4 @@ const Home = () => {
 };
 
 export default Home;
+
