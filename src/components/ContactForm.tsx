@@ -112,7 +112,7 @@ const ContactForm = () => {
       <div className="pt-7">
         <Button
           type="submit"
-          className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm"
+          className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-[1.02]"
           variant="outline"
         >
           Submit
