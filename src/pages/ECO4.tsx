@@ -7,6 +7,12 @@ const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    document.title = "ECO4 Grants Scotland - Free Heating, Solar & Insulation | Funding For Scotland";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Access free ECO4 grants in Scotland for heating upgrades, solar panels, and insulation. Check your eligibility for completely funded home improvements worth thousands.');
+    }
+
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };

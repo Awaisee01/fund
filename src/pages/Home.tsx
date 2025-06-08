@@ -1,5 +1,4 @@
-
-
+import { useEffect } from 'react';
 import Hero from '@/components/Hero';
 import TrustBadges from '@/components/TrustBadges';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +7,14 @@ import { ArrowRight, Home as HomeIcon, Zap, Flame, Wrench, CheckCircle } from 'l
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+  useEffect(() => {
+    document.title = "Funding For Scotland - Scottish Home Improvement Grants & Funding";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Scotland\'s leading consultancy for homeowner grants and funding. Access ECO4 grants, solar panels, boiler replacements, and home improvement funding up to £25,000.');
+    }
+  }, []);
+
   const services = [
     {
       icon: HomeIcon,
@@ -210,4 +217,3 @@ const Home = () => {
 };
 
 export default Home;
-

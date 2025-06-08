@@ -9,6 +9,12 @@ const Solar = () => {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    document.title = "Free Solar Panels Scotland - Government Grants & Installation | Funding For Scotland";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Get free solar panels in Scotland through government schemes. Reduce electricity bills by up to 70% with no upfront costs. Professional installation included.');
+    }
+
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };

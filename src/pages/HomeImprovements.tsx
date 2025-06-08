@@ -7,6 +7,12 @@ const HomeImprovements = () => {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    document.title = "Home Improvement Grants Scotland - Windows, Doors, Roofing & Rendering | Funding For Scotland";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Access home improvement grants in Scotland for windows, doors, roofing, and rendering. Government funding available up to £25,000 for property upgrades.');
+    }
+
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);

@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import SEOStructuredData from "./components/SEOStructuredData";
 import Home from "./pages/Home";
 import ECO4 from "./pages/ECO4";
 import Solar from "./pages/Solar";
@@ -23,6 +24,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <SEOStructuredData />
         <div className="min-h-screen flex flex-col">
           <Navigation />
           <main className="flex-1">

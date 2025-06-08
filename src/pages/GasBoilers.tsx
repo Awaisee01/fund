@@ -7,6 +7,12 @@ const GasBoilers = () => {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    document.title = "Free Gas Boiler Replacement Scotland - ECO4 & Government Grants | Funding For Scotland";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Get a free gas boiler replacement in Scotland through government funding schemes. Reduce heating bills by 40% with professional Gas Safe installation.');
+    }
+
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
