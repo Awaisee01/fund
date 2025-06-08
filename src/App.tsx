@@ -12,6 +12,7 @@ import Solar from "./pages/Solar";
 import GasBoilers from "./pages/GasBoilers";
 import HomeImprovements from "./pages/HomeImprovements";
 import Contact from "./pages/Contact";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/gas-boilers" element={<GasBoilers />} />
               <Route path="/home-improvements" element={<HomeImprovements />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

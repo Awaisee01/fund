@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Shield } from 'lucide-react';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +48,18 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
+              {/* Admin Link - Subtle */}
+              <Link
+                to="/admin"
+                className={`px-2 py-2 rounded-md text-sm transition-colors ${
+                  isActive('/admin')
+                    ? 'bg-gray-600 text-white'
+                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+                }`}
+                title="Admin Access"
+              >
+                <Shield className="w-4 h-4" />
+              </Link>
             </div>
           </div>
 
@@ -81,6 +93,18 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
+            <Link
+              to="/admin"
+              onClick={() => setIsOpen(false)}
+              className={`flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive('/admin')
+                  ? 'bg-gray-600 text-white'
+                  : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+              }`}
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              Admin
+            </Link>
           </div>
         </div>
       )}
