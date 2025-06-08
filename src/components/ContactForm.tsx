@@ -28,9 +28,9 @@ const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2.5 pb-4">
+    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 pb-4">
       <div>
-        <Label htmlFor="fullName" className="text-white text-xs font-medium">
+        <Label htmlFor="fullName" className="text-white text-sm sm:text-xs font-medium">
           Full Name
         </Label>
         <Input
@@ -39,14 +39,14 @@ const ContactForm = () => {
           type="text"
           value={formData.fullName}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-10 sm:h-8 text-base sm:text-sm touch-manipulation"
           placeholder="Enter your full name"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="phone" className="text-white text-xs font-medium">
+        <Label htmlFor="phone" className="text-white text-sm sm:text-xs font-medium">
           Phone
         </Label>
         <Input
@@ -55,14 +55,14 @@ const ContactForm = () => {
           type="tel"
           value={formData.phone}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-10 sm:h-8 text-base sm:text-sm touch-manipulation"
           placeholder="Enter your phone number"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="email" className="text-white text-xs font-medium">
+        <Label htmlFor="email" className="text-white text-sm sm:text-xs font-medium">
           Email
         </Label>
         <Input
@@ -71,14 +71,14 @@ const ContactForm = () => {
           type="email"
           value={formData.email}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-10 sm:h-8 text-base sm:text-sm touch-manipulation"
           placeholder="Enter your email"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="address" className="text-white text-xs font-medium">
+        <Label htmlFor="address" className="text-white text-sm sm:text-xs font-medium">
           Address
         </Label>
         <Input
@@ -87,14 +87,14 @@ const ContactForm = () => {
           type="text"
           value={formData.address}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-10 sm:h-8 text-base sm:text-sm touch-manipulation"
           placeholder="Enter your address"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="postCode" className="text-white text-xs font-medium">
+        <Label htmlFor="postCode" className="text-white text-sm sm:text-xs font-medium">
           Post Code
         </Label>
         <Input
@@ -103,16 +103,16 @@ const ContactForm = () => {
           type="text"
           value={formData.postCode}
           onChange={handleInputChange}
-          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-8 text-sm"
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-10 sm:h-8 text-base sm:text-sm touch-manipulation"
           placeholder="Enter your post code"
           required
         />
       </div>
       
-      <div className="pt-7">
+      <div className="pt-6 sm:pt-7">
         <Button
           type="submit"
-          className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-8 text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-[1.02]"
+          className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-12 sm:h-8 text-base sm:text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-[1.02] touch-manipulation"
           variant="outline"
         >
           Submit
