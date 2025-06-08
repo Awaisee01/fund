@@ -112,7 +112,7 @@ const Solar = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {solarBenefits.map((benefit, index) => {
               const Icon = benefit.icon;
               return (
@@ -134,34 +134,6 @@ const Solar = () => {
               );
             })}
           </div>
-          
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-8">
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center">
-                <Calculator className="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Solar Savings Calculator
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="bg-white rounded-lg p-6 shadow-md">
-                <h4 className="text-lg font-semibold text-gray-900 mb-2">Annual Savings</h4>
-                <p className="text-3xl font-bold text-green-600">£800-£1,200</p>
-                <p className="text-gray-600 mt-2">Typical electricity bill reduction</p>
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-md">
-                <h4 className="text-lg font-semibold text-gray-900 mb-2">25-Year Savings</h4>
-                <p className="text-3xl font-bold text-green-600">£20,000+</p>
-                <p className="text-gray-600 mt-2">Total lifetime savings potential</p>
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-md">
-                <h4 className="text-lg font-semibold text-gray-900 mb-2">Property Value</h4>
-                <p className="text-3xl font-bold text-green-600">+£10,000</p>
-                <p className="text-gray-600 mt-2">Average property value increase</p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
       
@@ -180,7 +152,7 @@ const Solar = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
               { step: "1", title: "Free Assessment", description: "We assess your property's solar potential and eligibility for funding schemes." },
-              { step: "2", title: "Design & Quote", description: "Our experts design a custom solar system and provide a detailed quote." },
+              { step: "2", title: "Modelling", description: "Your property's energy requirement will be assessed and layout of panels will be determined." },
               { step: "3", title: "Approval & Planning", description: "We handle all paperwork, permits, and planning permissions required." },
               { step: "4", title: "Professional Installation", description: "Certified installers complete your solar installation in 1-2 days." }
             ].map((process, index) => (
