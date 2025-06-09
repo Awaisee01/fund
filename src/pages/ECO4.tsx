@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ECO4Form from '@/components/ECO4Form';
+import ECO4CustomForm from '@/components/ECO4CustomForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -91,7 +91,7 @@ const ECO4 = () => {
             </div>
             
             <div className="lg:col-span-5 flex justify-center lg:justify-end">
-              <ECO4Form />
+              <ECO4CustomForm />
             </div>
           </div>
         </div>
