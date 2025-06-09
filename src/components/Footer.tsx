@@ -1,10 +1,10 @@
 
-
 import { Link } from 'react-router-dom';
+import { Shield } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900 text-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           <div className="col-span-1 sm:col-span-2 lg:col-span-2">
@@ -60,9 +60,17 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      
+      {/* Admin Access - Bottom Right */}
+      <Link
+        to="/admin"
+        className="absolute bottom-4 right-4 p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-gray-300 transition-colors"
+        title="Admin Access"
+      >
+        <Shield className="w-5 h-5" />
+      </Link>
     </footer>
   );
 };
 
 export default Footer;
-
