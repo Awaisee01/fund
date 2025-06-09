@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -42,7 +43,7 @@ const ECO4CustomForm = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 pb-8">
-        <div className="w-full h-[651px] -mt-6 relative">
+        <div className="w-full h-[651px] -mt-8 relative">
           {!isFormLoaded && (
             <div className="absolute inset-0 z-10 p-4 space-y-4">
               <Skeleton className="h-12 w-full bg-white/20" />
