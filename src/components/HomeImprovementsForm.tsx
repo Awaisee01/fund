@@ -1,7 +1,11 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const HomeImprovementsForm = () => {
+  const [isFormLoaded, setIsFormLoaded] = useState(false);
+
   useEffect(() => {
     // Load the GoHighLevel form embed script
     const script = document.createElement('script');
@@ -9,23 +13,64 @@ const HomeImprovementsForm = () => {
     script.async = true;
     document.body.appendChild(script);
 
+    // Set a timer to assume the form is loaded after a reasonable delay
+    const loadTimer = setTimeout(() => {
+      setIsFormLoaded(true);
+    }, 2000);
+
     return () => {
       // Cleanup script when component unmounts
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
       if (existingScript) {
         document.body.removeChild(existingScript);
       }
+      clearTimeout(loadTimer);
     };
   }, []);
 
+  const handleIframeLoad = () => {
+    // Additional check when iframe loads
+    setTimeout(() => {
+      setIsFormLoaded(true);
+    }, 500);
+  };
+
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-xl">
-      <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm">
-        <div className="relative">
+    <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
+      <CardHeader className="text-center pb-0 pt-4">
+        <CardTitle className="text-2xl font-bold text-white pt-2">
+          Enquire Here
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0 p-0">
+        <div className="w-full h-[580px] -mt-8 relative">
+          {!isFormLoaded && (
+            <div className="absolute inset-0 z-10 p-4 space-y-4">
+              <Skeleton className="h-12 w-full bg-white/20" />
+              <Skeleton className="h-12 w-full bg-white/20" />
+              <Skeleton className="h-32 w-full bg-white/20" />
+              <Skeleton className="h-12 w-full bg-white/20" />
+              <Skeleton className="h-12 w-full bg-white/20" />
+              <Skeleton className="h-12 w-full bg-white/20" />
+              <Skeleton className="h-16 w-full bg-white/20" />
+              <div className="flex space-x-2">
+                <Skeleton className="h-6 w-6 bg-white/20" />
+                <Skeleton className="h-6 w-32 bg-white/20" />
+              </div>
+              <Skeleton className="h-12 w-full bg-white/20" />
+            </div>
+          )}
           <iframe
-            src="https://api.leadconnectorhq.com/widget/form/vFxaWHxebYlLLQxMGEc7"
-            style={{width:'100%', height:'640px', border:'none', borderRadius:'12px'}}
-            id="inline-vFxaWHxebYlLLQxMGEc7" 
+            src="https://api.leadconnectorhq.com/widget/form/TM5BCB4gVRQAOZcM9d9L"
+            style={{
+              width:'100%', 
+              height:'100%', 
+              border:'none', 
+              borderRadius:'6px',
+              opacity: isFormLoaded ? 1 : 0,
+              transition: 'opacity 0.3s ease-in-out'
+            }}
+            id="inline-TM5BCB4gVRQAOZcM9d9L" 
             data-layout="{'id':'INLINE'}"
             data-trigger-type="alwaysShow"
             data-trigger-value=""
@@ -34,17 +79,15 @@ const HomeImprovementsForm = () => {
             data-deactivation-type="neverDeactivate"
             data-deactivation-value=""
             data-form-name="Home Improvements-L Form"
-            data-height="640"
-            data-layout-iframe-id="inline-vFxaWHxebYlLLQxMGEc7"
-            data-form-id="vFxaWHxebYlLLQxMGEc7"
+            data-height="551"
+            data-layout-iframe-id="inline-TM5BCB4gVRQAOZcM9d9L"
+            data-form-id="TM5BCB4gVRQAOZcM9d9L"
             title="Home Improvements-L Form"
-            className="bg-transparent"
+            onLoad={handleIframeLoad}
           />
-          {/* Overlay to help blend the form with the background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/5 pointer-events-none rounded-xl"></div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
