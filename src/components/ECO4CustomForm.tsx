@@ -1,28 +1,23 @@
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const ECO4CustomForm = () => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    phone: '',
-    email: '',
-    address: '',
-    postCode: ''
-  });
+  useEffect(() => {
+    // Load the GoHighLevel form embed script
+    const script = document.createElement('script');
+    script.src = 'https://link.msgsndr.com/js/form_embed.js';
+    script.async = true;
+    document.body.appendChild(script);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+    return () => {
+      // Cleanup script when component unmounts
+      const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
+      if (existingScript) {
+        document.body.removeChild(existingScript);
+      }
+    };
+  }, []);
 
   return (
     <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
@@ -32,94 +27,25 @@ const ECO4CustomForm = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-white mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-white mb-2">
-              Phone
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="Enter your phone number"
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="address" className="block text-sm font-medium text-white mb-2">
-              Address
-            </label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Enter your address"
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="postCode" className="block text-sm font-medium text-white mb-2">
-              Post Code
-            </label>
-            <input
-              type="text"
-              id="postCode"
-              name="postCode"
-              value={formData.postCode}
-              onChange={handleChange}
-              placeholder="Enter your post code"
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <Button 
-            type="submit" 
-            className="w-full bg-white/20 hover:bg-white/30 text-white font-semibold py-3 mt-6 border border-white/20"
-          >
-            Submit
-          </Button>
-        </form>
+        <div className="w-full h-[651px]">
+          <iframe
+            src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
+            style={{width:'100%', height:'100%', border:'none', borderRadius:'6px'}}
+            id="inline-cJ1J84PqSZEi3RCJZYb5" 
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="ECO4-L Form"
+            data-height="651"
+            data-layout-iframe-id="inline-cJ1J84PqSZEi3RCJZYb5"
+            data-form-id="cJ1J84PqSZEi3RCJZYb5"
+            title="ECO4-L Form"
+          />
+        </div>
       </CardContent>
     </Card>
   );
