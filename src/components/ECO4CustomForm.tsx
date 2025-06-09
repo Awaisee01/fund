@@ -37,13 +37,13 @@ const ECO4CustomForm = () => {
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-0 pt-4">
+      <CardHeader className="text-center pb-0 pt-6">
         <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 p-0">
-        <div className="w-full h-[580px] -mt-8 relative">
+        <div className="w-full h-[500px] -mt-8 relative">
           {!isFormLoaded && (
             <div className="absolute inset-0 z-10 p-4 space-y-4">
               <Skeleton className="h-12 w-full bg-white/20" />
