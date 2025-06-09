@@ -64,9 +64,9 @@ const ECO4 = () => {
         ></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-7">
+              <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                 ECO4 Funding
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
@@ -88,7 +88,7 @@ const ECO4 = () => {
               </div>
             </div>
             
-            <div className="hidden lg:block relative">
+            <div className="lg:col-span-5 flex justify-center lg:justify-end">
               <ECO4Form />
             </div>
           </div>
