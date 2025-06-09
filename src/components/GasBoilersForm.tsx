@@ -13,10 +13,10 @@ const GasBoilersForm = () => {
     script.async = true;
     document.body.appendChild(script);
 
-    // Show form after a delay to ensure it's loaded
+    // Show form after a longer delay to ensure it's fully loaded
     const showTimer = setTimeout(() => {
       setShowForm(true);
-    }, 2000);
+    }, 3000);
 
     return () => {
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
@@ -28,9 +28,10 @@ const GasBoilersForm = () => {
   }, []);
 
   const handleIframeLoad = () => {
+    // Add extra delay after iframe loads to ensure form is fully rendered
     setTimeout(() => {
       setShowForm(true);
-    }, 500);
+    }, 1000);
   };
 
   return (
@@ -44,16 +45,19 @@ const GasBoilersForm = () => {
         <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
           {/* Loading spinner */}
           <div 
-            className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-500 ${
+            className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
               showForm ? 'opacity-0 pointer-events-none' : 'opacity-100'
             }`}
           >
-            <Loader2 className="h-8 w-8 animate-spin text-white/80" />
+            <div className="flex flex-col items-center space-y-4">
+              <Loader2 className="h-8 w-8 animate-spin text-white/80" />
+              <p className="text-white/60 text-sm">Loading form...</p>
+            </div>
           </div>
 
           {/* Actual form */}
           <div 
-            className={`transition-opacity duration-500 ${
+            className={`transition-opacity duration-700 ${
               showForm ? 'opacity-100' : 'opacity-0'
             }`}
           >
