@@ -1,10 +1,9 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Loader2 } from 'lucide-react';
 
 const GasBoilersForm = () => {
-  const [isFormLoaded, setIsFormLoaded] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -14,31 +13,24 @@ const GasBoilersForm = () => {
     script.async = true;
     document.body.appendChild(script);
 
-    // Initial delay to let form start loading
-    const initialTimer = setTimeout(() => {
-      setIsFormLoaded(true);
-    }, 1500);
-
-    // Additional delay for smooth transition
+    // Show form after a delay to ensure it's loaded
     const showTimer = setTimeout(() => {
       setShowForm(true);
-    }, 2200);
+    }, 2000);
 
     return () => {
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
       if (existingScript) {
         document.body.removeChild(existingScript);
       }
-      clearTimeout(initialTimer);
       clearTimeout(showTimer);
     };
   }, []);
 
   const handleIframeLoad = () => {
     setTimeout(() => {
-      setIsFormLoaded(true);
-      setTimeout(() => setShowForm(true), 400);
-    }, 300);
+      setShowForm(true);
+    }, 500);
   };
 
   return (
@@ -50,31 +42,18 @@ const GasBoilersForm = () => {
       </CardHeader>
       <CardContent className="pt-0 p-0">
         <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
-          {/* Enhanced skeleton loader */}
+          {/* Loading spinner */}
           <div 
-            className={`absolute inset-0 z-10 p-4 space-y-3 transition-opacity duration-700 ease-out ${
+            className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-500 ${
               showForm ? 'opacity-0 pointer-events-none' : 'opacity-100'
             }`}
           >
-            <div className="space-y-3 pt-4">
-              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
-              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
-              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
-              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
-              <Skeleton className="h-24 w-full bg-white/25 rounded-md" />
-              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
-              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
-              <div className="flex items-center space-x-2 py-2">
-                <Skeleton className="h-4 w-4 bg-white/25 rounded-sm" />
-                <Skeleton className="h-4 w-3/4 bg-white/25 rounded-sm" />
-              </div>
-              <Skeleton className="h-12 w-full bg-white/25 rounded-md mt-4" />
-            </div>
+            <Loader2 className="h-8 w-8 animate-spin text-white/80" />
           </div>
 
           {/* Actual form */}
           <div 
-            className={`transition-opacity duration-700 ease-out ${
+            className={`transition-opacity duration-500 ${
               showForm ? 'opacity-100' : 'opacity-0'
             }`}
           >
