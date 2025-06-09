@@ -15,12 +15,22 @@ const Solar = () => {
       metaDescription.setAttribute('content', 'Get free solar panels in Scotland through government schemes. Reduce electricity bills by up to 70% with no upfront costs. Professional installation included.');
     }
 
-    const handleScroll = () => {
+    // Use requestAnimationFrame for smoother scrolling
+    let ticking = false;
+    const updateScrollY = () => {
       setScrollY(window.scrollY);
+      ticking = false;
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleSmoothScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollY);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleSmoothScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleSmoothScroll);
   }, []);
 
   const benefits = [
@@ -58,10 +68,10 @@ const Solar = () => {
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30"
+          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30 will-change-transform"
           style={{ 
             backgroundImage: `url(/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png)`,
-            transform: `translateY(${scrollY * 0.5}px)`
+            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
           }}
         ></div>
         

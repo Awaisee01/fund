@@ -13,12 +13,22 @@ const GasBoilers = () => {
       metaDescription.setAttribute('content', 'Get a free gas boiler replacement in Scotland through government funding schemes. Reduce heating bills by 40% with professional Gas Safe installation.');
     }
 
-    const handleScroll = () => {
+    // Use requestAnimationFrame for smoother scrolling
+    let ticking = false;
+    const updateScrollY = () => {
       setScrollY(window.scrollY);
+      ticking = false;
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleSmoothScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollY);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleSmoothScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleSmoothScroll);
   }, []);
 
   const benefits = [
@@ -56,10 +66,10 @@ const GasBoilers = () => {
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30"
+          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30 will-change-transform"
           style={{ 
             backgroundImage: `url(/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png)`,
-            transform: `translateY(${scrollY * 0.5}px)`
+            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
           }}
         ></div>
         

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import ECO4CustomForm from '@/components/ECO4CustomForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,8 +19,22 @@ const ECO4 = () => {
       setScrollY(window.scrollY);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Use requestAnimationFrame for smoother scrolling
+    let ticking = false;
+    const updateScrollY = () => {
+      setScrollY(window.scrollY);
+      ticking = false;
+    };
+
+    const handleSmoothScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollY);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleSmoothScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleSmoothScroll);
   }, []);
 
   const benefits = [
@@ -59,10 +72,10 @@ const ECO4 = () => {
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30"
+          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30 will-change-transform"
           style={{ 
             backgroundImage: `url(/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png)`,
-            transform: `translateY(${scrollY * 0.5}px)`
+            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
           }}
         ></div>
         
