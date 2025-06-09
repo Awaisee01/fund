@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -36,7 +35,7 @@ const ECO4CustomForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
+    <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
       <CardHeader className="text-center pb-0">
         <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
