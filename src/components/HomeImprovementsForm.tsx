@@ -20,10 +20,6 @@ const HomeImprovementsForm = () => {
 
   return (
     <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-xl">
-      <div className="mb-6 text-center">
-        <h3 className="text-xl font-bold text-white mb-2">Enquire Here</h3>
-        <p className="text-white/80 text-sm">Discover what home improvement grants you may be eligible for.</p>
-      </div>
       <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm">
         <div className="relative">
           <iframe
