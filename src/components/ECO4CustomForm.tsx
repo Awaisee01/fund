@@ -26,7 +26,7 @@ const ECO4CustomForm = () => {
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-2">
+      <CardContent className="pt-0">
         <div className="w-full h-[651px]">
           <iframe
             src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
