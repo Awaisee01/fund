@@ -1,4 +1,5 @@
 
+
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -54,7 +55,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 sm:mt-12 pt-6 sm:pt-8">
           <div className="text-center">
             <p className="text-gray-400 text-xs sm:text-sm">
-              © 2024 Funding For Scotland. All rights reserved.
+              © 2025 Funding For Scotland. All rights reserved.
             </p>
           </div>
         </div>
@@ -64,3 +65,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
