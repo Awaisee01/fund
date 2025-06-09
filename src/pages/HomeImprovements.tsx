@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ContactForm from '@/components/ContactForm';
+import HomeImprovementsForm from '@/components/HomeImprovementsForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home, RectangleEllipsis, Paintbrush2, Shield, DoorOpen, Hammer, CheckCircle } from 'lucide-react';
 
@@ -94,7 +94,7 @@ const HomeImprovements = () => {
             <div className="hidden lg:block relative">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-3 border border-white/20 flex flex-col justify-center max-w-sm mx-auto">
                 <h3 className="text-lg font-bold mb-4 text-center">Enquire Here</h3>
-                <ContactForm />
+                <HomeImprovementsForm />
               </div>
             </div>
           </div>
