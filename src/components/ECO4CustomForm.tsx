@@ -42,8 +42,8 @@ const ECO4CustomForm = () => {
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0 pb-0">
-        <div className="w-full h-[651px] -mt-8 relative">
+      <CardContent className="pt-0 p-0">
+        <div className="w-full h-[651px] -mt-4 relative">
           {!isFormLoaded && (
             <div className="absolute inset-0 z-10 p-4 space-y-4">
               <Skeleton className="h-12 w-full bg-white/20" />
