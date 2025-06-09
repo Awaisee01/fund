@@ -25,23 +25,28 @@ const SolarForm = () => {
         <p className="text-white/80 text-sm">Find out if you qualify for free solar panel installation.</p>
       </div>
       <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm">
-        <iframe
-          src="https://api.leadconnectorhq.com/widget/form/9zaSDsWu48GIsRIN2JdU"
-          style={{width:'100%', height:'640px', border:'none', borderRadius:'12px'}}
-          id="inline-9zaSDsWu48GIsRIN2JdU" 
-          data-layout="{'id':'INLINE'}"
-          data-trigger-type="alwaysShow"
-          data-trigger-value=""
-          data-activation-type="alwaysActivated"
-          data-activation-value=""
-          data-deactivation-type="neverDeactivate"
-          data-deactivation-value=""
-          data-form-name="Solar-L Form"
-          data-height="640"
-          data-layout-iframe-id="inline-9zaSDsWu48GIsRIN2JdU"
-          data-form-id="9zaSDsWu48GIsRIN2JdU"
-          title="Solar-L Form"
-        />
+        <div className="relative">
+          <iframe
+            src="https://api.leadconnectorhq.com/widget/form/9zaSDsWu48GIsRIN2JdU"
+            style={{width:'100%', height:'640px', border:'none', borderRadius:'12px'}}
+            id="inline-9zaSDsWu48GIsRIN2JdU" 
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="Solar-L Form"
+            data-height="640"
+            data-layout-iframe-id="inline-9zaSDsWu48GIsRIN2JdU"
+            data-form-id="9zaSDsWu48GIsRIN2JdU"
+            title="Solar-L Form"
+            className="bg-transparent"
+          />
+          {/* Overlay to help blend the form with the background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/5 pointer-events-none rounded-xl"></div>
+        </div>
       </div>
     </div>
   );
