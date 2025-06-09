@@ -5,13 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const ECO4CustomForm = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    fullName: '',
     phone: '',
-    postcode: '',
-    propertyType: '',
-    ownershipType: ''
+    email: '',
+    address: '',
+    postCode: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,7 +17,7 @@ const ECO4CustomForm = () => {
     console.log('Form submitted:', formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -27,66 +25,33 @@ const ECO4CustomForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm shadow-xl">
+    <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
       <CardHeader className="text-center pb-4">
-        <CardTitle className="text-2xl font-bold text-gray-900">
-          Check Your Eligibility
+        <CardTitle className="text-2xl font-bold text-white">
+          Enquire Here
         </CardTitle>
-        <p className="text-gray-600 text-sm">
-          Complete the form below to see if you qualify for ECO4 funding
-        </p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                First Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                required
-              />
-            </div>
-          </div>
-
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
+            <label htmlFor="fullName" className="block text-sm font-medium text-white mb-2">
+              Full Name
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="fullName"
+              name="fullName"
+              value={formData.fullName}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              placeholder="Enter your full name"
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-              Phone Number
+            <label htmlFor="phone" className="block text-sm font-medium text-white mb-2">
+              Phone
             </label>
             <input
               type="tel"
@@ -94,71 +59,65 @@ const ECO4CustomForm = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              placeholder="Enter your phone number"
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="postcode" className="block text-sm font-medium text-gray-700 mb-1">
-              Postcode
+            <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="address" className="block text-sm font-medium text-white mb-2">
+              Address
             </label>
             <input
               type="text"
-              id="postcode"
-              name="postcode"
-              value={formData.postcode}
+              id="address"
+              name="address"
+              value={formData.address}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              placeholder="e.g. SW1A 1AA"
+              placeholder="Enter your address"
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="propertyType" className="block text-sm font-medium text-gray-700 mb-1">
-              Property Type
+            <label htmlFor="postCode" className="block text-sm font-medium text-white mb-2">
+              Post Code
             </label>
-            <select
-              id="propertyType"
-              name="propertyType"
-              value={formData.propertyType}
+            <input
+              type="text"
+              id="postCode"
+              name="postCode"
+              value={formData.postCode}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              placeholder="Enter your post code"
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
               required
-            >
-              <option value="">Select property type</option>
-              <option value="house">House</option>
-              <option value="flat">Flat/Apartment</option>
-              <option value="bungalow">Bungalow</option>
-              <option value="maisonette">Maisonette</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="ownershipType" className="block text-sm font-medium text-gray-700 mb-1">
-              Do you own or rent?
-            </label>
-            <select
-              id="ownershipType"
-              name="ownershipType"
-              value={formData.ownershipType}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              required
-            >
-              <option value="">Select ownership type</option>
-              <option value="own">Own</option>
-              <option value="rent">Rent</option>
-              <option value="landlord">Landlord</option>
-            </select>
+            />
           </div>
 
           <Button 
             type="submit" 
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 mt-6"
+            className="w-full bg-white/20 hover:bg-white/30 text-white font-semibold py-3 mt-6 border border-white/20"
           >
-            Check My Eligibility
+            Submit
           </Button>
         </form>
       </CardContent>
