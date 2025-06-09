@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const ECO4CustomForm = () => {
   const [isFormLoaded, setIsFormLoaded] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     // Load the GoHighLevel form embed script
@@ -13,26 +14,31 @@ const ECO4CustomForm = () => {
     script.async = true;
     document.body.appendChild(script);
 
-    // Set a timer to assume the form is loaded after a reasonable delay
-    const loadTimer = setTimeout(() => {
+    // Initial delay to let form start loading
+    const initialTimer = setTimeout(() => {
       setIsFormLoaded(true);
-    }, 2000);
+    }, 1500);
+
+    // Additional delay for smooth transition
+    const showTimer = setTimeout(() => {
+      setShowForm(true);
+    }, 2200);
 
     return () => {
-      // Cleanup script when component unmounts
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
       if (existingScript) {
         document.body.removeChild(existingScript);
       }
-      clearTimeout(loadTimer);
+      clearTimeout(initialTimer);
+      clearTimeout(showTimer);
     };
   }, []);
 
   const handleIframeLoad = () => {
-    // Additional check when iframe loads
     setTimeout(() => {
       setIsFormLoaded(true);
-    }, 500);
+      setTimeout(() => setShowForm(true), 400);
+    }, 300);
   };
 
   return (
@@ -43,48 +49,59 @@ const ECO4CustomForm = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 p-0">
-        <div className="w-full h-[580px] -mt-8 relative">
-          {!isFormLoaded && (
-            <div className="absolute inset-0 z-10 p-4 space-y-4">
-              <Skeleton className="h-12 w-full bg-white/20" />
-              <Skeleton className="h-12 w-full bg-white/20" />
-              <Skeleton className="h-32 w-full bg-white/20" />
-              <Skeleton className="h-12 w-full bg-white/20" />
-              <Skeleton className="h-12 w-full bg-white/20" />
-              <Skeleton className="h-12 w-full bg-white/20" />
-              <Skeleton className="h-16 w-full bg-white/20" />
-              <div className="flex space-x-2">
-                <Skeleton className="h-6 w-6 bg-white/20" />
-                <Skeleton className="h-6 w-32 bg-white/20" />
+        <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
+          {/* Enhanced skeleton loader */}
+          <div 
+            className={`absolute inset-0 z-10 p-4 space-y-3 transition-opacity duration-700 ease-out ${
+              showForm ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
+          >
+            <div className="space-y-3 pt-4">
+              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
+              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
+              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
+              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
+              <Skeleton className="h-24 w-full bg-white/25 rounded-md" />
+              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
+              <Skeleton className="h-10 w-full bg-white/25 rounded-md" />
+              <div className="flex items-center space-x-2 py-2">
+                <Skeleton className="h-4 w-4 bg-white/25 rounded-sm" />
+                <Skeleton className="h-4 w-3/4 bg-white/25 rounded-sm" />
               </div>
-              <Skeleton className="h-12 w-full bg-white/20" />
+              <Skeleton className="h-12 w-full bg-white/25 rounded-md mt-4" />
             </div>
-          )}
-          <iframe
-            src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
-            style={{
-              width:'100%', 
-              height:'100%', 
-              border:'none', 
-              borderRadius:'6px',
-              opacity: isFormLoaded ? 1 : 0,
-              transition: 'opacity 0.3s ease-in-out'
-            }}
-            id="inline-cJ1J84PqSZEi3RCJZYb5" 
-            data-layout="{'id':'INLINE'}"
-            data-trigger-type="alwaysShow"
-            data-trigger-value=""
-            data-activation-type="alwaysActivated"
-            data-activation-value=""
-            data-deactivation-type="neverDeactivate"
-            data-deactivation-value=""
-            data-form-name="ECO4-L Form"
-            data-height="651"
-            data-layout-iframe-id="inline-cJ1J84PqSZEi3RCJZYb5"
-            data-form-id="cJ1J84PqSZEi3RCJZYb5"
-            title="ECO4-L Form"
-            onLoad={handleIframeLoad}
-          />
+          </div>
+
+          {/* Actual form */}
+          <div 
+            className={`transition-opacity duration-700 ease-out ${
+              showForm ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <iframe
+              src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
+              style={{
+                width:'100%', 
+                height:'100%', 
+                border:'none', 
+                borderRadius:'6px'
+              }}
+              id="inline-cJ1J84PqSZEi3RCJZYb5" 
+              data-layout="{'id':'INLINE'}"
+              data-trigger-type="alwaysShow"
+              data-trigger-value=""
+              data-activation-type="alwaysActivated"
+              data-activation-value=""
+              data-deactivation-type="neverDeactivate"
+              data-deactivation-value=""
+              data-form-name="ECO4-L Form"
+              data-height="651"
+              data-layout-iframe-id="inline-cJ1J84PqSZEi3RCJZYb5"
+              data-form-id="cJ1J84PqSZEi3RCJZYb5"
+              title="ECO4-L Form"
+              onLoad={handleIframeLoad}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>
