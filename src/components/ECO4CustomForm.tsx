@@ -21,12 +21,12 @@ const ECO4CustomForm = () => {
 
   return (
     <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-2">
+      <CardHeader className="text-center pb-0">
         <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-2">
         <div className="w-full h-[651px]">
           <iframe
             src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
