@@ -52,21 +52,10 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 mt-8 sm:mt-12 pt-6 sm:pt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <p className="text-gray-400 text-xs sm:text-sm text-center sm:text-left">
+          <div className="text-center">
+            <p className="text-gray-400 text-xs sm:text-sm">
               © 2024 Funding For Scotland. All rights reserved.
             </p>
-            <div className="flex space-x-4 sm:space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm touch-manipulation">
-                Facebook
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm touch-manipulation">
-                LinkedIn
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm touch-manipulation">
-                Twitter
-              </a>
-            </div>
           </div>
         </div>
       </div>
