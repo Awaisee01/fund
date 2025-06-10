@@ -58,19 +58,39 @@ const Hero = ({
               </div>
             )}
 
-            {/* Mobile CTA Button */}
+            {/* Mobile What can I help with? buttons */}
             <div className="lg:hidden mb-8">
-              <Button 
-                asChild 
-                size="lg"
-                className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation h-12 px-8"
-                variant="outline"
-              >
-                <Link to={ctaLink}>
-                  {ctaText}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <h3 className="text-lg font-bold mb-4 text-center">What can I help with?</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Button 
+                  asChild 
+                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
+                  variant="outline"
+                >
+                  <Link to="/eco4">ECO4</Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
+                  variant="outline"
+                >
+                  <Link to="/solar">Solar</Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
+                  variant="outline"
+                >
+                  <Link to="/gas-boilers">Gas Boilers</Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
+                  variant="outline"
+                >
+                  <Link to="/home-improvements">Home Improvements</Link>
+                </Button>
+              </div>
             </div>
           </div>
           

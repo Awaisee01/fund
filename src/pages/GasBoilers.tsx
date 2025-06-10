@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import GasBoilersForm from '@/components/GasBoilersForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -98,7 +99,7 @@ const GasBoilers = () => {
               </div>
             </div>
             
-            <div className="hidden lg:block relative">
+            <div className="flex justify-center lg:justify-end">
               <GasBoilersForm />
             </div>
           </div>

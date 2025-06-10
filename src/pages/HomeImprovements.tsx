@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import HomeImprovementsForm from '@/components/HomeImprovementsForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -104,7 +105,7 @@ const HomeImprovements = () => {
               )}
             </div>
             
-            <div className="hidden lg:block relative">
+            <div className="flex justify-center lg:justify-end">
               <HomeImprovementsForm />
             </div>
           </div>

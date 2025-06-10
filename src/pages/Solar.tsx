@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import SolarForm from '@/components/SolarForm';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -103,7 +104,7 @@ const Solar = () => {
               </div>
             </div>
             
-            <div className="hidden lg:block relative">
+            <div className="flex justify-center lg:justify-end">
               <SolarForm />
             </div>
           </div>

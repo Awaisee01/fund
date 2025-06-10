@@ -8,6 +8,7 @@ interface OptimizedImageProps {
   priority?: boolean;
   width?: number;
   height?: number;
+  style?: React.CSSProperties;
   onLoad?: () => void;
 }
 
@@ -18,6 +19,7 @@ const OptimizedImage = ({
   priority = false,
   width,
   height,
+  style,
   onLoad 
 }: OptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,14 +36,14 @@ const OptimizedImage = ({
 
   if (hasError) {
     return (
-      <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
+      <div className={`bg-gray-200 flex items-center justify-center ${className}`} style={style}>
         <span className="text-gray-500 text-sm">Image unavailable</span>
       </div>
     );
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} style={style}>
       {!isLoaded && (
         <div className="absolute inset-0 bg-gray-200 animate-pulse rounded" />
       )}
