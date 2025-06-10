@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import SolarForm from '@/components/SolarForm';
+import OptimizedImage from '@/components/OptimizedImage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sun, Battery, PoundSterling, Leaf, Home, Calculator, CheckCircle, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 const Solar = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -67,13 +66,17 @@ const Solar = () => {
     <div>
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30 will-change-transform"
-          style={{ 
-            backgroundImage: `url(/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png)`,
-            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
-          }}
-        ></div>
+        <div className="absolute inset-0 opacity-30 will-change-transform">
+          <OptimizedImage
+            src="/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png"
+            alt="Solar Panels Background"
+            className="w-full h-full object-cover mix-blend-multiply"
+            priority={true}
+            style={{ 
+              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
+            }}
+          />
+        </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">

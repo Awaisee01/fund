@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import ECO4CustomForm from '@/components/ECO4CustomForm';
+import OptimizedImage from '@/components/OptimizedImage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -14,10 +13,6 @@ const ECO4 = () => {
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Access free ECO4 grants in Scotland for heating upgrades, solar panels, and insulation. Check your eligibility for completely funded home improvements worth thousands.');
     }
-
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
 
     // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
@@ -71,13 +66,17 @@ const ECO4 = () => {
     <div>
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30 will-change-transform"
-          style={{ 
-            backgroundImage: `url(/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png)`,
-            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
-          }}
-        ></div>
+        <div className="absolute inset-0 opacity-30 will-change-transform">
+          <OptimizedImage
+            src="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png"
+            alt="ECO4 Background"
+            className="w-full h-full object-cover mix-blend-multiply"
+            priority={true}
+            style={{ 
+              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
+            }}
+          />
+        </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid lg:grid-cols-12 gap-8 items-center">

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,10 +25,13 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <img 
+              <OptimizedImage 
                 src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                 alt="Funding For Scotland Logo" 
                 className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
+                priority={true}
+                width={120}
+                height={48}
               />
             </Link>
           </div>
