@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import SolarForm from '@/components/SolarForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sun, Battery, PoundSterling, Leaf, Home, Calculator, CheckCircle, ArrowRight } from 'lucide-react';
+import { Sun, Battery, PoundSterling, Leaf, Home, Calculator, CheckCircle, ArrowRight, Thermometer, Heart, Shield } from 'lucide-react';
 
 const Solar = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -40,26 +40,26 @@ const Solar = () => {
     "Increase your property value significantly"
   ];
 
-  const solarBenefits = [
-    {
-      icon: PoundSterling,
-      title: "Save Money",
-      description: "Reduce your electricity bills by up to £1,200 per year with free solar energy from the sun."
-    },
-    {
-      icon: Leaf,
-      title: "Go Green",
-      description: "Reduce your carbon footprint and contribute to Scotland's renewable energy goals."
-    },
-    {
-      icon: Battery,
-      title: "Energy Storage",
-      description: "Optional battery storage systems to store excess energy for use when the sun isn't shining."
-    },
+  const eligibilityRequirements = [
     {
       icon: Home,
-      title: "Increase Value",
-      description: "Solar panels can increase your property value by up to £10,000 according to recent studies."
+      title: "Property Type",
+      description: "Open to homeowners, private tenants, and landlords"
+    },
+    {
+      icon: Thermometer,
+      title: "Energy Rating",
+      description: "Property has EPC rating of D, E, F, or G"
+    },
+    {
+      icon: Heart,
+      title: "Health Conditions",
+      description: "Including respiratory conditions, cardiovascular conditions and many more. See full list below"
+    },
+    {
+      icon: Shield,
+      title: "Benefits",
+      description: "Receive any of the benefits listed below or have household income below £31,000 per year"
     }
   ];
 
@@ -86,10 +86,10 @@ const Solar = () => {
                 Free Solar Panels
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Generate Clean Energy & Save Money
+                Completely free solar panels.
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                Access government and energy company schemes for free solar panel installation. Start generating your own renewable energy and dramatically reduce your electricity bills.
+                If your current heating system is an Air Source Heat Pump, you could qualify for free solar through the ECO4 Scheme.
               </p>
               
               <div className="mb-8">
@@ -111,39 +111,58 @@ const Solar = () => {
         </div>
       </section>
       
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Solar Panels?
+              Solar Qualifying Criteria
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Solar panels are one of the best investments you can make for your home. With Scottish government 
-              support and various funding schemes, you can get them installed completely free.
+              If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {solarBenefits.map((benefit, index) => {
-              const Icon = benefit.icon;
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {eligibilityRequirements.map((requirement, index) => {
+              const Icon = requirement.icon;
               return (
-                <Card key={index} className="group hover:shadow-xl transition-all duration-300">
-                  <CardHeader>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center group-hover:bg-yellow-500 transition-colors">
-                        <Icon className="w-6 h-6 text-yellow-600 group-hover:text-white transition-colors" />
-                      </div>
-                      <CardTitle className="text-xl">{benefit.title}</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base">
-                      {benefit.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
+                <div key={index} className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-yellow-500 rounded-full flex items-center justify-center">
+                    <Icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {requirement.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {requirement.description}
+                  </p>
+                </div>
               );
             })}
+          </div>
+          
+          <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Eligibility Criteria Include:
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                'Respiratory Conditions',
+                'Cardiovascular Conditions',
+                'Limited Mobility',
+                'Cancer Treatment/Diagnosis',
+                'Autoimmune Conditions',
+                'Over 65 years of age',
+                'On Benefits',
+                'Income below £31,000 per year',
+                'Children under 5 years of age'
+              ].map((condition, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700">{condition}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
