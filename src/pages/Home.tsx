@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import HeroSection from '@/components/HeroSection';
+import Hero from '@/components/Hero';
 import ServicesGrid from '@/components/ServicesGrid';
 import TrustBadges from '@/components/TrustBadges';
 import CallToActionSection from '@/components/CallToActionSection';
@@ -16,7 +16,17 @@ const Home = () => {
 
   return (
     <div>
-      <HeroSection />
+      <Hero 
+        title="Funding For Scotland"
+        subtitle="Get Up To £25,000 In Free Grants"
+        description="Scotland's leading consultancy for homeowner grants and funding. We help Scottish homeowners access government grants for energy efficiency improvements, solar panels, boiler replacements, and home improvements."
+        benefits={[
+          "100% Free Service - No Hidden Costs",
+          "Expert Grant Application Support",
+          "Access to Multiple Funding Streams",
+          "Professional Installation Network"
+        ]}
+      />
       <ServicesGrid />
       <TrustBadges />
       <CallToActionSection />
