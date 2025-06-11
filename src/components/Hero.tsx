@@ -57,46 +57,11 @@ const Hero = ({
                 </ul>
               </div>
             )}
-
-            {/* Mobile What can I help with? buttons */}
-            <div className="lg:hidden mb-8">
-              <h3 className="text-lg font-bold mb-4 text-center">What can I help with?</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <Button 
-                  asChild 
-                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
-                  variant="outline"
-                >
-                  <Link to="/eco4">ECO4</Link>
-                </Button>
-                <Button 
-                  asChild 
-                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
-                  variant="outline"
-                >
-                  <Link to="/solar">Solar</Link>
-                </Button>
-                <Button 
-                  asChild 
-                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
-                  variant="outline"
-                >
-                  <Link to="/gas-boilers">Gas Boilers</Link>
-                </Button>
-                <Button 
-                  asChild 
-                  className="w-full justify-center py-3 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation text-sm"
-                  variant="outline"
-                >
-                  <Link to="/home-improvements">Home Improvements</Link>
-                </Button>
-              </div>
-            </div>
           </div>
           
           <div className="relative">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-6 xl:px-8 py-6 xl:py-8 border border-white/20 flex flex-col justify-center">
-              <h3 className="text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">Quick Eligibility Check</h3>
+              <h3 className="text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">What can I help with?</h3>
               <div className="space-y-3 xl:space-y-4">
                 <Button 
                   asChild 
