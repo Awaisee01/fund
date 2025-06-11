@@ -18,7 +18,7 @@ const Home = () => {
     <div>
       <Hero 
         title="Unlock Scottish Grants & Funding"
-        subtitle="Get Up To £25,000 In Free Grants"
+        subtitle=""
         description="We help people in Scotland access local authority schemes, government backed schemes, and other grants around Scotland. Chat with our advisors today and find out what you're entitled to."
         benefits={[
           "Free eligibility assessment",
