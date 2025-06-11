@@ -46,7 +46,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><Link to="/" className="text-gray-300 hover:text-white transition-colors text-sm sm:text-base touch-manipulation">Home</Link></li>
               <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors text-sm sm:text-base touch-manipulation">Contact Us</Link></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors text-sm sm:text-base touch-manipulation">Privacy Policy</a></li>
+              <li><a href="https://www.termsfeed.com/live/ea3c4880-41a9-43e9-99ee-66bcc9e5f291" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors text-sm sm:text-base touch-manipulation">Privacy Policy</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white transition-colors text-sm sm:text-base touch-manipulation">Terms of Service</a></li>
             </ul>
           </div>
