@@ -1,5 +1,5 @@
 
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -33,7 +33,7 @@ const Hero = ({
       )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 xl:py-32">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               {title}
@@ -59,13 +59,13 @@ const Hero = ({
             )}
           </div>
           
-          <div className="w-full">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 sm:px-6 xl:px-8 py-6 xl:py-8 border border-white/20">
-              <h3 className="text-lg sm:text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">What can I help with?</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 xl:gap-4">
+          <div className="w-full flex justify-center lg:justify-end">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 sm:px-6 xl:px-8 py-6 xl:py-8 border border-white/20 w-full max-w-md">
+              <h3 className="text-lg sm:text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">What can we help with?</h3>
+              <div className="grid grid-cols-1 gap-3 xl:gap-4">
                 <Button 
                   asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation"
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
                   variant="outline"
                 >
                   <Link to="/eco4">
@@ -74,7 +74,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation"
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
                   variant="outline"
                 >
                   <Link to="/solar">
@@ -83,7 +83,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation"
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
                   variant="outline"
                 >
                   <Link to="/gas-boilers">
@@ -92,7 +92,7 @@ const Hero = ({
                 </Button>
                 <Button 
                   asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 touch-manipulation"
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
                   variant="outline"
                 >
                   <Link to="/home-improvements">

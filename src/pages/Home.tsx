@@ -17,14 +17,14 @@ const Home = () => {
   return (
     <div>
       <Hero 
-        title="Funding For Scotland"
+        title="Unlock Scottish Grants & Funding"
         subtitle="Get Up To £25,000 In Free Grants"
-        description="Scotland's leading consultancy for homeowner grants and funding. We help Scottish homeowners access government grants for energy efficiency improvements, solar panels, boiler replacements, and home improvements."
+        description="We help people in Scotland access local authority schemes, government backed schemes, and other grants around Scotland. Chat with our advisors today and find out what you're entitled to."
         benefits={[
-          "100% Free Service - No Hidden Costs",
-          "Expert Grant Application Support",
-          "Access to Multiple Funding Streams",
-          "Professional Installation Network"
+          "Free eligibility assessment",
+          "Nothing to pay, we're a free advice group",
+          "Guidance through the whole process",
+          "Friendly team ready to chat"
         ]}
       />
       <ServicesGrid />
