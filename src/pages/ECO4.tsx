@@ -47,8 +47,8 @@ const ECO4 = () => {
     },
     {
       icon: Thermometer,
-      title: "Energy Rating",
-      description: "Property has EPC rating of D, E, F, or G"
+      title: "Heating Type",
+      description: "Current heating system LPG, Oil, Electric Boiler, Electric Heaters. *Note - Scheme not available to properties on Mains Gas"
     },
     {
       icon: Heart,
