@@ -35,8 +35,8 @@ const HomeImprovements = () => {
   const benefits = [
     "Comprehensive home improvement grants available",
     "Windows, doors, roofing, and rendering covered",
-    "Increase property value by up to £30,000",
-    "Improve energy efficiency and reduce bills"
+    "Energy efficient improvements",
+    "Enhance your property's look, value, and comfort"
   ];
 
   const improvements = [
@@ -85,10 +85,10 @@ const HomeImprovements = () => {
                 Home Improvement Grants
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Transform Your Home with Government Funding
+                Transform Your Home With A Little Help
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                Access a wide range of grants and funding for home improvements including windows, doors, roofing, rendering, and energy efficiency upgrades. Enhance your property value and comfort.
+                Access a wide range of grants for home improvements including Windows, doors, roofing, rendering, and energy-efficiency upgrades.
               </p>
               
               {benefits.length > 0 && (
