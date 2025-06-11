@@ -94,7 +94,7 @@ const Hero = ({
             </div>
           </div>
           
-          <div className="hidden lg:block relative">
+          <div className="relative">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-6 xl:px-8 py-6 xl:py-8 border border-white/20 flex flex-col justify-center">
               <h3 className="text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">Quick Eligibility Check</h3>
               <div className="space-y-3 xl:space-y-4">
