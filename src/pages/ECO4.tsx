@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import ECO4CustomForm from '@/components/ECO4CustomForm';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -100,6 +101,12 @@ const ECO4 = () => {
                     </li>
                   ))}
                 </ul>
+                
+                <div className="mt-6">
+                  <p className="text-sm text-blue-200 italic">
+                    * ECO4 unavailable to properties with Mains Gas heating
+                  </p>
+                </div>
               </div>
             </div>
             
