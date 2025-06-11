@@ -1,4 +1,5 @@
 
+
 import { useEffect, useState } from 'react';
 import ECO4CustomForm from '@/components/ECO4CustomForm';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -59,7 +60,7 @@ const ECO4 = () => {
     {
       icon: Shield,
       title: "Benefits",
-      description: "Receive any of the benefits listed below or have household income below £31,000 per year"
+      description: "Receive state benefits or have household income below £31,000 per year"
     }
   ];
 
@@ -248,3 +249,4 @@ const ECO4 = () => {
 };
 
 export default ECO4;
+
