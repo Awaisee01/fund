@@ -62,14 +62,14 @@ const SolarForm = () => {
             }`}
           >
             <iframe
-              src="https://api.leadconnectorhq.com/widget/form/7a4T98Zn3bEon34CfgW0"
+              src="https://api.leadconnectorhq.com/widget/form/9lDaU9yEdGltsGe35Bwh"
               style={{
                 width:'100%', 
                 height:'100%', 
                 border:'none', 
                 borderRadius:'6px'
               }}
-              id="inline-7a4T98Zn3bEon34CfgW0" 
+              id="inline-9lDaU9yEdGltsGe35Bwh" 
               data-layout="{'id':'INLINE'}"
               data-trigger-type="alwaysShow"
               data-trigger-value=""
@@ -77,11 +77,11 @@ const SolarForm = () => {
               data-activation-value=""
               data-deactivation-type="neverDeactivate"
               data-deactivation-value=""
-              data-form-name="Soalr-L Form"
+              data-form-name="Solar-L Form"
               data-height="551"
-              data-layout-iframe-id="inline-7a4T98Zn3bEon34CfgW0"
-              data-form-id="7a4T98Zn3bEon34CfgW0"
-              title="Soalr-L Form"
+              data-layout-iframe-id="inline-9lDaU9yEdGltsGe35Bwh"
+              data-form-id="9lDaU9yEdGltsGe35Bwh"
+              title="Solar-L Form"
               onLoad={handleIframeLoad}
             />
           </div>
