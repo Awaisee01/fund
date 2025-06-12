@@ -8,10 +8,21 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already authenticated
+    // Check if user is already authenticated and session is still valid
     const adminAuth = localStorage.getItem('adminAuthenticated');
-    if (adminAuth === 'true') {
-      setIsAuthenticated(true);
+    const authTime = localStorage.getItem('adminAuthTime');
+    
+    if (adminAuth === 'true' && authTime) {
+      const sessionDuration = Date.now() - parseInt(authTime);
+      const maxSessionDuration = 4 * 60 * 60 * 1000; // 4 hours
+      
+      if (sessionDuration < maxSessionDuration) {
+        setIsAuthenticated(true);
+      } else {
+        // Session expired, clear auth
+        localStorage.removeItem('adminAuthenticated');
+        localStorage.removeItem('adminAuthTime');
+      }
     }
     setIsLoading(false);
   }, []);
@@ -21,6 +32,8 @@ const Admin = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('adminAuthenticated');
+    localStorage.removeItem('adminAuthTime');
     setIsAuthenticated(false);
   };
 
