@@ -18,12 +18,39 @@ const SolarForm = () => {
       setShowForm(true);
     }, 3000);
 
+    // Listen for messages from the iframe (form submissions)
+    const handleMessage = (event: MessageEvent) => {
+      // Check if the message is from the GoHighLevel form
+      if (event.origin === 'https://api.leadconnectorhq.com') {
+        // Check if it's a form submission event
+        if (event.data && event.data.type === 'form_submitted') {
+          // Trigger Meta Pixel event
+          if (typeof window !== 'undefined' && (window as any).fbq) {
+            (window as any).fbq('track', 'Lead', {
+              content_name: 'Solar Form Submission',
+              content_category: 'Solar Panels'
+            });
+          }
+          
+          // Also trigger a custom event for Google Analytics if needed
+          if (typeof window !== 'undefined' && (window as any).gtag) {
+            (window as any).gtag('event', 'form_submit', {
+              form_name: 'solar_enquiry_form'
+            });
+          }
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
     return () => {
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
       if (existingScript) {
         document.body.removeChild(existingScript);
       }
       clearTimeout(showTimer);
+      window.removeEventListener('message', handleMessage);
     };
   }, []);
 
