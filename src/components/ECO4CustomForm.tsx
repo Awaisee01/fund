@@ -52,7 +52,7 @@ const ECO4CustomForm = () => {
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-4 -mt-2">
+      <CardContent className="p-4 -mt-8">
         <div className="w-full relative" style={{ minHeight: `${formHeight}px` }}>
           {/* Loading spinner */}
           <div 
