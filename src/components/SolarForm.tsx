@@ -36,13 +36,13 @@ const SolarForm = () => {
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-0 pt-4">
-        <CardTitle className="text-2xl font-bold text-white pt-2">
+      <CardHeader className="text-center pb-2 pt-4">
+        <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0 p-0">
-        <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
+      <CardContent className="pt-0 p-2">
+        <div className="w-full min-h-[580px] max-h-[700px] relative overflow-hidden">
           {/* Loading spinner */}
           <div 
             className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
@@ -55,9 +55,9 @@ const SolarForm = () => {
             </div>
           </div>
 
-          {/* Actual form */}
+          {/* Actual form with scrollable container */}
           <div 
-            className={`transition-opacity duration-700 ${
+            className={`transition-opacity duration-700 h-full overflow-y-auto ${
               showForm ? 'opacity-100' : 'opacity-0'
             }`}
           >
@@ -65,7 +65,7 @@ const SolarForm = () => {
               src="https://api.leadconnectorhq.com/widget/form/9lDaU9yEdGltsGe35Bwh"
               style={{
                 width:'100%', 
-                height:'100%', 
+                minHeight:'700px',
                 border:'none', 
                 borderRadius:'6px'
               }}
@@ -78,7 +78,7 @@ const SolarForm = () => {
               data-deactivation-type="neverDeactivate"
               data-deactivation-value=""
               data-form-name="Solar-L Form"
-              data-height="551"
+              data-height="700"
               data-layout-iframe-id="inline-9lDaU9yEdGltsGe35Bwh"
               data-form-id="9lDaU9yEdGltsGe35Bwh"
               title="Solar-L Form"
