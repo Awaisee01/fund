@@ -18,10 +18,27 @@ const ECO4Form = () => {
     };
   }, []);
 
+  const handleMetaPixelClick = () => {
+    // Trigger Meta Pixel event
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead', {
+        content_name: 'ECO4 Form Submission',
+        content_category: 'ECO4 Grants'
+      });
+    }
+    
+    // Also trigger a custom event for Google Analytics if needed
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'form_submit', {
+        form_name: 'eco4_enquiry_form'
+      });
+    }
+  };
+
   return (
     <div className="w-fit mx-auto">
       <h3 className="text-2xl font-bold mb-4 text-center text-white">Enquire Here</h3>
-      <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm w-[320px]">
+      <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm w-[320px] relative">
         <div className="relative p-2">
           <iframe
             src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
@@ -43,6 +60,14 @@ const ECO4Form = () => {
           />
           {/* Overlay to help blend the form with the background */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/5 pointer-events-none rounded-xl"></div>
+          
+          {/* Invisible overlay button for Meta Pixel tracking */}
+          <button
+            onClick={handleMetaPixelClick}
+            className="absolute bottom-6 left-1/2 transform -translate-x-1/2 w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer z-20"
+            aria-label="Submit form tracking"
+            style={{ pointerEvents: 'auto' }}
+          />
         </div>
       </div>
     </div>

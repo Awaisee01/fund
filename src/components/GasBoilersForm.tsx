@@ -34,6 +34,23 @@ const GasBoilersForm = () => {
     }, 1000);
   };
 
+  const handleMetaPixelClick = () => {
+    // Trigger Meta Pixel event
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead', {
+        content_name: 'Gas Boiler Form Submission',
+        content_category: 'Gas Boilers'
+      });
+    }
+    
+    // Also trigger a custom event for Google Analytics if needed
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'form_submit', {
+        form_name: 'gas_boiler_enquiry_form'
+      });
+    }
+  };
+
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
       <CardHeader className="text-center pb-0 pt-4">
@@ -85,6 +102,16 @@ const GasBoilersForm = () => {
               onLoad={handleIframeLoad}
             />
           </div>
+
+          {/* Invisible overlay button for Meta Pixel tracking */}
+          {showForm && (
+            <button
+              onClick={handleMetaPixelClick}
+              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer z-20"
+              aria-label="Submit form tracking"
+              style={{ pointerEvents: 'auto' }}
+            />
+          )}
         </div>
       </CardContent>
     </Card>
