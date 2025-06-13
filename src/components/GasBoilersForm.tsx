@@ -103,14 +103,15 @@ const GasBoilersForm = () => {
             />
           </div>
 
-          {/* Invisible overlay button for Meta Pixel tracking */}
+          {/* Invisible overlay button positioned relatively at the bottom of the form */}
           {showForm && (
-            <button
-              onClick={handleMetaPixelClick}
-              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer z-20"
-              aria-label="Submit form tracking"
-              style={{ pointerEvents: 'auto' }}
-            />
+            <div className="relative -mt-16 flex justify-center z-20">
+              <button
+                onClick={handleMetaPixelClick}
+                className="w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer"
+                aria-label="Submit form tracking"
+              />
+            </div>
           )}
         </div>
       </CardContent>

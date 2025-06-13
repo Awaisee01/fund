@@ -61,13 +61,14 @@ const ECO4Form = () => {
           {/* Overlay to help blend the form with the background */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/5 pointer-events-none rounded-xl"></div>
           
-          {/* Invisible overlay button for Meta Pixel tracking */}
-          <button
-            onClick={handleMetaPixelClick}
-            className="absolute bottom-6 left-1/2 transform -translate-x-1/2 w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer z-20"
-            aria-label="Submit form tracking"
-            style={{ pointerEvents: 'auto' }}
-          />
+          {/* Invisible overlay button positioned relatively at the bottom of the form */}
+          <div className="relative -mt-16 flex justify-center z-20">
+            <button
+              onClick={handleMetaPixelClick}
+              className="w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer"
+              aria-label="Submit form tracking"
+            />
+          </div>
         </div>
       </div>
     </div>
