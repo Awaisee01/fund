@@ -5,7 +5,6 @@ import { Loader2 } from 'lucide-react';
 
 const GasBoilersForm = () => {
   const [showForm, setShowForm] = useState(false);
-  const [formHeight, setFormHeight] = useState(580);
 
   useEffect(() => {
     // Load the GoHighLevel form embed script
@@ -19,22 +18,12 @@ const GasBoilersForm = () => {
       setShowForm(true);
     }, 3000);
 
-    // Listen for iframe resize messages to adjust height dynamically
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.type === 'resize' && event.data.height) {
-        setFormHeight(Math.max(580, event.data.height));
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-
     return () => {
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
       if (existingScript) {
         document.body.removeChild(existingScript);
       }
       clearTimeout(showTimer);
-      window.removeEventListener('message', handleMessage);
     };
   }, []);
 
@@ -47,19 +36,18 @@ const GasBoilersForm = () => {
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-2 pt-4">
-        <CardTitle className="text-2xl font-bold text-white">
+      <CardHeader className="text-center pb-0 pt-4">
+        <CardTitle className="text-2xl font-bold text-white pt-2">
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-4 -mt-8">
-        <div className="w-full relative" style={{ minHeight: `${formHeight}px` }}>
+      <CardContent className="pt-0 p-0">
+        <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
           {/* Loading spinner */}
           <div 
             className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
               showForm ? 'opacity-0 pointer-events-none' : 'opacity-100'
             }`}
-            style={{ minHeight: '580px' }}
           >
             <div className="flex flex-col items-center space-y-4">
               <Loader2 className="h-8 w-8 animate-spin text-white/80" />
@@ -67,7 +55,7 @@ const GasBoilersForm = () => {
             </div>
           </div>
 
-          {/* Actual form with dynamic height */}
+          {/* Actual form */}
           <div 
             className={`transition-opacity duration-700 ${
               showForm ? 'opacity-100' : 'opacity-0'
@@ -77,7 +65,7 @@ const GasBoilersForm = () => {
               src="https://api.leadconnectorhq.com/widget/form/IQdjy6881LRm0K7ogyiF"
               style={{
                 width:'100%', 
-                height: `${formHeight}px`,
+                height:'100%', 
                 border:'none', 
                 borderRadius:'6px'
               }}
