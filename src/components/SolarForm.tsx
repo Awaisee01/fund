@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react';
 
 const SolarForm = () => {
   const [showForm, setShowForm] = useState(false);
+  const [formHeight, setFormHeight] = useState(580);
 
   useEffect(() => {
     // Load the GoHighLevel form embed script
@@ -18,12 +19,22 @@ const SolarForm = () => {
       setShowForm(true);
     }, 3000);
 
+    // Listen for iframe resize messages to adjust height dynamically
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'resize' && event.data.height) {
+        setFormHeight(Math.max(580, event.data.height));
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
     return () => {
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
       if (existingScript) {
         document.body.removeChild(existingScript);
       }
       clearTimeout(showTimer);
+      window.removeEventListener('message', handleMessage);
     };
   }, []);
 
@@ -41,8 +52,8 @@ const SolarForm = () => {
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0 p-2">
-        <div className="w-full relative">
+      <CardContent className="pt-0 p-4" style={{ paddingTop: '-8px' }}>
+        <div className="w-full relative" style={{ minHeight: `${formHeight}px` }}>
           {/* Loading spinner */}
           <div 
             className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
@@ -66,8 +77,7 @@ const SolarForm = () => {
               src="https://api.leadconnectorhq.com/widget/form/9lDaU9yEdGltsGe35Bwh"
               style={{
                 width:'100%', 
-                minHeight:'580px',
-                maxHeight:'800px',
+                height: `${formHeight}px`,
                 border:'none', 
                 borderRadius:'6px'
               }}
