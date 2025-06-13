@@ -52,7 +52,7 @@ const ECO4CustomForm = () => {
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0 p-4" style={{ paddingTop: '-8px' }}>
+      <CardContent className="p-4" style={{ paddingTop: '-8px' }}>
         <div className="w-full relative" style={{ minHeight: `${formHeight}px` }}>
           {/* Loading spinner */}
           <div 
