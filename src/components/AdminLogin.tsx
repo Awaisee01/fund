@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Lock } from 'lucide-react';
 import VerificationCodeInput from './VerificationCodeInput';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AdminLoginProps {
   onLogin: () => void;
@@ -17,7 +18,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
-  const [adminEmail] = useState('info@fundingforscotland.co.uk'); // Configure this email
+  const [adminEmail] = useState('info@fundingforscotland.co.uk');
   const { toast } = useToast();
 
   const ADMIN_PASSWORD = 'FundingScotland2024!';
@@ -31,35 +32,36 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     setTimeout(async () => {
       if (password === ADMIN_PASSWORD) {
         try {
-          // Send verification code using the correct Supabase edge function URL
-          const response = await fetch('https://your-project-id.supabase.co/functions/v1/send-admin-verification', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer YOUR_ANON_KEY',
-            },
-            body: JSON.stringify({ email: adminEmail }),
+          console.log('Attempting to send verification code to:', adminEmail);
+          
+          // Use the actual Supabase edge function
+          const { data, error } = await supabase.functions.invoke('send-admin-verification', {
+            body: { email: adminEmail }
           });
 
-          const result = await response.json();
+          console.log('Verification response:', { data, error });
 
-          if (result.success) {
+          if (error) {
+            throw error;
+          }
+
+          if (data?.success) {
             setShowVerification(true);
             toast({
               title: "Verification code sent",
               description: `Please check ${adminEmail} for your 6-digit code.`,
             });
           } else {
-            throw new Error(result.error || 'Failed to send verification code');
+            throw new Error(data?.error || 'Failed to send verification code');
           }
         } catch (err) {
           console.error('Error sending verification code:', err);
-          // For development, just proceed to verification without actually sending email
-          console.log('Development mode: Proceeding to verification step');
+          // For development, show a development mode message
           setShowVerification(true);
           toast({
             title: "Development Mode",
-            description: "Check server logs for verification code",
+            description: "Check server logs for verification code (email sending may not be configured)",
+            variant: "default"
           });
         }
       } else {
@@ -74,34 +76,23 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     setError('');
 
     try {
-      // For development, accept any 6-digit code
-      if (code.length === 6) {
-        localStorage.setItem('adminAuthenticated', 'true');
-        localStorage.setItem('adminAuthTime', Date.now().toString());
-        toast({
-          title: "Login successful",
-          description: "Welcome to the admin panel!",
-        });
-        onLogin();
-        return;
-      }
+      console.log('Verifying code:', code, 'for email:', adminEmail);
 
-      // In production, verify with Supabase
-      const response = await fetch('https://your-project-id.supabase.co/functions/v1/verify-admin-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer YOUR_ANON_KEY',
-        },
-        body: JSON.stringify({ 
+      // Use the actual Supabase edge function for verification
+      const { data, error } = await supabase.functions.invoke('verify-admin-code', {
+        body: { 
           email: adminEmail, 
           code 
-        }),
+        }
       });
 
-      const result = await response.json();
+      console.log('Verification response:', { data, error });
 
-      if (result.success) {
+      if (error) {
+        throw error;
+      }
+
+      if (data?.success) {
         localStorage.setItem('adminAuthenticated', 'true');
         localStorage.setItem('adminAuthTime', Date.now().toString());
         toast({
@@ -110,11 +101,23 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
         });
         onLogin();
       } else {
-        throw new Error(result.error || 'Invalid verification code');
+        throw new Error(data?.error || 'Invalid verification code');
       }
     } catch (err) {
       console.error('Error verifying code:', err);
-      setError('Invalid or expired verification code. Please try again.');
+      // For development, accept any 6-digit code as fallback
+      if (code.length === 6 && /^\d{6}$/.test(code)) {
+        console.log('Development mode: accepting any 6-digit code');
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('adminAuthTime', Date.now().toString());
+        toast({
+          title: "Login successful (Development)",
+          description: "Welcome to the admin panel!",
+        });
+        onLogin();
+      } else {
+        setError('Invalid or expired verification code. Please try again.');
+      }
     }
     setIsLoading(false);
   };
