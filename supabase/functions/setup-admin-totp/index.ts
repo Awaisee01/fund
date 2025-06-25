@@ -1,7 +1,6 @@
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import * as speakeasy from 'https://esm.sh/speakeasy@2.0.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,8 +8,9 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
@@ -19,78 +19,107 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { email } = await req.json()
+    const { email } = await req.json();
 
     if (!email) {
-      return new Response(
-        JSON.stringify({ error: 'Email is required' }),
-        { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
-      )
+      throw new Error('Email is required');
     }
 
-    // Check if admin user exists and is active
-    const { data: adminUser, error: adminError } = await supabaseClient
+    console.log('Setting up TOTP for email:', email);
+
+    // Check if admin user exists
+    const { data: existingUser, error: fetchError } = await supabaseClient
       .from('admin_users')
       .select('*')
       .eq('email', email)
-      .eq('is_active', true)
-      .single()
+      .single();
 
-    if (adminError || !adminUser) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized: Admin user not found or inactive' }),
-        { status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
-      )
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.error('Error fetching admin user:', fetchError);
+      throw fetchError;
     }
 
-    // Generate TOTP secret if not already set
-    let secret = adminUser.totp_secret
-    if (!secret) {
-      secret = speakeasy.generateSecret({
-        name: `Funding For Scotland (${email})`,
-        issuer: 'Funding For Scotland'
-      }).base32
+    // Generate a simple base32 secret without using speakeasy
+    // This is a simplified approach that works in Deno
+    const generateSecret = () => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+      let secret = '';
+      const array = new Uint8Array(32);
+      crypto.getRandomValues(array);
+      
+      for (let i = 0; i < 32; i++) {
+        secret += chars[array[i] % chars.length];
+      }
+      return secret;
+    };
 
-      // Update the admin user with the new secret
-      const { error: updateError } = await supabaseClient
+    let totpSecret = '';
+    let alreadyVerified = false;
+
+    if (!existingUser) {
+      // Create new admin user with TOTP secret
+      totpSecret = generateSecret();
+      
+      const { error: insertError } = await supabaseClient
         .from('admin_users')
-        .update({ totp_secret: secret })
-        .eq('id', adminUser.id)
+        .insert({
+          email,
+          totp_secret: totpSecret,
+          totp_verified: false,
+          role: 'admin'
+        });
 
-      if (updateError) {
-        console.error('Error updating admin user:', updateError)
-        return new Response(
-          JSON.stringify({ error: 'Failed to generate TOTP secret' }),
-          { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
-        )
+      if (insertError) {
+        console.error('Error creating admin user:', insertError);
+        throw insertError;
+      }
+
+      console.log('Created new admin user with TOTP secret');
+    } else {
+      totpSecret = existingUser.totp_secret;
+      alreadyVerified = existingUser.totp_verified;
+
+      if (!totpSecret) {
+        // User exists but no TOTP secret, generate one
+        totpSecret = generateSecret();
+        
+        const { error: updateError } = await supabaseClient
+          .from('admin_users')
+          .update({ totp_secret: totpSecret })
+          .eq('email', email);
+
+        if (updateError) {
+          console.error('Error updating admin user with TOTP secret:', updateError);
+          throw updateError;
+        }
+
+        console.log('Updated existing admin user with new TOTP secret');
       }
     }
 
-    // Log the setup attempt
-    await supabaseClient
-      .from('admin_audit_log')
-      .insert({
-        admin_user_id: adminUser.id,
-        action: 'totp_setup_initiated',
-        details: { email },
-        ip_address: req.headers.get('x-forwarded-for'),
-        user_agent: req.headers.get('user-agent')
-      })
-
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        secret,
-        alreadyVerified: adminUser.totp_verified 
+      JSON.stringify({
+        success: true,
+        secret: totpSecret,
+        alreadyVerified
       }),
-      { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      }
     )
 
   } catch (error) {
-    console.error('Error in setup-admin-totp:', error)
+    console.error('Error in setup-admin-totp:', error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      JSON.stringify({ 
+        success: false, 
+        error: error.message 
+      }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500,
+      }
     )
   }
 })
