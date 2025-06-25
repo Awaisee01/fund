@@ -4,155 +4,159 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Smartphone, ArrowLeft, Copy, CheckCircle } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import QRCode from 'qrcode';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { supabase } from '@/integrations/supabase/client';
 
 interface TOTPSetupProps {
   email: string;
-  secret: string;
-  onComplete: (code: string) => void;
-  onBack: () => void;
-  isLoading: boolean;
-  error: string;
+  onSetupComplete: () => void;
 }
 
-const TOTPSetup = ({ email, secret, onComplete, onBack, isLoading, error }: TOTPSetupProps) => {
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [copied, setCopied] = useState(false);
-  const { toast } = useToast();
+const TOTPSetup = ({ email, onSetupComplete }: TOTPSetupProps) => {
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
+  const [manualSecret, setManualSecret] = useState<string>('');
+  const [verificationCode, setVerificationCode] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
   useEffect(() => {
-    const generateQRCode = async () => {
-      const otpauth = `otpauth://totp/Funding%20For%20Scotland:${email}?secret=${secret}&issuer=Funding%20For%20Scotland`;
+    const setupTOTP = async () => {
       try {
-        const qrUrl = await QRCode.toDataURL(otpauth);
-        setQrCodeUrl(qrUrl);
+        setIsLoading(true);
+        setError('');
+        
+        const { data, error } = await supabase.functions.invoke('setup-admin-totp', {
+          body: { email }
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        if (data?.qrCodeUrl && data?.manualSecret) {
+          setQrCodeUrl(data.qrCodeUrl);
+          setManualSecret(data.manualSecret);
+        } else {
+          throw new Error('Invalid response from TOTP setup');
+        }
       } catch (err) {
-        console.error('Error generating QR code:', err);
+        console.error('TOTP setup error:', err);
+        setError(err instanceof Error ? err.message : 'Failed to set up TOTP');
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (secret) {
-      generateQRCode();
+    if (email) {
+      setupTOTP();
     }
-  }, [secret, email]);
+  }, [email]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (verificationCode.length === 6) {
-      onComplete(verificationCode);
+  const handleVerifyCode = async () => {
+    if (!verificationCode || verificationCode.length !== 6) {
+      setError('Please enter a 6-digit verification code');
+      return;
+    }
+
+    try {
+      setIsVerifying(true);
+      setError('');
+
+      const { data, error } = await supabase.functions.invoke('verify-admin-totp', {
+        body: { 
+          email, 
+          token: verificationCode 
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.verified) {
+        onSetupComplete();
+      } else {
+        setError('Invalid verification code. Please try again.');
+      }
+    } catch (err) {
+      console.error('TOTP verification error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to verify TOTP code');
+    } finally {
+      setIsVerifying(false);
     }
   };
 
-  const copySecret = () => {
-    navigator.clipboard.writeText(secret);
-    setCopied(true);
-    toast({
-      title: "Secret copied",
-      description: "The secret key has been copied to your clipboard.",
-    });
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-green-600 flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <Smartphone className="w-6 h-6 text-blue-600" />
-          </div>
-          <CardTitle className="text-2xl">Set Up Two-Factor Authentication</CardTitle>
-          <CardDescription>
-            Scan the QR code with your authenticator app or enter the secret manually
-          </CardDescription>
+  if (isLoading) {
+    return (
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle>Setting up Two-Factor Authentication</CardTitle>
+          <CardDescription>Please wait while we generate your TOTP secret...</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
-          {/* QR Code */}
-          {qrCodeUrl && (
-            <div className="flex justify-center">
-              <div className="bg-white p-4 rounded-lg">
-                <img src={qrCodeUrl} alt="TOTP QR Code" className="w-48 h-48" />
-              </div>
-            </div>
-          )}
-
-          {/* Manual Entry */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Or enter this secret manually:</Label>
-            <div className="flex items-center space-x-2">
-              <Input
-                value={secret}
-                readOnly
-                className="font-mono text-sm"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={copySecret}
-                className="shrink-0"
-              >
-                {copied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              </Button>
-            </div>
+        <CardContent>
+          <div className="flex justify-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
-
-          {/* Instructions */}
-          <div className="bg-blue-50 p-4 rounded-lg text-sm">
-            <h4 className="font-medium mb-2">Instructions:</h4>
-            <ol className="list-decimal list-inside space-y-1 text-gray-700">
-              <li>Download Google Authenticator or similar app</li>
-              <li>Scan the QR code or enter the secret manually</li>
-              <li>Enter the 6-digit code from your app below</li>
-            </ol>
-          </div>
-
-          {/* Verification */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="code">Verification Code</Label>
-              <Input
-                id="code"
-                type="text"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                placeholder="000000"
-                className="text-center text-lg tracking-widest font-mono"
-                maxLength={6}
-                required
-                disabled={isLoading}
-              />
-            </div>
-            
-            {error && (
-              <div className="text-red-600 text-sm text-center">{error}</div>
-            )}
-
-            <div className="flex space-x-3">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={onBack}
-                disabled={isLoading}
-                className="flex-1"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-              <Button 
-                type="submit" 
-                disabled={isLoading || verificationCode.length !== 6}
-                className="flex-1"
-              >
-                {isLoading ? 'Verifying...' : 'Complete Setup'}
-              </Button>
-            </div>
-          </form>
         </CardContent>
       </Card>
-    </div>
+    );
+  }
+
+  return (
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle>Set up Two-Factor Authentication</CardTitle>
+        <CardDescription>
+          Scan the QR code with your authenticator app or enter the secret manually
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {qrCodeUrl && (
+          <div className="text-center">
+            <img 
+              src={qrCodeUrl} 
+              alt="TOTP QR Code" 
+              className="mx-auto mb-4 border rounded-lg"
+              width={200}
+              height={200}
+            />
+            <p className="text-sm text-gray-600 mb-2">
+              Or enter this secret manually in your authenticator app:
+            </p>
+            <code className="text-xs bg-gray-100 p-2 rounded break-all">
+              {manualSecret}
+            </code>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <Label htmlFor="verification-code">Enter 6-digit code from your app</Label>
+          <Input
+            id="verification-code"
+            type="text"
+            placeholder="123456"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            maxLength={6}
+          />
+        </div>
+
+        <Button 
+          onClick={handleVerifyCode} 
+          disabled={isVerifying || verificationCode.length !== 6}
+          className="w-full"
+        >
+          {isVerifying ? 'Verifying...' : 'Verify and Complete Setup'}
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 
