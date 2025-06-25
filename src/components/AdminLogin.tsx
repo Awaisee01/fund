@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock } from 'lucide-react';
-import VerificationCodeInput from './VerificationCodeInput';
+import { Lock, Shield } from 'lucide-react';
+import TOTPSetup from './TOTPSetup';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -15,10 +15,12 @@ interface AdminLoginProps {
 
 const AdminLogin = ({ onLogin }: AdminLoginProps) => {
   const [password, setPassword] = useState('');
+  const [totpCode, setTotpCode] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showVerification, setShowVerification] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'password' | 'totp' | 'setup'>('password');
   const [adminEmail] = useState('info@fundingforscotland.co.uk');
+  const [totpSecret, setTotpSecret] = useState('');
   const { toast } = useToast();
 
   const ADMIN_PASSWORD = 'FundingScotland2024!';
@@ -28,65 +30,61 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     setIsLoading(true);
     setError('');
 
-    // Simulate a brief loading period for security
-    setTimeout(async () => {
-      if (password === ADMIN_PASSWORD) {
-        try {
-          console.log('Attempting to send verification code to:', adminEmail);
-          
-          // Use the actual Supabase edge function
-          const { data, error } = await supabase.functions.invoke('send-admin-verification', {
-            body: { email: adminEmail }
-          });
+    if (password !== ADMIN_PASSWORD) {
+      setError('Invalid password. Access denied.');
+      setIsLoading(false);
+      return;
+    }
 
-          console.log('Verification response:', { data, error });
+    try {
+      // Check if TOTP is set up for this admin
+      const { data, error } = await supabase.functions.invoke('setup-admin-totp', {
+        body: { email: adminEmail }
+      });
 
-          if (error) {
-            throw error;
-          }
+      if (error) {
+        throw error;
+      }
 
-          if (data?.success) {
-            setShowVerification(true);
-            toast({
-              title: "Verification code sent",
-              description: `Please check ${adminEmail} for your 6-digit code.`,
-            });
-          } else {
-            throw new Error(data?.error || 'Failed to send verification code');
-          }
-        } catch (err) {
-          console.error('Error sending verification code:', err);
-          // For development, show a development mode message
-          setShowVerification(true);
+      if (data?.success) {
+        setTotpSecret(data.secret);
+        
+        if (data.alreadyVerified) {
+          // TOTP already set up, go to verification
+          setCurrentStep('totp');
           toast({
-            title: "Development Mode",
-            description: "Check server logs for verification code (email sending may not be configured)",
-            variant: "default"
+            title: "Password correct",
+            description: "Please enter your 2FA code from your authenticator app.",
+          });
+        } else {
+          // First time setup
+          setCurrentStep('setup');
+          toast({
+            title: "TOTP Setup Required",
+            description: "Please set up two-factor authentication for your account.",
           });
         }
-      } else {
-        setError('Invalid password. Access denied.');
       }
-      setIsLoading(false);
-    }, 1000);
+    } catch (err) {
+      console.error('Error checking TOTP setup:', err);
+      setError('Failed to verify admin credentials. Please try again.');
+    }
+    
+    setIsLoading(false);
   };
 
-  const handleCodeVerification = async (code: string) => {
+  const handleTotpVerification = async (code: string) => {
     setIsLoading(true);
     setError('');
 
     try {
-      console.log('Verifying code:', code, 'for email:', adminEmail);
-
-      // Use the actual Supabase edge function for verification
-      const { data, error } = await supabase.functions.invoke('verify-admin-code', {
+      const { data, error } = await supabase.functions.invoke('verify-admin-totp', {
         body: { 
           email: adminEmail, 
-          code 
+          code,
+          isSetup: currentStep === 'setup'
         }
       });
-
-      console.log('Verification response:', { data, error });
 
       if (error) {
         throw error;
@@ -95,48 +93,105 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
       if (data?.success) {
         localStorage.setItem('adminAuthenticated', 'true');
         localStorage.setItem('adminAuthTime', Date.now().toString());
+        localStorage.setItem('adminUser', JSON.stringify(data.user));
+        
         toast({
           title: "Login successful",
-          description: "Welcome to the admin panel!",
+          description: currentStep === 'setup' 
+            ? "TOTP setup completed! Welcome to the admin panel." 
+            : "Welcome back to the admin panel!",
         });
         onLogin();
       } else {
         throw new Error(data?.error || 'Invalid verification code');
       }
     } catch (err) {
-      console.error('Error verifying code:', err);
-      // For development, accept any 6-digit code as fallback
-      if (code.length === 6 && /^\d{6}$/.test(code)) {
-        console.log('Development mode: accepting any 6-digit code');
-        localStorage.setItem('adminAuthenticated', 'true');
-        localStorage.setItem('adminAuthTime', Date.now().toString());
-        toast({
-          title: "Login successful (Development)",
-          description: "Welcome to the admin panel!",
-        });
-        onLogin();
-      } else {
-        setError('Invalid or expired verification code. Please try again.');
-      }
+      console.error('Error verifying TOTP:', err);
+      setError('Invalid verification code. Please try again.');
     }
+    
     setIsLoading(false);
   };
 
   const handleBackToPassword = () => {
-    setShowVerification(false);
+    setCurrentStep('password');
     setPassword('');
+    setTotpCode('');
     setError('');
   };
 
-  if (showVerification) {
+  const handleBackToTotp = () => {
+    setCurrentStep('totp');
+    setError('');
+  };
+
+  if (currentStep === 'setup') {
     return (
-      <VerificationCodeInput
+      <TOTPSetup
         email={adminEmail}
-        onVerify={handleCodeVerification}
+        secret={totpSecret}
+        onComplete={handleTotpVerification}
         onBack={handleBackToPassword}
         isLoading={isLoading}
         error={error}
       />
+    );
+  }
+
+  if (currentStep === 'totp') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-600 to-green-600 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+              <Shield className="w-6 h-6 text-blue-600" />
+            </div>
+            <CardTitle className="text-2xl">Two-Factor Authentication</CardTitle>
+            <CardDescription>
+              Enter the 6-digit code from your authenticator app
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={(e) => { e.preventDefault(); handleTotpVerification(totpCode); }} className="space-y-4">
+              <div>
+                <Label htmlFor="totpCode">Verification Code</Label>
+                <Input
+                  id="totpCode"
+                  type="text"
+                  value={totpCode}
+                  onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder="000000"
+                  className="text-center text-lg tracking-widest font-mono"
+                  maxLength={6}
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+              {error && (
+                <div className="text-red-600 text-sm text-center">{error}</div>
+              )}
+              <div className="flex space-x-3">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleBackToPassword}
+                  disabled={isLoading}
+                  className="flex-1"
+                >
+                  Back
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={isLoading || totpCode.length !== 6}
+                  className="flex-1"
+                >
+                  {isLoading ? 'Verifying...' : 'Verify'}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
@@ -174,7 +229,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
               className="w-full" 
               disabled={isLoading || !password}
             >
-              {isLoading ? 'Sending verification code...' : 'Continue to 2FA'}
+              {isLoading ? 'Verifying...' : 'Continue to 2FA'}
             </Button>
           </form>
         </CardContent>

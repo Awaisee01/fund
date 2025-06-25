@@ -9,7 +9,94 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_user_id: string | null
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          admin_user_id?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_audit_log_admin_user_id_fkey"
+            columns: ["admin_user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          invitation_expires_at: string | null
+          invitation_token: string | null
+          invited_by: string | null
+          is_active: boolean | null
+          role: string
+          totp_secret: string | null
+          totp_verified: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          invitation_expires_at?: string | null
+          invitation_token?: string | null
+          invited_by?: string | null
+          is_active?: boolean | null
+          role?: string
+          totp_secret?: string | null
+          totp_verified?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          invitation_expires_at?: string | null
+          invitation_token?: string | null
+          invited_by?: string | null
+          is_active?: boolean | null
+          role?: string
+          totp_secret?: string | null
+          totp_verified?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_users_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
