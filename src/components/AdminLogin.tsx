@@ -120,11 +120,6 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     setError('');
   };
 
-  const handleBackToTotp = () => {
-    setCurrentStep('totp');
-    setError('');
-  };
-
   if (currentStep === 'setup') {
     return (
       <TOTPSetup
