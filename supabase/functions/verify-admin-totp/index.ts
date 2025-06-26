@@ -43,17 +43,25 @@ serve(async (req) => {
       throw new Error('TOTP not set up for this user');
     }
 
-    // Proper TOTP verification using HMAC-SHA1
-    const verifyTOTP = async (secret: string, token: string, window = 1) => {
-      const timeStep = Math.floor(Date.now() / 1000 / 30);
+    // Improved TOTP verification with better time window handling
+    const verifyTOTP = async (secret: string, token: string) => {
+      console.log('Starting TOTP verification with secret length:', secret.length);
+      
+      // Clean the secret (remove spaces and convert to uppercase)
+      const cleanSecret = secret.replace(/\s+/g, '').toUpperCase();
+      console.log('Clean secret:', cleanSecret);
       
       // Convert base32 secret to bytes
       const base32chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
       let bits = '';
-      for (let i = 0; i < secret.length; i++) {
-        const char = secret[i];
-        const index = base32chars.indexOf(char.toUpperCase());
-        if (index === -1) continue;
+      
+      for (let i = 0; i < cleanSecret.length; i++) {
+        const char = cleanSecret[i];
+        const index = base32chars.indexOf(char);
+        if (index === -1) {
+          console.error('Invalid base32 character:', char);
+          continue;
+        }
         bits += index.toString(2).padStart(5, '0');
       }
       
@@ -67,43 +75,60 @@ serve(async (req) => {
         secretBytes[i] = parseInt(bits.slice(i * 8, (i + 1) * 8), 2);
       }
 
-      // Check current time and adjacent windows
-      for (let i = -window; i <= window; i++) {
-        const time = timeStep + i;
+      console.log('Secret bytes length:', secretBytes.length);
+
+      // Get current time step (30-second intervals since Unix epoch)
+      const currentTime = Math.floor(Date.now() / 1000);
+      const timeStep = Math.floor(currentTime / 30);
+      
+      console.log('Current time:', currentTime, 'Time step:', timeStep);
+
+      // Check multiple time windows to account for clock drift
+      const windows = [-2, -1, 0, 1, 2]; // Check 5 windows (2.5 minutes total)
+      
+      for (const windowOffset of windows) {
+        const time = timeStep + windowOffset;
         
-        // Convert time to 8-byte big-endian
-        const timeBytes = new ArrayBuffer(8);
-        const timeView = new DataView(timeBytes);
-        timeView.setUint32(4, time, false); // big-endian
-        
-        // HMAC-SHA1 using Web Crypto API
-        const key = await crypto.subtle.importKey(
-          'raw',
-          secretBytes,
-          { name: 'HMAC', hash: 'SHA-1' },
-          false,
-          ['sign']
-        );
-        
-        const signature = await crypto.subtle.sign('HMAC', key, timeBytes);
-        const hashArray = new Uint8Array(signature);
-        
-        // Dynamic truncation
-        const offset = hashArray[hashArray.length - 1] & 0xf;
-        const binary = ((hashArray[offset] & 0x7f) << 24) |
-                      ((hashArray[offset + 1] & 0xff) << 16) |
-                      ((hashArray[offset + 2] & 0xff) << 8) |
-                      (hashArray[offset + 3] & 0xff);
-        
-        const otp = (binary % 1000000).toString().padStart(6, '0');
-        
-        console.log(`Time window ${i}: Generated OTP ${otp} for time ${time}`);
-        
-        if (otp === token) {
-          return true;
+        try {
+          // Convert time to 8-byte big-endian buffer
+          const timeBuffer = new ArrayBuffer(8);
+          const timeView = new DataView(timeBuffer);
+          timeView.setUint32(4, time, false); // big-endian, store in last 4 bytes
+          
+          // Create HMAC-SHA1 key
+          const key = await crypto.subtle.importKey(
+            'raw',
+            secretBytes,
+            { name: 'HMAC', hash: 'SHA-1' },
+            false,
+            ['sign']
+          );
+          
+          // Generate HMAC-SHA1 signature
+          const signature = await crypto.subtle.sign('HMAC', key, timeBuffer);
+          const hashArray = new Uint8Array(signature);
+          
+          // Dynamic truncation (RFC 4226)
+          const offset = hashArray[hashArray.length - 1] & 0xf;
+          const binary = ((hashArray[offset] & 0x7f) << 24) |
+                        ((hashArray[offset + 1] & 0xff) << 16) |
+                        ((hashArray[offset + 2] & 0xff) << 8) |
+                        (hashArray[offset + 3] & 0xff);
+          
+          const otp = (binary % 1000000).toString().padStart(6, '0');
+          
+          console.log(`Window ${windowOffset}: time=${time}, generated OTP=${otp}, input=${token}`);
+          
+          if (otp === token) {
+            console.log('✅ TOTP match found in window:', windowOffset);
+            return true;
+          }
+        } catch (error) {
+          console.error('Error in TOTP calculation for window', windowOffset, ':', error);
         }
       }
       
+      console.log('❌ No TOTP match found in any time window');
       return false;
     };
 
