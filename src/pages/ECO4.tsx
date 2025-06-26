@@ -1,6 +1,6 @@
 
-
 import { useEffect, useState } from 'react';
+import Navigation from '@/components/Navigation';
 import ECO4CustomForm from '@/components/ECO4CustomForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -66,6 +66,7 @@ const ECO4 = () => {
 
   return (
     <div>
+      <Navigation />
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
@@ -249,4 +250,3 @@ const ECO4 = () => {
 };
 
 export default ECO4;
-

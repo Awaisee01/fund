@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react';
+import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, Clock, CheckCircle, Headphones } from 'lucide-react';
@@ -16,6 +17,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navigation />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 to-green-600 text-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
