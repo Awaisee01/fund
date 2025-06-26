@@ -1,54 +1,62 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from '@/pages/Home';
+import Contact from '@/pages/Contact';
+import ECO4 from '@/pages/ECO4';
+import Solar from '@/pages/Solar';
+import GasBoilers from '@/pages/GasBoilers';
+import HomeImprovements from '@/pages/HomeImprovements';
+import AdminLogin from '@/pages/AdminLogin';
+import AdminDashboard from '@/components/AdminDashboard';
+import { useState, useEffect } from 'react';
+import { usePageTracking } from '@/hooks/usePageTracking';
 
-import { createRoot } from 'react-dom/client';
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navigation from "./components/Navigation";
-import Footer from "./components/Footer";
-import ScrollToTop from "./components/ScrollToTop";
-import SEOStructuredData from "./components/SEOStructuredData";
-import Home from "./pages/Home";
-import ECO4 from "./pages/ECO4";
-import Solar from "./pages/Solar";
-import GasBoilers from "./pages/GasBoilers";
-import HomeImprovements from "./pages/HomeImprovements";
-import Contact from "./pages/Contact";
-import Admin from "./pages/Admin";
-import NotFound from "./pages/NotFound";
+function App() {
+  // Add page tracking
+  usePageTracking();
 
-const queryClient = new QueryClient();
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
-const App = () => {
+  useEffect(() => {
+    const storedAuth = localStorage.getItem('adminAuthenticated');
+    if (storedAuth === 'true') {
+      setIsAdminAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    localStorage.setItem('adminAuthenticated', 'true');
+    setIsAdminAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminAuthenticated');
+    setIsAdminAuthenticated(false);
+  };
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <SEOStructuredData />
-          <div className="min-h-screen flex flex-col">
-            <Navigation />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/eco4" element={<ECO4 />} />
-                <Route path="/solar" element={<Solar />} />
-                <Route path="/gas-boilers" element={<GasBoilers />} />
-                <Route path="/home-improvements" element={<HomeImprovements />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/eco4" element={<ECO4 />} />
+        <Route path="/solar" element={<Solar />} />
+        <Route path="/gas-boilers" element={<GasBoilers />} />
+        <Route path="/home-improvements" element={<HomeImprovements />} />
+        <Route path="/admin/login" element={<AdminLogin onLogin={handleLogin} />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            isAdminAuthenticated ? (
+              <AdminDashboard onLogout={handleLogout} />
+            ) : (
+              <AdminLogin onLogin={handleLogin} />
+            )
+          }
+        />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;

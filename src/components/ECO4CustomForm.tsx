@@ -1,7 +1,7 @@
-
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { trackEnquirySubmission } from '@/utils/analytics';
 
 const ECO4CustomForm = () => {
   const [showForm, setShowForm] = useState(false);
@@ -34,7 +34,10 @@ const ECO4CustomForm = () => {
     }, 1000);
   };
 
-  const handleMetaPixelClick = () => {
+  const handleMetaPixelClick = async () => {
+    // Track enquiry submission
+    await trackEnquirySubmission('eco4');
+    
     // Trigger Meta Pixel event
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead', {

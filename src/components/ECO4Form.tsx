@@ -1,5 +1,6 @@
 
 import { useEffect } from 'react';
+import { trackEnquirySubmission } from '@/utils/analytics';
 
 const ECO4Form = () => {
   useEffect(() => {
@@ -18,7 +19,10 @@ const ECO4Form = () => {
     };
   }, []);
 
-  const handleMetaPixelClick = () => {
+  const handleMetaPixelClick = async () => {
+    // Track enquiry submission
+    await trackEnquirySubmission('eco4');
+    
     // Trigger Meta Pixel event
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead', {
