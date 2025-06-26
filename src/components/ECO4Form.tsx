@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 
 const ECO4Form = () => {
@@ -17,7 +18,7 @@ const ECO4Form = () => {
     };
   }, []);
 
-  const handleMetaPixelClick = async () => {
+  const handleMetaPixelClick = () => {
     // Trigger Meta Pixel event
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead', {

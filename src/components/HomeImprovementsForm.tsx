@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
@@ -33,7 +34,7 @@ const HomeImprovementsForm = () => {
     }, 1000);
   };
 
-  const handleMetaPixelClick = async () => {
+  const handleMetaPixelClick = () => {
     // Trigger Meta Pixel event
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead', {

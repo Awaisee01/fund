@@ -1,6 +1,5 @@
 
 import { useEffect } from 'react';
-import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
 import ServicesGrid from '@/components/ServicesGrid';
 import TrustBadges from '@/components/TrustBadges';
@@ -17,7 +16,6 @@ const Home = () => {
 
   return (
     <div>
-      <Navigation />
       <Hero 
         title="Unlock Scottish Grants & Funding"
         subtitle=""
