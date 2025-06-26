@@ -99,15 +99,17 @@ export const trackPageVisit = async (page_path: string) => {
         })
         .eq('id', existingSession.id);
     } else {
-      // Create new session
-      await supabase.from('visitor_sessions').insert({
+      // Create new session - be explicit about the data structure
+      const sessionData = {
         visitor_id: visitorId,
         session_id: sessionId,
-        referrer: trackingData.referrer,
-        utm_source: utmParams.utm_source,
-        utm_medium: utmParams.utm_medium,
-        utm_campaign: utmParams.utm_campaign,
-      });
+        referrer: trackingData.referrer || null,
+        utm_source: utmParams.utm_source || null,
+        utm_medium: utmParams.utm_medium || null,
+        utm_campaign: utmParams.utm_campaign || null,
+      };
+      
+      await supabase.from('visitor_sessions').insert(sessionData);
     }
 
     console.log('Page visit tracked:', page_path);
@@ -123,17 +125,20 @@ export const trackEnquirySubmission = async (formType: string, formData?: Record
     const sessionId = getSessionId();
     const utmParams = getUTMParams();
 
-    await supabase.from('enquiry_submissions').insert({
+    // Be explicit about the data structure
+    const enquiryData = {
       visitor_id: visitorId,
       session_id: sessionId,
       form_type: formType,
       page_path: window.location.pathname,
-      referrer: document.referrer || undefined,
-      form_data: formData,
-      utm_source: utmParams.utm_source,
-      utm_medium: utmParams.utm_medium,
-      utm_campaign: utmParams.utm_campaign,
-    });
+      referrer: document.referrer || null,
+      form_data: formData || null,
+      utm_source: utmParams.utm_source || null,
+      utm_medium: utmParams.utm_medium || null,
+      utm_campaign: utmParams.utm_campaign || null,
+    };
+
+    await supabase.from('enquiry_submissions').insert(enquiryData);
 
     // Mark session as converted
     await supabase
