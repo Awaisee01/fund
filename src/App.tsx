@@ -10,12 +10,8 @@ import HomeImprovements from '@/pages/HomeImprovements';
 import AdminLogin from '@/components/AdminLogin';
 import AdminDashboard from '@/components/AdminDashboard';
 import { useState, useEffect } from 'react';
-import { usePageTracking } from '@/hooks/usePageTracking';
 
 function App() {
-  // Add page tracking
-  usePageTracking();
-
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
   useEffect(() => {
