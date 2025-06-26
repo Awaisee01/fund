@@ -119,24 +119,34 @@ export const trackPageVisit = async (page_path: string) => {
 };
 
 // Track enquiry submission
-export const trackEnquirySubmission = async (formType: string, formData?: any) => {
+export const trackEnquirySubmission = async (formType: string, formData?: unknown) => {
   try {
     const visitorId = getVisitorId();
     const sessionId = getSessionId();
     const utmParams = getUTMParams();
 
-    // Create the data object with explicit typing
+    // Simplify the data serialization to avoid type complexity
+    let serializedFormData = null;
+    if (formData) {
+      try {
+        serializedFormData = JSON.stringify(formData);
+        serializedFormData = JSON.parse(serializedFormData);
+      } catch {
+        serializedFormData = null;
+      }
+    }
+
     const insertData = {
       visitor_id: visitorId,
       session_id: sessionId,
       form_type: formType,
       page_path: window.location.pathname,
       referrer: document.referrer || null,
-      form_data: formData ? JSON.parse(JSON.stringify(formData)) : null,
+      form_data: serializedFormData,
       utm_source: utmParams.utm_source || null,
       utm_medium: utmParams.utm_medium || null,
       utm_campaign: utmParams.utm_campaign || null,
-    };
+    } as const;
 
     const { error } = await supabase.from('enquiry_submissions').insert(insertData);
     
