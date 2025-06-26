@@ -11,6 +11,14 @@ interface TrackingData {
   utm_content?: string;
 }
 
+interface UTMParams {
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  utm_term: string;
+  utm_content: string;
+}
+
 // Generate or get visitor ID from localStorage
 const getVisitorId = (): string => {
   let visitorId = localStorage.getItem('visitor_id');
@@ -32,7 +40,7 @@ const getSessionId = (): string => {
 };
 
 // Extract UTM parameters from URL
-const getUTMParams = () => {
+const getUTMParams = (): UTMParams => {
   const params = new URLSearchParams(window.location.search);
   return {
     utm_source: params.get('utm_source') || '',
@@ -53,7 +61,11 @@ export const trackPageVisit = async (page_path: string) => {
     const trackingData: TrackingData = {
       page_path,
       referrer: document.referrer || undefined,
-      ...utmParams,
+      utm_source: utmParams.utm_source,
+      utm_medium: utmParams.utm_medium,
+      utm_campaign: utmParams.utm_campaign,
+      utm_term: utmParams.utm_term,
+      utm_content: utmParams.utm_content,
     };
 
     // Track the page visit
@@ -61,7 +73,13 @@ export const trackPageVisit = async (page_path: string) => {
       visitor_id: visitorId,
       session_id: sessionId,
       user_agent: navigator.userAgent,
-      ...trackingData,
+      page_path: trackingData.page_path,
+      referrer: trackingData.referrer,
+      utm_source: trackingData.utm_source,
+      utm_medium: trackingData.utm_medium,
+      utm_campaign: trackingData.utm_campaign,
+      utm_term: trackingData.utm_term,
+      utm_content: trackingData.utm_content,
     });
 
     // Update or create visitor session
@@ -86,7 +104,9 @@ export const trackPageVisit = async (page_path: string) => {
         visitor_id: visitorId,
         session_id: sessionId,
         referrer: trackingData.referrer,
-        ...utmParams,
+        utm_source: utmParams.utm_source,
+        utm_medium: utmParams.utm_medium,
+        utm_campaign: utmParams.utm_campaign,
       });
     }
 
@@ -110,7 +130,9 @@ export const trackEnquirySubmission = async (formType: string, formData?: Record
       page_path: window.location.pathname,
       referrer: document.referrer || undefined,
       form_data: formData,
-      ...utmParams,
+      utm_source: utmParams.utm_source,
+      utm_medium: utmParams.utm_medium,
+      utm_campaign: utmParams.utm_campaign,
     });
 
     // Mark session as converted
