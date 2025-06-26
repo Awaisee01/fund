@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from '@/pages/Home';
@@ -6,7 +7,7 @@ import ECO4 from '@/pages/ECO4';
 import Solar from '@/pages/Solar';
 import GasBoilers from '@/pages/GasBoilers';
 import HomeImprovements from '@/pages/HomeImprovements';
-import AdminLogin from '@/pages/AdminLogin';
+import AdminLogin from '@/components/AdminLogin';
 import AdminDashboard from '@/components/AdminDashboard';
 import { useState, useEffect } from 'react';
 import { usePageTracking } from '@/hooks/usePageTracking';

@@ -32,7 +32,7 @@ const getSessionId = (): string => {
 };
 
 // Extract UTM parameters from URL
-const getUTMParams = (): Record<string, string> => {
+const getUTMParams = () => {
   const params = new URLSearchParams(window.location.search);
   return {
     utm_source: params.get('utm_source') || '',
@@ -52,7 +52,7 @@ export const trackPageVisit = async (page_path: string) => {
     
     const trackingData: TrackingData = {
       page_path,
-      referrer: document.referrer || null,
+      referrer: document.referrer || undefined,
       ...utmParams,
     };
 
@@ -97,7 +97,7 @@ export const trackPageVisit = async (page_path: string) => {
 };
 
 // Track enquiry submission
-export const trackEnquirySubmission = async (formType: string, formData?: any) => {
+export const trackEnquirySubmission = async (formType: string, formData?: Record<string, any>) => {
   try {
     const visitorId = getVisitorId();
     const sessionId = getSessionId();
@@ -108,7 +108,7 @@ export const trackEnquirySubmission = async (formType: string, formData?: any) =
       session_id: sessionId,
       form_type: formType,
       page_path: window.location.pathname,
-      referrer: document.referrer || null,
+      referrer: document.referrer || undefined,
       form_data: formData,
       ...utmParams,
     });
