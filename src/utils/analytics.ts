@@ -119,26 +119,31 @@ export const trackPageVisit = async (page_path: string) => {
 };
 
 // Track enquiry submission
-export const trackEnquirySubmission = async (formType: string, formData?: Record<string, any>) => {
+export const trackEnquirySubmission = async (formType: string, formData?: any) => {
   try {
     const visitorId = getVisitorId();
     const sessionId = getSessionId();
     const utmParams = getUTMParams();
 
-    // Be explicit about the data structure
-    const enquiryData = {
+    // Create the data object with explicit typing
+    const insertData = {
       visitor_id: visitorId,
       session_id: sessionId,
       form_type: formType,
       page_path: window.location.pathname,
       referrer: document.referrer || null,
-      form_data: formData || null,
+      form_data: formData ? JSON.parse(JSON.stringify(formData)) : null,
       utm_source: utmParams.utm_source || null,
       utm_medium: utmParams.utm_medium || null,
       utm_campaign: utmParams.utm_campaign || null,
     };
 
-    await supabase.from('enquiry_submissions').insert(enquiryData);
+    const { error } = await supabase.from('enquiry_submissions').insert(insertData);
+    
+    if (error) {
+      console.error('Error inserting enquiry:', error);
+      return;
+    }
 
     // Mark session as converted
     await supabase
