@@ -28,7 +28,7 @@ export const trackPageVisit = async (page_path: string) => {
     const sessionId = getSessionId();
     
     // Insert page visit record
-    const { error } = await supabase.from('page_visits').insert({
+    await supabase.from('page_visits').insert({
       visitor_id: visitorId,
       session_id: sessionId,
       page_path: page_path,
@@ -40,11 +40,6 @@ export const trackPageVisit = async (page_path: string) => {
       utm_term: null,
       utm_content: null,
     });
-
-    if (error) {
-      console.error('Error tracking page visit:', error);
-      return;
-    }
 
     // Update or create visitor session
     const { data: existingSession } = await supabase
@@ -64,7 +59,7 @@ export const trackPageVisit = async (page_path: string) => {
         .eq('id', existingSession.id);
     } else {
       // Create new session
-      const { error: sessionError } = await supabase.from('visitor_sessions').insert({
+      await supabase.from('visitor_sessions').insert({
         visitor_id: visitorId,
         session_id: sessionId,
         referrer: document.referrer || null,
@@ -72,10 +67,6 @@ export const trackPageVisit = async (page_path: string) => {
         utm_medium: null,
         utm_campaign: null,
       });
-
-      if (sessionError) {
-        console.error('Error creating visitor session:', sessionError);
-      }
     }
 
     console.log('Page visit tracked:', page_path);

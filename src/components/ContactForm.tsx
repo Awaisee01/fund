@@ -1,9 +1,7 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { trackEnquirySubmission } from '@/utils/analytics';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -25,9 +23,6 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    
-    // Track the enquiry submission
-    await trackEnquirySubmission('contact', formData);
     
     // Handle form submission here
   };

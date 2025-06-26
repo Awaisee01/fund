@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { trackEnquirySubmission } from '@/utils/analytics';
 
 const SolarForm = () => {
   const [showForm, setShowForm] = useState(false);
@@ -35,9 +34,6 @@ const SolarForm = () => {
   };
 
   const handleMetaPixelClick = async () => {
-    // Track enquiry submission
-    await trackEnquirySubmission('solar');
-    
     // Trigger Meta Pixel event
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead', {
