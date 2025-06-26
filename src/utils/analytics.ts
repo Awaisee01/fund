@@ -68,19 +68,24 @@ export const trackPageVisit = async (page_path: string) => {
       utm_content: utmParams.utm_content,
     };
 
-    // Track the page visit
-    await supabase.from('page_visits').insert({
+    // Track the page visit - use explicit type casting to avoid deep inference
+    const { error: visitError } = await supabase.from('page_visits').insert({
       visitor_id: visitorId,
       session_id: sessionId,
       user_agent: navigator.userAgent,
       page_path: trackingData.page_path,
-      referrer: trackingData.referrer,
-      utm_source: trackingData.utm_source,
-      utm_medium: trackingData.utm_medium,
-      utm_campaign: trackingData.utm_campaign,
-      utm_term: trackingData.utm_term,
-      utm_content: trackingData.utm_content,
+      referrer: trackingData.referrer || null,
+      utm_source: trackingData.utm_source || null,
+      utm_medium: trackingData.utm_medium || null,
+      utm_campaign: trackingData.utm_campaign || null,
+      utm_term: trackingData.utm_term || null,
+      utm_content: trackingData.utm_content || null,
     });
+
+    if (visitError) {
+      console.error('Error tracking page visit:', visitError);
+      return;
+    }
 
     // Update or create visitor session
     const { data: existingSession } = await supabase
@@ -99,17 +104,19 @@ export const trackPageVisit = async (page_path: string) => {
         })
         .eq('id', existingSession.id);
     } else {
-      // Create new session - be explicit about the data structure
-      const sessionData = {
+      // Create new session
+      const { error: sessionError } = await supabase.from('visitor_sessions').insert({
         visitor_id: visitorId,
         session_id: sessionId,
         referrer: trackingData.referrer || null,
         utm_source: utmParams.utm_source || null,
         utm_medium: utmParams.utm_medium || null,
         utm_campaign: utmParams.utm_campaign || null,
-      };
-      
-      await supabase.from('visitor_sessions').insert(sessionData);
+      });
+
+      if (sessionError) {
+        console.error('Error creating visitor session:', sessionError);
+      }
     }
 
     console.log('Page visit tracked:', page_path);
@@ -119,36 +126,49 @@ export const trackPageVisit = async (page_path: string) => {
 };
 
 // Track enquiry submission
-export const trackEnquirySubmission = async (formType: string, formData?: Record<string, any>) => {
+export const trackEnquirySubmission = async (formType: string, formData?: any) => {
   try {
     const visitorId = getVisitorId();
     const sessionId = getSessionId();
     const utmParams = getUTMParams();
 
-    // Handle form data serialization safely
-    let processedFormData: Record<string, any> | null = null;
+    // Safely handle form data
+    let safeFormData = null;
     if (formData && typeof formData === 'object') {
-      processedFormData = { ...formData };
+      try {
+        safeFormData = JSON.parse(JSON.stringify(formData));
+      } catch {
+        safeFormData = null;
+      }
     }
 
-    // Insert enquiry data with explicit typing
-    await supabase.from('enquiry_submissions').insert({
+    // Insert enquiry data with explicit error handling
+    const { error: enquiryError } = await supabase.from('enquiry_submissions').insert({
       visitor_id: visitorId,
       session_id: sessionId,
       form_type: formType,
       page_path: window.location.pathname,
       referrer: document.referrer || null,
-      form_data: processedFormData,
+      form_data: safeFormData,
       utm_source: utmParams.utm_source || null,
       utm_medium: utmParams.utm_medium || null,
       utm_campaign: utmParams.utm_campaign || null,
     });
 
+    if (enquiryError) {
+      console.error('Error tracking enquiry submission:', enquiryError);
+      return;
+    }
+
     // Mark session as converted
-    await supabase
+    const { error: sessionError } = await supabase
       .from('visitor_sessions')
       .update({ converted: true })
       .eq('session_id', sessionId);
+
+    if (sessionError) {
+      console.error('Error updating session conversion:', sessionError);
+    }
 
     console.log('Enquiry submission tracked:', formType);
   } catch (error) {
