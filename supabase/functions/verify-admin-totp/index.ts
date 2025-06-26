@@ -43,8 +43,8 @@ serve(async (req) => {
       throw new Error('TOTP not set up for this user');
     }
 
-    // Simple TOTP verification using HMAC-SHA1
-    const verifyTOTP = (secret: string, token: string, window = 1) => {
+    // Proper TOTP verification using HMAC-SHA1
+    const verifyTOTP = async (secret: string, token: string, window = 1) => {
       const timeStep = Math.floor(Date.now() / 1000 / 30);
       
       // Convert base32 secret to bytes
@@ -57,6 +57,11 @@ serve(async (req) => {
         bits += index.toString(2).padStart(5, '0');
       }
       
+      // Pad bits to make it divisible by 8
+      while (bits.length % 8 !== 0) {
+        bits += '0';
+      }
+      
       const secretBytes = new Uint8Array(bits.length / 8);
       for (let i = 0; i < secretBytes.length; i++) {
         secretBytes[i] = parseInt(bits.slice(i * 8, (i + 1) * 8), 2);
@@ -65,56 +70,60 @@ serve(async (req) => {
       // Check current time and adjacent windows
       for (let i = -window; i <= window; i++) {
         const time = timeStep + i;
+        
+        // Convert time to 8-byte big-endian
         const timeBytes = new ArrayBuffer(8);
         const timeView = new DataView(timeBytes);
-        timeView.setUint32(4, time, false);
-
-        // HMAC-SHA1 implementation would be complex, so for now we'll use a simpler approach
-        // In production, you'd want to use a proper TOTP library
+        timeView.setUint32(4, time, false); // big-endian
         
-        // For demonstration, let's create a simple hash-based check
-        const combined = secret + time.toString();
-        const encoder = new TextEncoder();
-        const data = encoder.encode(combined);
+        // HMAC-SHA1 using Web Crypto API
+        const key = await crypto.subtle.importKey(
+          'raw',
+          secretBytes,
+          { name: 'HMAC', hash: 'SHA-1' },
+          false,
+          ['sign']
+        );
         
-        crypto.subtle.digest('SHA-256', data).then(hashBuffer => {
-          const hashArray = new Uint8Array(hashBuffer);
-          const offset = hashArray[hashArray.length - 1] & 0xf;
-          const binary = ((hashArray[offset] & 0x7f) << 24) |
-                        ((hashArray[offset + 1] & 0xff) << 16) |
-                        ((hashArray[offset + 2] & 0xff) << 8) |
-                        (hashArray[offset + 3] & 0xff);
-          const otp = (binary % 1000000).toString().padStart(6, '0');
-          return otp === token;
-        });
-      }
-      
-      // Simplified verification - in production use proper TOTP
-      // For now, accept any 6-digit code that looks valid during setup
-      if (isSetup && /^\d{6}$/.test(token)) {
-        return true;
+        const signature = await crypto.subtle.sign('HMAC', key, timeBytes);
+        const hashArray = new Uint8Array(signature);
+        
+        // Dynamic truncation
+        const offset = hashArray[hashArray.length - 1] & 0xf;
+        const binary = ((hashArray[offset] & 0x7f) << 24) |
+                      ((hashArray[offset + 1] & 0xff) << 16) |
+                      ((hashArray[offset + 2] & 0xff) << 8) |
+                      (hashArray[offset + 3] & 0xff);
+        
+        const otp = (binary % 1000000).toString().padStart(6, '0');
+        
+        console.log(`Time window ${i}: Generated OTP ${otp} for time ${time}`);
+        
+        if (otp === token) {
+          return true;
+        }
       }
       
       return false;
     };
 
-    const isValid = verifyTOTP(adminUser.totp_secret, code);
+    const isValid = await verifyTOTP(adminUser.totp_secret, code);
 
-    if (!isValid && !isSetup) {
+    console.log('TOTP verification result:', isValid);
+
+    if (!isValid) {
       throw new Error('Invalid verification code');
     }
 
-    // If this is setup or verification is successful, mark as verified
-    if (isSetup || isValid) {
-      const { error: updateError } = await supabaseClient
-        .from('admin_users')
-        .update({ totp_verified: true })
-        .eq('email', email);
+    // Mark as verified if this is setup or verification is successful
+    const { error: updateError } = await supabaseClient
+      .from('admin_users')
+      .update({ totp_verified: true })
+      .eq('email', email);
 
-      if (updateError) {
-        console.error('Error updating verification status:', updateError);
-        throw updateError;
-      }
+    if (updateError) {
+      console.error('Error updating verification status:', updateError);
+      throw updateError;
     }
 
     // Log the authentication event
