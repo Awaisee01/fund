@@ -1,6 +1,4 @@
-
 import { useEffect, useState, Suspense, lazy } from 'react';
-import Navigation from '@/components/Navigation';
 import SolarForm from '@/components/SolarForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import HeroSkeleton from '@/components/HeroSkeleton';
@@ -74,17 +72,11 @@ const Solar = () => {
   ];
 
   if (!heroLoaded) {
-    return (
-      <div>
-        <Navigation />
-        <HeroSkeleton />
-      </div>
-    );
+    return <HeroSkeleton />;
   }
 
   return (
     <div>
-      <Navigation />
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
@@ -177,29 +169,7 @@ const Solar = () => {
               })}
             </div>
             
-            <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                Eligibility Criteria Include:
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[
-                  'Respiratory Conditions',
-                  'Cardiovascular Conditions',
-                  'Limited Mobility',
-                  'Cancer Treatment/Diagnosis',
-                  'Autoimmune Conditions',
-                  'Over 65 years of age',
-                  'On Benefits',
-                  'Income below £31,000 per year',
-                  'Children under 5 years of age'
-                ].map((condition, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                    <span className="text-gray-700">{condition}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <EligibilitySection />
           </div>
         </section>
       </Suspense>
@@ -230,26 +200,7 @@ const Solar = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {[
-                { step: "1", title: "Free Assessment", description: "We assess your property's solar potential and eligibility for funding schemes." },
-                { step: "2", title: "Modelling", description: "Your property's energy requirement will be assessed and layout of panels will be determined." },
-                { step: "3", title: "Approval & Planning", description: "We handle all paperwork, permits, and planning permissions required." },
-                { step: "4", title: "Professional Installation", description: "Certified installers complete your solar installation in 1-2 days." }
-              ].map((process, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">{process.step}</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {process.title}
-                  </h3>
-                  <p className="text-gray-600">
-                    {process.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <ProcessSection />
           </div>
         </section>
       </Suspense>
