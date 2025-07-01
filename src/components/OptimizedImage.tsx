@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 
 interface OptimizedImageProps {
@@ -10,6 +9,7 @@ interface OptimizedImageProps {
   height?: number;
   style?: React.CSSProperties;
   onLoad?: () => void;
+  onError?: () => void;
 }
 
 const OptimizedImage = ({ 
@@ -20,7 +20,8 @@ const OptimizedImage = ({
   width,
   height,
   style,
-  onLoad 
+  onLoad,
+  onError
 }: OptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -32,7 +33,8 @@ const OptimizedImage = ({
 
   const handleError = useCallback(() => {
     setHasError(true);
-  }, []);
+    onError?.();
+  }, [onError]);
 
   if (hasError) {
     return (
