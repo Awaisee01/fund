@@ -63,7 +63,7 @@ const SolarForm = () => {
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0 p-0">
+      <CardContent className="pt-0 p-0 pb-6">
         <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
           {/* Enhanced loading state with skeleton */}
           <div 
