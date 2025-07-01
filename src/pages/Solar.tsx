@@ -1,12 +1,19 @@
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, Suspense, lazy } from 'react';
 import Navigation from '@/components/Navigation';
 import SolarForm from '@/components/SolarForm';
 import OptimizedImage from '@/components/OptimizedImage';
+import HeroSkeleton from '@/components/HeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sun, Battery, PoundSterling, Leaf, Home, Calculator, CheckCircle, ArrowRight, Thermometer, Heart, Shield } from 'lucide-react';
 
+// Lazy load sections that are below the fold
+const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
+const ProcessSection = lazy(() => import('@/components/ProcessSection'));
+
 const Solar = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [heroLoaded, setHeroLoaded] = useState(false);
 
   useEffect(() => {
     document.title = "Free Solar Panels Scotland - Government Grants & Installation | Funding For Scotland";
@@ -14,6 +21,9 @@ const Solar = () => {
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Get free solar panels in Scotland through government schemes. Reduce electricity bills by up to 70% with no upfront costs. Professional installation included.');
     }
+
+    // Mark hero as loaded immediately for faster perceived performance
+    setHeroLoaded(true);
 
     // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
@@ -63,6 +73,15 @@ const Solar = () => {
     }
   ];
 
+  if (!heroLoaded) {
+    return (
+      <div>
+        <Navigation />
+        <HeroSkeleton />
+      </div>
+    );
+  }
+
   return (
     <div>
       <Navigation />
@@ -74,6 +93,8 @@ const Solar = () => {
             alt="Solar Panels Background"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
+            width={1920}
+            height={1080}
             style={{ 
               transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
             }}
@@ -112,96 +133,126 @@ const Solar = () => {
         </div>
       </section>
       
-      <section className="py-20 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Solar Qualifying Criteria
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
-            </p>
+      <Suspense fallback={
+        <div className="py-20 bg-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
+                ))}
+              </div>
+            </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {eligibilityRequirements.map((requirement, index) => {
-              const Icon = requirement.icon;
-              return (
+        </div>
+      }>
+        <section className="py-20 bg-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Solar Qualifying Criteria
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {eligibilityRequirements.map((requirement, index) => {
+                const Icon = requirement.icon;
+                return (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-yellow-500 rounded-full flex items-center justify-center">
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {requirement.title}
+                    </h3>
+                    <p className="text-gray-600">
+                      {requirement.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                Eligibility Criteria Include:
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  'Respiratory Conditions',
+                  'Cardiovascular Conditions',
+                  'Limited Mobility',
+                  'Cancer Treatment/Diagnosis',
+                  'Autoimmune Conditions',
+                  'Over 65 years of age',
+                  'On Benefits',
+                  'Income below £31,000 per year',
+                  'Children under 5 years of age'
+                ].map((condition, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                    <span className="text-gray-700">{condition}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </Suspense>
+      
+      <Suspense fallback={
+        <div className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-32 bg-gray-300 rounded"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Solar Installation Process
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our streamlined process makes getting solar panels as easy as possible. From initial assessment 
+                to final installation, we handle everything for you.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {[
+                { step: "1", title: "Free Assessment", description: "We assess your property's solar potential and eligibility for funding schemes." },
+                { step: "2", title: "Modelling", description: "Your property's energy requirement will be assessed and layout of panels will be determined." },
+                { step: "3", title: "Approval & Planning", description: "We handle all paperwork, permits, and planning permissions required." },
+                { step: "4", title: "Professional Installation", description: "Certified installers complete your solar installation in 1-2 days." }
+              ].map((process, index) => (
                 <div key={index} className="text-center">
                   <div className="w-16 h-16 mx-auto mb-4 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <Icon className="w-8 h-8 text-white" />
+                    <span className="text-white font-bold text-xl">{process.step}</span>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {requirement.title}
+                    {process.title}
                   </h3>
                   <p className="text-gray-600">
-                    {requirement.description}
+                    {process.description}
                   </p>
-                </div>
-              );
-            })}
-          </div>
-          
-          <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Eligibility Criteria Include:
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                'Respiratory Conditions',
-                'Cardiovascular Conditions',
-                'Limited Mobility',
-                'Cancer Treatment/Diagnosis',
-                'Autoimmune Conditions',
-                'Over 65 years of age',
-                'On Benefits',
-                'Income below £31,000 per year',
-                'Children under 5 years of age'
-              ].map((condition, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                  <span className="text-gray-700">{condition}</span>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
-      
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Solar Installation Process
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our streamlined process makes getting solar panels as easy as possible. From initial assessment 
-              to final installation, we handle everything for you.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              { step: "1", title: "Free Assessment", description: "We assess your property's solar potential and eligibility for funding schemes." },
-              { step: "2", title: "Modelling", description: "Your property's energy requirement will be assessed and layout of panels will be determined." },
-              { step: "3", title: "Approval & Planning", description: "We handle all paperwork, permits, and planning permissions required." },
-              { step: "4", title: "Professional Installation", description: "Certified installers complete your solar installation in 1-2 days." }
-            ].map((process, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-yellow-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">{process.step}</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {process.title}
-                </h3>
-                <p className="text-gray-600">
-                  {process.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </Suspense>
     </div>
   );
 };

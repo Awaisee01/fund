@@ -36,16 +36,36 @@ const OptimizedImage = ({
 
   if (hasError) {
     return (
-      <div className={`bg-gray-200 flex items-center justify-center ${className}`} style={style}>
+      <div 
+        className={`bg-gray-200 flex items-center justify-center ${className}`} 
+        style={{
+          ...style,
+          minHeight: height ? `${height}px` : '200px',
+          aspectRatio: width && height ? `${width}/${height}` : 'auto'
+        }}
+      >
         <span className="text-gray-500 text-sm">Image unavailable</span>
       </div>
     );
   }
 
   return (
-    <div className={`relative ${className}`} style={style}>
+    <div 
+      className={`relative ${className}`} 
+      style={{
+        ...style,
+        minHeight: height ? `${height}px` : 'auto',
+        aspectRatio: width && height ? `${width}/${height}` : 'auto'
+      }}
+    >
       {!isLoaded && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse rounded" />
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse rounded"
+          style={{
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite'
+          }}
+        />
       )}
       <img
         src={src}
@@ -56,12 +76,19 @@ const OptimizedImage = ({
         decoding="async"
         onLoad={handleLoad}
         onError={handleError}
-        className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+        className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
         style={{ 
           contentVisibility: 'auto',
-          containIntrinsicSize: width && height ? `${width}px ${height}px` : 'auto'
+          containIntrinsicSize: width && height ? `${width}px ${height}px` : 'auto',
+          aspectRatio: width && height ? `${width}/${height}` : 'auto'
         }}
       />
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+      `}</style>
     </div>
   );
 };

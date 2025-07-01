@@ -2,36 +2,41 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const SolarForm = () => {
   const [showForm, setShowForm] = useState(false);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   useEffect(() => {
-    // Load the GoHighLevel form embed script
+    // Preload the GoHighLevel form embed script
     const script = document.createElement('script');
     script.src = 'https://link.msgsndr.com/js/form_embed.js';
     script.async = true;
+    
+    script.onload = () => {
+      setIsScriptLoaded(true);
+      // Reduced delay since script is now loaded
+      setTimeout(() => {
+        setShowForm(true);
+      }, 1000);
+    };
+    
     document.body.appendChild(script);
-
-    // Show form after a longer delay to ensure it's fully loaded
-    const showTimer = setTimeout(() => {
-      setShowForm(true);
-    }, 3000);
 
     return () => {
       const existingScript = document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]');
       if (existingScript) {
         document.body.removeChild(existingScript);
       }
-      clearTimeout(showTimer);
     };
   }, []);
 
   const handleIframeLoad = () => {
-    // Add extra delay after iframe loads to ensure form is fully rendered
+    // Faster transition after iframe loads
     setTimeout(() => {
       setShowForm(true);
-    }, 1000);
+    }, 300);
   };
 
   const handleMetaPixelClick = () => {
@@ -59,24 +64,36 @@ const SolarForm = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 p-0">
-        <div className="w-full min-h-[580px] -mt-8 relative overflow-hidden">
-          {/* Loading spinner */}
+        <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
+          {/* Enhanced loading state with skeleton */}
           <div 
-            className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
+            className={`absolute inset-0 z-10 transition-opacity duration-500 ${
               showForm ? 'opacity-0 pointer-events-none' : 'opacity-100'
             }`}
           >
-            <div className="flex flex-col items-center space-y-4">
-              <Loader2 className="h-8 w-8 animate-spin text-white/80" />
-              <p className="text-white/60 text-sm">Loading form...</p>
+            <div className="p-6 space-y-4 mt-8">
+              <Skeleton className="h-4 w-3/4 bg-white/30" />
+              <Skeleton className="h-10 w-full bg-white/30" />
+              <Skeleton className="h-4 w-1/2 bg-white/30" />
+              <Skeleton className="h-10 w-full bg-white/30" />
+              <Skeleton className="h-4 w-2/3 bg-white/30" />
+              <Skeleton className="h-10 w-full bg-white/30" />
+              <Skeleton className="h-4 w-1/3 bg-white/30" />
+              <Skeleton className="h-10 w-full bg-white/30" />
+              <Skeleton className="h-12 w-full bg-white/30 mt-6" />
+            </div>
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-2">
+              <Loader2 className="h-6 w-6 animate-spin text-white/80" />
+              <p className="text-white/60 text-xs">Loading form...</p>
             </div>
           </div>
 
-          {/* Actual form */}
+          {/* Actual form with reserved space */}
           <div 
-            className={`transition-opacity duration-700 ${
+            className={`transition-opacity duration-500 ${
               showForm ? 'opacity-100' : 'opacity-0'
             }`}
+            style={{ minHeight: '580px' }}
           >
             <iframe
               src="https://api.leadconnectorhq.com/widget/form/9lDaU9yEdGltsGe35Bwh"
