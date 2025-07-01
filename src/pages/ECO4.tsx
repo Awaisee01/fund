@@ -21,6 +21,14 @@ const ECO4 = () => {
       metaDescription.setAttribute('content', 'Access free ECO4 grants in Scotland for heating upgrades, solar panels, and insulation. Check your eligibility for completely funded home improvements worth thousands.');
     }
 
+    // Set a fallback timeout to show the page even if image doesn't load
+    const fallbackTimer = setTimeout(() => {
+      if (!heroLoaded) {
+        console.log('ECO4: Loading fallback triggered');
+        setHeroLoaded(true);
+      }
+    }, 2000); // Show page after 2 seconds regardless of image loading
+
     // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
     const updateScrollY = () => {
@@ -36,8 +44,12 @@ const ECO4 = () => {
     };
 
     window.addEventListener('scroll', handleSmoothScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleSmoothScroll);
-  }, []);
+    
+    return () => {
+      window.removeEventListener('scroll', handleSmoothScroll);
+      clearTimeout(fallbackTimer);
+    };
+  }, [heroLoaded]);
 
   const benefits = [
     "Heating upgrades",
@@ -70,11 +82,17 @@ const ECO4 = () => {
   ];
 
   const handleImageLoad = () => {
+    console.log('ECO4: Image loaded successfully');
     setImageLoaded(true);
     // Add a small delay to ensure smooth transition
     setTimeout(() => {
       setHeroLoaded(true);
     }, 100);
+  };
+
+  const handleImageError = () => {
+    console.log('ECO4: Image failed to load, showing page anyway');
+    setHeroLoaded(true);
   };
 
   if (!heroLoaded) {
@@ -94,6 +112,7 @@ const ECO4 = () => {
             width={1920}
             height={1080}
             onLoad={handleImageLoad}
+            onError={handleImageError}
             style={{ 
               transform: `translate3d(0, ${scrollY * 0.3}px, 0)`,
               opacity: imageLoaded ? 1 : 0,
