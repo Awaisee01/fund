@@ -12,6 +12,7 @@ const EligibilitySection = lazy(() => import('@/components/EligibilitySection'))
 const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     document.title = "ECO4 Grants Scotland - Free Heating, Solar & Insulation | Funding For Scotland";
@@ -19,9 +20,6 @@ const ECO4 = () => {
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Access free ECO4 grants in Scotland for heating upgrades, solar panels, and insulation. Check your eligibility for completely funded home improvements worth thousands.');
     }
-
-    // Mark hero as loaded immediately for faster perceived performance
-    setHeroLoaded(true);
 
     // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
@@ -71,13 +69,21 @@ const ECO4 = () => {
     }
   ];
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+    // Add a small delay to ensure smooth transition
+    setTimeout(() => {
+      setHeroLoaded(true);
+    }, 100);
+  };
+
   if (!heroLoaded) {
     return <PageHeroSkeleton hasForm={true} />;
   }
 
   return (
     <div>
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
@@ -87,14 +93,17 @@ const ECO4 = () => {
             priority={true}
             width={1920}
             height={1080}
+            onLoad={handleImageLoad}
             style={{ 
-              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
+              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`,
+              opacity: imageLoaded ? 1 : 0,
+              transition: 'opacity 0.5s ease-in-out'
             }}
           />
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24 min-h-screen flex items-center">
+          <div className="grid lg:grid-cols-12 gap-8 items-center w-full">
             <div className="lg:col-span-7 flex flex-col justify-center">
               <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                 ECO4 Funding
