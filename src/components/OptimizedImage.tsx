@@ -83,12 +83,14 @@ const OptimizedImage = ({
           aspectRatio: width && height ? `${width}/${height}` : 'auto'
         }}
       />
-      <style jsx>{`
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-      `}</style>
+      <style>
+        {`
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+          }
+        `}
+      </style>
     </div>
   );
 };
