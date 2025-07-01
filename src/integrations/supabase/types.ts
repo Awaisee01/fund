@@ -56,6 +56,7 @@ export type Database = {
           invitation_token: string | null
           invited_by: string | null
           is_active: boolean | null
+          password_hash: string | null
           role: string
           totp_secret: string | null
           totp_verified: boolean | null
@@ -69,6 +70,7 @@ export type Database = {
           invitation_token?: string | null
           invited_by?: string | null
           is_active?: boolean | null
+          password_hash?: string | null
           role?: string
           totp_secret?: string | null
           totp_verified?: boolean | null
@@ -82,6 +84,7 @@ export type Database = {
           invitation_token?: string | null
           invited_by?: string | null
           is_active?: boolean | null
+          password_hash?: string | null
           role?: string
           totp_secret?: string | null
           totp_verified?: boolean | null
@@ -97,12 +100,154 @@ export type Database = {
           },
         ]
       }
+      enquiry_submissions: {
+        Row: {
+          created_at: string | null
+          form_data: Json | null
+          form_type: string
+          id: string
+          page_path: string
+          referrer: string | null
+          session_id: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          form_data?: Json | null
+          form_type: string
+          id?: string
+          page_path: string
+          referrer?: string | null
+          session_id: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          form_data?: Json | null
+          form_type?: string
+          id?: string
+          page_path?: string
+          referrer?: string | null
+          session_id?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
+      page_visits: {
+        Row: {
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          page_path: string
+          referrer: string | null
+          session_id: string
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          page_path: string
+          referrer?: string | null
+          session_id: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          page_path?: string
+          referrer?: string | null
+          session_id?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
+      visitor_sessions: {
+        Row: {
+          converted: boolean | null
+          created_at: string | null
+          id: string
+          pages_visited: number | null
+          referrer: string | null
+          session_end: string | null
+          session_start: string | null
+          total_time_seconds: number | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          visitor_id: string
+        }
+        Insert: {
+          converted?: boolean | null
+          created_at?: string | null
+          id?: string
+          pages_visited?: number | null
+          referrer?: string | null
+          session_end?: string | null
+          session_start?: string | null
+          total_time_seconds?: number | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          visitor_id: string
+        }
+        Update: {
+          converted?: boolean | null
+          created_at?: string | null
+          id?: string
+          pages_visited?: number | null
+          referrer?: string | null
+          session_end?: string | null
+          session_start?: string | null
+          total_time_seconds?: number | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_admin_password: {
+        Args: { admin_user_id: string; new_password: string }
+        Returns: undefined
+      }
+      verify_admin_password_by_id: {
+        Args: { admin_user_id: string; provided_password: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
