@@ -28,7 +28,7 @@ const Navigation = () => {
               <OptimizedImage 
                 src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                 alt="Funding For Scotland Logo" 
-                className="h-16 sm:h-18 lg:h-20 xl:h-24 w-auto object-contain"
+                className="h-20 sm:h-24 lg:h-28 xl:h-32 w-auto object-contain"
                 priority={true}
                 width={200}
                 height={80}
