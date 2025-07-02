@@ -1,7 +1,8 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Home } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import type { Database } from '@/integrations/supabase/types';
 import { ExportControls } from './ExportControls';
@@ -113,7 +114,7 @@ export const SubmissionsTable = ({
             </p>
           </div>
         ) : (
-          <div className="rounded-md border">
+          <div className="rounded-md border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -125,10 +126,11 @@ export const SubmissionsTable = ({
                       }}
                     />
                   </TableHead>
-                  <TableHead>Lead Details</TableHead>
-                  <TableHead>Service</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Submitted</TableHead>
+                  <TableHead className="min-w-[200px]">Contact Details</TableHead>
+                  <TableHead className="min-w-[120px]">Service</TableHead>
+                  <TableHead className="min-w-[150px]">Property Details</TableHead>
+                  <TableHead className="min-w-[100px]">Status</TableHead>
+                  <TableHead className="min-w-[120px]">Submitted</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -175,11 +177,26 @@ export const SubmissionsTable = ({
                         <div className="font-medium">
                           {formatServiceType(submission.service_type)}
                         </div>
-                        {submission.property_type && (
-                          <div className="text-sm text-gray-500">
-                            {submission.property_type}
-                          </div>
-                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-1 text-sm">
+                          {submission.property_type && (
+                            <div className="flex items-center text-gray-600">
+                              <Home className="w-3 h-3 mr-1 flex-shrink-0" />
+                              {submission.property_type}
+                            </div>
+                          )}
+                          {submission.property_ownership && (
+                            <div className="text-gray-500">
+                              Ownership: {submission.property_ownership}
+                            </div>
+                          )}
+                          {submission.current_heating_system && (
+                            <div className="text-gray-500">
+                              Heating: {submission.current_heating_system}
+                            </div>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <LeadStatusBadge status={submission.status} />
