@@ -1,4 +1,3 @@
-
 import { useEffect, useState, Suspense, lazy } from 'react';
 import NativeECO4Form from '@/components/NativeECO4Form';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -81,8 +80,8 @@ const ECO4 = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/e9ab3cbe-fe73-4d48-8092-58c661b09ab9.png"
-            alt="ECO4 Energy Efficiency Background - Houses with Solar Panels"
+            src="/lovable-uploads/7dfe5a80-6453-471d-805e-51f9a0a3224e.png"
+            alt="ECO4 Energy Efficiency Background - Aerial view of modern houses with solar panels"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
             width={1920}
