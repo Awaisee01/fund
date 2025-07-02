@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -75,14 +76,14 @@ const NativeSolarForm = () => {
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-4">
+      <CardHeader className="text-center pb-2">
         <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-4">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <FormField
               control={form.control}
               name="fullName"
@@ -93,7 +94,7 @@ const NativeSolarForm = () => {
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
                       placeholder="Enter your full name"
                     />
                   </FormControl>
@@ -112,7 +113,7 @@ const NativeSolarForm = () => {
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
                       placeholder="Enter your address"
                     />
                   </FormControl>
@@ -131,7 +132,7 @@ const NativeSolarForm = () => {
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
                       placeholder="G1 1AA"
                     />
                   </FormControl>
@@ -157,7 +158,7 @@ const NativeSolarForm = () => {
                     <Input 
                       {...field} 
                       type="email"
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
                       placeholder="your.email@example.com"
                     />
                   </FormControl>
@@ -183,7 +184,7 @@ const NativeSolarForm = () => {
                     <Input 
                       {...field} 
                       type="tel"
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
                       placeholder="07xxx xxx xxx"
                     />
                   </FormControl>
@@ -192,8 +193,8 @@ const NativeSolarForm = () => {
               )}
             />
 
-            <div className="pt-2">
-              <p className="text-white text-sm text-center mb-3">
+            <div className="pt-1">
+              <p className="text-white text-sm text-center mb-2">
                 Only for homes with Air Source Heat Pumps
               </p>
               
@@ -221,7 +222,7 @@ const NativeSolarForm = () => {
 
             <Button 
               type="submit" 
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold h-10 mt-6"
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold h-9 mt-4"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Sending...' : 'Submit'}
