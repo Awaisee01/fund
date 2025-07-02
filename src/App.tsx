@@ -12,6 +12,7 @@ import SEOStructuredData from "./components/SEOStructuredData";
 import Home from "./pages/Home";
 import ECO4 from "./pages/ECO4";
 import Solar from "./pages/Solar";
+import SolarNew from "./pages/SolarNew";
 import GasBoilers from "./pages/GasBoilers";
 import HomeImprovements from "./pages/HomeImprovements";
 import Contact from "./pages/Contact";
@@ -36,6 +37,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/eco4" element={<ECO4 />} />
                 <Route path="/solar" element={<Solar />} />
+                <Route path="/solar-new" element={<SolarNew />} />
                 <Route path="/gas-boilers" element={<GasBoilers />} />
                 <Route path="/home-improvements" element={<HomeImprovements />} />
                 <Route path="/contact" element={<Contact />} />
