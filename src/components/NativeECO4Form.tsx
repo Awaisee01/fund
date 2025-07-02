@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -57,19 +56,24 @@ const NativeECO4Form = () => {
       // Here you would normally send to your backend
       console.log('ECO4 form submitted:', data);
       
-      // Show success message
+      // Reset form first
+      form.reset();
+      
+      // Show success message with proper configuration
       toast({
         title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
         duration: 5000,
       });
       
-      form.reset();
+      console.log('Toast called successfully');
+      
     } catch (error) {
       console.error('Form submission error:', error);
       toast({
         title: "Something went wrong",
         description: "Please try again or call us directly.",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);
