@@ -6,10 +6,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, FileText, Settings, LogOut, Mail, Phone, MapPin, Calendar, ExternalLink, Filter } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Users, FileText, Settings, LogOut, Mail, Phone, MapPin, Calendar, ExternalLink, Filter, BarChart3 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { DateRange } from 'react-day-picker';
+import { isWithinInterval, parseISO } from 'date-fns';
 import type { Database } from '@/integrations/supabase/types';
+
+// Import the new components
+import { DateRangeFilter } from './admin/DateRangeFilter';
+import { ExportControls } from './admin/ExportControls';
+import { EmailIntegration } from './admin/EmailIntegration';
+import { DashboardAnalytics } from './admin/DashboardAnalytics';
+import { BulkActions } from './admin/BulkActions';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -26,6 +36,9 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [editingNotes, setEditingNotes] = useState<string>('');
   const [editingStatus, setEditingStatus] = useState<LeadStatus>('new');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const { toast } = useToast();
 
   // Stats derived from submissions
@@ -63,7 +76,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     try {
       const updateData: any = { ...updates };
       
-      // Add timestamp fields based on status
       if (updates.status === 'contacted') {
         updateData.contacted_at = new Date().toISOString();
       }
@@ -78,7 +90,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
       if (error) throw error;
 
-      // Refresh data
       await fetchSubmissions();
       setSelectedSubmission(null);
       
@@ -100,14 +111,29 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     fetchSubmissions();
   }, []);
 
-  // Filter submissions based on selected status
+  // Filter submissions based on status and date range
   useEffect(() => {
-    if (statusFilter === 'all') {
-      setFilteredSubmissions(submissions);
-    } else {
-      setFilteredSubmissions(submissions.filter(s => s.status === statusFilter));
+    let filtered = submissions;
+
+    // Filter by status
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(s => s.status === statusFilter);
     }
-  }, [submissions, statusFilter]);
+
+    // Filter by date range
+    if (dateRange?.from) {
+      filtered = filtered.filter(s => {
+        const submissionDate = parseISO(s.created_at);
+        if (dateRange.to) {
+          return isWithinInterval(submissionDate, { start: dateRange.from!, end: dateRange.to });
+        } else {
+          return submissionDate >= dateRange.from!;
+        }
+      });
+    }
+
+    setFilteredSubmissions(filtered);
+  }, [submissions, statusFilter, dateRange]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminAuthenticated');
@@ -141,6 +167,14 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     return formatted[serviceType as keyof typeof formatted] || serviceType;
   };
 
+  const handleRowSelect = (id: string, checked: boolean) => {
+    if (checked) {
+      setSelectedIds([...selectedIds, id]);
+    } else {
+      setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -159,15 +193,28 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
               <h1 className="text-xl font-semibold text-gray-900">Admin Panel</h1>
               <p className="text-sm text-gray-600">Funding For Scotland</p>
             </div>
-            <Button onClick={handleLogout} variant="outline" size="sm">
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button 
+                onClick={() => setShowAnalytics(!showAnalytics)} 
+                variant="outline" 
+                size="sm"
+              >
+                <BarChart3 className="w-4 h-4 mr-2" />
+                {showAnalytics ? 'Hide' : 'Show'} Analytics
+              </Button>
+              <Button onClick={handleLogout} variant="outline" size="sm">
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Analytics Dashboard */}
+        {showAnalytics && <DashboardAnalytics submissions={submissions} />}
+
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -225,41 +272,66 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                   Manage and track customer enquiries across all services
                 </CardDescription>
               </div>
-              <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-muted-foreground" />
-                <Select value={statusFilter} onValueChange={(value: LeadStatus | 'all') => setStatusFilter(value)}>
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="Filter by status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
-                    <SelectItem value="new">New</SelectItem>
-                    <SelectItem value="contacted">Contacted</SelectItem>
-                    <SelectItem value="qualified">Qualified</SelectItem>
-                    <SelectItem value="converted">Converted</SelectItem>
-                    <SelectItem value="closed">Closed</SelectItem>
-                    <SelectItem value="lost">Lost</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="flex items-center gap-3">
+                <DateRangeFilter 
+                  dateRange={dateRange} 
+                  onDateRangeChange={setDateRange} 
+                />
+                <div className="flex items-center gap-2">
+                  <Filter className="w-4 h-4 text-muted-foreground" />
+                  <Select value={statusFilter} onValueChange={(value: LeadStatus | 'all') => setStatusFilter(value)}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Filter by status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="new">New</SelectItem>
+                      <SelectItem value="contacted">Contacted</SelectItem>
+                      <SelectItem value="qualified">Qualified</SelectItem>
+                      <SelectItem value="converted">Converted</SelectItem>
+                      <SelectItem value="closed">Closed</SelectItem>
+                      <SelectItem value="lost">Lost</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <ExportControls 
+                  submissions={submissions}
+                  filteredSubmissions={filteredSubmissions}
+                />
               </div>
             </div>
           </CardHeader>
           <CardContent>
+            <BulkActions
+              submissions={filteredSubmissions}
+              selectedIds={selectedIds}
+              onSelectionChange={setSelectedIds}
+              onBulkUpdate={fetchSubmissions}
+            />
+            
             {filteredSubmissions.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-gray-500">
-                  {statusFilter === 'all' ? 'No form submissions yet.' : `No submissions with status "${statusFilter}".`}
+                  {statusFilter === 'all' && !dateRange?.from ? 'No form submissions yet.' : 'No submissions match your filters.'}
                 </p>
                 <p className="text-sm text-gray-400 mt-2">
-                  {statusFilter === 'all' 
+                  {statusFilter === 'all' && !dateRange?.from
                     ? 'Submissions will appear here when visitors fill out your forms.' 
-                    : 'Try selecting a different status filter.'}
+                    : 'Try adjusting your filters to see more results.'}
                 </p>
               </div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={filteredSubmissions.length > 0 && selectedIds.length === filteredSubmissions.length}
+                        onCheckedChange={(checked) => {
+                          setSelectedIds(checked ? filteredSubmissions.map(s => s.id) : []);
+                        }}
+                      />
+                    </TableHead>
                     <TableHead>Name & Contact</TableHead>
                     <TableHead>Service</TableHead>
                     <TableHead>Property Info</TableHead>
@@ -271,6 +343,12 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 <TableBody>
                   {filteredSubmissions.map((submission) => (
                     <TableRow key={submission.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedIds.includes(submission.id)}
+                          onCheckedChange={(checked) => handleRowSelect(submission.id, checked as boolean)}
+                        />
+                      </TableCell>
                       <TableCell>
                         <div className="flex flex-col space-y-1">
                           <span className="font-medium">{submission.name}</span>
@@ -312,18 +390,26 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => {
-                            setSelectedSubmission(submission);
-                            setEditingNotes(submission.admin_notes || '');
-                            setEditingStatus(submission.status);
-                          }}
-                        >
-                          <ExternalLink className="w-4 h-4 mr-1" />
-                          View Details
-                        </Button>
+                        <div className="flex gap-2">
+                          <EmailIntegration 
+                            submission={submission}
+                            onEmailSent={() => {
+                              updateSubmission(submission.id, { status: 'contacted' });
+                            }}
+                          />
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              setSelectedSubmission(submission);
+                              setEditingNotes(submission.admin_notes || '');
+                              setEditingStatus(submission.status);
+                            }}
+                          >
+                            <ExternalLink className="w-4 h-4 mr-1" />
+                            View Details
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
