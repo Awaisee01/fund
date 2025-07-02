@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -26,6 +25,7 @@ interface SubmissionsTableProps {
   onViewDetails: (submission: FormSubmission) => void;
   onEmailSent: (submissionId: string) => void;
   onStatusUpdate: (submissionId: string, status: LeadStatus) => void;
+  onDelete?: (submissionId: string) => void;
 }
 
 export const SubmissionsTable = ({
@@ -36,7 +36,8 @@ export const SubmissionsTable = ({
   onBulkUpdate,
   onViewDetails,
   onEmailSent,
-  onStatusUpdate
+  onStatusUpdate,
+  onDelete
 }: SubmissionsTableProps) => {
   const formatServiceType = (serviceType: string) => {
     const formatted = {
@@ -211,6 +212,7 @@ export const SubmissionsTable = ({
                           submission={submission}
                           onViewDetails={onViewDetails}
                           onStatusUpdate={onStatusUpdate}
+                          onDelete={onDelete}
                         />
                       </TableCell>
                     </TableRow>

@@ -152,6 +152,34 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     }
   };
 
+  const deleteSubmission = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('form_submissions')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      await fetchSubmissions();
+      if (selectedSubmission?.id === id) {
+        setSelectedSubmission(null);
+      }
+      
+      toast({
+        title: "Success",
+        description: "Enquiry deleted successfully",
+      });
+    } catch (error) {
+      console.error('Error deleting submission:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete enquiry",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleStatusUpdate = (submissionId: string, status: LeadStatus) => {
     updateSubmission(submissionId, { status });
   };
@@ -242,6 +270,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           onViewDetails={handleViewDetails}
           onEmailSent={handleEmailSent}
           onStatusUpdate={handleStatusUpdate}
+          onDelete={deleteSubmission}
         />
 
         {/* Pagination */}

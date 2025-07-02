@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { BulkStatusDialog } from './BulkStatusDialog';
 import { BulkNotesDialog } from './BulkNotesDialog';
+import { BulkDeleteDialog } from './BulkDeleteDialog';
 import { BulkEmailDialog } from '../BulkEmailDialog';
 import { WorkflowTrigger } from '../WorkflowTrigger';
 import { ConfirmationDialog } from '../ConfirmationDialog';
@@ -53,6 +54,12 @@ export const BulkActionButtons = ({
       />
 
       <WorkflowTrigger
+        selectedIds={selectedIds}
+        onSelectionChange={onSelectionChange}
+        onBulkUpdate={onBulkUpdate}
+      />
+
+      <BulkDeleteDialog
         selectedIds={selectedIds}
         onSelectionChange={onSelectionChange}
         onBulkUpdate={onBulkUpdate}
