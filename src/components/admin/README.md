@@ -1,76 +1,109 @@
 
 # Admin Dashboard Components
 
-This directory contains all the components for the admin dashboard, organized into focused, reusable modules.
+This directory contains all the components and utilities for the admin dashboard functionality.
 
-## Component Structure
+## Core Components
 
-### Core Dashboard Components
-- `AdminDashboard.tsx` - Main dashboard container with state management
-- `AdminDashboardHeader.tsx` - Header with navigation and controls
-- `StatsOverview.tsx` - Statistics cards display
-- `SubmissionsTable.tsx` - Main table for form submissions
-- `SubmissionDetailModal.tsx` - Modal for viewing/editing submission details
+### AdminDashboardHeader
+- Main header with navigation and analytics toggle
+- Logout functionality
+- Props: `showAnalytics`, `onToggleAnalytics`, `onLogout`
 
-### Bulk Actions
-- `BulkActions.tsx` - Container for bulk operation controls
-- `BulkActions/BulkActionHeader.tsx` - Selection controls and counter
-- `BulkActions/BulkActionButtons.tsx` - Action buttons for bulk operations
-- `BulkActions/BulkStatusDialog.tsx` - Dialog for bulk status updates
-- `BulkActions/BulkNotesDialog.tsx` - Dialog for bulk notes addition
+### StatsOverview
+- Displays key metrics cards
+- Props: `totalSubmissions`, `newSubmissions`, `processedSubmissions`, `todaySubmissions`
 
-### Feature Components
-- `SearchFilter.tsx` - Debounced search input with icon
-- `PaginationControls.tsx` - Pagination with page size controls
-- `BulkEmailDialog.tsx` - Bulk email sending functionality
-- `WorkflowTrigger.tsx` - Automated workflow execution
-- `ConfirmationDialog.tsx` - Reusable confirmation dialog
-- `DashboardAnalytics.tsx` - Analytics charts and metrics
-- `DateRangeFilter.tsx` - Date range filtering
-- `EmailIntegration.tsx` - Email sending integration
-- `ExportControls.tsx` - Data export functionality
+### SubmissionsTable
+- Main data table with filtering and bulk actions
+- Handles status filtering, date range filtering
+- Props: `submissions`, `filteredSubmissions`, `selectedIds`, `statusFilter`, `dateRange`, etc.
+
+### SubmissionDetailModal
+- Modal for viewing and editing individual submissions
+- Props: `submission`, `editingNotes`, `editingStatus`, etc.
+
+## Utility Components
+
+### SearchFilter
+- Debounced search input component
+- Props: `onSearch`, `placeholder`
+
+### PaginationControls
+- Pagination component with page size controls
+- Props: `currentPage`, `totalPages`, `pageSize`, `totalItems`, etc.
+
+### ConfirmationDialog
+- Reusable confirmation dialog for destructive actions
+- Props: `isOpen`, `onClose`, `onConfirm`, `title`, `description`, etc.
+
+### BulkActions
+- Bulk action controls with header and buttons
+- Integrates with BulkActionHeader and BulkActionButtons
+
+### BulkEmailDialog
+- Dialog for sending bulk emails to selected submissions
+- Props: `isOpen`, `onClose`, `selectedSubmissions`, `onEmailSent`
+
+### WorkflowTrigger
+- Component for triggering automated workflows
+- Props: `isOpen`, `onClose`, `selectedSubmissions`, `onWorkflowTriggered`
 
 ## Hooks
-- `useAdminDashboard.ts` - Custom hook for dashboard state management
 
-## Testing
-- `__tests__/` - Unit tests for components
-- Test files follow the pattern `ComponentName.test.tsx`
+### useAdminDashboard
+- Custom hook that manages dashboard state and operations
+- Returns: `submissions`, `loading`, `fetchSubmissions`, `updateSubmission`
+
+## File Structure
+
+```
+src/components/admin/
+├── README.md
+├── AdminDashboardHeader.tsx
+├── StatsOverview.tsx
+├── SubmissionsTable.tsx
+├── SubmissionDetailModal.tsx
+├── SearchFilter.tsx
+├── PaginationControls.tsx
+├── ConfirmationDialog.tsx
+├── BulkActions.tsx
+├── BulkEmailDialog.tsx
+├── WorkflowTrigger.tsx
+├── BulkActions/
+│   ├── BulkActionHeader.tsx
+│   └── BulkActionButtons.tsx
+└── [other components...]
+```
 
 ## Key Features
 
-### Performance Optimizations
-- Debounced search with 300ms delay
-- Memoized filtering and pagination
-- Virtual scrolling support for large datasets
-- Efficient re-rendering with proper dependency arrays
+1. **Performance Optimizations**:
+   - Debounced search (300ms delay)
+   - Pagination with configurable page sizes
+   - Memoized filtering and sorting
 
-### User Experience
-- Confirmation dialogs for destructive actions
-- Loading states and error handling
-- Responsive design with mobile support
-- Keyboard navigation support
+2. **Bulk Operations**:
+   - Select all/none functionality
+   - Bulk status updates
+   - Bulk email sending
+   - Automated workflow triggers
 
-### Bulk Operations
-- Multi-selection with select all/none
-- Bulk status updates with confirmation
-- Bulk email sending to selected submissions
-- Automated workflow triggers
-- Bulk notes addition
+3. **Confirmation Dialogs**:
+   - All destructive actions require confirmation
+   - Customizable dialog variants (default/destructive)
 
-### Analytics & Reporting
-- Real-time statistics dashboard
-- Date range filtering
-- Export functionality (CSV, Excel)
-- Visual charts and metrics
+4. **Search & Filtering**:
+   - Real-time search across multiple fields
+   - Status filtering
+   - Date range filtering
 
-## Usage Examples
+## Usage Example
 
-### Basic Dashboard Setup
 ```tsx
-import AdminDashboard from './components/AdminDashboard';
+import AdminDashboard from '@/components/AdminDashboard';
 
-function App() {
+function AdminPage() {
   const handleLogout = () => {
     // Handle logout logic
   };
@@ -79,40 +112,23 @@ function App() {
 }
 ```
 
-### Using Individual Components
-```tsx
-import { SearchFilter, PaginationControls } from './components/admin';
+## Testing
 
-function CustomTable() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+To add unit tests for these components, you would need to install testing dependencies:
 
-  return (
-    <div>
-      <SearchFilter onSearch={setSearchQuery} />
-      {/* Your table content */}
-      <PaginationControls
-        currentPage={currentPage}
-        totalPages={10}
-        onPageChange={setCurrentPage}
-      />
-    </div>
-  );
-}
+```bash
+npm install --save-dev @testing-library/react @testing-library/jest-dom vitest @vitest/ui jsdom
 ```
 
-## Performance Considerations
+Then configure your test setup and add test files in the `__tests__` directory.
 
-- Components use React.memo where appropriate
-- Expensive operations are memoized with useMemo
-- Event handlers are properly memoized with useCallback
-- Large lists use pagination to maintain performance
-- Database queries are optimized with proper indexing
+## Dependencies
 
-## Accessibility
-
-- All interactive elements have proper ARIA labels
-- Keyboard navigation is fully supported
-- Color contrast meets WCAG guidelines
-- Screen reader compatibility
-- Focus management in modals and dialogs
+The admin components use the following key dependencies:
+- React & React Hooks
+- Tailwind CSS for styling
+- Shadcn/UI components
+- Supabase for data operations
+- Lodash for utility functions
+- Date-fns for date manipulation
+- Lucide React for icons
