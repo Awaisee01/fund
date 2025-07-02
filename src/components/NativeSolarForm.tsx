@@ -4,18 +4,17 @@ import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 
 interface SolarFormData {
-  firstName: string;
-  lastName: string;
+  fullName: string;
+  address: string;
+  postCode: string;
   email: string;
   phone: string;
-  postcode: string;
-  propertyType: string;
-  heatingSystem: string;
+  understand: boolean;
 }
 
 const NativeSolarForm = () => {
@@ -24,13 +23,12 @@ const NativeSolarForm = () => {
   
   const form = useForm<SolarFormData>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
+      fullName: '',
+      address: '',
+      postCode: '',
       email: '',
       phone: '',
-      postcode: '',
-      propertyType: '',
-      heatingSystem: ''
+      understand: false
     }
   });
 
@@ -87,44 +85,62 @@ const NativeSolarForm = () => {
       <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <FormField
-                control={form.control}
-                name="firstName"
-                rules={{ required: "First name is required" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-white text-xs">First Name</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
-                        placeholder="First name"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-300 text-xs" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                rules={{ required: "Last name is required" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-white text-xs">Last Name</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
-                        placeholder="Last name"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-300 text-xs" />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="fullName"
+              rules={{ required: "Full name is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white text-xs">Full Name</FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      placeholder="Enter your full name"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-300 text-xs" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address"
+              rules={{ required: "Address is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white text-xs">Address</FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      placeholder="Enter your address"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-300 text-xs" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="postCode"
+              rules={{ required: "Post code is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white text-xs">Post Code</FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
+                      placeholder="G1 1AA"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-300 text-xs" />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -178,83 +194,39 @@ const NativeSolarForm = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="postcode"
-              rules={{ required: "Postcode is required" }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-xs">Postcode</FormLabel>
-                  <FormControl>
-                    <Input 
-                      {...field} 
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-9"
-                      placeholder="G1 1AA"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-300 text-xs" />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="propertyType"
-              rules={{ required: "Property type is required" }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-xs">Property Type</FormLabel>
-                  <FormControl>
-                    <select 
-                      {...field}
-                      className="w-full bg-white/90 border border-white/30 text-gray-900 text-sm h-9 px-3 rounded-md"
-                    >
-                      <option value="">Select property type</option>
-                      <option value="house">House</option>
-                      <option value="flat">Flat</option>
-                      <option value="bungalow">Bungalow</option>
-                      <option value="terraced">Terraced</option>
-                      <option value="semi-detached">Semi-detached</option>
-                      <option value="detached">Detached</option>
-                    </select>
-                  </FormControl>
-                  <FormMessage className="text-red-300 text-xs" />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="heatingSystem"
-              rules={{ required: "Current heating system is required" }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-xs">Current Heating System</FormLabel>
-                  <FormControl>
-                    <select 
-                      {...field}
-                      className="w-full bg-white/90 border border-white/30 text-gray-900 text-sm h-9 px-3 rounded-md"
-                    >
-                      <option value="">Select heating system</option>
-                      <option value="air-source-heat-pump">Air Source Heat Pump</option>
-                      <option value="electric-boiler">Electric Boiler</option>
-                      <option value="electric-heaters">Electric Heaters</option>
-                      <option value="lpg">LPG</option>
-                      <option value="oil">Oil</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </FormControl>
-                  <FormMessage className="text-red-300 text-xs" />
-                </FormItem>
-              )}
-            />
+            <div className="pt-2">
+              <p className="text-white text-sm text-center mb-3">
+                Only for homes with Air Source Heat Pumps
+              </p>
+              
+              <FormField
+                control={form.control}
+                name="understand"
+                rules={{ required: "You must confirm you understand" }}
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900"
+                      />
+                    </FormControl>
+                    <FormLabel className="text-white text-sm cursor-pointer">
+                      I understand
+                    </FormLabel>
+                    <FormMessage className="text-red-300 text-xs" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold h-10 mt-6"
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold h-10 mt-6"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Sending...' : 'Get My Free Solar Quote'}
+              {isSubmitting ? 'Sending...' : 'Submit'}
             </Button>
           </form>
         </Form>
