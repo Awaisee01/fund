@@ -1,6 +1,6 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
-import ECO4CustomForm from '@/components/ECO4CustomForm';
+import NativeECO4Form from '@/components/NativeECO4Form';
 import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -125,7 +125,7 @@ const ECO4 = () => {
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <ECO4CustomForm />
+              <NativeECO4Form />
             </div>
           </div>
         </div>

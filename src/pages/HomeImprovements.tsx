@@ -1,19 +1,23 @@
 
-import { useEffect, useState, Suspense } from 'react';
-import HomeImprovementsForm from '@/components/HomeImprovementsForm';
+import { useEffect, useState, Suspense, lazy } from 'react';
+import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
+import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home, RectangleEllipsis, Paintbrush2, Shield, DoorOpen, Hammer, CheckCircle } from 'lucide-react';
+import { CheckCircle, Home, Thermometer, Zap, Shield, Wrench, Lightbulb, PaintBucket } from 'lucide-react';
+
+// Lazy load below-the-fold content
+const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
 
 const HomeImprovements = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
 
   useEffect(() => {
-    document.title = "Home Improvement Grants Scotland - Windows, Doors, Roofing & Rendering | Funding For Scotland";
+    document.title = "Free Home Improvements Scotland - Government Grants & Upgrades | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Access home improvement grants in Scotland for windows, doors, roofing, and rendering. Government funding available up to £25,000 for property upgrades.');
+      metaDescription.setAttribute('content', 'Access free home improvements in Scotland through government grants. Upgrade your property with insulation, windows, doors, and energy efficiency improvements.');
     }
 
     // Mark hero as loaded immediately for faster perceived performance
@@ -38,36 +42,32 @@ const HomeImprovements = () => {
   }, []);
 
   const benefits = [
-    "Comprehensive home improvement grants available",
-    "Windows, doors, roofing, and rendering covered",
-    "Energy efficient improvements",
-    "Enhance your property's look, value, and comfort"
+    "Insulation upgrades",
+    "Window and door replacements",
+    "Energy efficiency improvements",
+    "Professional installation included"
   ];
 
-  const improvements = [
-    {
-      icon: RectangleEllipsis,
-      title: "Windows & Doors",
-      description: "Energy-efficient double or triple glazing, composite doors, and UPVC installations.",
-      funding: "Up to £8,000"
-    },
+  const eligibilityRequirements = [
     {
       icon: Home,
-      title: "Roofing Services",
-      description: "New roofs, roof repairs, and roof insulation to protect your home and improve efficiency.",
-      funding: "Up to £12,000"
+      title: "Property Type",
+      description: "Open to homeowners, private tenants, and landlords"
     },
     {
-      icon: Paintbrush2,
-      title: "External Rendering",
-      description: "Modern rendering systems that improve insulation and give your home a fresh new look.",
-      funding: "Up to £15,000"
+      icon: Thermometer,
+      title: "Energy Rating",
+      description: "Properties with poor energy efficiency ratings qualify for improvements"
+    },
+    {
+      icon: Wrench,
+      title: "Improvement Areas",
+      description: "Various home improvement categories including insulation, windows, and doors"
     },
     {
       icon: Shield,
-      title: "Insulation Upgrades",
-      description: "External wall insulation, loft insulation, and cavity wall treatments for better efficiency.",
-      funding: "Up to £10,000"
+      title: "Benefits",
+      description: "Receive state benefits or have household income below £31,000 per year"
     }
   ];
 
@@ -79,56 +79,109 @@ const HomeImprovements = () => {
     <div>
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30 will-change-transform"
-          style={{ 
-            backgroundImage: 'url(/lovable-uploads/8fdd29b5-d86d-491f-9c2f-9e692f13c11c.png)',
-            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
-          }}
-        ></div>
+        <div className="absolute inset-0 opacity-30 will-change-transform">
+          <OptimizedImage
+            src="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png"
+            alt="Home Improvements Background"
+            className="w-full h-full object-cover mix-blend-multiply"
+            priority={true}
+            width={1920}
+            height={1080}
+            style={{ 
+              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
+            }}
+          />
+        </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
-                Home Improvement Grants
+              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+                Free Home Improvements
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Transform Your Home With A Little Help
+                Upgrade your home at no cost
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                Access a wide range of grants for home improvements including Windows, doors, roofing, rendering, and energy-efficiency upgrades.
+                Transform your property with government-funded home improvements. From insulation to window replacements, make your home more comfortable and energy-efficient without any upfront costs.
               </p>
               
-              {benefits.length > 0 && (
-                <div className="mb-8">
-                  <ul className="space-y-3">
-                    {benefits.map((benefit, index) => (
-                      <li key={index} className="flex items-center space-x-3">
-                        <CheckCircle className="h-6 w-6 text-green-300 flex-shrink-0" />
-                        <span className="text-blue-50">{benefit}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div className="mb-8">
+                <ul className="space-y-3">
+                  {benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-center space-x-3">
+                      <CheckCircle className="h-6 w-6 text-green-300 flex-shrink-0" />
+                      <span className="text-blue-50">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <HomeImprovementsForm />
+              <NativeHomeImprovementsForm />
             </div>
           </div>
         </div>
       </section>
       
       <Suspense fallback={
+        <div className="py-20 bg-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <section className="py-20 bg-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Home Improvements Qualifying Criteria
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {eligibilityRequirements.map((requirement, index) => {
+                const Icon = requirement.icon;
+                return (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-purple-500 rounded-full flex items-center justify-center">
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {requirement.title}
+                    </h3>
+                    <p className="text-gray-600">
+                      {requirement.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <EligibilitySection />
+          </div>
+        </section>
+      </Suspense>
+      
+      <Suspense fallback={
         <div className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="animate-pulse space-y-8">
               <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
+                  <div key={i} className="h-32 bg-gray-300 rounded"></div>
                 ))}
               </div>
             </div>
@@ -139,135 +192,69 @@ const HomeImprovements = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Available Home Improvement Grants
+                What Home Improvements Are Covered?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                We help you access various Scottish government and council grants for comprehensive home improvements 
-                that increase your property value and reduce energy costs.
+                Our comprehensive home improvement program covers various upgrades to make your property more comfortable and energy-efficient.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-              {improvements.map((improvement, index) => {
-                const Icon = improvement.icon;
-                return (
-                  <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-green-200">
-                    <CardHeader>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-600 transition-colors">
-                          <Icon className="w-6 h-6 text-green-600 group-hover:text-white transition-colors" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-xl">{improvement.title}</CardTitle>
-                          <p className="text-green-600 font-semibold">{improvement.funding}</p>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-base">
-                        {improvement.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-            
-            <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 mx-auto mb-4 bg-green-600 rounded-full flex items-center justify-center">
-                  <Hammer className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Complete Home Transformation Package
-                </h3>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                  Combine multiple improvement grants to completely transform your home. Our experts will identify 
-                  all available funding opportunities for your specific situation.
-                </p>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Home className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <CardTitle>Insulation</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Loft, cavity wall, and solid wall insulation to improve your home's thermal efficiency and reduce heat loss.
+                  </CardDescription>
+                </CardContent>
+              </Card>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Basic Package</h4>
-                  <p className="text-3xl font-bold text-green-600">Up to £8,000</p>
-                  <p className="text-gray-600 mt-2">Windows & doors upgrade</p>
-                </div>
-                <div className="bg-white rounded-lg p-6 shadow-md border-2 border-green-200">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Standard Package</h4>
-                  <p className="text-3xl font-bold text-green-600">Up to £15,000</p>
-                  <p className="text-gray-600 mt-2">Plus roofing improvements</p>
-                </div>
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Premium Package</h4>
-                  <p className="text-3xl font-bold text-green-600">Up to £25,000</p>
-                  <p className="text-gray-600 mt-2">Complete home transformation</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </Suspense>
-      
-      <Suspense fallback={
-        <div className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      }>
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Why Invest in Home Improvements?
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Strategic home improvements not only enhance your living experience but also provide excellent 
-                return on investment through increased property value and reduced running costs.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                { 
-                  icon: "📈", 
-                  title: "Increase Value", 
-                  description: "Home improvements can increase property value by 15-30%" 
-                },
-                { 
-                  icon: "💰", 
-                  title: "Reduce Bills", 
-                  description: "Energy efficient upgrades cut heating and cooling costs" 
-                },
-                { 
-                  icon: "🏠", 
-                  title: "Better Comfort", 
-                  description: "Improved insulation and heating create year-round comfort" 
-                },
-                { 
-                  icon: "🛡️", 
-                  title: "Future-Proof", 
-                  description: "Modern improvements protect against future maintenance issues" 
-                }
-              ].map((benefit, index) => (
-                <div key={index} className="text-center bg-white rounded-lg p-6 shadow-md">
-                  <div className="text-4xl mb-4">{benefit.icon}</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-gray-600">
-                    {benefit.description}
-                  </p>
-                </div>
-              ))}
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Lightbulb className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <CardTitle>Windows & Doors</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Energy-efficient double or triple-glazed windows and doors to reduce drafts and improve security.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                    <Zap className="w-8 h-8 text-green-600" />
+                  </div>
+                  <CardTitle>Energy Upgrades</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    LED lighting, smart meters, and energy-efficient appliances to reduce your electricity consumption.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
+                    <PaintBucket className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <CardTitle>Property Upgrades</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    External wall coatings, roof repairs, and other structural improvements to enhance your property.
+                  </CardDescription>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>

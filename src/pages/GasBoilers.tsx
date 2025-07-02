@@ -1,19 +1,23 @@
 
-import { useEffect, useState, Suspense } from 'react';
-import GasBoilersForm from '@/components/GasBoilersForm';
+import { useEffect, useState, Suspense, lazy } from 'react';
+import NativeGasBoilersForm from '@/components/NativeGasBoilersForm';
+import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Flame, ThermometerSun, PoundSterling, Shield, Wrench, Clock, CheckCircle } from 'lucide-react';
+import { CheckCircle, Home, Thermometer, Zap, Shield, Flame, Wrench, PoundSterling } from 'lucide-react';
+
+// Lazy load below-the-fold content
+const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
 
 const GasBoilers = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
 
   useEffect(() => {
-    document.title = "Free Gas Boiler Replacement Scotland - ECO4 & Government Grants | Funding For Scotland";
+    document.title = "Free Gas Boiler Replacement & Repair Scotland - Government Grants | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Get a free gas boiler replacement in Scotland through government funding schemes. Reduce heating bills by 40% with professional Gas Safe installation.');
+      metaDescription.setAttribute('content', 'Get free gas boiler replacement or repair in Scotland through government grants. Improve your home efficiency with modern boiler installations at no cost.');
     }
 
     // Mark hero as loaded immediately for faster perceived performance
@@ -38,32 +42,32 @@ const GasBoilers = () => {
   }, []);
 
   const benefits = [
-    "Free boiler replacement through government schemes",
-    "Reduce heating bills by up to 40%",
-    "10-year manufacturer warranty included",
-    "Professional installation by Gas Safe engineers"
+    "Free boiler replacement",
+    "Modern high-efficiency boilers",
+    "Reduce energy bills significantly",
+    "Professional installation included"
   ];
 
-  const boilerBenefits = [
+  const eligibilityRequirements = [
     {
-      icon: PoundSterling,
-      title: "Lower Bills",
-      description: "New efficient boilers can reduce your heating bills by 30-40% compared to old inefficient models."
+      icon: Home,
+      title: "Property Type",
+      description: "Open to homeowners, private tenants, and landlords"
     },
     {
-      icon: ThermometerSun,
-      title: "Better Comfort",
-      description: "Consistent heating throughout your home with improved temperature control and reliability."
+      icon: Flame,
+      title: "Current System",
+      description: "Properties with existing gas boilers requiring replacement or upgrade"
+    },
+    {
+      icon: Thermometer,
+      title: "Efficiency Rating",
+      description: "Older boilers with poor efficiency ratings qualify for replacement"
     },
     {
       icon: Shield,
-      title: "Safety & Reliability",
-      description: "Modern safety features and reliable performance with comprehensive warranties for peace of mind."
-    },
-    {
-      icon: Wrench,
-      title: "Professional Service",
-      description: "Installation by Gas Safe registered engineers with full certification and ongoing support."
+      title: "Benefits",
+      description: "Receive state benefits or have household income below £31,000 per year"
     }
   ];
 
@@ -75,25 +79,31 @@ const GasBoilers = () => {
     <div>
       <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30 will-change-transform"
-          style={{ 
-            backgroundImage: `url(/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png)`,
-            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
-          }}
-        ></div>
+        <div className="absolute inset-0 opacity-30 will-change-transform">
+          <OptimizedImage
+            src="/lovable-uploads/8fdd29b5-d86d-491f-9c2f-9e692f13c11c.png"
+            alt="Gas Boiler Background"
+            className="w-full h-full object-cover mix-blend-multiply"
+            priority={true}
+            width={1920}
+            height={1080}
+            style={{ 
+              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
+            }}
+          />
+        </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                Free Gas Boilers
+                Free Gas Boiler Replacement
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Upgrade to Energy Efficient Heating
+                Upgrade your heating system at no cost
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                Replace your old, inefficient boiler with a brand new, high-efficiency model through government and energy company funding schemes. Reduce your heating bills and improve home comfort.
+                Replace your old, inefficient gas boiler with a modern, high-efficiency model through government-funded schemes. Reduce your energy bills and improve your home's heating performance.
               </p>
               
               <div className="mb-8">
@@ -109,18 +119,67 @@ const GasBoilers = () => {
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <GasBoilersForm />
+              <NativeGasBoilersForm />
             </div>
           </div>
         </div>
       </section>
       
       <Suspense fallback={
+        <div className="py-20 bg-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <section className="py-20 bg-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Gas Boiler Qualifying Criteria
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {eligibilityRequirements.map((requirement, index) => {
+                const Icon = requirement.icon;
+                return (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-orange-500 rounded-full flex items-center justify-center">
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {requirement.title}
+                    </h3>
+                    <p className="text-gray-600">
+                      {requirement.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <EligibilitySection />
+          </div>
+        </section>
+      </Suspense>
+      
+      <Suspense fallback={
         <div className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="animate-pulse space-y-8">
               <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="h-32 bg-gray-300 rounded"></div>
                 ))}
@@ -133,156 +192,69 @@ const GasBoilers = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Benefits of a New Gas Boiler
+                What Does Gas Boiler Replacement Cover?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Modern gas boilers are significantly more efficient than older models, offering better performance, 
-                lower running costs, and improved reliability for your home heating system.
+                Our fully funded gas boiler replacement service includes everything you need for a complete heating system upgrade.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-              {boilerBenefits.map((benefit, index) => {
-                const Icon = benefit.icon;
-                return (
-                  <Card key={index} className="group hover:shadow-xl transition-all duration-300">
-                    <CardHeader>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-500 transition-colors">
-                          <Icon className="w-6 h-6 text-orange-600 group-hover:text-white transition-colors" />
-                        </div>
-                        <CardTitle className="text-xl">{benefit.title}</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-base">
-                        {benefit.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-            
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 mx-auto mb-4 bg-orange-500 rounded-full flex items-center justify-center">
-                  <Flame className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Boiler Efficiency Comparison
-                </h3>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-lg p-6 shadow-md border-2 border-red-200">
-                  <h4 className="text-lg font-semibold text-red-600 mb-4 text-center">Old Inefficient Boiler</h4>
-                  <ul className="space-y-2">
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
-                      60-70% efficiency rating
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
-                      Higher fuel bills
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
-                      Frequent breakdowns
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
-                      Inconsistent heating
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="bg-white rounded-lg p-6 shadow-md border-2 border-green-200">
-                  <h4 className="text-lg font-semibold text-green-600 mb-4 text-center">New Efficient Boiler</h4>
-                  <ul className="space-y-2">
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      90%+ efficiency rating
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Reduced fuel bills
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Reliable performance
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Even temperature control
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </Suspense>
-      
-      <Suspense fallback={
-        <div className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      }>
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Boiler Installation Process
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our professional team handles everything from assessment to installation, ensuring you get 
-                the best boiler for your home with minimal disruption.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { 
-                  icon: Shield, 
-                  title: "Assessment & Quote", 
-                  description: "Free home assessment to determine the best boiler size and type for your property's needs." 
-                },
-                { 
-                  icon: Clock, 
-                  title: "Quick Installation", 
-                  description: "Professional installation typically completed in 1 day by Gas Safe registered engineers." 
-                },
-                { 
-                  icon: Wrench, 
-                  title: "Ongoing Support", 
-                  description: "10-year warranty plus ongoing maintenance support to keep your boiler running efficiently." 
-                }
-              ].map((process, index) => {
-                const Icon = process.icon;
-                return (
-                  <div key={index} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-orange-500 rounded-full flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {process.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {process.description}
-                    </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
+                    <Flame className="w-8 h-8 text-orange-600" />
                   </div>
-                );
-              })}
+                  <CardTitle>New Boiler</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    High-efficiency gas boiler installation with modern technology for optimal performance and energy savings.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Wrench className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <CardTitle>Professional Installation</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Certified engineers handle complete installation, testing, and commissioning of your new heating system.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                    <Thermometer className="w-8 h-8 text-green-600" />
+                  </div>
+                  <CardTitle>System Controls</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Modern heating controls and thermostats for better temperature management and energy efficiency.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                    <PoundSterling className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <CardTitle>Warranty Included</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Comprehensive warranty on your new boiler and installation work for complete peace of mind.
+                  </CardDescription>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
