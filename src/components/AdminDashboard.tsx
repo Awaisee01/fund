@@ -9,36 +9,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Users, FileText, Settings, LogOut, Mail, Phone, MapPin, Calendar, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
 
 interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-interface FormSubmission {
-  id: string;
-  service_type: string;
-  status: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  postcode: string | null;
-  property_type: string | null;
-  property_ownership: string | null;
-  current_heating_system: string | null;
-  admin_notes: string | null;
-  created_at: string;
-  updated_at: string;
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-}
+type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
+type LeadStatus = Database['public']['Enums']['lead_status'];
 
 const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<FormSubmission | null>(null);
   const [editingNotes, setEditingNotes] = useState<string>('');
-  const [editingStatus, setEditingStatus] = useState<string>('');
+  const [editingStatus, setEditingStatus] = useState<LeadStatus>('new');
   const { toast } = useToast();
 
   // Stats derived from submissions
@@ -72,15 +57,21 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     }
   };
 
-  const updateSubmission = async (id: string, updates: { status?: string; admin_notes?: string }) => {
+  const updateSubmission = async (id: string, updates: { status?: LeadStatus; admin_notes?: string }) => {
     try {
+      const updateData: any = { ...updates };
+      
+      // Add timestamp fields based on status
+      if (updates.status === 'contacted') {
+        updateData.contacted_at = new Date().toISOString();
+      }
+      if (updates.status === 'converted') {
+        updateData.converted_at = new Date().toISOString();
+      }
+
       const { error } = await supabase
         .from('form_submissions')
-        .update({
-          ...updates,
-          ...(updates.status === 'contacted' && { contacted_at: new Date().toISOString() }),
-          ...(updates.status === 'converted' && { converted_at: new Date().toISOString() }),
-        })
+        .update(updateData)
         .eq('id', id);
 
       if (error) throw error;
@@ -112,7 +103,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     onLogout();
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: LeadStatus) => {
     const statusColors = {
       new: 'bg-blue-100 text-blue-800',
       contacted: 'bg-yellow-100 text-yellow-800',
@@ -122,7 +113,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     };
     
     return (
-      <Badge className={statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'}>
+      <Badge className={statusColors[status]}>
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
@@ -350,7 +341,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">Status</label>
-                  <Select value={editingStatus} onValueChange={setEditingStatus}>
+                  <Select value={editingStatus} onValueChange={(value: LeadStatus) => setEditingStatus(value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
