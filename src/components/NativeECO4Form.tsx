@@ -56,18 +56,27 @@ const NativeECO4Form = () => {
       // Here you would normally send to your backend
       console.log('ECO4 form submitted:', data);
       
+      // Add debug logging
+      console.log('About to show success toast...');
+      
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.", {
         duration: 6000,
         position: 'top-center',
       });
       
+      console.log('Success toast called');
+      
       form.reset();
     } catch (error) {
       console.error('Form submission error:', error);
+      console.log('About to show error toast...');
+      
       toast.error("Something went wrong. Please try again or call us directly.", {
         duration: 5000,
         position: 'top-center',
       });
+      
+      console.log('Error toast called');
     } finally {
       setIsSubmitting(false);
     }
