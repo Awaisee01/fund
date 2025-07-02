@@ -59,7 +59,7 @@ const GasBoilersForm = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 p-0">
-        <div className="w-full min-h-[580px] -mt-8 relative overflow-hidden">
+        <div className="w-full min-h-[580px] -mt-8 relative overflow-visible">
           {/* Loading spinner */}
           <div 
             className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
@@ -72,7 +72,7 @@ const GasBoilersForm = () => {
             </div>
           </div>
 
-          {/* Actual form */}
+          {/* Actual form with dynamic height */}
           <div 
             className={`transition-opacity duration-700 ${
               showForm ? 'opacity-100' : 'opacity-0'
@@ -82,7 +82,8 @@ const GasBoilersForm = () => {
               src="https://api.leadconnectorhq.com/widget/form/IQdjy6881LRm0K7ogyiF"
               style={{
                 width:'100%', 
-                height:'580px', 
+                minHeight:'580px',
+                height: 'auto',
                 border:'none', 
                 borderRadius:'6px'
               }}

@@ -39,10 +39,16 @@ const ECO4Form = () => {
     <div className="w-fit mx-auto">
       <h3 className="text-2xl font-bold mb-4 text-center text-white">Enquire Here</h3>
       <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm w-[320px] relative">
-        <div className="relative p-2">
+        <div className="relative p-2 min-h-[640px] overflow-visible">
           <iframe
             src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
-            style={{width:'300px', height:'640px', border:'none', borderRadius:'8px'}}
+            style={{
+              width:'300px', 
+              minHeight:'640px',
+              height: 'auto',
+              border:'none', 
+              borderRadius:'8px'
+            }}
             id="inline-cJ1J84PqSZEi3RCJZYb5" 
             data-layout="{'id':'INLINE'}"
             data-trigger-type="alwaysShow"

@@ -64,7 +64,7 @@ const SolarForm = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 p-0 pb-6">
-        <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
+        <div className="w-full min-h-[580px] -mt-8 relative overflow-visible">
           {/* Enhanced loading state with skeleton */}
           <div 
             className={`absolute inset-0 z-10 transition-opacity duration-500 ${
@@ -88,18 +88,18 @@ const SolarForm = () => {
             </div>
           </div>
 
-          {/* Actual form with reserved space */}
+          {/* Actual form with dynamic height */}
           <div 
             className={`transition-opacity duration-500 ${
               showForm ? 'opacity-100' : 'opacity-0'
             }`}
-            style={{ minHeight: '580px' }}
           >
             <iframe
               src="https://api.leadconnectorhq.com/widget/form/9lDaU9yEdGltsGe35Bwh"
               style={{
                 width:'100%', 
-                height:'580px', 
+                minHeight:'580px',
+                height: 'auto',
                 border:'none', 
                 borderRadius:'6px'
               }}

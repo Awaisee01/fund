@@ -54,13 +54,13 @@ const ECO4CustomForm = () => {
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-0 pt-4">
-        <CardTitle className="text-2xl font-bold text-white pt-2">
+      <CardHeader className="text-center pb-2 pt-4">
+        <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 p-0 pb-6">
-        <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
+        <div className="w-full min-h-[580px] relative overflow-visible">
           {/* Loading spinner */}
           <div 
             className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
@@ -73,7 +73,7 @@ const ECO4CustomForm = () => {
             </div>
           </div>
 
-          {/* Actual form */}
+          {/* Actual form with dynamic height */}
           <div 
             className={`transition-opacity duration-700 ${
               showForm ? 'opacity-100' : 'opacity-0'
@@ -83,7 +83,8 @@ const ECO4CustomForm = () => {
               src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"
               style={{
                 width:'100%', 
-                height:'580px', 
+                minHeight:'580px',
+                height: 'auto',
                 border:'none', 
                 borderRadius:'6px'
               }}
