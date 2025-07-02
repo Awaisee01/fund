@@ -35,6 +35,7 @@ const ECO4CustomForm = () => {
   };
 
   const handleMetaPixelClick = () => {
+    console.log('Tracking button clicked');
     // Trigger Meta Pixel event
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead', {
@@ -103,15 +104,14 @@ const ECO4CustomForm = () => {
             />
           </div>
 
-          {/* Invisible overlay button positioned at the bottom of the form */}
+          {/* Tracking button - positioned to not interfere with form submission */}
           {showForm && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
-              <button
-                onClick={handleMetaPixelClick}
-                className="w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer"
-                aria-label="Submit form tracking"
-              />
-            </div>
+            <button
+              onClick={handleMetaPixelClick}
+              className="absolute top-2 right-2 w-8 h-8 bg-transparent border-none opacity-0 cursor-pointer z-30"
+              aria-label="Form tracking"
+              tabIndex={-1}
+            />
           )}
         </div>
       </CardContent>
