@@ -118,9 +118,7 @@ export const BulkActions = ({ submissions, selectedIds, onSelectionChange, onBul
       <div className="flex items-center space-x-2">
         <Checkbox
           checked={allSelected}
-          ref={(el) => {
-            if (el) el.indeterminate = someSelected;
-          }}
+          indeterminate={someSelected}
           onCheckedChange={handleSelectAll}
         />
         <span className="text-sm font-medium">
