@@ -49,11 +49,17 @@ export const LeadStatusBadge = ({ status, size = 'default' }: LeadStatusBadgePro
 
   const config = getStatusConfig(status);
   
+  // Apply size-specific styling via className instead of size prop
+  const sizeClasses = {
+    sm: 'text-xs px-2 py-0.5',
+    default: 'text-xs px-2.5 py-0.5',
+    lg: 'text-sm px-3 py-1'
+  };
+  
   return (
     <Badge 
       variant="outline" 
-      className={`${config.color} font-medium`}
-      size={size}
+      className={`${config.color} font-medium ${sizeClasses[size]}`}
     >
       {config.label}
     </Badge>

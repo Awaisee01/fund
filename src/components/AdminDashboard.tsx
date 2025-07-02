@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -153,6 +152,10 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     }
   };
 
+  const handleStatusUpdate = (submissionId: string, status: LeadStatus) => {
+    updateSubmission(submissionId, { status });
+  };
+
   useEffect(() => {
     fetchSubmissions();
   }, []);
@@ -238,7 +241,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           onBulkUpdate={fetchSubmissions}
           onViewDetails={handleViewDetails}
           onEmailSent={handleEmailSent}
-          onStatusUpdate={updateSubmission}
+          onStatusUpdate={handleStatusUpdate}
         />
 
         {/* Pagination */}
