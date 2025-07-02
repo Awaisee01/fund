@@ -1,17 +1,19 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { DateRange } from 'react-day-picker';
 import { isWithinInterval, parseISO } from 'date-fns';
 import type { Database } from '@/integrations/supabase/types';
 
-// Import the new components
+// Import the components
 import { AdminDashboardHeader } from './admin/AdminDashboardHeader';
 import { StatsOverview } from './admin/StatsOverview';
 import { SubmissionsTable } from './admin/SubmissionsTable';
 import { SubmissionDetailModal } from './admin/SubmissionDetailModal';
 import { DashboardAnalytics } from './admin/DashboardAnalytics';
+import { SearchFilter } from './admin/SearchFilter';
+import { PaginationControls } from './admin/PaginationControls';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -31,6 +33,9 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
   const { toast } = useToast();
 
   // Stats derived from submissions
@@ -42,6 +47,58 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       new Date(s.created_at).toDateString() === new Date().toDateString()
     ).length
   };
+
+  // Memoized filtering and pagination
+  const paginatedSubmissions = useMemo(() => {
+    let filtered = submissions;
+
+    // Filter by status
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(s => s.status === statusFilter);
+    }
+
+    // Filter by date range
+    if (dateRange?.from) {
+      filtered = filtered.filter(s => {
+        const submissionDate = parseISO(s.created_at);
+        if (dateRange.to) {
+          return isWithinInterval(submissionDate, { start: dateRange.from!, end: dateRange.to });
+        } else {
+          return submissionDate >= dateRange.from!;
+        }
+      });
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(s => 
+        s.name.toLowerCase().includes(query) ||
+        s.email?.toLowerCase().includes(query) ||
+        s.phone?.toLowerCase().includes(query) ||
+        s.postcode?.toLowerCase().includes(query) ||
+        s.service_type.toLowerCase().includes(query)
+      );
+    }
+
+    setFilteredSubmissions(filtered);
+
+    // Pagination
+    const totalPages = Math.ceil(filtered.length / pageSize);
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    return {
+      items: filtered.slice(startIndex, endIndex),
+      totalPages,
+      totalItems: filtered.length
+    };
+  }, [submissions, statusFilter, dateRange, searchQuery, currentPage, pageSize]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, dateRange, searchQuery, pageSize]);
 
   const fetchSubmissions = async () => {
     try {
@@ -103,30 +160,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     fetchSubmissions();
   }, []);
 
-  // Filter submissions based on status and date range
-  useEffect(() => {
-    let filtered = submissions;
-
-    // Filter by status
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(s => s.status === statusFilter);
-    }
-
-    // Filter by date range
-    if (dateRange?.from) {
-      filtered = filtered.filter(s => {
-        const submissionDate = parseISO(s.created_at);
-        if (dateRange.to) {
-          return isWithinInterval(submissionDate, { start: dateRange.from!, end: dateRange.to });
-        } else {
-          return submissionDate >= dateRange.from!;
-        }
-      });
-    }
-
-    setFilteredSubmissions(filtered);
-  }, [submissions, statusFilter, dateRange]);
-
   const handleLogout = () => {
     localStorage.removeItem('adminAuthenticated');
     onLogout();
@@ -179,10 +212,15 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           todaySubmissions={stats.todaySubmissions}
         />
 
+        {/* Search Filter */}
+        <div className="mb-6">
+          <SearchFilter onSearch={setSearchQuery} />
+        </div>
+
         {/* Submissions Table */}
         <SubmissionsTable
           submissions={submissions}
-          filteredSubmissions={filteredSubmissions}
+          filteredSubmissions={paginatedSubmissions.items}
           selectedIds={selectedIds}
           statusFilter={statusFilter}
           dateRange={dateRange}
@@ -193,6 +231,18 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           onViewDetails={handleViewDetails}
           onEmailSent={handleEmailSent}
         />
+
+        {/* Pagination */}
+        {paginatedSubmissions.totalItems > 0 && (
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={paginatedSubmissions.totalPages}
+            pageSize={pageSize}
+            totalItems={paginatedSubmissions.totalItems}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={setPageSize}
+          />
+        )}
       </div>
 
       {/* Detail Modal */}

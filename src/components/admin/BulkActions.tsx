@@ -15,6 +15,10 @@ interface BulkActionsProps {
 export const BulkActions = ({ submissions, selectedIds, onSelectionChange, onBulkUpdate }: BulkActionsProps) => {
   if (submissions.length === 0) return null;
 
+  const selectedSubmissions = submissions.filter(submission => 
+    selectedIds.includes(submission.id)
+  );
+
   return (
     <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
       <BulkActionHeader
@@ -25,6 +29,7 @@ export const BulkActions = ({ submissions, selectedIds, onSelectionChange, onBul
       
       <BulkActionButtons
         selectedIds={selectedIds}
+        selectedSubmissions={selectedSubmissions}
         onSelectionChange={onSelectionChange}
         onBulkUpdate={onBulkUpdate}
       />
