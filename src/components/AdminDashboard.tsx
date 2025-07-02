@@ -97,12 +97,17 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     updateSubmission(submissionId, { status: 'contacted' });
   };
 
-  const handleSaveSubmission = () => {
+  const handleSaveSubmission = (updates: {
+    status: LeadStatus;
+    admin_notes: string;
+    property_type?: string;
+    property_ownership?: string;
+    current_heating_system?: string;
+    epc_score?: string;
+  }) => {
     if (selectedSubmission) {
-      updateSubmission(selectedSubmission.id, {
-        status: editingStatus,
-        admin_notes: editingNotes
-      });
+      updateSubmission(selectedSubmission.id, updates);
+      setSelectedSubmission(null);
     }
   };
 

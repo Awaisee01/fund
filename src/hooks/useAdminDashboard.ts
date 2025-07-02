@@ -33,7 +33,17 @@ export const useAdminDashboard = () => {
     }
   };
 
-  const updateSubmission = async (id: string, updates: { status?: LeadStatus; admin_notes?: string }) => {
+  const updateSubmission = async (
+    id: string, 
+    updates: { 
+      status?: LeadStatus; 
+      admin_notes?: string;
+      property_type?: string;
+      property_ownership?: string;
+      current_heating_system?: string;
+      epc_score?: string;
+    }
+  ) => {
     try {
       const updateData: any = { ...updates };
       

@@ -17,7 +17,14 @@ interface SubmissionDetailModalProps {
   onClose: () => void;
   onNotesChange: (notes: string) => void;
   onStatusChange: (status: LeadStatus) => void;
-  onSave: () => void;
+  onSave: (updates: {
+    status: LeadStatus;
+    admin_notes: string;
+    property_type?: string;
+    property_ownership?: string;
+    current_heating_system?: string;
+    epc_score?: string;
+  }) => void;
 }
 
 export const SubmissionDetailModal = ({
@@ -52,9 +59,14 @@ export const SubmissionDetailModal = ({
   };
 
   const handleSave = async () => {
-    // TODO: Update submission with property details
-    // This will need to be implemented in the parent component
-    onSave();
+    onSave({
+      status: editingStatus,
+      admin_notes: editingNotes,
+      property_type: propertyType,
+      property_ownership: propertyOwnership,
+      current_heating_system: currentHeatingSystem,
+      epc_score: epcScore
+    });
   };
 
   return (
@@ -259,7 +271,7 @@ export const SubmissionDetailModal = ({
             <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={onSave}>
+            <Button onClick={handleSave}>
               Save Changes
             </Button>
           </div>
