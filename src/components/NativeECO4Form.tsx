@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 interface ECO4FormData {
   fullName: string;
@@ -19,6 +19,7 @@ interface ECO4FormData {
 
 const NativeECO4Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   
   const form = useForm<ECO4FormData>({
     defaultValues: {
@@ -56,17 +57,17 @@ const NativeECO4Form = () => {
       // Here you would normally send to your backend
       console.log('ECO4 form submitted:', data);
       
-      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.", {
-        duration: 6000,
-        position: 'top-center',
+      toast({
+        title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
       });
       
       form.reset();
     } catch (error) {
       console.error('Form submission error:', error);
-      toast.error("Something went wrong. Please try again or call us directly.", {
-        duration: 5000,
-        position: 'top-center',
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or call us directly.",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
