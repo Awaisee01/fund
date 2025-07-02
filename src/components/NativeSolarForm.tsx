@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -194,8 +193,8 @@ const NativeSolarForm = () => {
             />
 
             <div className="pt-1">
-              <p className="text-white text-sm text-center mb-2">
-                Only for homes with Air Source Heat Pumps
+              <p className="text-white text-sm text-left mb-2">
+                * Only for homes with Air Source Heat Pumps
               </p>
               
               <FormField
