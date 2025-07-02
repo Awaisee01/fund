@@ -53,13 +53,13 @@ const ECO4CustomForm = () => {
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-4">
-        <CardTitle className="text-2xl font-bold text-white">
+      <CardHeader className="text-center pb-0 pt-4">
+        <CardTitle className="text-2xl font-bold text-white pt-2">
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-6 pt-0">
-        <div className="w-full h-[580px] relative overflow-hidden">
+      <CardContent className="pt-0 p-0 pb-6">
+        <div className="w-full h-[580px] -mt-8 relative overflow-hidden">
           {/* Loading spinner */}
           <div 
             className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
