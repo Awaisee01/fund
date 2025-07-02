@@ -11,6 +11,7 @@ type ServiceType = Database['public']['Enums']['service_type'];
 export const useAdminFilters = (submissions: FormSubmission[]) => {
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
   const [serviceFilter, setServiceFilter] = useState<ServiceType | 'all'>('all');
+  const [epcFilter, setEpcFilter] = useState<string>('all');
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +31,11 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
       filtered = filtered.filter(s => s.service_type === serviceFilter);
     }
 
+    // Filter by EPC score
+    if (epcFilter !== 'all') {
+      filtered = filtered.filter(s => s.epc_score === epcFilter);
+    }
+
     // Filter by date range
     if (dateRange?.from) {
       filtered = filtered.filter(s => {
@@ -42,7 +48,7 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
       });
     }
 
-    // Enhanced search functionality
+    // Enhanced search functionality (excluding EPC score since it has its own filter)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(s => 
@@ -54,7 +60,6 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
         s.property_type?.toLowerCase().includes(query) ||
         s.property_ownership?.toLowerCase().includes(query) ||
         s.current_heating_system?.toLowerCase().includes(query) ||
-        s.epc_score?.toLowerCase().includes(query) ||
         s.admin_notes?.toLowerCase().includes(query) ||
         (s.form_data && typeof s.form_data === 'object' && 'address' in s.form_data && 
          typeof s.form_data.address === 'string' && 
@@ -73,16 +78,17 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
       totalItems: filtered.length,
       filteredItems: filtered
     };
-  }, [submissions, statusFilter, serviceFilter, dateRange, searchQuery, currentPage, pageSize]);
+  }, [submissions, statusFilter, serviceFilter, epcFilter, dateRange, searchQuery, currentPage, pageSize]);
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [statusFilter, serviceFilter, dateRange, searchQuery, pageSize]);
+  }, [statusFilter, serviceFilter, epcFilter, dateRange, searchQuery, pageSize]);
 
   const handleClearAllFilters = () => {
     setStatusFilter('all');
     setServiceFilter('all');
+    setEpcFilter('all');
     setDateRange(undefined);
     setSearchQuery('');
   };
@@ -90,6 +96,7 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
   return {
     statusFilter,
     serviceFilter,
+    epcFilter,
     dateRange,
     searchQuery,
     currentPage,
@@ -97,6 +104,7 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
     paginatedSubmissions,
     setStatusFilter,
     setServiceFilter,
+    setEpcFilter,
     setDateRange,
     setSearchQuery,
     setCurrentPage,

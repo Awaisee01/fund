@@ -15,10 +15,12 @@ type ServiceType = Database['public']['Enums']['service_type'];
 interface AdvancedFiltersProps {
   statusFilter: LeadStatus | 'all';
   serviceFilter: ServiceType | 'all';
+  epcFilter: string;
   dateRange: DateRange | undefined;
   searchQuery: string;
   onStatusFilterChange: (status: LeadStatus | 'all') => void;
   onServiceFilterChange: (service: ServiceType | 'all') => void;
+  onEpcFilterChange: (epc: string) => void;
   onDateRangeChange: (range: DateRange | undefined) => void;
   onSearchChange: (query: string) => void;
   onClearAll: () => void;
@@ -27,16 +29,18 @@ interface AdvancedFiltersProps {
 export const AdvancedFilters = ({
   statusFilter,
   serviceFilter,
+  epcFilter,
   dateRange,
   searchQuery,
   onStatusFilterChange,
   onServiceFilterChange,
+  onEpcFilterChange,
   onDateRangeChange,
   onSearchChange,
   onClearAll
 }: AdvancedFiltersProps) => {
   const hasActiveFilters = statusFilter !== 'all' || serviceFilter !== 'all' || 
-                          dateRange?.from || searchQuery.trim();
+                          epcFilter !== 'all' || dateRange?.from || searchQuery.trim();
 
   const formatServiceType = (serviceType: ServiceType) => {
     const formatted = {
@@ -72,7 +76,7 @@ export const AdvancedFilters = ({
       <CardContent className="space-y-4">
         <SearchFilter 
           onSearch={onSearchChange}
-          placeholder="Search by name, email, phone, postcode, address, property details, heating system, EPC score, or notes..."
+          placeholder="Search by name, email, phone, postcode, address, property details, heating system, or notes..."
         />
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -110,7 +114,26 @@ export const AdvancedFilters = ({
             </Select>
           </div>
 
-          <div className="md:col-span-2">
+          <div>
+            <label className="text-sm font-medium mb-2 block">EPC Score</label>
+            <Select value={epcFilter} onValueChange={onEpcFilterChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="All EPC Scores" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All EPC Scores</SelectItem>
+                <SelectItem value="A">A</SelectItem>
+                <SelectItem value="B">B</SelectItem>
+                <SelectItem value="C">C</SelectItem>
+                <SelectItem value="D">D</SelectItem>
+                <SelectItem value="E">E</SelectItem>
+                <SelectItem value="F">F</SelectItem>
+                <SelectItem value="G">G</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
             <label className="text-sm font-medium mb-2 block">Date Range</label>
             <DateRangeFilter 
               dateRange={dateRange}
@@ -138,6 +161,15 @@ export const AdvancedFilters = ({
                 <X 
                   className="w-3 h-3 cursor-pointer" 
                   onClick={() => onServiceFilterChange('all')}
+                />
+              </Badge>
+            )}
+            {epcFilter !== 'all' && (
+              <Badge variant="secondary" className="gap-1">
+                EPC Score: {epcFilter}
+                <X 
+                  className="w-3 h-3 cursor-pointer" 
+                  onClick={() => onEpcFilterChange('all')}
                 />
               </Badge>
             )}

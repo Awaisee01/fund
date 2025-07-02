@@ -28,6 +28,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const {
     statusFilter,
     serviceFilter,  
+    epcFilter,
     dateRange,
     searchQuery,
     currentPage,
@@ -35,6 +36,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     paginatedSubmissions,
     setStatusFilter,
     setServiceFilter,
+    setEpcFilter,
     setDateRange,
     setSearchQuery,
     setCurrentPage,
@@ -138,10 +140,12 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         <AdvancedFilters
           statusFilter={statusFilter}
           serviceFilter={serviceFilter}
+          epcFilter={epcFilter}
           dateRange={dateRange}
           searchQuery={searchQuery}
           onStatusFilterChange={setStatusFilter}
           onServiceFilterChange={setServiceFilter}
+          onEpcFilterChange={setEpcFilter}
           onDateRangeChange={setDateRange}
           onSearchChange={setSearchQuery}
           onClearAll={handleClearAllFilters}
