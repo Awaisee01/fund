@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface ECO4FormData {
   fullName: string;
@@ -18,7 +18,6 @@ interface ECO4FormData {
 
 const NativeECO4Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
   
   const form = useForm<ECO4FormData>({
     defaultValues: {
@@ -59,9 +58,8 @@ const NativeECO4Form = () => {
       // Reset form first
       form.reset();
       
-      // Show success message with proper configuration
-      toast({
-        title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
+      // Show success message using sonner toast
+      toast.success("Thank you for your enquiry. We will be in touch within 24 hours to discuss your options", {
         duration: 5000,
       });
       
@@ -69,10 +67,7 @@ const NativeECO4Form = () => {
       
     } catch (error) {
       console.error('Form submission error:', error);
-      toast({
-        title: "Something went wrong",
-        description: "Please try again or call us directly.",
-        variant: "destructive",
+      toast.error("Something went wrong. Please try again or call us directly.", {
         duration: 5000,
       });
     } finally {
