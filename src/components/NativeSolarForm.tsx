@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
 
 interface SolarFormData {
   fullName: string;
@@ -34,49 +34,28 @@ const NativeSolarForm = () => {
   });
 
   const onSubmit = async (data: SolarFormData) => {
+    console.log('🚀 Solar form submission started:', data);
     setIsSubmitting(true);
     
     try {
-      // Save to Supabase database
-      const { error } = await supabase
-        .from('form_submissions')
-        .insert({
-          service_type: 'solar',
-          name: data.fullName,
-          email: data.email,
-          phone: data.phone,
-          postcode: data.postCode,
-          form_data: {
-            address: data.address,
-            understand_air_source_heat_pump: data.understand,
-            source: 'solar_new_page'
-          },
-          page_path: window.location.pathname,
-          referrer: document.referrer || null,
-          user_agent: navigator.userAgent
-        });
+      // Save to Supabase database using the enhanced service
+      await submitFormToDatabase({
+        serviceType: 'solar',
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        postcode: data.postCode,
+        address: data.address,
+        formData: {
+          understand_air_source_heat_pump: data.understand,
+          source: 'solar_page'
+        }
+      });
 
-      if (error) throw error;
+      // Track the submission
+      trackFormSubmission('Solar', 'Solar Panels');
 
-      // Trigger Meta Pixel event for actual form submission
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'Lead', {
-          content_name: 'Solar Form Submission',
-          content_category: 'Solar Panels',
-          value: 1,
-          currency: 'GBP'
-        });
-      }
-      
-      // Also trigger Google Analytics if available
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'form_submit', {
-          form_name: 'solar_enquiry_form',
-          form_location: 'solar_new_page'
-        });
-      }
-
-      console.log('Solar form submitted and saved to database:', data);
+      console.log('🎉 Solar form submission completed successfully');
       
       // Show success message and reset form
       setShowSuccess(true);
@@ -90,7 +69,7 @@ const NativeSolarForm = () => {
       }, 5000);
       
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('💥 Solar form submission failed:', error);
       toast.error("Something went wrong. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);

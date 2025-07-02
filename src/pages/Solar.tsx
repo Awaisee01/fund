@@ -1,9 +1,9 @@
+
 import { useEffect, useState, Suspense, lazy } from 'react';
-import SolarForm from '@/components/SolarForm';
+import NativeSolarForm from '@/components/NativeSolarForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import HeroSkeleton from '@/components/HeroSkeleton';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sun, Battery, PoundSterling, Leaf, Home, Calculator, CheckCircle, ArrowRight, Thermometer, Heart, Shield } from 'lucide-react';
+import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
 
 // Lazy load sections that are below the fold
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
@@ -119,7 +119,7 @@ const Solar = () => {
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <SolarForm />
+              <NativeSolarForm />
             </div>
           </div>
         </div>

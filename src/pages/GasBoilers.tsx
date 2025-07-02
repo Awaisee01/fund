@@ -1,6 +1,6 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
-import GasBoilersForm from '@/components/GasBoilersForm';
+import NativeGasBoilersForm from '@/components/NativeGasBoilersForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,10 +20,8 @@ const GasBoilers = () => {
       metaDescription.setAttribute('content', 'Get free gas boiler replacement or repair in Scotland through government grants. Improve your home efficiency with modern boiler installations at no cost.');
     }
 
-    // Mark hero as loaded immediately for faster perceived performance
     setHeroLoaded(true);
 
-    // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
     const updateScrollY = () => {
       setScrollY(window.scrollY);
@@ -119,7 +117,7 @@ const GasBoilers = () => {
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <GasBoilersForm />
+              <NativeGasBoilersForm />
             </div>
           </div>
         </div>

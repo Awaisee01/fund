@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
 
 interface GasBoilersFormData {
   fullName: string;
@@ -30,48 +31,27 @@ const NativeGasBoilersForm = () => {
   });
 
   const onSubmit = async (data: GasBoilersFormData) => {
+    console.log('🚀 Gas Boilers form submission started:', data);
     setIsSubmitting(true);
     
     try {
-      // Save to Supabase database
-      const { error } = await supabase
-        .from('form_submissions')
-        .insert({
-          service_type: 'gas_boilers',
-          name: data.fullName,
-          email: data.email,
-          phone: data.phone,
-          postcode: data.postCode,
-          form_data: {
-            address: data.address,
-            source: 'gas_boilers_new_page'
-          },
-          page_path: window.location.pathname,
-          referrer: document.referrer || null,
-          user_agent: navigator.userAgent
-        });
+      // Save to Supabase database using the enhanced service
+      await submitFormToDatabase({
+        serviceType: 'gas_boilers',
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        postcode: data.postCode,
+        address: data.address,
+        formData: {
+          source: 'gas_boilers_page'
+        }
+      });
 
-      if (error) throw error;
+      // Track the submission
+      trackFormSubmission('Gas Boilers', 'Gas Boilers');
 
-      // Trigger Meta Pixel event for actual form submission
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'Lead', {
-          content_name: 'Gas Boilers Form Submission',
-          content_category: 'Gas Boilers',
-          value: 1,
-          currency: 'GBP'
-        });
-      }
-      
-      // Also trigger Google Analytics if available
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'form_submit', {
-          form_name: 'gas_boilers_enquiry_form',
-          form_location: 'gas_boilers_page'
-        });
-      }
-
-      console.log('Gas Boilers form submitted and saved to database:', data);
+      console.log('🎉 Gas Boilers form submission completed successfully');
       
       // Show success message and reset form
       setShowSuccess(true);
@@ -85,7 +65,7 @@ const NativeGasBoilersForm = () => {
       }, 5000);
       
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('💥 Gas Boilers form submission failed:', error);
       toast.error("Something went wrong. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);

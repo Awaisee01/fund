@@ -1,26 +1,26 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
-import ECO4Form from '@/components/ECO4Form';
+import NativeECO4Form from '@/components/NativeECO4Form';
 import OptimizedImage from '@/components/OptimizedImage';
-import PageHeroSkeleton from '@/components/PageHeroSkeleton';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
+import HeroSkeleton from '@/components/HeroSkeleton';
+import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
 
-// Lazy load below-the-fold content
+// Lazy load sections that are below the fold
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
+const ProcessSection = lazy(() => import('@/components/ProcessSection'));
 
 const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
 
   useEffect(() => {
-    document.title = "ECO4 Grants Scotland - Free Heating, Solar & Insulation | Funding For Scotland";
+    document.title = "Free ECO4 Grants Scotland - Government Energy Efficiency Scheme | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Access free ECO4 grants in Scotland for heating upgrades, solar panels, and insulation. Check your eligibility for completely funded home improvements worth thousands.');
+      metaDescription.setAttribute('content', 'Get free ECO4 grants in Scotland for energy efficiency improvements. Free insulation, boilers, and home upgrades through government schemes.');
     }
 
-    // Mark hero as loaded immediately for faster perceived performance - same as Solar page
+    // Mark hero as loaded immediately for faster perceived performance
     setHeroLoaded(true);
 
     // Use requestAnimationFrame for smoother scrolling
@@ -42,10 +42,10 @@ const ECO4 = () => {
   }, []);
 
   const benefits = [
-    "Heating upgrades",
-    "Solar panels", 
-    "Insulation",
-    "Heating controls and thermostats"
+    "Free insulation worth thousands",
+    "New boiler installation at no cost",
+    "Reduce energy bills by up to 40%",
+    "Government-backed scheme"
   ];
 
   const eligibilityRequirements = [
@@ -56,8 +56,8 @@ const ECO4 = () => {
     },
     {
       icon: Thermometer,
-      title: "Heating Type",
-      description: "Current heating system LPG, Oil, Electric Boiler, Electric Heaters. *Note - Scheme not available to properties on Mains Gas"
+      title: "Energy Rating",
+      description: "Property has EPC rating of D, E, F, or G"
     },
     {
       icon: Heart,
@@ -67,12 +67,12 @@ const ECO4 = () => {
     {
       icon: Shield,
       title: "Benefits",
-      description: "Receive state benefits or have household income below £31,000 per year"
+      description: "Receive any of the benefits listed below or have household income below £31,000 per year"
     }
   ];
 
   if (!heroLoaded) {
-    return <PageHeroSkeleton hasForm={true} />;
+    return <HeroSkeleton />;
   }
 
   return (
@@ -81,7 +81,7 @@ const ECO4 = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png"
+            src="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png"
             alt="ECO4 Background"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
@@ -97,13 +97,14 @@ const ECO4 = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                ECO4 Funding
+                ECO4 Grants
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Completely free heating upgrades, solar panels, and insulation
+                Free energy efficiency upgrades for your home
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                The primary goal of the ECO4 scheme is to improve energy efficiency in homes, reduce carbon emissions, tackle fuel poverty, and support the UK's commitment to net-zero carbon emissions by 2050.
+                The ECO4 scheme provides free energy efficiency improvements including insulation, 
+                boiler upgrades, and heating systems to eligible households across Scotland.
               </p>
               
               <div className="mb-8">
@@ -115,17 +116,11 @@ const ECO4 = () => {
                     </li>
                   ))}
                 </ul>
-                
-                <div className="mt-6">
-                  <p className="text-sm text-blue-200 italic">
-                    * ECO4 unavailable to properties with Mains Gas heating
-                  </p>
-                </div>
               </div>
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <ECO4Form />
+              <NativeECO4Form />
             </div>
           </div>
         </div>
@@ -161,7 +156,7 @@ const ECO4 = () => {
                 const Icon = requirement.icon;
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-green-500 rounded-full flex items-center justify-center">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -181,11 +176,11 @@ const ECO4 = () => {
       </Suspense>
       
       <Suspense fallback={
-        <div className="py-20 bg-white">
+        <div className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="animate-pulse space-y-8">
               <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="h-32 bg-gray-300 rounded"></div>
                 ))}
@@ -194,74 +189,19 @@ const ECO4 = () => {
           </div>
         </div>
       }>
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                What Does ECO4 Cover?
+                ECO4 Installation Process
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                This fully funded scheme provides a comprehensive improvement to your home's energy performance rating. Making homes more comfortable and cheaper to run.
+                Our streamlined process makes getting ECO4 improvements as easy as possible. From initial assessment 
+                to final installation, we handle everything for you.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-                    <Thermometer className="w-8 h-8 text-green-600" />
-                  </div>
-                  <CardTitle>Heating Systems</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    New boilers, heat pumps, and heating system upgrades to improve efficiency and reduce costs.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <Sun className="w-8 h-8 text-yellow-600" />
-                  </div>
-                  <CardTitle>Solar Panels</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Solar PV (photovoltaic) panels convert light (photons) to electrons making them more suitable to Scotland's climate.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Home className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <CardTitle>Insulation</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Loft insulation, cavity wall insulation, and solid wall insulation to keep heat in and reduce energy bills.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Zap className="w-8 h-8 text-purple-600" />
-                  </div>
-                  <CardTitle>Smart Controls</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Smart thermostats and heating controls to give you better control over your energy usage.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </div>
+            <ProcessSection />
           </div>
         </section>
       </Suspense>
