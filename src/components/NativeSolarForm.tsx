@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,6 +18,7 @@ interface SolarFormData {
 
 const NativeSolarForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   
   const form = useForm<SolarFormData>({
     defaultValues: {
@@ -56,22 +56,43 @@ const NativeSolarForm = () => {
       // Here you would normally send to your backend
       console.log('Solar form submitted:', data);
       
-      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.", {
-        duration: 6000,
-        position: 'top-center',
-      });
-      
+      // Show success message and reset form
+      setShowSuccess(true);
       form.reset();
+      
+      // Also try the toast
+      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+      
     } catch (error) {
       console.error('Form submission error:', error);
-      toast.error("Something went wrong. Please try again or call us directly.", {
-        duration: 5000,
-        position: 'top-center',
-      });
+      toast.error("Something went wrong. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (showSuccess) {
+    return (
+      <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardContent className="p-6 text-center">
+          <div className="text-green-400 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-white mb-2">Thank You!</h3>
+          <p className="text-white/90 text-sm">
+            We will be in touch within 24 hours to discuss your options.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
