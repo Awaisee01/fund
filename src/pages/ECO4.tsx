@@ -81,8 +81,8 @@ const ECO4 = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png"
-            alt="ECO4 Background"
+            src="/lovable-uploads/558d03ed-3b5e-4c76-9fe1-4c368acff5ad.png"
+            alt="ECO4 Energy Efficiency Background"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
             width={1920}

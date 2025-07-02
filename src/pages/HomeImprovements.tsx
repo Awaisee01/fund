@@ -79,7 +79,7 @@ const HomeImprovements = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png"
+            src="/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png"
             alt="Home Improvements Background"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
