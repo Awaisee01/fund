@@ -150,6 +150,7 @@ export type Database = {
           created_at: string
           current_heating_system: string | null
           email: string | null
+          epc_score: string | null
           form_data: Json | null
           id: string
           ip_address: unknown | null
@@ -177,6 +178,7 @@ export type Database = {
           created_at?: string
           current_heating_system?: string | null
           email?: string | null
+          epc_score?: string | null
           form_data?: Json | null
           id?: string
           ip_address?: unknown | null
@@ -204,6 +206,7 @@ export type Database = {
           created_at?: string
           current_heating_system?: string | null
           email?: string | null
+          epc_score?: string | null
           form_data?: Json | null
           id?: string
           ip_address?: unknown | null

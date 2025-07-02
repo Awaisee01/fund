@@ -62,10 +62,10 @@ export const SubmissionsTable = ({
     const hoursSinceCreated = (Date.now() - new Date(submission.created_at).getTime()) / (1000 * 60 * 60);
     
     if (submission.status === 'new' && hoursSinceCreated < 2) {
-      return 'urgent'; // New leads less than 2 hours old
+      return 'urgent';
     }
     if (submission.status === 'new' && hoursSinceCreated < 24) {
-      return 'high'; // New leads less than 24 hours old
+      return 'high';
     }
     return 'normal';
   };
@@ -126,9 +126,8 @@ export const SubmissionsTable = ({
                       }}
                     />
                   </TableHead>
-                  <TableHead className="min-w-[200px]">Contact Details</TableHead>
+                  <TableHead className="min-w-[250px]">Contact Information</TableHead>
                   <TableHead className="min-w-[120px]">Service</TableHead>
-                  <TableHead className="min-w-[150px]">Property Details</TableHead>
                   <TableHead className="min-w-[100px]">Status</TableHead>
                   <TableHead className="min-w-[120px]">Submitted</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -165,6 +164,13 @@ export const SubmissionsTable = ({
                               {submission.phone}
                             </div>
                           )}
+                          {/* Extract address from form_data if available */}
+                          {submission.form_data && typeof submission.form_data === 'object' && 'address' in submission.form_data && (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Home className="w-3 h-3 mr-1 flex-shrink-0" />
+                              <span className="truncate">{submission.form_data.address as string}</span>
+                            </div>
+                          )}
                           {submission.postcode && (
                             <div className="flex items-center text-sm text-gray-600">
                               <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
@@ -176,26 +182,6 @@ export const SubmissionsTable = ({
                       <TableCell>
                         <div className="font-medium">
                           {formatServiceType(submission.service_type)}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="space-y-1 text-sm">
-                          {submission.property_type && (
-                            <div className="flex items-center text-gray-600">
-                              <Home className="w-3 h-3 mr-1 flex-shrink-0" />
-                              {submission.property_type}
-                            </div>
-                          )}
-                          {submission.property_ownership && (
-                            <div className="text-gray-500">
-                              Ownership: {submission.property_ownership}
-                            </div>
-                          )}
-                          {submission.current_heating_system && (
-                            <div className="text-gray-500">
-                              Heating: {submission.current_heating_system}
-                            </div>
-                          )}
                         </div>
                       </TableCell>
                       <TableCell>
