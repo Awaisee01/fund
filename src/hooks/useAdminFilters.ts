@@ -42,7 +42,7 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
       });
     }
 
-    // Filter by search query
+    // Enhanced search functionality
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(s => 
@@ -50,7 +50,15 @@ export const useAdminFilters = (submissions: FormSubmission[]) => {
         s.email?.toLowerCase().includes(query) ||
         s.phone?.toLowerCase().includes(query) ||
         s.postcode?.toLowerCase().includes(query) ||
-        s.service_type.toLowerCase().includes(query)
+        s.service_type.toLowerCase().includes(query) ||
+        s.property_type?.toLowerCase().includes(query) ||
+        s.property_ownership?.toLowerCase().includes(query) ||
+        s.current_heating_system?.toLowerCase().includes(query) ||
+        s.epc_score?.toLowerCase().includes(query) ||
+        s.admin_notes?.toLowerCase().includes(query) ||
+        (s.form_data && typeof s.form_data === 'object' && 'address' in s.form_data && 
+         typeof s.form_data.address === 'string' && 
+         s.form_data.address.toLowerCase().includes(query))
       );
     }
 

@@ -72,7 +72,7 @@ export const AdvancedFilters = ({
       <CardContent className="space-y-4">
         <SearchFilter 
           onSearch={onSearchChange}
-          placeholder="Search by name, email, phone, or postcode..."
+          placeholder="Search by name, email, phone, postcode, address, property details, heating system, EPC score, or notes..."
         />
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
