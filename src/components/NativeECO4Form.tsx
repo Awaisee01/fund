@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 interface ECO4FormData {
   fullName: string;
@@ -18,6 +19,7 @@ interface ECO4FormData {
 
 const NativeECO4Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   
   const form = useForm<ECO4FormData>({
     defaultValues: {
@@ -55,34 +57,17 @@ const NativeECO4Form = () => {
       // Here you would normally send to your backend
       console.log('ECO4 form submitted:', data);
       
-      // Reset form after successful submission
-      form.reset();
-      
-      // Show success message using sonner toast with high priority
-      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.", {
-        duration: 6000,
-        position: 'top-center',
-        style: {
-          background: '#10b981',
-          color: 'white',
-          fontSize: '16px',
-          fontWeight: '600'
-        }
+      toast({
+        title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
       });
       
-      console.log('Success toast should now be visible');
-      
+      form.reset();
     } catch (error) {
       console.error('Form submission error:', error);
-      toast.error("Something went wrong. Please try again or call us directly.", {
-        duration: 5000,
-        position: 'top-center',
-        style: {
-          background: '#ef4444',
-          color: 'white',
-          fontSize: '16px',
-          fontWeight: '600'
-        }
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or call us directly.",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
