@@ -55,20 +55,34 @@ const NativeECO4Form = () => {
       // Here you would normally send to your backend
       console.log('ECO4 form submitted:', data);
       
-      // Reset form first
+      // Reset form after successful submission
       form.reset();
       
-      // Show success message using sonner toast
-      toast.success("Thank you for your enquiry. We will be in touch within 24 hours to discuss your options", {
-        duration: 5000,
+      // Show success message using sonner toast with high priority
+      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.", {
+        duration: 6000,
+        position: 'top-center',
+        style: {
+          background: '#10b981',
+          color: 'white',
+          fontSize: '16px',
+          fontWeight: '600'
+        }
       });
       
-      console.log('Toast called successfully');
+      console.log('Success toast should now be visible');
       
     } catch (error) {
       console.error('Form submission error:', error);
       toast.error("Something went wrong. Please try again or call us directly.", {
         duration: 5000,
+        position: 'top-center',
+        style: {
+          background: '#ef4444',
+          color: 'white',
+          fontSize: '16px',
+          fontWeight: '600'
+        }
       });
     } finally {
       setIsSubmitting(false);
