@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, FileText, Settings, LogOut, Mail, Phone, MapPin, Calendar, ExternalLink } from 'lucide-react';
+import { Users, FileText, Settings, LogOut, Mail, Phone, MapPin, Calendar, ExternalLink, Filter } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import type { Database } from '@/integrations/supabase/types';
@@ -20,10 +20,12 @@ type LeadStatus = Database['public']['Enums']['lead_status'];
 
 const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
+  const [filteredSubmissions, setFilteredSubmissions] = useState<FormSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<FormSubmission | null>(null);
   const [editingNotes, setEditingNotes] = useState<string>('');
   const [editingStatus, setEditingStatus] = useState<LeadStatus>('new');
+  const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
   const { toast } = useToast();
 
   // Stats derived from submissions
@@ -98,6 +100,15 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     fetchSubmissions();
   }, []);
 
+  // Filter submissions based on selected status
+  useEffect(() => {
+    if (statusFilter === 'all') {
+      setFilteredSubmissions(submissions);
+    } else {
+      setFilteredSubmissions(submissions.filter(s => s.status === statusFilter));
+    }
+  }, [submissions, statusFilter]);
+
   const handleLogout = () => {
     localStorage.removeItem('adminAuthenticated');
     onLogout();
@@ -109,7 +120,8 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       contacted: 'bg-yellow-100 text-yellow-800',
       qualified: 'bg-purple-100 text-purple-800',
       converted: 'bg-green-100 text-green-800',
-      closed: 'bg-gray-100 text-gray-800'
+      closed: 'bg-gray-100 text-gray-800',
+      lost: 'bg-red-100 text-red-800'
     };
     
     return (
@@ -206,16 +218,43 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         {/* Submissions Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Form Submissions</CardTitle>
-            <CardDescription>
-              Manage and track customer enquiries across all services
-            </CardDescription>
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle>Form Submissions</CardTitle>
+                <CardDescription>
+                  Manage and track customer enquiries across all services
+                </CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-muted-foreground" />
+                <Select value={statusFilter} onValueChange={(value: LeadStatus | 'all') => setStatusFilter(value)}>
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    <SelectItem value="new">New</SelectItem>
+                    <SelectItem value="contacted">Contacted</SelectItem>
+                    <SelectItem value="qualified">Qualified</SelectItem>
+                    <SelectItem value="converted">Converted</SelectItem>
+                    <SelectItem value="closed">Closed</SelectItem>
+                    <SelectItem value="lost">Lost</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            {submissions.length === 0 ? (
+            {filteredSubmissions.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500">No form submissions yet.</p>
-                <p className="text-sm text-gray-400 mt-2">Submissions will appear here when visitors fill out your forms.</p>
+                <p className="text-gray-500">
+                  {statusFilter === 'all' ? 'No form submissions yet.' : `No submissions with status "${statusFilter}".`}
+                </p>
+                <p className="text-sm text-gray-400 mt-2">
+                  {statusFilter === 'all' 
+                    ? 'Submissions will appear here when visitors fill out your forms.' 
+                    : 'Try selecting a different status filter.'}
+                </p>
               </div>
             ) : (
               <Table>
@@ -230,7 +269,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {submissions.map((submission) => (
+                  {filteredSubmissions.map((submission) => (
                     <TableRow key={submission.id}>
                       <TableCell>
                         <div className="flex flex-col space-y-1">
@@ -351,6 +390,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                       <SelectItem value="qualified">Qualified</SelectItem>
                       <SelectItem value="converted">Converted</SelectItem>
                       <SelectItem value="closed">Closed</SelectItem>
+                      <SelectItem value="lost">Lost</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

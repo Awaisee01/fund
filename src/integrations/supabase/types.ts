@@ -342,7 +342,13 @@ export type Database = {
       }
     }
     Enums: {
-      lead_status: "new" | "contacted" | "qualified" | "converted" | "closed"
+      lead_status:
+        | "new"
+        | "contacted"
+        | "qualified"
+        | "converted"
+        | "closed"
+        | "lost"
       service_type: "eco4" | "solar" | "gas_boilers" | "home_improvements"
     }
     CompositeTypes: {
@@ -459,7 +465,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      lead_status: ["new", "contacted", "qualified", "converted", "closed"],
+      lead_status: [
+        "new",
+        "contacted",
+        "qualified",
+        "converted",
+        "closed",
+        "lost",
+      ],
       service_type: ["eco4", "solar", "gas_boilers", "home_improvements"],
     },
   },
