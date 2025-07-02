@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,30 +27,27 @@ const ContactForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('🚀 Contact form submission started:', formData);
     setIsSubmitting(true);
     
     try {
-      // Save to Supabase database
-      const { error } = await supabase
-        .from('form_submissions')
-        .insert({
-          service_type: 'eco4', // Contact form can be general, but using eco4 as default
-          name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          postcode: formData.postCode,
-          form_data: {
-            address: formData.address,
-            source: 'contact_form'
-          },
-          page_path: window.location.pathname,
-          referrer: document.referrer || null,
-          user_agent: navigator.userAgent
-        });
+      // Save to Supabase database using the enhanced service
+      await submitFormToDatabase({
+        serviceType: 'eco4', // Contact form can be general, but using eco4 as default
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        postcode: formData.postCode,
+        address: formData.address,
+        formData: {
+          source: 'contact_form'
+        }
+      });
 
-      if (error) throw error;
+      // Track the submission
+      trackFormSubmission('Contact', 'General');
 
-      console.log('Contact form submitted and saved to database:', formData);
+      console.log('🎉 Contact form submission completed successfully');
       
       // Show success message and reset form
       setShowSuccess(true);
@@ -71,7 +67,7 @@ const ContactForm = () => {
       }, 5000);
       
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('💥 Contact form submission failed:', error);
       toast.error("Something went wrong. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);

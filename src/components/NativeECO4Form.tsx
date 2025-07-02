@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
 
 interface ECO4FormData {
   fullName: string;
@@ -34,49 +33,28 @@ const NativeECO4Form = () => {
   });
 
   const onSubmit = async (data: ECO4FormData) => {
+    console.log('🚀 ECO4 form submission started:', data);
     setIsSubmitting(true);
     
     try {
-      // Save to Supabase database
-      const { error } = await supabase
-        .from('form_submissions')
-        .insert({
-          service_type: 'eco4',
-          name: data.fullName,
-          email: data.email,
-          phone: data.phone,
-          postcode: data.postCode,
-          form_data: {
-            address: data.address,
-            understand_mains_gas_restriction: data.understand,
-            source: 'eco4_new_page'
-          },
-          page_path: window.location.pathname,
-          referrer: document.referrer || null,
-          user_agent: navigator.userAgent
-        });
+      // Save to Supabase database using the enhanced service
+      await submitFormToDatabase({
+        serviceType: 'eco4',
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        postcode: data.postCode,
+        address: data.address,
+        formData: {
+          understand_mains_gas_restriction: data.understand,
+          source: 'eco4_new_page'
+        }
+      });
 
-      if (error) throw error;
+      // Track the submission
+      trackFormSubmission('ECO4', 'ECO4');
 
-      // Trigger Meta Pixel event for actual form submission
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'Lead', {
-          content_name: 'ECO4 Form Submission',
-          content_category: 'ECO4',
-          value: 1,
-          currency: 'GBP'
-        });
-      }
-      
-      // Also trigger Google Analytics if available
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'form_submit', {
-          form_name: 'eco4_enquiry_form',
-          form_location: 'eco4_page'
-        });
-      }
-
-      console.log('ECO4 form submitted and saved to database:', data);
+      console.log('🎉 ECO4 form submission completed successfully');
       
       // Show success message and reset form
       setShowSuccess(true);
@@ -90,7 +68,7 @@ const NativeECO4Form = () => {
       }, 5000);
       
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('💥 ECO4 form submission failed:', error);
       toast.error("Something went wrong. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);
