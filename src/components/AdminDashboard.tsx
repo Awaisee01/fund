@@ -8,11 +8,11 @@ import type { Database } from '@/integrations/supabase/types';
 
 // Import the components
 import { AdminDashboardHeader } from './admin/AdminDashboardHeader';
-import { StatsOverview } from './admin/StatsOverview';
+import { QuickStats } from './admin/QuickStats';
+import { AdvancedFilters } from './admin/AdvancedFilters';
 import { SubmissionsTable } from './admin/SubmissionsTable';
 import { SubmissionDetailModal } from './admin/SubmissionDetailModal';
 import { DashboardAnalytics } from './admin/DashboardAnalytics';
-import { SearchFilter } from './admin/SearchFilter';
 import { PaginationControls } from './admin/PaginationControls';
 
 interface AdminDashboardProps {
@@ -21,15 +21,16 @@ interface AdminDashboardProps {
 
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
 type LeadStatus = Database['public']['Enums']['lead_status'];
+type ServiceType = Database['public']['Enums']['service_type'];
 
 const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
-  const [filteredSubmissions, setFilteredSubmissions] = useState<FormSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<FormSubmission | null>(null);
   const [editingNotes, setEditingNotes] = useState<string>('');
   const [editingStatus, setEditingStatus] = useState<LeadStatus>('new');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
+  const [serviceFilter, setServiceFilter] = useState<ServiceType | 'all'>('all');
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showAnalytics, setShowAnalytics] = useState(false);
@@ -38,16 +39,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [pageSize, setPageSize] = useState(20);
   const { toast } = useToast();
 
-  // Stats derived from submissions
-  const stats = {
-    totalSubmissions: submissions.length,
-    newSubmissions: submissions.filter(s => s.status === 'new').length,
-    processedSubmissions: submissions.filter(s => s.status === 'converted').length,
-    todaySubmissions: submissions.filter(s => 
-      new Date(s.created_at).toDateString() === new Date().toDateString()
-    ).length
-  };
-
   // Memoized filtering and pagination
   const paginatedSubmissions = useMemo(() => {
     let filtered = submissions;
@@ -55,6 +46,11 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     // Filter by status
     if (statusFilter !== 'all') {
       filtered = filtered.filter(s => s.status === statusFilter);
+    }
+
+    // Filter by service type
+    if (serviceFilter !== 'all') {
+      filtered = filtered.filter(s => s.service_type === serviceFilter);
     }
 
     // Filter by date range
@@ -81,8 +77,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       );
     }
 
-    setFilteredSubmissions(filtered);
-
     // Pagination
     const totalPages = Math.ceil(filtered.length / pageSize);
     const startIndex = (currentPage - 1) * pageSize;
@@ -91,14 +85,15 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     return {
       items: filtered.slice(startIndex, endIndex),
       totalPages,
-      totalItems: filtered.length
+      totalItems: filtered.length,
+      filteredItems: filtered
     };
-  }, [submissions, statusFilter, dateRange, searchQuery, currentPage, pageSize]);
+  }, [submissions, statusFilter, serviceFilter, dateRange, searchQuery, currentPage, pageSize]);
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [statusFilter, dateRange, searchQuery, pageSize]);
+  }, [statusFilter, serviceFilter, dateRange, searchQuery, pageSize]);
 
   const fetchSubmissions = async () => {
     try {
@@ -140,7 +135,9 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       if (error) throw error;
 
       await fetchSubmissions();
-      setSelectedSubmission(null);
+      if (selectedSubmission?.id === id) {
+        setSelectedSubmission(null);
+      }
       
       toast({
         title: "Success",
@@ -162,6 +159,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
   const handleLogout = () => {
     localStorage.removeItem('adminAuthenticated');
+    localStorage.removeItem('adminAuthTime');
     onLogout();
   };
 
@@ -184,6 +182,13 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     }
   };
 
+  const handleClearAllFilters = () => {
+    setStatusFilter('all');
+    setServiceFilter('all');
+    setDateRange(undefined);
+    setSearchQuery('');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -204,18 +209,21 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         {/* Analytics Dashboard */}
         {showAnalytics && <DashboardAnalytics submissions={submissions} />}
 
-        {/* Stats Overview */}
-        <StatsOverview
-          totalSubmissions={stats.totalSubmissions}
-          newSubmissions={stats.newSubmissions}
-          processedSubmissions={stats.processedSubmissions}
-          todaySubmissions={stats.todaySubmissions}
-        />
+        {/* Quick Stats Overview */}
+        <QuickStats submissions={submissions} />
 
-        {/* Search Filter */}
-        <div className="mb-6">
-          <SearchFilter onSearch={setSearchQuery} />
-        </div>
+        {/* Advanced Filters */}
+        <AdvancedFilters
+          statusFilter={statusFilter}
+          serviceFilter={serviceFilter}
+          dateRange={dateRange}
+          searchQuery={searchQuery}
+          onStatusFilterChange={setStatusFilter}
+          onServiceFilterChange={setServiceFilter}
+          onDateRangeChange={setDateRange}
+          onSearchChange={setSearchQuery}
+          onClearAll={handleClearAllFilters}
+        />
 
         {/* Submissions Table */}
         <SubmissionsTable
@@ -230,6 +238,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           onBulkUpdate={fetchSubmissions}
           onViewDetails={handleViewDetails}
           onEmailSent={handleEmailSent}
+          onStatusUpdate={updateSubmission}
         />
 
         {/* Pagination */}
