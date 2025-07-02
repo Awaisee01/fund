@@ -12,7 +12,6 @@ const EligibilitySection = lazy(() => import('@/components/EligibilitySection'))
 const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     document.title = "ECO4 Grants Scotland - Free Heating, Solar & Insulation | Funding For Scotland";
@@ -21,13 +20,8 @@ const ECO4 = () => {
       metaDescription.setAttribute('content', 'Access free ECO4 grants in Scotland for heating upgrades, solar panels, and insulation. Check your eligibility for completely funded home improvements worth thousands.');
     }
 
-    // Set a fallback timeout to show the page even if image doesn't load
-    const fallbackTimer = setTimeout(() => {
-      if (!heroLoaded) {
-        console.log('ECO4: Loading fallback triggered');
-        setHeroLoaded(true);
-      }
-    }, 2000); // Show page after 2 seconds regardless of image loading
+    // Mark hero as loaded immediately for faster perceived performance - same as Solar page
+    setHeroLoaded(true);
 
     // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
@@ -44,12 +38,8 @@ const ECO4 = () => {
     };
 
     window.addEventListener('scroll', handleSmoothScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleSmoothScroll);
-      clearTimeout(fallbackTimer);
-    };
-  }, [heroLoaded]);
+    return () => window.removeEventListener('scroll', handleSmoothScroll);
+  }, []);
 
   const benefits = [
     "Heating upgrades",
@@ -81,27 +71,13 @@ const ECO4 = () => {
     }
   ];
 
-  const handleImageLoad = () => {
-    console.log('ECO4: Image loaded successfully');
-    setImageLoaded(true);
-    // Add a small delay to ensure smooth transition
-    setTimeout(() => {
-      setHeroLoaded(true);
-    }, 100);
-  };
-
-  const handleImageError = () => {
-    console.log('ECO4: Image failed to load, showing page anyway');
-    setHeroLoaded(true);
-  };
-
   if (!heroLoaded) {
     return <PageHeroSkeleton hasForm={true} />;
   }
 
   return (
     <div>
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
@@ -111,20 +87,16 @@ const ECO4 = () => {
             priority={true}
             width={1920}
             height={1080}
-            onLoad={handleImageLoad}
-            onError={handleImageError}
             style={{ 
-              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`,
-              opacity: imageLoaded ? 1 : 0,
-              transition: 'opacity 0.5s ease-in-out'
+              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
             }}
           />
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24 min-h-screen flex items-center">
-          <div className="grid lg:grid-cols-12 gap-8 items-center w-full">
-            <div className="lg:col-span-7 flex flex-col justify-center">
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
                 ECO4 Funding
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
@@ -152,7 +124,7 @@ const ECO4 = () => {
               </div>
             </div>
             
-            <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end">
               <ECO4CustomForm />
             </div>
           </div>
