@@ -3,8 +3,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 const ContactForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -21,11 +25,57 @@ const ContactForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission here
+    setIsSubmitting(true);
+    
+    try {
+      // Here you would normally send to your backend
+      console.log('Contact form submitted:', formData);
+      
+      // Show success message and reset form
+      setShowSuccess(true);
+      setFormData({
+        fullName: '',
+        phone: '',
+        email: '',
+        address: '',
+        postCode: ''
+      });
+      
+      // Also try the toast
+      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+      
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error("Something went wrong. Please try again or call us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (showSuccess) {
+    return (
+      <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardContent className="p-6 text-center">
+          <div className="text-green-400 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-white mb-2">Thank You!</h3>
+          <p className="text-white/90 text-sm">
+            We will be in touch within 24 hours to discuss your options.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 pb-4">
@@ -114,8 +164,9 @@ const ContactForm = () => {
           type="submit"
           className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-12 sm:h-8 text-base sm:text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-[1.02] touch-manipulation"
           variant="outline"
+          disabled={isSubmitting}
         >
-          Submit
+          {isSubmitting ? 'Sending...' : 'Submit'}
         </Button>
       </div>
     </form>
