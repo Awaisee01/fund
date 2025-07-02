@@ -154,12 +154,12 @@ export const SubmissionDetailModal = ({
                         <SelectValue placeholder="Select property type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="house">House</SelectItem>
-                        <SelectItem value="flat">Flat</SelectItem>
-                        <SelectItem value="bungalow">Bungalow</SelectItem>
-                        <SelectItem value="terraced">Terraced</SelectItem>
-                        <SelectItem value="semi-detached">Semi-detached</SelectItem>
                         <SelectItem value="detached">Detached</SelectItem>
+                        <SelectItem value="semi-detached">Semi-Detached</SelectItem>
+                        <SelectItem value="bungalow">Bungalow</SelectItem>
+                        <SelectItem value="mid-terrace">Mid-Terrace</SelectItem>
+                        <SelectItem value="end-terrace">End-Terrace</SelectItem>
+                        <SelectItem value="flat">Flat</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
@@ -172,11 +172,11 @@ export const SubmissionDetailModal = ({
                         <SelectValue placeholder="Select ownership type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="owner-occupied">Owner Occupied</SelectItem>
-                        <SelectItem value="rented">Rented</SelectItem>
+                        <SelectItem value="owner">Owner</SelectItem>
+                        <SelectItem value="landlord">Landlord</SelectItem>
+                        <SelectItem value="private-tenant">Private Tenant</SelectItem>
                         <SelectItem value="housing-association">Housing Association</SelectItem>
                         <SelectItem value="council">Council</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -188,13 +188,15 @@ export const SubmissionDetailModal = ({
                         <SelectValue placeholder="Select heating system" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="gas-boiler">Gas Boiler</SelectItem>
+                        <SelectItem value="mains-gas">Mains Gas</SelectItem>
                         <SelectItem value="oil-boiler">Oil Boiler</SelectItem>
-                        <SelectItem value="electric-heating">Electric Heating</SelectItem>
-                        <SelectItem value="heat-pump">Heat Pump</SelectItem>
-                        <SelectItem value="solid-fuel">Solid Fuel</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="lpg">LPG</SelectItem>
+                        <SelectItem value="electric-boiler">Electric Boiler</SelectItem>
+                        <SelectItem value="storage-heaters">Storage Heaters</SelectItem>
+                        <SelectItem value="room-heaters">Room Heaters</SelectItem>
+                        <SelectItem value="ashp">ASHP</SelectItem>
+                        <SelectItem value="biomass">Biomass</SelectItem>
+                        <SelectItem value="coal">Coal</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
