@@ -57,8 +57,10 @@ const NativeECO4Form = () => {
       // Here you would normally send to your backend
       console.log('ECO4 form submitted:', data);
       
+      // Show success message
       toast({
         title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
+        duration: 5000,
       });
       
       form.reset();
