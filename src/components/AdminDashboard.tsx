@@ -1,59 +1,154 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, FileText, Settings, LogOut, Mail, Phone, MapPin } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Users, FileText, Settings, LogOut, Mail, Phone, MapPin, Calendar, ExternalLink } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
-  // Mock data for demonstration
-  const [enquiries] = useState([
-    {
-      id: 1,
-      name: 'John Smith',
-      email: 'john@example.com',
-      phone: '07123456789',
-      service: 'ECO4',
-      date: '2024-06-08',
-      status: 'New'
-    },
-    {
-      id: 2,
-      name: 'Sarah Johnson',
-      email: 'sarah@example.com',
-      phone: '07987654321',
-      service: 'Solar',
-      date: '2024-06-07',
-      status: 'Contacted'
-    },
-    {
-      id: 3,
-      name: 'Mike Brown',
-      email: 'mike@example.com',
-      phone: '07555666777',
-      service: 'Gas Boilers',
-      date: '2024-06-06',
-      status: 'Processed'
-    }
-  ]);
+interface FormSubmission {
+  id: string;
+  service_type: string;
+  status: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  postcode: string | null;
+  property_type: string | null;
+  property_ownership: string | null;
+  current_heating_system: string | null;
+  admin_notes: string | null;
+  created_at: string;
+  updated_at: string;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+}
 
+const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
+  const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedSubmission, setSelectedSubmission] = useState<FormSubmission | null>(null);
+  const [editingNotes, setEditingNotes] = useState<string>('');
+  const [editingStatus, setEditingStatus] = useState<string>('');
+  const { toast } = useToast();
+
+  // Stats derived from submissions
   const stats = {
-    totalEnquiries: enquiries.length,
-    newEnquiries: enquiries.filter(e => e.status === 'New').length,
-    processedEnquiries: enquiries.filter(e => e.status === 'Processed').length
+    totalSubmissions: submissions.length,
+    newSubmissions: submissions.filter(s => s.status === 'new').length,
+    processedSubmissions: submissions.filter(s => s.status === 'converted').length,
+    todaySubmissions: submissions.filter(s => 
+      new Date(s.created_at).toDateString() === new Date().toDateString()
+    ).length
   };
+
+  const fetchSubmissions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('form_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setSubmissions(data || []);
+    } catch (error) {
+      console.error('Error fetching submissions:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch form submissions",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateSubmission = async (id: string, updates: { status?: string; admin_notes?: string }) => {
+    try {
+      const { error } = await supabase
+        .from('form_submissions')
+        .update({
+          ...updates,
+          ...(updates.status === 'contacted' && { contacted_at: new Date().toISOString() }),
+          ...(updates.status === 'converted' && { converted_at: new Date().toISOString() }),
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      // Refresh data
+      await fetchSubmissions();
+      setSelectedSubmission(null);
+      
+      toast({
+        title: "Success",
+        description: "Submission updated successfully",
+      });
+    } catch (error) {
+      console.error('Error updating submission:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update submission",
+        variant: "destructive",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('adminAuthenticated');
     onLogout();
   };
 
+  const getStatusBadge = (status: string) => {
+    const statusColors = {
+      new: 'bg-blue-100 text-blue-800',
+      contacted: 'bg-yellow-100 text-yellow-800',
+      qualified: 'bg-purple-100 text-purple-800',
+      converted: 'bg-green-100 text-green-800',
+      closed: 'bg-gray-100 text-gray-800'
+    };
+    
+    return (
+      <Badge className={statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'}>
+        {status.charAt(0).toUpperCase() + status.slice(1)}
+      </Badge>
+    );
+  };
+
+  const formatServiceType = (serviceType: string) => {
+    const formatted = {
+      eco4: 'ECO4',
+      solar: 'Solar',
+      gas_boilers: 'Gas Boilers',
+      home_improvements: 'Home Improvements'
+    };
+    return formatted[serviceType as keyof typeof formatted] || serviceType;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-lg">Loading submissions...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -71,100 +166,232 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Enquiries</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Submissions</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.totalEnquiries}</div>
-              <p className="text-xs text-muted-foreground">All time enquiries</p>
+              <div className="text-2xl font-bold">{stats.totalSubmissions}</div>
+              <p className="text-xs text-muted-foreground">All time submissions</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">New Enquiries</CardTitle>
+              <CardTitle className="text-sm font-medium">New Submissions</CardTitle>
               <Mail className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.newEnquiries}</div>
+              <div className="text-2xl font-bold">{stats.newSubmissions}</div>
               <p className="text-xs text-muted-foreground">Awaiting response</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Processed</CardTitle>
+              <CardTitle className="text-sm font-medium">Converted</CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.processedEnquiries}</div>
-              <p className="text-xs text-muted-foreground">Completed enquiries</p>
+              <div className="text-2xl font-bold">{stats.processedSubmissions}</div>
+              <p className="text-xs text-muted-foreground">Successful conversions</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Today</CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.todaySubmissions}</div>
+              <p className="text-xs text-muted-foreground">Submissions today</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Enquiries Table */}
+        {/* Submissions Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Enquiries</CardTitle>
+            <CardTitle>Form Submissions</CardTitle>
             <CardDescription>
               Manage and track customer enquiries across all services
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Service</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {enquiries.map((enquiry) => (
-                  <TableRow key={enquiry.id}>
-                    <TableCell className="font-medium">{enquiry.name}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col space-y-1">
-                        <div className="flex items-center text-sm">
-                          <Mail className="w-3 h-3 mr-1" />
-                          {enquiry.email}
-                        </div>
-                        <div className="flex items-center text-sm">
-                          <Phone className="w-3 h-3 mr-1" />
-                          {enquiry.phone}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>{enquiry.service}</TableCell>
-                    <TableCell>{enquiry.date}</TableCell>
-                    <TableCell>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        enquiry.status === 'New' ? 'bg-blue-100 text-blue-800' :
-                        enquiry.status === 'Contacted' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {enquiry.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm">
-                        View Details
-                      </Button>
-                    </TableCell>
+            {submissions.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500">No form submissions yet.</p>
+                <p className="text-sm text-gray-400 mt-2">Submissions will appear here when visitors fill out your forms.</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name & Contact</TableHead>
+                    <TableHead>Service</TableHead>
+                    <TableHead>Property Info</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {submissions.map((submission) => (
+                    <TableRow key={submission.id}>
+                      <TableCell>
+                        <div className="flex flex-col space-y-1">
+                          <span className="font-medium">{submission.name}</span>
+                          {submission.email && (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Mail className="w-3 h-3 mr-1" />
+                              {submission.email}
+                            </div>
+                          )}
+                          {submission.phone && (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Phone className="w-3 h-3 mr-1" />
+                              {submission.phone}
+                            </div>
+                          )}
+                          {submission.postcode && (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <MapPin className="w-3 h-3 mr-1" />
+                              {submission.postcode}
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>{formatServiceType(submission.service_type)}</TableCell>
+                      <TableCell>
+                        <div className="text-sm">
+                          {submission.property_type && <div>Type: {submission.property_type}</div>}
+                          {submission.property_ownership && <div>Ownership: {submission.property_ownership}</div>}
+                          {submission.current_heating_system && <div>Heating: {submission.current_heating_system}</div>}
+                        </div>
+                      </TableCell>
+                      <TableCell>{getStatusBadge(submission.status)}</TableCell>
+                      <TableCell>
+                        <div className="text-sm">
+                          {new Date(submission.created_at).toLocaleDateString()}
+                          <div className="text-xs text-gray-500">
+                            {new Date(submission.created_at).toLocaleTimeString()}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedSubmission(submission);
+                            setEditingNotes(submission.admin_notes || '');
+                            setEditingStatus(submission.status);
+                          }}
+                        >
+                          <ExternalLink className="w-4 h-4 mr-1" />
+                          View Details
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>
+
+      {/* Detail Modal */}
+      {selectedSubmission && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-xl font-semibold">Submission Details</h2>
+                <Button variant="ghost" size="sm" onClick={() => setSelectedSubmission(null)}>
+                  ×
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-medium mb-2">Contact Information</h3>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <p><strong>Name:</strong> {selectedSubmission.name}</p>
+                    {selectedSubmission.email && <p><strong>Email:</strong> {selectedSubmission.email}</p>}
+                    {selectedSubmission.phone && <p><strong>Phone:</strong> {selectedSubmission.phone}</p>}
+                    {selectedSubmission.postcode && <p><strong>Postcode:</strong> {selectedSubmission.postcode}</p>}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-medium mb-2">Service & Property</h3>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <p><strong>Service:</strong> {formatServiceType(selectedSubmission.service_type)}</p>
+                    {selectedSubmission.property_type && <p><strong>Property Type:</strong> {selectedSubmission.property_type}</p>}
+                    {selectedSubmission.property_ownership && <p><strong>Ownership:</strong> {selectedSubmission.property_ownership}</p>}
+                    {selectedSubmission.current_heating_system && <p><strong>Heating System:</strong> {selectedSubmission.current_heating_system}</p>}
+                  </div>
+                </div>
+
+                {(selectedSubmission.utm_source || selectedSubmission.utm_medium || selectedSubmission.utm_campaign) && (
+                  <div>
+                    <h3 className="font-medium mb-2">Marketing Attribution</h3>
+                    <div className="bg-gray-50 p-3 rounded text-sm">
+                      {selectedSubmission.utm_source && <p><strong>Source:</strong> {selectedSubmission.utm_source}</p>}
+                      {selectedSubmission.utm_medium && <p><strong>Medium:</strong> {selectedSubmission.utm_medium}</p>}
+                      {selectedSubmission.utm_campaign && <p><strong>Campaign:</strong> {selectedSubmission.utm_campaign}</p>}
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Status</label>
+                  <Select value={editingStatus} onValueChange={setEditingStatus}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">New</SelectItem>
+                      <SelectItem value="contacted">Contacted</SelectItem>
+                      <SelectItem value="qualified">Qualified</SelectItem>
+                      <SelectItem value="converted">Converted</SelectItem>
+                      <SelectItem value="closed">Closed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Admin Notes</label>
+                  <Textarea
+                    value={editingNotes}
+                    onChange={(e) => setEditingNotes(e.target.value)}
+                    placeholder="Add notes about this submission..."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-3 pt-4">
+                  <Button variant="outline" onClick={() => setSelectedSubmission(null)}>
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={() => updateSubmission(selectedSubmission.id, {
+                      status: editingStatus,
+                      admin_notes: editingNotes
+                    })}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

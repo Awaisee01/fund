@@ -142,6 +142,90 @@ export type Database = {
         }
         Relationships: []
       }
+      form_submissions: {
+        Row: {
+          admin_notes: string | null
+          contacted_at: string | null
+          converted_at: string | null
+          created_at: string
+          current_heating_system: string | null
+          email: string | null
+          form_data: Json | null
+          id: string
+          ip_address: unknown | null
+          name: string
+          page_path: string
+          phone: string | null
+          postcode: string | null
+          property_ownership: string | null
+          property_type: string | null
+          referrer: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status: Database["public"]["Enums"]["lead_status"]
+          updated_at: string
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          contacted_at?: string | null
+          converted_at?: string | null
+          created_at?: string
+          current_heating_system?: string | null
+          email?: string | null
+          form_data?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          name: string
+          page_path: string
+          phone?: string | null
+          postcode?: string | null
+          property_ownership?: string | null
+          property_type?: string | null
+          referrer?: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          contacted_at?: string | null
+          converted_at?: string | null
+          created_at?: string
+          current_heating_system?: string | null
+          email?: string | null
+          form_data?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          name?: string
+          page_path?: string
+          phone?: string | null
+          postcode?: string | null
+          property_ownership?: string | null
+          property_type?: string | null
+          referrer?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: []
+      }
       page_visits: {
         Row: {
           created_at: string | null
@@ -237,7 +321,15 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      form_submission_stats: {
+        Row: {
+          count: number | null
+          service_type: Database["public"]["Enums"]["service_type"] | null
+          status: Database["public"]["Enums"]["lead_status"] | null
+          submission_date: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       update_admin_password: {
@@ -250,7 +342,8 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      lead_status: "new" | "contacted" | "qualified" | "converted" | "closed"
+      service_type: "eco4" | "solar" | "gas_boilers" | "home_improvements"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -365,6 +458,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      lead_status: ["new", "contacted", "qualified", "converted", "closed"],
+      service_type: ["eco4", "solar", "gas_boilers", "home_improvements"],
+    },
   },
 } as const
