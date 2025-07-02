@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface SolarFormData {
   fullName: string;
@@ -18,7 +19,6 @@ interface SolarFormData {
 
 const NativeSolarForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
   
   const form = useForm<SolarFormData>({
     defaultValues: {
@@ -56,17 +56,17 @@ const NativeSolarForm = () => {
       // Here you would normally send to your backend
       console.log('Solar form submitted:', data);
       
-      toast({
-        title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
+      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.", {
+        duration: 6000,
+        position: 'top-center',
       });
       
       form.reset();
     } catch (error) {
       console.error('Form submission error:', error);
-      toast({
-        title: "Something went wrong",
-        description: "Please try again or call us directly.",
-        variant: "destructive"
+      toast.error("Something went wrong. Please try again or call us directly.", {
+        duration: 5000,
+        position: 'top-center',
       });
     } finally {
       setIsSubmitting(false);
