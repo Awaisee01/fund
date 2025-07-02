@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -27,11 +27,19 @@ export const BulkActions = ({ submissions, selectedIds, onSelectionChange, onBul
   const [bulkStatus, setBulkStatus] = useState<LeadStatus>('new');
   const [bulkNotes, setBulkNotes] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const checkboxRef = useRef<HTMLButtonElement>(null);
   const { toast } = useToast();
 
   const selectedSubmissions = submissions.filter(s => selectedIds.includes(s.id));
   const allSelected = submissions.length > 0 && selectedIds.length === submissions.length;
   const someSelected = selectedIds.length > 0 && selectedIds.length < submissions.length;
+
+  // Set indeterminate state using ref
+  useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = someSelected;
+    }
+  }, [someSelected]);
 
   const handleSelectAll = () => {
     if (allSelected) {
@@ -117,8 +125,8 @@ export const BulkActions = ({ submissions, selectedIds, onSelectionChange, onBul
     <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
       <div className="flex items-center space-x-2">
         <Checkbox
+          ref={checkboxRef}
           checked={allSelected}
-          indeterminate={someSelected}
           onCheckedChange={handleSelectAll}
         />
         <span className="text-sm font-medium">
@@ -218,4 +226,74 @@ export const BulkActions = ({ submissions, selectedIds, onSelectionChange, onBul
       )}
     </div>
   );
+
+  async function handleBulkStatusUpdate() {
+    setIsUpdating(true);
+    try {
+      const updateData: any = { status: bulkStatus };
+      
+      if (bulkStatus === 'contacted') {
+        updateData.contacted_at = new Date().toISOString();
+      }
+      if (bulkStatus === 'converted') {
+        updateData.converted_at = new Date().toISOString();
+      }
+
+      const { error } = await supabase
+        .from('form_submissions')
+        .update(updateData)
+        .in('id', selectedIds);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `Updated ${selectedIds.length} submissions to ${bulkStatus}`,
+      });
+
+      setIsStatusDialogOpen(false);
+      onSelectionChange([]);
+      onBulkUpdate();
+    } catch (error) {
+      console.error('Error updating submissions:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update submissions",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
+  async function handleBulkNotesUpdate() {
+    setIsUpdating(true);
+    try {
+      const { error } = await supabase
+        .from('form_submissions')
+        .update({ admin_notes: bulkNotes })
+        .in('id', selectedIds);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `Added notes to ${selectedIds.length} submissions`,
+      });
+
+      setIsNotesDialogOpen(false);
+      setBulkNotes('');
+      onSelectionChange([]);
+      onBulkUpdate();
+    } catch (error) {
+      console.error('Error updating submissions:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update submissions",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  }
 };
