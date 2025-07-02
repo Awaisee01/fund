@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SolarFormData {
   fullName: string;
@@ -35,6 +37,27 @@ const NativeSolarForm = () => {
     setIsSubmitting(true);
     
     try {
+      // Save to Supabase database
+      const { error } = await supabase
+        .from('form_submissions')
+        .insert({
+          service_type: 'solar',
+          name: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          postcode: data.postCode,
+          form_data: {
+            address: data.address,
+            understand_air_source_heat_pump: data.understand,
+            source: 'solar_new_page'
+          },
+          page_path: window.location.pathname,
+          referrer: document.referrer || null,
+          user_agent: navigator.userAgent
+        });
+
+      if (error) throw error;
+
       // Trigger Meta Pixel event for actual form submission
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'Lead', {
@@ -53,14 +76,12 @@ const NativeSolarForm = () => {
         });
       }
 
-      // Here you would normally send to your backend
-      console.log('Solar form submitted:', data);
+      console.log('Solar form submitted and saved to database:', data);
       
       // Show success message and reset form
       setShowSuccess(true);
       form.reset();
       
-      // Also try the toast
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
       
       // Hide success message after 5 seconds

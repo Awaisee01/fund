@@ -1,11 +1,11 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface HomeImprovementsFormData {
   fullName: string;
@@ -17,7 +17,7 @@ interface HomeImprovementsFormData {
 
 const NativeHomeImprovementsForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  const [showSuccess, setShowSuccess] = useState(false);
   
   const form = useForm<HomeImprovementsFormData>({
     defaultValues: {
@@ -33,6 +33,26 @@ const NativeHomeImprovementsForm = () => {
     setIsSubmitting(true);
     
     try {
+      // Save to Supabase database
+      const { error } = await supabase
+        .from('form_submissions')
+        .insert({
+          service_type: 'home_improvements',
+          name: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          postcode: data.postCode,
+          form_data: {
+            address: data.address,
+            source: 'home_improvements_new_page'
+          },
+          page_path: window.location.pathname,
+          referrer: document.referrer || null,
+          user_agent: navigator.userAgent
+        });
+
+      if (error) throw error;
+
       // Trigger Meta Pixel event for actual form submission
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'Lead', {
@@ -51,25 +71,44 @@ const NativeHomeImprovementsForm = () => {
         });
       }
 
-      // Here you would normally send to your backend
-      console.log('Home Improvements form submitted:', data);
+      console.log('Home Improvements form submitted and saved to database:', data);
       
-      toast({
-        title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
-      });
-      
+      // Show success message and reset form
+      setShowSuccess(true);
       form.reset();
+      
+      toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+      
     } catch (error) {
       console.error('Form submission error:', error);
-      toast({
-        title: "Something went wrong",
-        description: "Please try again or call us directly.",
-        variant: "destructive"
-      });
+      toast.error("Something went wrong. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (showSuccess) {
+    return (
+      <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardContent className="p-6 text-center">
+          <div className="text-green-400 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-white mb-2">Thank You!</h3>
+          <p className="text-white/90 text-sm">
+            We will be in touch within 24 hours to discuss your options.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">

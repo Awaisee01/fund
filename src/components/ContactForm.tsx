@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,8 +31,27 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Here you would normally send to your backend
-      console.log('Contact form submitted:', formData);
+      // Save to Supabase database
+      const { error } = await supabase
+        .from('form_submissions')
+        .insert({
+          service_type: 'eco4', // Contact form can be general, but using eco4 as default
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          postcode: formData.postCode,
+          form_data: {
+            address: formData.address,
+            source: 'contact_form'
+          },
+          page_path: window.location.pathname,
+          referrer: document.referrer || null,
+          user_agent: navigator.userAgent
+        });
+
+      if (error) throw error;
+
+      console.log('Contact form submitted and saved to database:', formData);
       
       // Show success message and reset form
       setShowSuccess(true);
@@ -43,7 +63,6 @@ const ContactForm = () => {
         postCode: ''
       });
       
-      // Also try the toast
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
       
       // Hide success message after 5 seconds
