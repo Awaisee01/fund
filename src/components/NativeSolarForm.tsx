@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -58,8 +57,7 @@ const NativeSolarForm = () => {
       console.log('Solar form submitted:', data);
       
       toast({
-        title: "Thank you for your enquiry!",
-        description: "We'll be in touch within 24 hours to discuss your solar options.",
+        title: "Thank you for your enquiry. We will be in touch within 24 hours to discuss your options",
       });
       
       form.reset();
