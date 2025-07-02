@@ -53,13 +53,13 @@ const ECO4CustomForm = () => {
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
-      <CardHeader className="text-center pb-0 pt-4">
-        <CardTitle className="text-2xl font-bold text-white pt-2">
+      <CardHeader className="text-center pb-4">
+        <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0 p-0">
-        <div className="w-full min-h-[580px] -mt-8 relative overflow-hidden">
+      <CardContent className="p-6 pt-0">
+        <div className="w-full h-[580px] relative overflow-hidden">
           {/* Loading spinner */}
           <div 
             className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-700 ${
@@ -103,9 +103,9 @@ const ECO4CustomForm = () => {
             />
           </div>
 
-          {/* Invisible overlay button positioned relatively at the bottom of the form */}
+          {/* Invisible overlay button positioned at the bottom of the form */}
           {showForm && (
-            <div className="relative -mt-16 flex justify-center z-20">
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
               <button
                 onClick={handleMetaPixelClick}
                 className="w-32 h-12 bg-transparent border-none opacity-0 cursor-pointer"
