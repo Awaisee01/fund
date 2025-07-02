@@ -1,29 +1,27 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
-import HomeImprovementsForm from '@/components/HomeImprovementsForm';
+import NativeECO4Form from '@/components/NativeECO4Form';
 import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Home, Thermometer, Zap, Shield, Wrench, Lightbulb, PaintBucket } from 'lucide-react';
+import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
 
 // Lazy load below-the-fold content
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
 
-const HomeImprovements = () => {
+const ECO4New = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
 
   useEffect(() => {
-    document.title = "Free Home Improvements Scotland - Government Grants & Upgrades | Funding For Scotland";
+    document.title = "ECO4 Grants Scotland - Free Heating, Solar & Insulation | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Access free home improvements in Scotland through government grants. Upgrade your property with insulation, windows, doors, and energy efficiency improvements.');
+      metaDescription.setAttribute('content', 'Access free ECO4 grants in Scotland for heating upgrades, solar panels, and insulation. Check your eligibility for completely funded home improvements worth thousands.');
     }
 
-    // Mark hero as loaded immediately for faster perceived performance
     setHeroLoaded(true);
 
-    // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
     const updateScrollY = () => {
       setScrollY(window.scrollY);
@@ -42,10 +40,10 @@ const HomeImprovements = () => {
   }, []);
 
   const benefits = [
-    "Insulation upgrades",
-    "Window and door replacements",
-    "Energy efficiency improvements",
-    "Professional installation included"
+    "Heating upgrades",
+    "Solar panels", 
+    "Insulation",
+    "Heating controls and thermostats"
   ];
 
   const eligibilityRequirements = [
@@ -56,13 +54,13 @@ const HomeImprovements = () => {
     },
     {
       icon: Thermometer,
-      title: "Energy Rating",
-      description: "Properties with poor energy efficiency ratings qualify for improvements"
+      title: "Heating Type",
+      description: "Current heating system LPG, Oil, Electric Boiler, Electric Heaters. *Note - Scheme not available to properties on Mains Gas"
     },
     {
-      icon: Wrench,
-      title: "Improvement Areas",
-      description: "Various home improvement categories including insulation, windows, and doors"
+      icon: Heart,
+      title: "Health Conditions",
+      description: "Including respiratory conditions, cardiovascular conditions and many more. See full list below"
     },
     {
       icon: Shield,
@@ -81,8 +79,8 @@ const HomeImprovements = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png"
-            alt="Home Improvements Background"
+            src="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png"
+            alt="ECO4 Background"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
             width={1920}
@@ -97,13 +95,13 @@ const HomeImprovements = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                Free Home Improvements
+                ECO4 Funding
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Upgrade your home at no cost
+                Completely free heating upgrades, solar panels, and insulation
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                Transform your property with government-funded home improvements. From insulation to window replacements, make your home more comfortable and energy-efficient without any upfront costs.
+                The primary goal of the ECO4 scheme is to improve energy efficiency in homes, reduce carbon emissions, tackle fuel poverty, and support the UK's commitment to net-zero carbon emissions by 2050.
               </p>
               
               <div className="mb-8">
@@ -115,11 +113,17 @@ const HomeImprovements = () => {
                     </li>
                   ))}
                 </ul>
+                
+                <div className="mt-6">
+                  <p className="text-sm text-blue-200 italic">
+                    * ECO4 unavailable to properties with Mains Gas heating
+                  </p>
+                </div>
               </div>
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <HomeImprovementsForm />
+              <NativeECO4Form />
             </div>
           </div>
         </div>
@@ -143,7 +147,7 @@ const HomeImprovements = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Home Improvements Qualifying Criteria
+                ECO4 Qualifying Criteria
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
@@ -155,7 +159,7 @@ const HomeImprovements = () => {
                 const Icon = requirement.icon;
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-purple-500 rounded-full flex items-center justify-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -192,24 +196,38 @@ const HomeImprovements = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                What Home Improvements Are Covered?
+                What Does ECO4 Cover?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our comprehensive home improvement program covers various upgrades to make your property more comfortable and energy-efficient.
+                This fully funded scheme provides a comprehensive improvement to your home's energy performance rating. Making homes more comfortable and cheaper to run.
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
               <Card className="text-center">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Home className="w-8 h-8 text-purple-600" />
+                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                    <Thermometer className="w-8 h-8 text-green-600" />
                   </div>
-                  <CardTitle>Insulation</CardTitle>
+                  <CardTitle>Heating Systems</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    Loft, cavity wall, and solid wall insulation to improve your home's thermal efficiency and reduce heat loss.
+                    New boilers, heat pumps, and heating system upgrades to improve efficiency and reduce costs.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <Sun className="w-8 h-8 text-yellow-600" />
+                  </div>
+                  <CardTitle>Solar Panels</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Solar PV (photovoltaic) panels convert light (photons) to electrons making them more suitable to Scotland's climate.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -217,41 +235,27 @@ const HomeImprovements = () => {
               <Card className="text-center">
                 <CardHeader>
                   <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Lightbulb className="w-8 h-8 text-blue-600" />
+                    <Home className="w-8 h-8 text-blue-600" />
                   </div>
-                  <CardTitle>Windows & Doors</CardTitle>
+                  <CardTitle>Insulation</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    Energy-efficient double or triple-glazed windows and doors to reduce drafts and improve security.
+                    Loft insulation, cavity wall insulation, and solid wall insulation to keep heat in and reduce energy bills.
                   </CardDescription>
                 </CardContent>
               </Card>
               
               <Card className="text-center">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-                    <Zap className="w-8 h-8 text-green-600" />
+                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Zap className="w-8 h-8 text-purple-600" />
                   </div>
-                  <CardTitle>Energy Upgrades</CardTitle>
+                  <CardTitle>Smart Controls</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    LED lighting, smart meters, and energy-efficient appliances to reduce your electricity consumption.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
-                    <PaintBucket className="w-8 h-8 text-orange-600" />
-                  </div>
-                  <CardTitle>Property Upgrades</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    External wall coatings, roof repairs, and other structural improvements to enhance your property.
+                    Smart thermostats and heating controls to give you better control over your energy usage.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -263,4 +267,4 @@ const HomeImprovements = () => {
   );
 };
 
-export default HomeImprovements;
+export default ECO4New;

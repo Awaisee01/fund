@@ -1,6 +1,5 @@
-
 import { useEffect, useState, Suspense, lazy } from 'react';
-import HomeImprovementsForm from '@/components/HomeImprovementsForm';
+import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,7 @@ import { CheckCircle, Home, Thermometer, Zap, Shield, Wrench, Lightbulb, PaintBu
 // Lazy load below-the-fold content
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
 
-const HomeImprovements = () => {
+const HomeImprovementsNew = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
 
@@ -20,10 +19,8 @@ const HomeImprovements = () => {
       metaDescription.setAttribute('content', 'Access free home improvements in Scotland through government grants. Upgrade your property with insulation, windows, doors, and energy efficiency improvements.');
     }
 
-    // Mark hero as loaded immediately for faster perceived performance
     setHeroLoaded(true);
 
-    // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
     const updateScrollY = () => {
       setScrollY(window.scrollY);
@@ -119,7 +116,7 @@ const HomeImprovements = () => {
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <HomeImprovementsForm />
+              <NativeHomeImprovementsForm />
             </div>
           </div>
         </div>
@@ -263,4 +260,4 @@ const HomeImprovements = () => {
   );
 };
 
-export default HomeImprovements;
+export default HomeImprovementsNew;

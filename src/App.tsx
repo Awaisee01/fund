@@ -11,10 +11,13 @@ import ScrollToTop from "./components/ScrollToTop";
 import SEOStructuredData from "./components/SEOStructuredData";
 import Home from "./pages/Home";
 import ECO4 from "./pages/ECO4";
+import ECO4New from "./pages/ECO4New";
 import Solar from "./pages/Solar";
 import SolarNew from "./pages/SolarNew";
 import GasBoilers from "./pages/GasBoilers";
+import GasBoilersNew from "./pages/GasBoilersNew";
 import HomeImprovements from "./pages/HomeImprovements";
+import HomeImprovementsNew from "./pages/HomeImprovementsNew";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -36,10 +39,13 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/eco4" element={<ECO4 />} />
+                <Route path="/eco4-new" element={<ECO4New />} />
                 <Route path="/solar" element={<Solar />} />
                 <Route path="/solar-new" element={<SolarNew />} />
                 <Route path="/gas-boilers" element={<GasBoilers />} />
+                <Route path="/gas-boilers-new" element={<GasBoilersNew />} />
                 <Route path="/home-improvements" element={<HomeImprovements />} />
+                <Route path="/home-improvements-new" element={<HomeImprovementsNew />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="*" element={<NotFound />} />

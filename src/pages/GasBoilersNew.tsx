@@ -1,29 +1,26 @@
-
 import { useEffect, useState, Suspense, lazy } from 'react';
-import HomeImprovementsForm from '@/components/HomeImprovementsForm';
+import NativeGasBoilersForm from '@/components/NativeGasBoilersForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Home, Thermometer, Zap, Shield, Wrench, Lightbulb, PaintBucket } from 'lucide-react';
+import { CheckCircle, Home, Thermometer, Zap, Shield, Flame, Wrench, PoundSterling } from 'lucide-react';
 
 // Lazy load below-the-fold content
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
 
-const HomeImprovements = () => {
+const GasBoilersNew = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
 
   useEffect(() => {
-    document.title = "Free Home Improvements Scotland - Government Grants & Upgrades | Funding For Scotland";
+    document.title = "Free Gas Boiler Replacement & Repair Scotland - Government Grants | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Access free home improvements in Scotland through government grants. Upgrade your property with insulation, windows, doors, and energy efficiency improvements.');
+      metaDescription.setAttribute('content', 'Get free gas boiler replacement or repair in Scotland through government grants. Improve your home efficiency with modern boiler installations at no cost.');
     }
 
-    // Mark hero as loaded immediately for faster perceived performance
     setHeroLoaded(true);
 
-    // Use requestAnimationFrame for smoother scrolling
     let ticking = false;
     const updateScrollY = () => {
       setScrollY(window.scrollY);
@@ -42,9 +39,9 @@ const HomeImprovements = () => {
   }, []);
 
   const benefits = [
-    "Insulation upgrades",
-    "Window and door replacements",
-    "Energy efficiency improvements",
+    "Free boiler replacement",
+    "Modern high-efficiency boilers",
+    "Reduce energy bills significantly",
     "Professional installation included"
   ];
 
@@ -55,14 +52,14 @@ const HomeImprovements = () => {
       description: "Open to homeowners, private tenants, and landlords"
     },
     {
-      icon: Thermometer,
-      title: "Energy Rating",
-      description: "Properties with poor energy efficiency ratings qualify for improvements"
+      icon: Flame,
+      title: "Current System",
+      description: "Properties with existing gas boilers requiring replacement or upgrade"
     },
     {
-      icon: Wrench,
-      title: "Improvement Areas",
-      description: "Various home improvement categories including insulation, windows, and doors"
+      icon: Thermometer,
+      title: "Efficiency Rating",
+      description: "Older boilers with poor efficiency ratings qualify for replacement"
     },
     {
       icon: Shield,
@@ -81,8 +78,8 @@ const HomeImprovements = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png"
-            alt="Home Improvements Background"
+            src="/lovable-uploads/8fdd29b5-d86d-491f-9c2f-9e692f13c11c.png"
+            alt="Gas Boiler Background"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
             width={1920}
@@ -97,13 +94,13 @@ const HomeImprovements = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                Free Home Improvements
+                Free Gas Boiler Replacement
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Upgrade your home at no cost
+                Upgrade your heating system at no cost
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                Transform your property with government-funded home improvements. From insulation to window replacements, make your home more comfortable and energy-efficient without any upfront costs.
+                Replace your old, inefficient gas boiler with a modern, high-efficiency model through government-funded schemes. Reduce your energy bills and improve your home's heating performance.
               </p>
               
               <div className="mb-8">
@@ -119,7 +116,7 @@ const HomeImprovements = () => {
             </div>
             
             <div className="flex justify-center lg:justify-end">
-              <HomeImprovementsForm />
+              <NativeGasBoilersForm />
             </div>
           </div>
         </div>
@@ -143,7 +140,7 @@ const HomeImprovements = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Home Improvements Qualifying Criteria
+                Gas Boiler Qualifying Criteria
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
@@ -155,7 +152,7 @@ const HomeImprovements = () => {
                 const Icon = requirement.icon;
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-purple-500 rounded-full flex items-center justify-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-orange-500 rounded-full flex items-center justify-center">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -192,24 +189,24 @@ const HomeImprovements = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                What Home Improvements Are Covered?
+                What Does Gas Boiler Replacement Cover?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our comprehensive home improvement program covers various upgrades to make your property more comfortable and energy-efficient.
+                Our fully funded gas boiler replacement service includes everything you need for a complete heating system upgrade.
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
               <Card className="text-center">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Home className="w-8 h-8 text-purple-600" />
+                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
+                    <Flame className="w-8 h-8 text-orange-600" />
                   </div>
-                  <CardTitle>Insulation</CardTitle>
+                  <CardTitle>New Boiler</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    Loft, cavity wall, and solid wall insulation to improve your home's thermal efficiency and reduce heat loss.
+                    High-efficiency gas boiler installation with modern technology for optimal performance and energy savings.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -217,13 +214,13 @@ const HomeImprovements = () => {
               <Card className="text-center">
                 <CardHeader>
                   <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Lightbulb className="w-8 h-8 text-blue-600" />
+                    <Wrench className="w-8 h-8 text-blue-600" />
                   </div>
-                  <CardTitle>Windows & Doors</CardTitle>
+                  <CardTitle>Professional Installation</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    Energy-efficient double or triple-glazed windows and doors to reduce drafts and improve security.
+                    Certified engineers handle complete installation, testing, and commissioning of your new heating system.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -231,27 +228,27 @@ const HomeImprovements = () => {
               <Card className="text-center">
                 <CardHeader>
                   <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-                    <Zap className="w-8 h-8 text-green-600" />
+                    <Thermometer className="w-8 h-8 text-green-600" />
                   </div>
-                  <CardTitle>Energy Upgrades</CardTitle>
+                  <CardTitle>System Controls</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    LED lighting, smart meters, and energy-efficient appliances to reduce your electricity consumption.
+                    Modern heating controls and thermostats for better temperature management and energy efficiency.
                   </CardDescription>
                 </CardContent>
               </Card>
               
               <Card className="text-center">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
-                    <PaintBucket className="w-8 h-8 text-orange-600" />
+                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                    <PoundSterling className="w-8 h-8 text-purple-600" />
                   </div>
-                  <CardTitle>Property Upgrades</CardTitle>
+                  <CardTitle>Warranty Included</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    External wall coatings, roof repairs, and other structural improvements to enhance your property.
+                    Comprehensive warranty on your new boiler and installation work for complete peace of mind.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -263,4 +260,4 @@ const HomeImprovements = () => {
   );
 };
 
-export default HomeImprovements;
+export default GasBoilersNew;
