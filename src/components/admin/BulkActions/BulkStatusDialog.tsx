@@ -19,7 +19,7 @@ interface BulkStatusDialogProps {
 
 export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate }: BulkStatusDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [bulkStatus, setBulkStatus] = useState<LeadStatus>('new');
+  const [bulkStatus, setBulkStatus] = useState<string>('new');
   const [isUpdating, setIsUpdating] = useState(false);
   const { toast } = useToast();
 
@@ -28,8 +28,8 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
     try {
       const updateData: any = { status: bulkStatus };
       
-      // Update contacted_at for survey_booked status (using string comparison to avoid type issues)
-      if (bulkStatus === 'survey_booked' as any) {
+      // Update contacted_at for survey_booked status
+      if (bulkStatus === 'survey_booked') {
         updateData.contacted_at = new Date().toISOString();
       }
 
@@ -78,7 +78,7 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
         <div className="space-y-4">
           <div>
             <Label>New Status</Label>
-            <Select value={bulkStatus} onValueChange={(value: LeadStatus) => setBulkStatus(value)}>
+            <Select value={bulkStatus} onValueChange={(value: string) => setBulkStatus(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

@@ -36,7 +36,7 @@ export const useAdminDashboard = () => {
   const updateSubmission = async (
     id: string, 
     updates: { 
-      status?: LeadStatus; 
+      status?: string; 
       admin_notes?: string;
       property_type?: string;
       property_ownership?: string;
@@ -47,8 +47,8 @@ export const useAdminDashboard = () => {
     try {
       const updateData: any = { ...updates };
       
-      // Update contacted_at for survey_booked status (using string comparison to avoid type issues)
-      if (updates.status === 'survey_booked' as any) {
+      // Update contacted_at for survey_booked status
+      if (updates.status === 'survey_booked') {
         updateData.contacted_at = new Date().toISOString();
       }
 

@@ -5,13 +5,13 @@ import type { Database } from '@/integrations/supabase/types';
 type LeadStatus = Database['public']['Enums']['lead_status'];
 
 interface LeadStatusBadgeProps {
-  status: LeadStatus;
+  status: string;
   size?: 'sm' | 'default' | 'lg';
 }
 
 export const LeadStatusBadge = ({ status, size = 'default' }: LeadStatusBadgeProps) => {
-  const getStatusConfig = (status: LeadStatus) => {
-    const configs = {
+  const getStatusConfig = (status: string) => {
+    const configs: Record<string, { color: string; label: string; priority: number }> = {
       new: { 
         color: 'bg-blue-100 text-blue-800 border-blue-200', 
         label: 'New',
@@ -36,10 +36,31 @@ export const LeadStatusBadge = ({ status, size = 'default' }: LeadStatusBadgePro
         color: 'bg-gray-100 text-gray-800 border-gray-200', 
         label: 'No Contact',
         priority: 4 
+      },
+      // Legacy status support
+      contacted: { 
+        color: 'bg-green-100 text-green-800 border-green-200', 
+        label: 'Contacted',
+        priority: 2 
+      },
+      qualified: { 
+        color: 'bg-green-100 text-green-800 border-green-200', 
+        label: 'Qualified',
+        priority: 2 
+      },
+      converted: { 
+        color: 'bg-green-100 text-green-800 border-green-200', 
+        label: 'Converted',
+        priority: 2 
+      },
+      closed: { 
+        color: 'bg-gray-100 text-gray-800 border-gray-200', 
+        label: 'Closed',
+        priority: 4 
       }
     };
     
-    return configs[status];
+    return configs[status] || configs.new;
   };
 
   const config = getStatusConfig(status);

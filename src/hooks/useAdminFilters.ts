@@ -9,7 +9,7 @@ type LeadStatus = Database['public']['Enums']['lead_status'];
 type ServiceType = Database['public']['Enums']['service_type'];
 
 export const useAdminFilters = (submissions: FormSubmission[]) => {
-  const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<string | 'all'>('all');
   const [serviceFilter, setServiceFilter] = useState<ServiceType | 'all'>('all');
   const [epcFilter, setEpcFilter] = useState<string>('all');
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
