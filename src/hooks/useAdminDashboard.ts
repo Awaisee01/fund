@@ -47,11 +47,8 @@ export const useAdminDashboard = () => {
     try {
       const updateData: any = { ...updates };
       
-      if (updates.status === 'contacted') {
+      if (updates.status === 'survey_booked') {
         updateData.contacted_at = new Date().toISOString();
-      }
-      if (updates.status === 'converted') {
-        updateData.converted_at = new Date().toISOString();
       }
 
       const { error } = await supabase

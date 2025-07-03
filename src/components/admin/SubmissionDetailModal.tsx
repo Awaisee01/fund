@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -244,11 +243,10 @@ export const SubmissionDetailModal = ({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="new">New</SelectItem>
-                        <SelectItem value="contacted">Contacted</SelectItem>
-                        <SelectItem value="qualified">Qualified</SelectItem>
-                        <SelectItem value="converted">Converted</SelectItem>
-                        <SelectItem value="closed">Closed</SelectItem>
+                        <SelectItem value="survey_booked">Survey Booked</SelectItem>
                         <SelectItem value="lost">Lost</SelectItem>
+                        <SelectItem value="doesnt_qualify">Doesn't Qualify</SelectItem>
+                        <SelectItem value="no_contact">No Contact</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

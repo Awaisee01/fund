@@ -28,11 +28,8 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
     try {
       const updateData: any = { status: bulkStatus };
       
-      if (bulkStatus === 'contacted') {
+      if (bulkStatus === 'survey_booked') {
         updateData.contacted_at = new Date().toISOString();
-      }
-      if (bulkStatus === 'converted') {
-        updateData.converted_at = new Date().toISOString();
       }
 
       const { error } = await supabase
@@ -86,11 +83,10 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="new">New</SelectItem>
-                <SelectItem value="contacted">Contacted</SelectItem>
-                <SelectItem value="qualified">Qualified</SelectItem>
-                <SelectItem value="converted">Converted</SelectItem>
-                <SelectItem value="closed">Closed</SelectItem>
+                <SelectItem value="survey_booked">Survey Booked</SelectItem>
                 <SelectItem value="lost">Lost</SelectItem>
+                <SelectItem value="doesnt_qualify">Doesn't Qualify</SelectItem>
+                <SelectItem value="no_contact">No Contact</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -17,30 +17,25 @@ export const LeadStatusBadge = ({ status, size = 'default' }: LeadStatusBadgePro
         label: 'New',
         priority: 1 
       },
-      contacted: { 
-        color: 'bg-yellow-100 text-yellow-800 border-yellow-200', 
-        label: 'Contacted',
-        priority: 2 
-      },
-      qualified: { 
-        color: 'bg-purple-100 text-purple-800 border-purple-200', 
-        label: 'Qualified',
-        priority: 3 
-      },
-      converted: { 
+      survey_booked: { 
         color: 'bg-green-100 text-green-800 border-green-200', 
-        label: 'Converted',
-        priority: 5 
-      },
-      closed: { 
-        color: 'bg-gray-100 text-gray-800 border-gray-200', 
-        label: 'Closed',
-        priority: 4 
+        label: 'Survey Booked',
+        priority: 2 
       },
       lost: { 
         color: 'bg-red-100 text-red-800 border-red-200', 
         label: 'Lost',
         priority: 0 
+      },
+      doesnt_qualify: { 
+        color: 'bg-orange-100 text-orange-800 border-orange-200', 
+        label: "Doesn't Qualify",
+        priority: 3 
+      },
+      no_contact: { 
+        color: 'bg-gray-100 text-gray-800 border-gray-200', 
+        label: 'No Contact',
+        priority: 4 
       }
     };
     
