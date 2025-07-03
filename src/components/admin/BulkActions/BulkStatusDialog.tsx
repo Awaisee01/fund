@@ -84,10 +84,10 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="new">New</SelectItem>
-                <SelectItem value="survey_booked" as any>Survey Booked</SelectItem>
+                <SelectItem value="survey_booked">Survey Booked</SelectItem>
                 <SelectItem value="lost">Lost</SelectItem>
-                <SelectItem value="doesnt_qualify" as any>Doesn't Qualify</SelectItem>
-                <SelectItem value="no_contact" as any>No Contact</SelectItem>
+                <SelectItem value="doesnt_qualify">Doesn't Qualify</SelectItem>
+                <SelectItem value="no_contact">No Contact</SelectItem>
               </SelectContent>
             </Select>
           </div>
