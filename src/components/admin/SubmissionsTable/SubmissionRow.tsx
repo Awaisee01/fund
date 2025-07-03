@@ -8,14 +8,13 @@ import { PriorityIndicator } from './PriorityIndicator';
 import type { Database } from '@/integrations/supabase/types';
 
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
-type LeadStatus = Database['public']['Enums']['lead_status'];
 
 interface SubmissionRowProps {
   submission: FormSubmission;
   isSelected: boolean;
   onSelect: (id: string, checked: boolean) => void;
   onViewDetails: (submission: FormSubmission) => void;
-  onStatusUpdate: (submissionId: string, status: LeadStatus) => void;
+  onStatusUpdate: (submissionId: string, status: string) => void;
   onDelete?: (submissionId: string) => void;
 }
 

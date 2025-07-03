@@ -7,12 +7,11 @@ import { ConfirmationDialog } from './ConfirmationDialog';
 import type { Database } from '@/integrations/supabase/types';
 
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
-type LeadStatus = Database['public']['Enums']['lead_status'];
 
 interface LeadActionsProps {
   submission: FormSubmission;
   onViewDetails: (submission: FormSubmission) => void;
-  onStatusUpdate: (submissionId: string, status: LeadStatus) => void;
+  onStatusUpdate: (submissionId: string, status: string) => void;
   onDelete?: (submissionId: string) => void;
 }
 

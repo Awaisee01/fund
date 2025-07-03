@@ -9,16 +9,15 @@ import { SearchFilter } from './SearchFilter';
 import { DateRange } from 'react-day-picker';
 import type { Database } from '@/integrations/supabase/types';
 
-type LeadStatus = Database['public']['Enums']['lead_status'];
 type ServiceType = Database['public']['Enums']['service_type'];
 
 interface AdvancedFiltersProps {
-  statusFilter: LeadStatus | 'all';
+  statusFilter: string | 'all';
   serviceFilter: ServiceType | 'all';
   epcFilter: string;
   dateRange: DateRange | undefined;
   searchQuery: string;
-  onStatusFilterChange: (status: LeadStatus | 'all') => void;
+  onStatusFilterChange: (status: string | 'all') => void;
   onServiceFilterChange: (service: ServiceType | 'all') => void;
   onEpcFilterChange: (epc: string) => void;
   onDateRangeChange: (range: DateRange | undefined) => void;
@@ -89,11 +88,14 @@ export const AdvancedFilters = ({
               <SelectContent>
                 <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="new">New</SelectItem>
+                <SelectItem value="survey_booked">Survey Booked</SelectItem>
+                <SelectItem value="lost">Lost</SelectItem>
+                <SelectItem value="doesnt_qualify">Doesn't Qualify</SelectItem>
+                <SelectItem value="no_contact">No Contact</SelectItem>
                 <SelectItem value="contacted">Contacted</SelectItem>
                 <SelectItem value="qualified">Qualified</SelectItem>
                 <SelectItem value="converted">Converted</SelectItem>
                 <SelectItem value="closed">Closed</SelectItem>
-                <SelectItem value="lost">Lost</SelectItem>
               </SelectContent>
             </Select>
           </div>

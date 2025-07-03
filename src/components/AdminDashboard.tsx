@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import type { Database } from '@/integrations/supabase/types';
@@ -22,7 +23,6 @@ interface AdminDashboardProps {
 }
 
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
-type LeadStatus = Database['public']['Enums']['lead_status'];
 
 const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const { submissions, loading, fetchSubmissions, updateSubmission } = useAdminDashboard();
@@ -47,7 +47,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
   const [selectedSubmission, setSelectedSubmission] = useState<FormSubmission | null>(null);
   const [editingNotes, setEditingNotes] = useState<string>('');
-  const [editingStatus, setEditingStatus] = useState<LeadStatus>('new');
+  const [editingStatus, setEditingStatus] = useState<string>('new');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const { toast } = useToast();
@@ -80,7 +80,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     }
   };
 
-  const handleStatusUpdate = (submissionId: string, status: LeadStatus) => {
+  const handleStatusUpdate = (submissionId: string, status: string) => {
     updateSubmission(submissionId, { status });
   };
 
@@ -101,7 +101,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   };
 
   const handleSaveSubmission = (updates: {
-    status: LeadStatus;
+    status: string;
     admin_notes: string;
     property_type?: string;
     property_ownership?: string;

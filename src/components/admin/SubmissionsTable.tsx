@@ -10,21 +10,20 @@ import { SubmissionRow } from './SubmissionsTable/SubmissionRow';
 import { EmptyState } from './SubmissionsTable/EmptyState';
 
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
-type LeadStatus = Database['public']['Enums']['lead_status'];
 
 interface SubmissionsTableProps {
   submissions: FormSubmission[];
   filteredSubmissions: FormSubmission[];
   selectedIds: string[];
-  statusFilter: LeadStatus | 'all';
+  statusFilter: string | 'all';
   dateRange: DateRange | undefined;
   onSelectionChange: (ids: string[]) => void;
-  onStatusFilterChange: (status: LeadStatus | 'all') => void;
+  onStatusFilterChange: (status: string | 'all') => void;
   onDateRangeChange: (range: DateRange | undefined) => void;
   onBulkUpdate: () => void;
   onViewDetails: (submission: FormSubmission) => void;
   onEmailSent: (submissionId: string) => void;
-  onStatusUpdate: (submissionId: string, status: LeadStatus) => void;
+  onStatusUpdate: (submissionId: string, status: string) => void;
   onDelete?: (submissionId: string) => void;
 }
 
