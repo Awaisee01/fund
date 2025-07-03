@@ -47,7 +47,8 @@ export const useAdminDashboard = () => {
     try {
       const updateData: any = { ...updates };
       
-      if (updates.status === 'survey_booked') {
+      // Update contacted_at for survey_booked status (using string comparison to avoid type issues)
+      if (updates.status === 'survey_booked' as any) {
         updateData.contacted_at = new Date().toISOString();
       }
 

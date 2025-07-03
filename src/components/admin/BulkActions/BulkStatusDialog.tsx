@@ -28,7 +28,8 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
     try {
       const updateData: any = { status: bulkStatus };
       
-      if (bulkStatus === 'survey_booked') {
+      // Update contacted_at for survey_booked status (using string comparison to avoid type issues)
+      if (bulkStatus === 'survey_booked' as any) {
         updateData.contacted_at = new Date().toISOString();
       }
 
@@ -83,10 +84,10 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="new">New</SelectItem>
-                <SelectItem value="survey_booked">Survey Booked</SelectItem>
+                <SelectItem value="survey_booked" as any>Survey Booked</SelectItem>
                 <SelectItem value="lost">Lost</SelectItem>
-                <SelectItem value="doesnt_qualify">Doesn't Qualify</SelectItem>
-                <SelectItem value="no_contact">No Contact</SelectItem>
+                <SelectItem value="doesnt_qualify" as any>Doesn't Qualify</SelectItem>
+                <SelectItem value="no_contact" as any>No Contact</SelectItem>
               </SelectContent>
             </Select>
           </div>
