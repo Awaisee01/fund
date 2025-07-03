@@ -97,7 +97,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   };
 
   const handleEmailSent = (submissionId: string) => {
-    updateSubmission(submissionId, { status: 'contacted' });
+    updateSubmission(submissionId, { status: 'survey_booked' });
   };
 
   const handleSaveSubmission = (updates: {
