@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -7,17 +8,16 @@ import { useState, useEffect } from 'react';
 import type { Database } from '@/integrations/supabase/types';
 
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
-type LeadStatus = Database['public']['Enums']['lead_status'];
 
 interface SubmissionDetailModalProps {
   submission: FormSubmission;
   editingNotes: string;
-  editingStatus: LeadStatus;
+  editingStatus: string;
   onClose: () => void;
   onNotesChange: (notes: string) => void;
-  onStatusChange: (status: LeadStatus) => void;
+  onStatusChange: (status: string) => void;
   onSave: (updates: {
-    status: LeadStatus;
+    status: string;
     admin_notes: string;
     property_type?: string;
     property_ownership?: string;
