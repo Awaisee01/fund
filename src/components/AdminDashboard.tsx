@@ -11,6 +11,7 @@ import { SubmissionsTable } from './admin/SubmissionsTable';
 import { SubmissionDetailModal } from './admin/SubmissionDetailModal';
 import { DashboardAnalytics } from './admin/DashboardAnalytics';
 import { PaginationControls } from './admin/PaginationControls';
+import { TestEmailButton } from './admin/TestEmailButton';
 
 // Import hooks
 import { useAdminDashboard } from '@/hooks/useAdminDashboard';
@@ -130,6 +131,11 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Test Email Button */}
+        <div className="mb-6 flex justify-end">
+          <TestEmailButton />
+        </div>
+
         {/* Analytics Dashboard */}
         {showAnalytics && <DashboardAnalytics submissions={submissions} />}
 
