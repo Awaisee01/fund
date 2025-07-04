@@ -352,6 +352,9 @@ export type Database = {
         | "converted"
         | "closed"
         | "lost"
+        | "survey_booked"
+        | "doesnt_qualify"
+        | "no_contact"
       service_type: "eco4" | "solar" | "gas_boilers" | "home_improvements"
     }
     CompositeTypes: {
@@ -475,6 +478,9 @@ export const Constants = {
         "converted",
         "closed",
         "lost",
+        "survey_booked",
+        "doesnt_qualify",
+        "no_contact",
       ],
       service_type: ["eco4", "solar", "gas_boilers", "home_improvements"],
     },
