@@ -121,7 +121,7 @@ const NativeGasBoilersForm = () => {
       </CardHeader>
       <CardContent className="p-4">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="fullName"
@@ -132,7 +132,7 @@ const NativeGasBoilersForm = () => {
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your full name"
                     />
                   </FormControl>
@@ -151,7 +151,7 @@ const NativeGasBoilersForm = () => {
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your address"
                     />
                   </FormControl>
@@ -170,7 +170,7 @@ const NativeGasBoilersForm = () => {
                   <FormControl>
                     <Input 
                       {...field} 
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="G1 1AA"
                     />
                   </FormControl>
@@ -196,7 +196,7 @@ const NativeGasBoilersForm = () => {
                     <Input 
                       {...field} 
                       type="email"
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="your.email@example.com"
                     />
                   </FormControl>
@@ -222,7 +222,7 @@ const NativeGasBoilersForm = () => {
                     <Input 
                       {...field} 
                       type="tel"
-                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-8"
+                      className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="07xxx xxx xxx"
                     />
                   </FormControl>
@@ -233,7 +233,7 @@ const NativeGasBoilersForm = () => {
 
             <Button 
               type="submit" 
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold h-9 mt-4"
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold h-12 mt-6"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Sending...' : 'Submit'}
