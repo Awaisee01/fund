@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,6 +18,7 @@ interface GasBoilersFormData {
 const NativeGasBoilersForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   
   const form = useForm<GasBoilersFormData>({
     defaultValues: {
@@ -29,6 +29,18 @@ const NativeGasBoilersForm = () => {
       phone: ''
     }
   });
+
+  const scrollToTop = () => {
+    if (cardRef.current) {
+      cardRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start',
+        inline: 'nearest'
+      });
+    }
+    // Also scroll window to top as fallback
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const onSubmit = async (data: GasBoilersFormData) => {
     console.log('🚀 Gas Boilers form submission started:', data);
@@ -57,12 +69,17 @@ const NativeGasBoilersForm = () => {
       setShowSuccess(true);
       form.reset();
       
+      // Scroll to top to ensure success message is visible
+      setTimeout(() => {
+        scrollToTop();
+      }, 100);
+      
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
       
-      // Hide success message after 5 seconds
+      // Hide success message after 8 seconds (longer to ensure user sees it)
       setTimeout(() => {
         setShowSuccess(false);
-      }, 5000);
+      }, 8000);
       
     } catch (error) {
       console.error('💥 Gas Boilers form submission failed:', error);
@@ -74,24 +91,29 @@ const NativeGasBoilersForm = () => {
 
   if (showSuccess) {
     return (
-      <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
+      <Card ref={cardRef} className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20 relative z-50">
         <CardContent className="p-6 text-center">
           <div className="text-green-400 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-20 h-20 mx-auto animate-scale-in" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Thank You!</h3>
-          <p className="text-white/90 text-sm">
-            We will be in touch within 24 hours to discuss your options.
+          <h3 className="text-2xl font-bold text-white mb-3">Thank You!</h3>
+          <p className="text-white/90 text-base leading-relaxed">
+            We have received your enquiry and will be in touch within 24 hours to discuss your options.
           </p>
+          <div className="mt-4 p-3 bg-green-500/20 rounded-lg border border-green-400/30">
+            <p className="text-green-300 text-sm font-medium">
+              ✓ Your submission has been confirmed
+            </p>
+          </div>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
+    <Card ref={cardRef} className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
       <CardHeader className="text-center pb-2">
         <CardTitle className="text-2xl font-bold text-white">
           Enquire Here
