@@ -42,9 +42,10 @@ export const SubmissionDetailModal = ({
 
   // Prevent body scroll when modal is open
   useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = originalStyle;
     };
   }, []);
 
@@ -77,8 +78,8 @@ export const SubmissionDetailModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[9999]">
-      <div className="bg-white rounded-lg w-full max-w-4xl max-h-[95vh] flex flex-col shadow-2xl">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[9999] overflow-y-auto">
+      <div className="bg-white rounded-lg w-full max-w-4xl my-8 flex flex-col shadow-2xl max-h-[calc(100vh-4rem)]">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b bg-white rounded-t-lg flex-shrink-0">
           <h2 className="text-xl font-semibold">Lead Details</h2>
