@@ -40,6 +40,14 @@ export const SubmissionDetailModal = ({
   const [currentHeatingSystem, setCurrentHeatingSystem] = useState(submission.current_heating_system || '');
   const [epcScore, setEpcScore] = useState(submission.epc_score || '');
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   const formatServiceType = (serviceType: string) => {
     const formatted = {
       eco4: 'ECO4',
@@ -69,9 +77,9 @@ export const SubmissionDetailModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white rounded-lg max-w-3xl w-full my-8 mx-auto">
-        <div className="p-6 max-h-[80vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="p-6 overflow-y-auto flex-1">
           <div className="flex justify-between items-start mb-4">
             <h2 className="text-xl font-semibold">Lead Details</h2>
             <Button variant="ghost" size="sm" onClick={onClose}>
@@ -265,15 +273,15 @@ export const SubmissionDetailModal = ({
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex justify-end space-x-3 pt-6 border-t mt-6">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button onClick={handleSave}>
-              Save Changes
-            </Button>
-          </div>
+        <div className="flex justify-end space-x-3 p-6 border-t bg-gray-50">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave}>
+            Save Changes
+          </Button>
         </div>
       </div>
     </div>
