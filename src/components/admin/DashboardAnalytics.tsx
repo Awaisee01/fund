@@ -53,9 +53,9 @@ export const DashboardAnalytics = ({ submissions }: DashboardAnalyticsProps) => 
     };
   });
 
-  // Conversion rate
+  // Conversion rate - now includes survey_booked as converted
   const totalSubmissions = submissions.length;
-  const convertedSubmissions = submissions.filter(s => s.status === 'converted').length;
+  const convertedSubmissions = submissions.filter(s => s.status === 'converted' || s.status === 'survey_booked').length;
   const conversionRate = totalSubmissions > 0 ? (convertedSubmissions / totalSubmissions * 100).toFixed(1) : '0';
 
   const chartConfig = {

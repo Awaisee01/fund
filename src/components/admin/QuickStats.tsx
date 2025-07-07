@@ -27,7 +27,7 @@ export const QuickStats = ({ submissions }: QuickStatsProps) => {
   ).length;
   
   const newLeads = submissions.filter(s => s.status === 'new').length;
-  const converted = submissions.filter(s => s.status === 'converted').length;
+  const converted = submissions.filter(s => s.status === 'converted' || s.status === 'survey_booked').length;
   const contactedToday = submissions.filter(s => 
     s.contacted_at && new Date(s.contacted_at).toDateString() === today
   ).length;

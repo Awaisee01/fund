@@ -69,9 +69,9 @@ export const SubmissionDetailModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-white rounded-lg max-w-3xl w-full my-8 mx-auto">
+        <div className="p-6 max-h-[80vh] overflow-y-auto">
           <div className="flex justify-between items-start mb-4">
             <h2 className="text-xl font-semibold">Lead Details</h2>
             <Button variant="ghost" size="sm" onClick={onClose}>
@@ -219,6 +219,7 @@ export const SubmissionDetailModal = ({
                         <SelectValue placeholder="Select EPC rating" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="No EPC">No EPC</SelectItem>
                         <SelectItem value="A">A (92-100)</SelectItem>
                         <SelectItem value="B">B (81-91)</SelectItem>
                         <SelectItem value="C">C (69-80)</SelectItem>
