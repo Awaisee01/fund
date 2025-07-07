@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState, useEffect } from 'react';
 import type { Database } from '@/integrations/supabase/types';
 
@@ -78,9 +79,9 @@ export const SubmissionDetailModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[9999] overflow-y-auto">
-      <div className="bg-white rounded-lg w-full max-w-4xl my-8 flex flex-col shadow-2xl max-h-[calc(100vh-4rem)]">
-        {/* Header */}
+    <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
+        {/* Header - Fixed */}
         <div className="flex justify-between items-center p-6 border-b bg-white rounded-t-lg flex-shrink-0">
           <h2 className="text-xl font-semibold">Lead Details</h2>
           <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -89,7 +90,7 @@ export const SubmissionDetailModal = ({
         </div>
         
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <ScrollArea className="flex-1 p-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Contact Information */}
             <div className="space-y-4">
@@ -276,9 +277,9 @@ export const SubmissionDetailModal = ({
               </div>
             </div>
           </div>
-        </div>
+        </ScrollArea>
 
-        {/* Footer */}
+        {/* Footer - Fixed */}
         <div className="flex justify-end space-x-3 p-6 border-t bg-gray-50 rounded-b-lg flex-shrink-0">
           <Button variant="outline" onClick={onClose}>
             Cancel
