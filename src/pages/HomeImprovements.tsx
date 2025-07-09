@@ -172,11 +172,11 @@ const HomeImprovements = () => {
                         width={400}
                         height={300}
                       />
-                      <div className="w-12 h-12 mx-auto -mt-6 mb-4 bg-purple-500 rounded-full flex items-center justify-center relative z-10">
+                      <div className="w-12 h-12 mx-auto -mt-6 bg-purple-500 rounded-full flex items-center justify-center relative z-10">
                         <span className="text-xl font-bold text-white">{step.number}</span>
                       </div>
                     </div>
-                    <CardTitle className="text-lg mb-2">{step.title}</CardTitle>
+                    <CardTitle className="text-lg mb-2 mt-2">{step.title}</CardTitle>
                     <CardDescription className="text-sm">
                       {step.description}
                     </CardDescription>
