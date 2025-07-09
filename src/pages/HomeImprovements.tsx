@@ -1,12 +1,10 @@
+
 import { useEffect, useState, Suspense, lazy } from 'react';
 import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Home, Thermometer, Zap, Shield, Wrench, Lightbulb, PaintBucket } from 'lucide-react';
-
-// Lazy load below-the-fold content
-const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
+import { CheckCircle, Home, Lightbulb, Zap, PaintBucket } from 'lucide-react';
 
 const HomeImprovements = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -45,26 +43,42 @@ const HomeImprovements = () => {
     "Approved Installers"
   ];
 
-  const eligibilityRequirements = [
+  const processSteps = [
     {
-      icon: Home,
-      title: "Property Type",
-      description: "Open to homeowners, private tenants, and landlords"
+      number: "1",
+      title: "Survey",
+      description: "Before any work can take place, a thorough assessment of the area must be completed to ensure an efficient installation and to do a risk assessment on the project.",
+      image: "/lovable-uploads/e6d7f9f8-3fec-4e65-915a-0292e7eaf42a.png"
     },
     {
-      icon: Thermometer,
-      title: "Energy Rating",
-      description: "Properties with poor energy efficiency ratings qualify for improvements"
+      number: "2", 
+      title: "Clean with Anti-fungal Treatment",
+      description: "The installer will clean the area with an anti-fungal agent which helps identify areas requiring repair and makes for a much better installation overall.",
+      image: "/lovable-uploads/59689f9a-f212-4f4a-9657-ce728db1fd4d.png"
     },
     {
-      icon: Wrench,
-      title: "Improvement Areas",
-      description: "Various home improvement categories including insulation, windows, and doors"
+      number: "3",
+      title: "Inspection", 
+      description: "Careful inspection is then carried out to highlight areas requiring repair or replacement. This includes broken or bossed render and broken or missing roof tiles.",
+      image: "/lovable-uploads/8e79806d-c25c-4da5-93ac-ef224e8d65fe.png"
     },
     {
-      icon: Shield,
-      title: "Benefits",
-      description: "Receive state benefits or have household income below £31,000 per year"
+      number: "4",
+      title: "Repairs",
+      description: "All repairs or replacement identified during the inspection are carried out to give an ideal surface for application.",
+      image: "/lovable-uploads/a901cc1e-e8f7-4877-8151-dfeb1c7d9ec1.png"
+    },
+    {
+      number: "5", 
+      title: "Masking",
+      description: "Windows, doors, alarm systems, etc. are all masked to protect your property as well as covering with ground sheets.",
+      image: "/lovable-uploads/2809388d-08dd-4fd6-9664-8d94949886ec.png"
+    },
+    {
+      number: "6",
+      title: "Application",
+      description: "Airless spray system is used to apply the breathable and hydrophobic protective coating to your walls or roof.",
+      image: "/lovable-uploads/382f5ce0-dbac-4569-96d2-b220e2011e78.png"
     }
   ];
 
@@ -127,9 +141,9 @@ const HomeImprovements = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="animate-pulse space-y-8">
               <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-64 bg-gray-300 rounded"></div>
                 ))}
               </div>
             </div>
@@ -140,33 +154,39 @@ const HomeImprovements = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Home Improvements Qualifying Criteria
+                Full Process
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
+                Our comprehensive step-by-step approach ensures quality results and professional installation for your wall and roof renovations.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {eligibilityRequirements.map((requirement, index) => {
-                const Icon = requirement.icon;
-                return (
-                  <div key={index} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-purple-500 rounded-full flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-white" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {processSteps.map((step, index) => (
+                <Card key={index} className="text-center h-full">
+                  <CardHeader>
+                    <div className="mb-4">
+                      <OptimizedImage
+                        src={step.image}
+                        alt={`Step ${step.number}: ${step.title}`}
+                        className="w-full h-48 object-cover rounded-lg"
+                        width={400}
+                        height={300}
+                      />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {requirement.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {requirement.description}
-                    </p>
-                  </div>
-                );
-              })}
+                    <div className="w-12 h-12 mx-auto mb-4 bg-purple-500 rounded-full flex items-center justify-center">
+                      <span className="text-xl font-bold text-white">{step.number}</span>
+                    </div>
+                    <CardTitle>{step.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base">
+                      {step.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-            
-            <EligibilitySection />
           </div>
         </section>
       </Suspense>
