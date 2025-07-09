@@ -78,7 +78,7 @@ const HomeImprovements = () => {
       number: "6",
       title: "Application",
       description: "Airless spray system is used to apply the breathable and hydrophobic protective coating to your walls or roof.",
-      image: "/lovable-uploads/382f5ce0-dbac-4569-96d2-b220e2011e78.png"
+      image: "/lovable-uploads/9f639358-4175-48bd-8f67-6500b1863dbc.png"
     }
   ];
 
@@ -150,9 +150,9 @@ const HomeImprovements = () => {
           </div>
         </div>
       }>
-        <section className="py-20 bg-gray-100">
+        <section className="py-16 bg-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
                 Full Process
               </h2>
@@ -161,26 +161,26 @@ const HomeImprovements = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {processSteps.map((step, index) => (
                 <Card key={index} className="text-center h-full">
-                  <CardHeader>
-                    <div className="mb-4">
+                  <CardHeader className="pb-3">
+                    <div className="mb-3">
                       <OptimizedImage
                         src={step.image}
                         alt={`Step ${step.number}: ${step.title}`}
-                        className="w-full h-48 object-cover rounded-lg"
+                        className="w-full h-40 object-cover rounded-lg"
                         width={400}
                         height={300}
                       />
                     </div>
-                    <div className="w-12 h-12 mx-auto mb-4 bg-purple-500 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 mx-auto mb-3 bg-purple-500 rounded-full flex items-center justify-center">
                       <span className="text-xl font-bold text-white">{step.number}</span>
                     </div>
-                    <CardTitle>{step.title}</CardTitle>
+                    <CardTitle className="text-lg">{step.title}</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base">
+                  <CardContent className="pt-0">
+                    <CardDescription className="text-sm">
                       {step.description}
                     </CardDescription>
                   </CardContent>
