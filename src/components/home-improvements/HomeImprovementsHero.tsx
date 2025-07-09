@@ -9,20 +9,21 @@ const HomeImprovementsHero = () => {
 
   useEffect(() => {
     let ticking = false;
+    
     const updateScrollY = () => {
       setScrollY(window.scrollY);
       ticking = false;
     };
 
-    const handleSmoothScroll = () => {
+    const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(updateScrollY);
         ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleSmoothScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleSmoothScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const benefits = [
@@ -35,17 +36,23 @@ const HomeImprovementsHero = () => {
   return (
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>
-      <div className="absolute inset-0 opacity-30 will-change-transform">
+      
+      {/* Optimized parallax background */}
+      <div 
+        className="absolute inset-0 opacity-30 will-change-transform"
+        style={{
+          transform: `translate3d(0, ${scrollY * 0.5}px, 0)`,
+          backfaceVisibility: 'hidden',
+          perspective: '1000px'
+        }}
+      >
         <OptimizedImage
           src="/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png"
           alt="Home Improvements Background - Modern house exterior with driveway"
-          className="w-full h-full object-cover mix-blend-multiply"
+          className="w-full h-[120%] object-cover mix-blend-multiply"
           priority={true}
           width={1920}
-          height={1080}
-          style={{ 
-            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
-          }}
+          height={1296}
         />
       </div>
       
