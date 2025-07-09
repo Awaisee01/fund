@@ -99,7 +99,7 @@ const HomeImprovements = () => {
               alt="Roof Renovation Colour Options - Tile Red, Anthracite, Black Blue, Rustic, Red Brown, Green, Dark Brown"
               className="max-w-full h-auto"
               width={1200}
-              height={200}
+              height={220}
             />
           </div>
         </div>
