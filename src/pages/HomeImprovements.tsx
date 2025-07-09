@@ -4,6 +4,7 @@ import HomeImprovementsHero from '@/components/home-improvements/HomeImprovement
 import ProcessSteps from '@/components/home-improvements/ProcessSteps';
 import BeforeAfterCarousel from '@/components/home-improvements/BeforeAfterCarousel';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
+import OptimizedImage from '@/components/OptimizedImage';
 
 const HomeImprovements = () => {
   const [heroLoaded, setHeroLoaded] = useState(false);
@@ -55,6 +56,30 @@ const HomeImprovements = () => {
       }>
         <BeforeAfterCarousel />
       </Suspense>
+
+      {/* Wall Renovation Colours Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Wall Renovation Colours
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Choose from our range of premium wall coating colours to transform your property's exterior
+            </p>
+          </div>
+          
+          <div className="flex justify-center">
+            <OptimizedImage
+              src="/lovable-uploads/36cc3bdf-84b2-410c-9c9f-11faa27ac900.png"
+              alt="Wall Renovation Colour Options - Light Grey, Water Lily, White, Devon Stone, Polar White, Cotswold Cream, Beige, Cotswold Stone, Pebble, Sage Green"
+              className="max-w-full h-auto rounded-lg shadow-lg"
+              width={1200}
+              height={600}
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
