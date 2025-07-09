@@ -163,8 +163,8 @@ const HomeImprovements = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {processSteps.map((step, index) => (
                 <Card key={index} className="text-center h-full">
-                  <CardHeader className="pb-2 px-4 pt-4">
-                    <div className="mb-3">
+                  <CardHeader className="p-4">
+                    <div className="mb-2">
                       <OptimizedImage
                         src={step.image}
                         alt={`Step ${step.number}: ${step.title}`}
@@ -173,10 +173,10 @@ const HomeImprovements = () => {
                         height={300}
                       />
                     </div>
-                    <div className="w-12 h-12 mx-auto mb-3 bg-purple-500 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 mx-auto -mt-2 mb-2 bg-purple-500 rounded-full flex items-center justify-center">
                       <span className="text-xl font-bold text-white">{step.number}</span>
                     </div>
-                    <CardTitle className="text-lg mb-3">{step.title}</CardTitle>
+                    <CardTitle className="text-lg">{step.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0 px-4 pb-4">
                     <CardDescription className="text-sm">
