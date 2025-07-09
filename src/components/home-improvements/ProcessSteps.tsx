@@ -58,19 +58,19 @@ const ProcessSteps = () => {
           {processSteps.map((step, index) => (
             <Card key={index} className="text-center h-full overflow-hidden">
               <div className="p-4">
-                <div className="relative mb-0">
+                <div className="relative mb-4">
                   <OptimizedImage
                     src={step.image}
                     alt={`Step ${step.number}: ${step.title}`}
-                    className="w-full h-40 object-cover rounded-lg mb-0"
+                    className="w-full h-40 object-cover rounded-lg"
                     width={400}
                     height={300}
                   />
-                  <div className="w-12 h-12 mx-auto -mt-20 bg-purple-500 rounded-full flex items-center justify-center relative z-10">
+                  <div className="w-12 h-12 mx-auto -mt-6 bg-purple-500 rounded-full flex items-center justify-center relative z-10">
                     <span className="text-xl font-bold text-white">{step.number}</span>
                   </div>
                 </div>
-                <CardTitle className="text-lg mb-2 mt-2">{step.title}</CardTitle>
+                <CardTitle className="text-lg mb-2">{step.title}</CardTitle>
                 <CardDescription className="text-sm">
                   {step.description}
                 </CardDescription>
