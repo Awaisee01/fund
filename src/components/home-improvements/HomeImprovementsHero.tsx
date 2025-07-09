@@ -1,0 +1,86 @@
+
+import { useEffect, useState } from 'react';
+import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
+import OptimizedImage from '@/components/OptimizedImage';
+import { CheckCircle } from 'lucide-react';
+
+const HomeImprovementsHero = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    let ticking = false;
+    const updateScrollY = () => {
+      setScrollY(window.scrollY);
+      ticking = false;
+    };
+
+    const handleSmoothScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollY);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleSmoothScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleSmoothScroll);
+  }, []);
+
+  const benefits = [
+    "Repair broken/missing areas",
+    "Fully breathable & hydrophobic system", 
+    "10 year Guarantee",
+    "Approved Installers"
+  ];
+
+  return (
+    <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
+      <div className="absolute inset-0 bg-black opacity-20"></div>
+      <div className="absolute inset-0 opacity-30 will-change-transform">
+        <OptimizedImage
+          src="/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png"
+          alt="Home Improvements Background - Modern house exterior with driveway"
+          className="w-full h-full object-cover mix-blend-multiply"
+          priority={true}
+          width={1920}
+          height={1080}
+          style={{ 
+            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
+          }}
+        />
+      </div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+              Wall and Roof Renovations
+            </h1>
+            <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
+              Transform the look of your property while improving energy efficiency
+            </p>
+            <p className="text-lg mb-8 text-blue-50 leading-relaxed">
+              Huge range of colour options. Get your free quote today.
+            </p>
+            
+            <div className="mb-8">
+              <ul className="space-y-3">
+                {benefits.map((benefit, index) => (
+                  <li key={index} className="flex items-center space-x-3">
+                    <CheckCircle className="h-6 w-6 text-green-300 flex-shrink-0" />
+                    <span className="text-blue-50">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          
+          <div className="flex justify-center lg:justify-end">
+            <NativeHomeImprovementsForm />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HomeImprovementsHero;
