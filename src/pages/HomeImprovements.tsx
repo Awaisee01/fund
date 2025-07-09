@@ -1,4 +1,3 @@
-
 import { useEffect, useState, Suspense, lazy } from 'react';
 import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -164,7 +163,7 @@ const HomeImprovements = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {processSteps.map((step, index) => (
                 <Card key={index} className="text-center h-full">
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-2 px-4 pt-4">
                     <div className="mb-3">
                       <OptimizedImage
                         src={step.image}
@@ -179,7 +178,7 @@ const HomeImprovements = () => {
                     </div>
                     <CardTitle className="text-lg mb-3">{step.title}</CardTitle>
                   </CardHeader>
-                  <CardContent className="pt-0">
+                  <CardContent className="pt-0 px-4 pb-4">
                     <CardDescription className="text-sm">
                       {step.description}
                     </CardDescription>
