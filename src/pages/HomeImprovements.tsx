@@ -58,7 +58,7 @@ const HomeImprovements = () => {
       </Suspense>
 
       {/* Wall Renovation Colours Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -73,7 +73,7 @@ const HomeImprovements = () => {
             <OptimizedImage
               src="/lovable-uploads/36cc3bdf-84b2-410c-9c9f-11faa27ac900.png"
               alt="Wall Renovation Colour Options - Light Grey, Water Lily, White, Devon Stone, Polar White, Cotswold Cream, Beige, Cotswold Stone, Pebble, Sage Green"
-              className="max-w-full h-auto rounded-lg shadow-lg"
+              className="max-w-full h-auto"
               width={1200}
               height={600}
             />
@@ -82,7 +82,7 @@ const HomeImprovements = () => {
       </section>
 
       {/* Roof Renovation Colours Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -97,9 +97,9 @@ const HomeImprovements = () => {
             <OptimizedImage
               src="/lovable-uploads/20eec8da-2186-4c0c-9104-fca70d33ca81.png"
               alt="Roof Renovation Colour Options - Tile Red, Anthracite, Black Blue, Rustic, Red Brown, Green, Dark Brown"
-              className="max-w-full h-auto rounded-lg shadow-lg"
+              className="max-w-full h-auto"
               width={1200}
-              height={400}
+              height={300}
             />
           </div>
         </div>
