@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import OptimizedImage from '@/components/OptimizedImage';
-import { Badge } from "@/components/ui/badge";
 
 const BeforeAfterCarousel = () => {
   const beforeAfterImages = [
@@ -29,97 +28,48 @@ const BeforeAfterCarousel = () => {
     }
   ];
 
+  // Flatten the images for horizontal scrolling
+  const allImages = beforeAfterImages.flatMap(item => [
+    { src: item.before, alt: `${item.description} - Before` },
+    { src: item.after, alt: `${item.description} - After` }
+  ]);
+
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Before & Afters
           </h2>
-          <p className="text-xl text-gray-600 mb-2">
+          <p className="text-lg text-gray-600">
             Roof & Wall Renovations
           </p>
-          <div className="w-24 h-1 bg-green-500 mx-auto rounded-full"></div>
         </div>
         
-        <div className="relative max-w-6xl mx-auto">
-          <Carousel className="w-full" opts={{ align: "center", loop: true }}>
+        <div className="relative max-w-4xl mx-auto">
+          <Carousel className="w-full" opts={{ align: "start", loop: true }}>
             <CarouselContent className="-ml-2 md:-ml-4">
-              {beforeAfterImages.map((item, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4">
-                  <Card className="border-0 shadow-2xl overflow-hidden bg-white">
+              {allImages.map((image, index) => (
+                <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3">
+                  <Card className="border shadow-sm overflow-hidden">
                     <CardContent className="p-0">
-                      <div className="relative">
-                        {/* Before Image */}
-                        <div className="relative h-80 md:h-96 overflow-hidden">
-                          <OptimizedImage
-                            src={item.before}
-                            alt={`Before: ${item.description}`}
-                            className="w-full h-full object-cover"
-                            width={800}
-                            height={400}
-                          />
-                          <Badge 
-                            variant="secondary" 
-                            className="absolute top-4 left-4 bg-red-100 text-red-800 font-semibold"
-                          >
-                            BEFORE
-                          </Badge>
-                        </div>
-                        
-                        {/* Divider */}
-                        <div className="relative h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent">
-                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-                            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* After Image */}
-                        <div className="relative h-80 md:h-96 overflow-hidden">
-                          <OptimizedImage
-                            src={item.after}
-                            alt={`After: ${item.description}`}
-                            className="w-full h-full object-cover"
-                            width={800}
-                            height={400}
-                          />
-                          <Badge 
-                            variant="secondary" 
-                            className="absolute top-4 right-4 bg-green-100 text-green-800 font-semibold"
-                          >
-                            AFTER
-                          </Badge>
-                        </div>
-                      </div>
-                      
-                      {/* Description */}
-                      <div className="p-6 bg-white">
-                        <h3 className="text-xl font-semibold text-gray-900 text-center">
-                          {item.description}
-                        </h3>
+                      <div className="aspect-[4/3] overflow-hidden">
+                        <OptimizedImage
+                          src={image.src}
+                          alt={image.alt}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          width={400}
+                          height={300}
+                        />
                       </div>
                     </CardContent>
                   </Card>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-4 h-12 w-12 bg-white/90 hover:bg-white border-2 border-gray-200 shadow-lg" />
-            <CarouselNext className="right-4 h-12 w-12 bg-white/90 hover:bg-white border-2 border-gray-200 shadow-lg" />
+            <CarouselPrevious className="left-2 h-8 w-8 bg-white/90 hover:bg-white shadow-md" />
+            <CarouselNext className="right-2 h-8 w-8 bg-white/90 hover:bg-white shadow-md" />
           </Carousel>
-          
-          {/* Dots indicator */}
-          <div className="flex justify-center mt-8 space-x-2">
-            {beforeAfterImages.map((_, index) => (
-              <div
-                key={index}
-                className="w-2 h-2 rounded-full bg-gray-300"
-              />
-            ))}
-          </div>
         </div>
       </div>
     </section>
