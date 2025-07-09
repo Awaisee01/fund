@@ -1,4 +1,3 @@
-
 import { useEffect, useState, Suspense, lazy } from 'react';
 import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -40,10 +39,10 @@ const HomeImprovements = () => {
   }, []);
 
   const benefits = [
-    "Insulation upgrades",
-    "Window and door replacements",
-    "Energy efficiency improvements",
-    "Professional installation included"
+    "Repair broken/missing areas",
+    "Fully breathable & hydrophobic system", 
+    "10 year Guarantee",
+    "Approved Installers"
   ];
 
   const eligibilityRequirements = [
@@ -95,13 +94,13 @@ const HomeImprovements = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                Free Home Improvements
+                Wall and Roof Renovations
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Upgrade your home at no cost
+                Transform the look of your property while improving energy efficiency
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                Transform your property with government-funded home improvements. From insulation to window replacements, make your home more comfortable and energy-efficient without any upfront costs.
+                Huge range of colour options. Get your free quote today.
               </p>
               
               <div className="mb-8">
