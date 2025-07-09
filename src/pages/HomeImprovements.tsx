@@ -172,7 +172,7 @@ const HomeImprovements = () => {
                         width={400}
                         height={300}
                       />
-                      <div className="w-12 h-12 mx-auto -mt-40 bg-purple-500 rounded-full flex items-center justify-center relative z-10">
+                      <div className="w-12 h-12 mx-auto -mt-45 bg-purple-500 rounded-full flex items-center justify-center relative z-10">
                         <span className="text-xl font-bold text-white">{step.number}</span>
                       </div>
                     </div>
