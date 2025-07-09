@@ -1,43 +1,9 @@
 
-import { useEffect, useState, useRef } from 'react';
+import { CheckCircle } from 'lucide-react';
 import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
 import OptimizedImage from '@/components/OptimizedImage';
-import { CheckCircle } from 'lucide-react';
 
 const HomeImprovementsHero = () => {
-  const [scrollY, setScrollY] = useState(0);
-  const parallaxRef = useRef<HTMLDivElement>(null);
-  const rafId = useRef<number>();
-
-  useEffect(() => {
-    const updateParallax = () => {
-      const scrolled = window.scrollY;
-      setScrollY(scrolled);
-      
-      if (parallaxRef.current) {
-        const parallaxOffset = scrolled * 0.3;
-        parallaxRef.current.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`;
-      }
-    };
-
-    const handleScroll = () => {
-      if (rafId.current) {
-        cancelAnimationFrame(rafId.current);
-      }
-      
-      rafId.current = requestAnimationFrame(updateParallax);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (rafId.current) {
-        cancelAnimationFrame(rafId.current);
-      }
-    };
-  }, []);
-
   const benefits = [
     "Repair broken/missing areas",
     "Fully breathable & hydrophobic system", 
@@ -49,25 +15,15 @@ const HomeImprovementsHero = () => {
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>
       
-      {/* Optimized smooth parallax background */}
-      <div 
-        ref={parallaxRef}
-        className="absolute inset-0 opacity-30 will-change-transform"
-        style={{
-          backfaceVisibility: 'hidden',
-          transform: 'translate3d(0, 0, 0)',
-        }}
-      >
+      {/* Static background image without parallax */}
+      <div className="absolute inset-0 opacity-30">
         <OptimizedImage
           src="/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png"
           alt="Home Improvements Background - Modern house exterior with driveway"
-          className="w-full h-[130%] object-cover mix-blend-multiply"
+          className="w-full h-full object-cover mix-blend-multiply"
           priority={true}
           width={1920}
-          height={1296}
-          style={{
-            imageRendering: 'crisp-edges',
-          }}
+          height={1080}
         />
       </div>
       
