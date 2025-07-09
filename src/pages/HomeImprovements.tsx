@@ -80,6 +80,30 @@ const HomeImprovements = () => {
           </div>
         </div>
       </section>
+
+      {/* Roof Renovation Colours Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Roof Renovation Colours
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Select from our premium roof coating colours to enhance your property's appearance
+            </p>
+          </div>
+          
+          <div className="flex justify-center">
+            <OptimizedImage
+              src="/lovable-uploads/20eec8da-2186-4c0c-9104-fca70d33ca81.png"
+              alt="Roof Renovation Colour Options - Tile Red, Anthracite, Black Blue, Rustic, Red Brown, Green, Dark Brown"
+              className="max-w-full h-auto rounded-lg shadow-lg"
+              width={1200}
+              height={400}
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
