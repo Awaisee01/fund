@@ -65,8 +65,8 @@ const ECO4 = () => {
     },
     {
       icon: Shield,
-      title: "Benefits",
-      description: "Receive any of the benefits listed below or have household income below £31,000 per year"
+      title: "Qualifiers",
+      description: "Please review the list of qualifiers below. You only need to tick one box and these apply to anyone living at the property."
     }
   ];
 
