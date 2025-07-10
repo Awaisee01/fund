@@ -41,10 +41,10 @@ const ECO4 = () => {
   }, []);
 
   const benefits = [
-    "Free insulation worth thousands",
-    "New boiler installation at no cost",
-    "Reduce energy bills by up to 40%",
-    "Government-backed scheme"
+    "Heating Upgrades",
+    "Solar Panels", 
+    "Insulation",
+    "Free Government Backed Scheme"
   ];
 
   const eligibilityRequirements = [
@@ -102,8 +102,7 @@ const ECO4 = () => {
                 Free energy efficiency upgrades for your home
               </p>
               <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                The ECO4 scheme provides free energy efficiency improvements including insulation, 
-                boiler upgrades, and heating systems to eligible households across Scotland.
+                The Westminster backed ECO4 scheme provides free heating upgrades, solar panels, and insulation to eligible households across Scotland.
               </p>
               
               <div className="mb-8">
