@@ -96,7 +96,7 @@ const ECO4 = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                Free ECO4 Scheme
+                ECO4 Scheme
               </h1>
               <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
                 Free energy efficiency upgrades for your home
