@@ -28,12 +28,28 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Validate request body
+    if (!req.body) {
+      throw new Error('Request body is required');
+    }
+
     const enquiryData: EnquiryNotificationRequest = await req.json();
+    
+    if (!enquiryData.name || !enquiryData.service_type) {
+      throw new Error('Name and service_type are required');
+    }
+    
     console.log('Processing enquiry notification for:', enquiryData.name);
+
+    // Validate environment variables
+    if (!Deno.env.get("RESEND_API_KEY")) {
+      throw new Error('RESEND_API_KEY not configured');
+    }
 
     const serviceTypeFormatted = enquiryData.service_type.replace('_', ' ').toUpperCase();
     
-    const emailResponse = await resend.emails.send({
+    // Add timeout for email sending
+    const emailPromise = resend.emails.send({
       from: "New Enquiry <noreply@fundingforscotland.co.uk>",
       to: ["info@fundingforscotland.co.uk"],
       subject: `New ${serviceTypeFormatted} Enquiry - ${enquiryData.name}`,
@@ -67,6 +83,13 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
+    // Add 8 second timeout for email sending
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Email timeout')), 8000);
+    });
+
+    const emailResponse = await Promise.race([emailPromise, timeoutPromise]);
+
     console.log("Email notification sent successfully:", emailResponse);
 
     return new Response(JSON.stringify({ success: true, data: emailResponse }), {
@@ -78,10 +101,19 @@ const handler = async (req: Request): Promise<Response> => {
     });
   } catch (error: any) {
     console.error("Error in send-enquiry-notification function:", error);
+    
+    // Return appropriate status code based on error type
+    let statusCode = 500;
+    if (error.message.includes('required') || error.message.includes('not configured')) {
+      statusCode = 400;
+    } else if (error.message.includes('timeout')) {
+      statusCode = 504;
+    }
+    
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
       {
-        status: 500,
+        status: statusCode,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );

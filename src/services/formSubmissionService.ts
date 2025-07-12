@@ -74,58 +74,45 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
 
     console.log('📤 Sending data to Supabase:', submissionData);
 
-    // Add timeout to prevent hanging requests
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-
     const { data: result, error } = await supabase
       .from('form_submissions')
       .insert(submissionData)
-      .select()
-      .abortSignal(controller.signal);
-
-    clearTimeout(timeoutId);
+      .select();
 
     if (error) {
       console.error('❌ Supabase insertion error:', error);
-      // Remove from recent submissions on error so user can retry
       recentSubmissions.delete(submissionKey);
       throw error;
     }
     
     console.log('✅ Form submission saved successfully:', result);
 
-    // Send email notification with better error handling
-    try {
-      console.log('📧 Sending email notification...');
-      
-      const emailController = new AbortController();
-      const emailTimeoutId = setTimeout(() => emailController.abort(), 10000); // 10 second timeout for email
-      
-      const { error: emailError } = await supabase.functions.invoke('send-enquiry-notification', {
-        body: {
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          postcode: data.postcode,
-          service_type: data.serviceType,
-          address: data.address,
-          created_at: result[0].created_at
+    // Send email notification asynchronously - don't block form completion
+    setTimeout(async () => {
+      try {
+        console.log('📧 Sending email notification...');
+        
+        const { error: emailError } = await supabase.functions.invoke('send-enquiry-notification', {
+          body: {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            postcode: data.postcode,
+            service_type: data.serviceType,
+            address: data.address,
+            created_at: result[0].created_at
+          }
+        });
+
+        if (emailError) {
+          console.error('❌ Email notification failed:', emailError);
+        } else {
+          console.log('✅ Email notification sent successfully');
         }
-      });
-
-      clearTimeout(emailTimeoutId);
-
-      if (emailError) {
-        console.error('❌ Email notification failed:', emailError);
-        // Don't throw here - we don't want to fail the form submission if email fails
-      } else {
-        console.log('✅ Email notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Email notification error:', emailError);
       }
-    } catch (emailError) {
-      console.error('❌ Email notification error:', emailError);
-      // Don't throw here - we don't want to fail the form submission if email fails
-    }
+    }, 0);
     
     return { success: true, data: result };
   } catch (error) {
