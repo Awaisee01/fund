@@ -60,14 +60,14 @@ const SolarForm = () => {
     setHasTracked(true);
     
     try {
-      // Trigger Meta Pixel event with better error handling
-      if (typeof window !== 'undefined' && (window as any).fbq && typeof (window as any).fbq === 'function') {
-        (window as any).fbq('track', 'Lead', {
+      // Enhanced Meta Pixel tracking with UTM data
+      import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
+        trackLeadWithUTM({
           content_name: 'Solar Form Submission',
           content_category: 'Solar Panels'
         });
         console.log('✅ Solar form Meta Pixel tracking successful');
-      }
+      });
       
       // Also trigger a custom event for Google Analytics if needed
       if (typeof window !== 'undefined' && (window as any).gtag && typeof (window as any).gtag === 'function') {

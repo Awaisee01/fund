@@ -1,6 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
+import { trackLeadWithUTM } from '@/lib/utm-tracking';
 
 type ServiceType = Database['public']['Enums']['service_type'];
 
@@ -134,27 +135,13 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
 const debouncedTrackFormSubmission = debounce((formName: string, category: string) => {
   console.log('📊 Tracking form submission:', { formName, category });
   
-  // Meta Pixel tracking with better error handling
-  if (typeof window !== 'undefined' && (window as any).fbq) {
-    try {
-      // Check if fbq is actually loaded and ready
-      if (typeof (window as any).fbq === 'function') {
-        (window as any).fbq('track', 'Lead', {
-          content_name: `${formName} Form Submission`,
-          content_category: category,
-          value: 1,
-          currency: 'GBP'
-        });
-        console.log('✅ Meta Pixel tracking successful');
-      } else {
-        console.warn('⚠️ Meta Pixel fbq function not properly loaded');
-      }
-    } catch (error) {
-      console.error('❌ Meta Pixel tracking failed:', error);
-    }
-  } else {
-    console.warn('⚠️ Meta Pixel not available');
-  }
+  // Enhanced Meta Pixel tracking with UTM data
+  trackLeadWithUTM({
+    content_name: `${formName} Form Submission`,
+    content_category: category,
+    value: 1,
+    currency: 'GBP'
+  });
   
   // Google Analytics tracking with better error handling
   if (typeof window !== 'undefined' && (window as any).gtag) {

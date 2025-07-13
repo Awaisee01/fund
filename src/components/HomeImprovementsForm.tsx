@@ -35,13 +35,13 @@ const HomeImprovementsForm = () => {
   };
 
   const handleMetaPixelClick = () => {
-    // Trigger Meta Pixel event
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Lead', {
+    // Enhanced Meta Pixel tracking with UTM data
+    import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
+      trackLeadWithUTM({
         content_name: 'Home Improvements Form Submission',
         content_category: 'Home Improvements'
       });
-    }
+    });
     
     // Also trigger a custom event for Google Analytics if needed
     if (typeof window !== 'undefined' && (window as any).gtag) {
