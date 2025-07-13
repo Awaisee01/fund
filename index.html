@@ -78,6 +78,21 @@
     fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
+
+    <!-- UTM Parameter Tracking -->
+    <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+      utms.forEach(key => {
+        const value = params.get(key);
+        if (value) {
+          localStorage.setItem(key, value);
+        }
+      });
+    })();
+    </script>
+    <!-- End UTM Parameter Tracking -->
   </head>
 
   <body>
