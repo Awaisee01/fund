@@ -1,7 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
-import { trackLeadWithUTM } from '@/lib/utm-tracking';
+import { trackLeadWithUTM, getUTMData } from '@/lib/utm-tracking';
 
 type ServiceType = Database['public']['Enums']['service_type'];
 
@@ -114,6 +114,50 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         console.error('❌ Email notification error:', emailError);
       }
     }, 0);
+
+    // Send Facebook Conversions API data asynchronously
+    setTimeout(async () => {
+      try {
+        console.log('📊 Sending Facebook Conversions API data...');
+        
+        const utmData = getUTMData();
+        const [firstName, ...lastNameParts] = data.name.split(' ');
+        const lastName = lastNameParts.join(' ');
+        
+        const { error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
+          body: {
+            data: {
+              eventName: 'Lead',
+              userData: {
+                email: data.email,
+                phone: data.phone,
+                firstName: firstName,
+                lastName: lastName || '',
+                zipCode: data.postcode
+              },
+              customData: {
+                content_name: `${data.serviceType} Form Submission`,
+                content_category: data.serviceType,
+                value: 1,
+                currency: 'GBP'
+              },
+              eventSourceUrl: window.location.href,
+              utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
+              userAgent: navigator.userAgent,
+              ipAddress: undefined // Will be handled server-side
+            }
+          }
+        });
+
+        if (fbError) {
+          console.error('❌ Facebook Conversions API failed:', fbError);
+        } else {
+          console.log('✅ Facebook Conversions API sent successfully');
+        }
+      } catch (fbError) {
+        console.error('❌ Facebook Conversions API error:', fbError);
+      }
+    }, 100);
     
     return { success: true, data: result };
   } catch (error) {
