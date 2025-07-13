@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import SEOStructuredData from "./components/SEOStructuredData";
+import FacebookPixelPageView from "./components/FacebookPixelPageView";
 import Home from "./pages/Home";
 import ECO4 from "./pages/ECO4";
 import ECO4New from "./pages/ECO4New";
@@ -30,6 +31,7 @@ const App = () => {
         <BrowserRouter>
           <ScrollToTop />
           <SEOStructuredData />
+          <FacebookPixelPageView />
           <div className="min-h-screen flex flex-col">
             <Navigation />
             <main className="flex-1">
