@@ -15,7 +15,7 @@ interface ConversionData {
     lastName?: string
     zipCode?: string
     city?: string
-    state?: string
+    county?: string // UK uses County not State
   }
   customData: {
     content_name: string
@@ -85,8 +85,8 @@ serve(async (req) => {
     if (data.userData.city) {
       userData.ct = await hashData(data.userData.city)
     }
-    if (data.userData.state) {
-      userData.st = await hashData(data.userData.state)
+    if (data.userData.county) {
+      userData.st = await hashData(data.userData.county) // Facebook uses 'st' field for regional data
     }
 
     // Build custom data with UTM parameters

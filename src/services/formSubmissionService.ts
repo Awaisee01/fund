@@ -127,33 +127,45 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         // Generate unique event ID for deduplication
         const eventId = `${data.serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         
-        // Extract city and state from address or postcode if available
+        // Extract city and county from address if available
         let city = '';
-        let state = '';
+        let county = '';
         
         if (data.address) {
           const addressParts = data.address.split(',').map(part => part.trim());
           if (addressParts.length >= 2) {
             city = addressParts[addressParts.length - 2] || '';
-            state = addressParts[addressParts.length - 1] || '';
+            county = addressParts[addressParts.length - 1] || '';
           }
         }
         
-        // For UK postcodes, we can extract region info
+        // For UK postcodes, map to cities and counties
         if (data.postcode && !city) {
           const postcodeParts = data.postcode.split(' ');
           if (postcodeParts.length > 0) {
-            // Extract first part for rough location matching
-            const area = postcodeParts[0];
-            // Map common UK postcode areas to regions (simplified)
-            const ukRegions: Record<string, string> = {
-              'M': 'Manchester', 'B': 'Birmingham', 'L': 'Liverpool',
-              'LS': 'Leeds', 'S': 'Sheffield', 'NE': 'Newcastle',
-              'E': 'London', 'N': 'London', 'W': 'London', 'SW': 'London',
-              'SE': 'London', 'NW': 'London', 'EC': 'London', 'WC': 'London'
+            const area = postcodeParts[0].toUpperCase();
+            // Map UK postcode areas to cities and counties
+            const ukLocations: Record<string, {city: string, county: string}> = {
+              'M': {city: 'Manchester', county: 'Greater Manchester'},
+              'B': {city: 'Birmingham', county: 'West Midlands'},
+              'L': {city: 'Liverpool', county: 'Merseyside'},
+              'LS': {city: 'Leeds', county: 'West Yorkshire'},
+              'S': {city: 'Sheffield', county: 'South Yorkshire'},
+              'NE': {city: 'Newcastle', county: 'Tyne and Wear'},
+              'E': {city: 'London', county: 'Greater London'},
+              'N': {city: 'London', county: 'Greater London'},
+              'W': {city: 'London', county: 'Greater London'},
+              'SW': {city: 'London', county: 'Greater London'},
+              'SE': {city: 'London', county: 'Greater London'},
+              'NW': {city: 'London', county: 'Greater London'},
+              'EC': {city: 'London', county: 'Greater London'},
+              'WC': {city: 'London', county: 'Greater London'}
             };
-            city = ukRegions[area] || '';
-            state = 'England'; // Default for UK
+            const location = ukLocations[area];
+            if (location) {
+              city = location.city;
+              county = location.county;
+            }
           }
         }
         
@@ -169,7 +181,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
                 lastName: lastName || '',
                 zipCode: data.postcode,
                 city: city || undefined,
-                state: state || undefined
+                county: county || undefined
               },
               customData: {
                 content_name: `${data.serviceType} Form Submission`,
