@@ -7,12 +7,15 @@ const corsHeaders = {
 
 interface ConversionData {
   eventName: string
+  eventId?: string // For deduplication
   userData: {
     email?: string
     phone?: string
     firstName?: string
     lastName?: string
     zipCode?: string
+    city?: string
+    state?: string
   }
   customData: {
     content_name: string
@@ -79,6 +82,12 @@ serve(async (req) => {
     if (data.userData.zipCode) {
       userData.zp = await hashData(data.userData.zipCode)
     }
+    if (data.userData.city) {
+      userData.ct = await hashData(data.userData.city)
+    }
+    if (data.userData.state) {
+      userData.st = await hashData(data.userData.state)
+    }
 
     // Build custom data with UTM parameters
     const customData = {
@@ -93,15 +102,22 @@ serve(async (req) => {
     }
 
     // Prepare the event payload
+    const eventPayload: any = {
+      event_name: data.eventName,
+      event_time: eventTime,
+      event_source_url: data.eventSourceUrl,
+      user_data: userData,
+      custom_data: customData,
+      action_source: 'website'
+    }
+
+    // Add event ID for deduplication if provided
+    if (data.eventId) {
+      eventPayload.event_id = data.eventId
+    }
+
     const eventData = {
-      data: [{
-        event_name: data.eventName,
-        event_time: eventTime,
-        event_source_url: data.eventSourceUrl,
-        user_data: userData,
-        custom_data: customData,
-        action_source: 'website'
-      }]
+      data: [eventPayload]
     }
 
     // Send to Facebook Conversions API

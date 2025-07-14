@@ -124,16 +124,52 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         const [firstName, ...lastNameParts] = data.name.split(' ');
         const lastName = lastNameParts.join(' ');
         
+        // Generate unique event ID for deduplication
+        const eventId = `${data.serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        
+        // Extract city and state from address or postcode if available
+        let city = '';
+        let state = '';
+        
+        if (data.address) {
+          const addressParts = data.address.split(',').map(part => part.trim());
+          if (addressParts.length >= 2) {
+            city = addressParts[addressParts.length - 2] || '';
+            state = addressParts[addressParts.length - 1] || '';
+          }
+        }
+        
+        // For UK postcodes, we can extract region info
+        if (data.postcode && !city) {
+          const postcodeParts = data.postcode.split(' ');
+          if (postcodeParts.length > 0) {
+            // Extract first part for rough location matching
+            const area = postcodeParts[0];
+            // Map common UK postcode areas to regions (simplified)
+            const ukRegions: Record<string, string> = {
+              'M': 'Manchester', 'B': 'Birmingham', 'L': 'Liverpool',
+              'LS': 'Leeds', 'S': 'Sheffield', 'NE': 'Newcastle',
+              'E': 'London', 'N': 'London', 'W': 'London', 'SW': 'London',
+              'SE': 'London', 'NW': 'London', 'EC': 'London', 'WC': 'London'
+            };
+            city = ukRegions[area] || '';
+            state = 'England'; // Default for UK
+          }
+        }
+        
         const { error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: {
             data: {
               eventName: 'Lead',
+              eventId: eventId, // For deduplication
               userData: {
                 email: data.email,
                 phone: data.phone,
                 firstName: firstName,
                 lastName: lastName || '',
-                zipCode: data.postcode
+                zipCode: data.postcode,
+                city: city || undefined,
+                state: state || undefined
               },
               customData: {
                 content_name: `${data.serviceType} Form Submission`,
