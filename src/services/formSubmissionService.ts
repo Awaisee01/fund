@@ -13,6 +13,7 @@ interface FormSubmissionData {
   postcode?: string;
   address?: string;
   formData?: Record<string, any>;
+  formName?: string; // For tracking purposes
 }
 
 // Debounce function to prevent rapid successive calls
@@ -88,6 +89,14 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     
     console.log('✅ Form submission saved successfully:', result);
 
+    // Generate unique event ID for deduplication between Pixel and Conversions API
+    const eventId = `${data.serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Track form submission immediately with the same event ID
+    if (data.formName) {
+      trackFormSubmission(data.formName, data.serviceType, eventId);
+    }
+
     // Send email notification asynchronously - don't block form completion
     setTimeout(async () => {
       try {
@@ -123,9 +132,6 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         const utmData = getUTMData();
         const [firstName, ...lastNameParts] = data.name.split(' ');
         const lastName = lastNameParts.join(' ');
-        
-        // Generate unique event ID for deduplication
-        const eventId = `${data.serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         
         // Extract city and county from address if available
         let city = '';
@@ -224,16 +230,16 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
 };
 
 // Debounced tracking function to prevent excessive calls
-const debouncedTrackFormSubmission = debounce((formName: string, category: string) => {
-  console.log('📊 Tracking form submission:', { formName, category });
+const debouncedTrackFormSubmission = debounce((formName: string, category: string, eventId?: string) => {
+  console.log('📊 Tracking form submission:', { formName, category, eventId });
   
-  // Enhanced Meta Pixel tracking with UTM data
+  // Enhanced Meta Pixel tracking with UTM data and event ID for deduplication
   trackLeadWithUTM({
     content_name: `${formName} Form Submission`,
     content_category: category,
     value: 1,
     currency: 'GBP'
-  });
+  }, eventId);
   
   // Google Analytics tracking with better error handling
   if (typeof window !== 'undefined' && (window as any).gtag) {

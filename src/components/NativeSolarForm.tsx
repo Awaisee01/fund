@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface SolarFormData {
@@ -76,11 +76,9 @@ const NativeSolarForm = () => {
         formData: {
           understand_air_source_heat_pump: data.understand,
           source: 'solar_page'
-        }
+        },
+        formName: 'Solar'
       });
-
-      // Track the submission
-      trackFormSubmission('Solar', 'Solar Panels');
 
       console.log('🎉 Solar form submission completed successfully');
       

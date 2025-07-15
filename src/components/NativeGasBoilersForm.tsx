@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 
 interface GasBoilersFormData {
   fullName: string;
@@ -57,11 +57,9 @@ const NativeGasBoilersForm = () => {
         address: data.address,
         formData: {
           source: 'gas_boilers_page'
-        }
+        },
+        formName: 'Gas Boilers'
       });
-
-      // Track the submission
-      trackFormSubmission('Gas Boilers', 'Gas Boilers');
 
       console.log('🎉 Gas Boilers form submission completed successfully');
       

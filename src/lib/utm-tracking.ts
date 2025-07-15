@@ -45,10 +45,12 @@ export const getUTMData = (): UTMData => {
  * Enhanced Facebook Pixel tracking with UTM data
  * @param eventName - The Facebook Pixel event name (e.g., 'Lead', 'Purchase')
  * @param eventData - Additional event parameters
+ * @param eventId - Optional event ID for deduplication with Conversions API
  */
 export const trackPixelEventWithUTM = (
   eventName: string, 
-  eventData: Record<string, any> = {}
+  eventData: Record<string, any> = {},
+  eventId?: string
 ): void => {
   if (typeof window === 'undefined' || !(window as any).fbq) {
     console.warn('⚠️ Facebook Pixel not available');
@@ -57,21 +59,27 @@ export const trackPixelEventWithUTM = (
 
   try {
     const utmData = getUTMData();
-    const enhancedEventData = {
+    const enhancedEventData: Record<string, any> = {
       ...eventData,
       ...utmData
     };
 
+    // Add event ID if provided for deduplication
+    if (eventId) {
+      enhancedEventData.eventID = eventId;
+    }
+
     // Only include custom_data if there are UTM parameters
     const hasUTMData = Object.keys(utmData).length > 0;
     
-    if (hasUTMData) {
-      console.log('📊 Tracking Facebook Pixel event with UTM data:', {
+    if (hasUTMData || eventId) {
+      console.log('📊 Tracking Facebook Pixel event with enhanced data:', {
         event: eventName,
-        data: enhancedEventData
+        data: enhancedEventData,
+        eventId: eventId
       });
     } else {
-      console.log('📊 Tracking Facebook Pixel event (no UTM data):', {
+      console.log('📊 Tracking Facebook Pixel event (basic):', {
         event: eventName,
         data: eventData
       });
@@ -106,12 +114,12 @@ export const trackLeadWithUTM = (leadData: {
   content_category: string;
   value?: number;
   currency?: string;
-}): void => {
+}, eventId?: string): void => {
   trackPixelEventWithUTM('Lead', {
     ...leadData,
     value: leadData.value || 1,
     currency: leadData.currency || 'GBP'
-  });
+  }, eventId);
 };
 
 /**

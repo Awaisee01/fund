@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 
 interface HomeImprovementsFormData {
   fullName: string;
@@ -57,11 +57,9 @@ const NativeHomeImprovementsForm = () => {
         address: data.address,
         formData: {
           source: 'home_improvements_page'
-        }
+        },
+        formName: 'Home Improvements'
       });
-
-      // Track the submission
-      trackFormSubmission('Home Improvements', 'Home Improvements');
 
       console.log('🎉 Home Improvements form submission completed successfully');
       

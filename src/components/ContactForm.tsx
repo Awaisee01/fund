@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,11 +41,9 @@ const ContactForm = () => {
         address: formData.address,
         formData: {
           source: 'contact_form'
-        }
+        },
+        formName: 'Contact'
       });
-
-      // Track the submission
-      trackFormSubmission('Contact', 'General');
 
       console.log('🎉 Contact form submission completed successfully');
       

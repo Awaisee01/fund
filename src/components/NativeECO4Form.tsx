@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { submitFormToDatabase, trackFormSubmission } from '@/services/formSubmissionService';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 
 interface ECO4FormData {
   fullName: string;
@@ -61,11 +61,9 @@ const NativeECO4Form = () => {
         formData: {
           understand_mains_gas_restriction: data.understand,
           source: 'eco4_new_page'
-        }
+        },
+        formName: 'ECO4'
       });
-
-      // Track the submission
-      trackFormSubmission('ECO4', 'ECO4');
 
       console.log('🎉 ECO4 form submission completed successfully');
       
