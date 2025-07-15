@@ -66,8 +66,8 @@ const SolarNew = () => {
     },
     {
       icon: Shield,
-      title: "Benefits",
-      description: "Receive any of the benefits listed below or have household income below £31,000 per year"
+      title: "Qualifiers",
+      description: "List of qualifiers below. You only need to tick one box & these apply to anyone living at the property."
     }
   ];
 
