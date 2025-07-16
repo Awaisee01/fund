@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
+import AnalyticsTracker from "./components/AnalyticsTracker";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import SEOStructuredData from "./components/SEOStructuredData";
@@ -28,8 +29,9 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <BrowserRouter>
-          <ScrollToTop />
+      <BrowserRouter>
+        <AnalyticsTracker />
+        <ScrollToTop />
           <SEOStructuredData />
           <FacebookPixelPageView />
           <div className="min-h-screen flex flex-col">
