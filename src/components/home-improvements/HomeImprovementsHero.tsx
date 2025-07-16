@@ -28,8 +28,15 @@ const HomeImprovementsHero = () => {
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
+        {/* Mobile: Form first, Desktop: Content first */}
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* Form Section - First on mobile, second on desktop */}
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+            <NativeHomeImprovementsForm />
+          </div>
+          
+          {/* Content Section - Second on mobile, first on desktop */}
+          <div className="order-2 lg:order-1">{/* ... keep existing code */}
             <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
               Wall and Roof Renovations
             </h1>
@@ -50,10 +57,6 @@ const HomeImprovementsHero = () => {
                 ))}
               </ul>
             </div>
-          </div>
-          
-          <div className="flex justify-center lg:justify-end">
-            <NativeHomeImprovementsForm />
           </div>
         </div>
       </div>

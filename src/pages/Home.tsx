@@ -2,14 +2,28 @@
 import { useEffect, useState, Suspense, lazy } from 'react';
 import Hero from '@/components/Hero';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
+import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
 
-// Lazy load below-the-fold content
+// Lazy load below-the-fold content for better performance
 const ServicesGrid = lazy(() => import('@/components/ServicesGrid'));
 const TrustBadges = lazy(() => import('@/components/TrustBadges'));
 const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
 
+// Loading fallback components
+const SectionSkeleton = () => (
+  <div className="animate-pulse bg-gray-200 h-64 rounded-lg mx-auto max-w-7xl mb-8"></div>
+);
+
+const TrustBadgesSkeleton = () => (
+  <div className="animate-pulse bg-gray-100 h-20 w-full"></div>
+);
+
 const Home = () => {
   const [heroLoaded, setHeroLoaded] = useState(false);
+
+  // Performance optimizations
+  usePagePerformance('home');
+  useViewportOptimization();
 
   useEffect(() => {
     document.title = "Funding For Scotland - Scottish Home Improvement Grants & Funding";

@@ -33,8 +33,55 @@ const Hero = ({
       )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 xl:py-32">
+        {/* Mobile: Form first, Desktop: Content first */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div>
+          {/* Form Section - First on mobile, second on desktop */}
+          <div className="order-1 lg:order-2 w-full flex justify-center lg:justify-end">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 sm:px-6 xl:px-8 py-6 xl:py-8 border border-white/20 w-full max-w-md">
+              <h3 className="text-lg sm:text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">What can we help with?</h3>
+              <div className="grid grid-cols-1 gap-3 xl:gap-4">
+                <Button 
+                  asChild 
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation min-h-[48px]"
+                  variant="outline"
+                >
+                  <Link to="/eco4">
+                    ECO4
+                  </Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation min-h-[48px]"
+                  variant="outline"
+                >
+                  <Link to="/solar">
+                    Solar Panels
+                  </Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation min-h-[48px]"
+                  variant="outline"
+                >
+                  <Link to="/gas-boilers">
+                    Gas Boilers
+                  </Link>
+                </Button>
+                <Button 
+                  asChild 
+                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation min-h-[48px]"
+                  variant="outline"
+                >
+                  <Link to="/home-improvements">
+                    Home Improvements
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Content Section - Second on mobile, first on desktop */}
+          <div className="order-2 lg:order-1">{/* ... keep existing code */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               {title}
             </h1>
@@ -57,50 +104,6 @@ const Hero = ({
                 </ul>
               </div>
             )}
-          </div>
-          
-          <div className="w-full flex justify-center lg:justify-end">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 sm:px-6 xl:px-8 py-6 xl:py-8 border border-white/20 w-full max-w-md">
-              <h3 className="text-lg sm:text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">What can we help with?</h3>
-              <div className="grid grid-cols-1 gap-3 xl:gap-4">
-                <Button 
-                  asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
-                  variant="outline"
-                >
-                  <Link to="/eco4">
-                    ECO4
-                  </Link>
-                </Button>
-                <Button 
-                  asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
-                  variant="outline"
-                >
-                  <Link to="/solar">
-                    Solar Panels
-                  </Link>
-                </Button>
-                <Button 
-                  asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
-                  variant="outline"
-                >
-                  <Link to="/gas-boilers">
-                    Gas Boilers
-                  </Link>
-                </Button>
-                <Button 
-                  asChild 
-                  className="w-full justify-center p-3 xl:p-4 bg-white/10 hover:bg-white/20 text-white hover:text-white hover:font-bold border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 touch-manipulation"
-                  variant="outline"
-                >
-                  <Link to="/home-improvements">
-                    Home Improvements
-                  </Link>
-                </Button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
