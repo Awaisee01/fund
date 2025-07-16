@@ -3,6 +3,7 @@ import NativeECO4Form from '@/components/NativeECO4Form';
 import OptimizedImage from '@/components/OptimizedImage';
 import HeroSkeleton from '@/components/HeroSkeleton';
 import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
+import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
 
 // Lazy load sections that are below the fold
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
@@ -11,6 +12,9 @@ const ProcessSection = lazy(() => import('@/components/ProcessSection'));
 const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
+  
+  usePagePerformance('eco4');
+  useViewportOptimization();
 
   useEffect(() => {
     document.title = "Free ECO4 Grants Scotland - Government Energy Efficiency Scheme | Funding For Scotland";
@@ -94,7 +98,7 @@ const ECO4 = () => {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div className="order-2 lg:order-1">
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
                 ECO4 Scheme
               </h1>
@@ -117,7 +121,7 @@ const ECO4 = () => {
               </div>
             </div>
             
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
               <NativeECO4Form />
             </div>
           </div>

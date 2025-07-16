@@ -5,6 +5,7 @@ import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Flame, Wrench, PoundSterling } from 'lucide-react';
+import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
 
 // Lazy load below-the-fold content
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
@@ -12,6 +13,9 @@ const EligibilitySection = lazy(() => import('@/components/EligibilitySection'))
 const GasBoilers = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
+  
+  usePagePerformance('gas-boilers');
+  useViewportOptimization();
 
   useEffect(() => {
     document.title = "Free Gas Boiler Replacement & Repair Scotland - Government Grants | Funding For Scotland";
@@ -93,7 +97,7 @@ const GasBoilers = () => {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div className="order-2 lg:order-1">
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
                 Free Gas Boiler Replacement
               </h1>
@@ -116,7 +120,7 @@ const GasBoilers = () => {
               </div>
             </div>
             
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
               <NativeGasBoilersForm />
             </div>
           </div>
