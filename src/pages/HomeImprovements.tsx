@@ -2,7 +2,6 @@
 import { useEffect, useState, Suspense, lazy } from 'react';
 import HomeImprovementsHero from '@/components/home-improvements/HomeImprovementsHero';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
-import OptimizedImage from '@/components/OptimizedImage';
 import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
 
 // Lazy load non-critical components
@@ -77,12 +76,13 @@ const HomeImprovements = () => {
           </div>
           
           <div className="flex justify-center">
-            <OptimizedImage
+            <img
               src="/lovable-uploads/36cc3bdf-84b2-410c-9c9f-11faa27ac900.png"
               alt="Wall Renovation Colour Options - Light Grey, Water Lily, White, Devon Stone, Polar White, Cotswold Cream, Beige, Cotswold Stone, Pebble, Sage Green"
               className="max-w-full h-auto"
               width={1200}
               height={600}
+              loading="lazy"
             />
           </div>
         </div>
@@ -101,12 +101,13 @@ const HomeImprovements = () => {
           </div>
           
           <div className="flex justify-center">
-            <OptimizedImage
+            <img
               src="/lovable-uploads/20eec8da-2186-4c0c-9104-fca70d33ca81.png"
               alt="Roof Renovation Colour Options - Tile Red, Anthracite, Black Blue, Rustic, Red Brown, Green, Dark Brown"
               className="max-w-full h-auto"
               width={1200}
               height={220}
+              loading="lazy"
             />
           </div>
         </div>
