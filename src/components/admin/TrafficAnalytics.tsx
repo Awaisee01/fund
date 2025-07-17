@@ -70,10 +70,29 @@ export const TrafficAnalytics = () => {
     };
   });
 
+  // Clean up page paths - remove query parameters and tokens
+  const cleanPagePath = (path: string) => {
+    // Remove query parameters and tokens
+    const cleanPath = path.split('?')[0];
+    
+    // Map paths to readable names
+    const pathMap: Record<string, string> = {
+      '/': 'Home',
+      '/eco4': 'ECO4 Scheme',
+      '/solar': 'Solar Panels',
+      '/gas-boilers': 'Gas Boilers',
+      '/home-improvements': 'Home Improvements',
+      '/contact': 'Contact',
+      '/admin': 'Admin'
+    };
+    
+    return pathMap[cleanPath] || cleanPath.replace('/', '') || 'Home';
+  };
+
   // Page path distribution
   const pagePathData = pageVisits.reduce((acc, visit) => {
-    const path = visit.page_path || 'Unknown';
-    acc[path] = (acc[path] || 0) + 1;
+    const cleanPath = cleanPagePath(visit.page_path || '/');
+    acc[cleanPath] = (acc[cleanPath] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
@@ -81,21 +100,60 @@ export const TrafficAnalytics = () => {
     .sort(([,a], [,b]) => (b as number) - (a as number))
     .slice(0, 10)
     .map(([path, count]) => ({
-      page: path.replace('/', '') || 'Home',
+      page: path,
       visits: count,
     }));
 
+  // Clean up traffic sources
+  const cleanSource = (source: string) => {
+    if (!source || source === 'null' || source === 'undefined') return 'Direct';
+    
+    // Handle common social media domains
+    if (source.includes('facebook.com') || source.includes('fb.')) return 'Facebook';
+    if (source.includes('google.com') || source.includes('google.')) return 'Google';
+    if (source.includes('instagram.com')) return 'Instagram';
+    if (source.includes('twitter.com') || source.includes('x.com')) return 'Twitter/X';
+    if (source.includes('linkedin.com')) return 'LinkedIn';
+    if (source.includes('youtube.com')) return 'YouTube';
+    if (source.includes('tiktok.com')) return 'TikTok';
+    
+    // Handle direct traffic
+    if (source === 'Direct' || source.includes('direct')) return 'Direct';
+    
+    // Handle email sources
+    if (source.includes('email') || source.includes('mail')) return 'Email';
+    
+    // Handle lovable development URLs
+    if (source.includes('lovable.dev') || source.includes('lovableproject.com')) return 'Development';
+    
+    // Extract domain from full URLs
+    try {
+      const url = new URL(source.startsWith('http') ? source : `https://${source}`);
+      const domain = url.hostname.replace('www.', '');
+      
+      // Capitalize first letter
+      return domain.charAt(0).toUpperCase() + domain.slice(1);
+    } catch {
+      // If not a valid URL, just clean up the string
+      return source.length > 15 ? source.substring(0, 15) + '...' : source;
+    }
+  };
+
   // Traffic sources
   const sourceData = pageVisits.reduce((acc, visit) => {
-    const source = visit.utm_source || visit.referrer || 'Direct';
-    acc[source] = (acc[source] || 0) + 1;
+    const rawSource = visit.utm_source || visit.referrer || 'Direct';
+    const cleanedSource = cleanSource(rawSource);
+    acc[cleanedSource] = (acc[cleanedSource] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
-  const sourceChartData = Object.entries(sourceData).map(([source, count]) => ({
-    source: source && source.length > 20 ? source.substring(0, 20) + '...' : source,
-    count,
-  }));
+  const sourceChartData = Object.entries(sourceData)
+    .sort(([,a], [,b]) => (b as number) - (a as number))
+    .map(([source, count]) => ({
+      source,
+      count: count as number,
+      percentage: (((count as number) / pageVisits.length) * 100).toFixed(1)
+    }));
 
   // Today's stats
   const today = new Date().toISOString().split('T')[0];
