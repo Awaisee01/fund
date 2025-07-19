@@ -18,6 +18,8 @@ interface HomeImprovementsFormData {
 const NativeHomeImprovementsForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [submitAttempts, setSubmitAttempts] = useState(0);
+  const [lastSubmissionTime, setLastSubmissionTime] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   
   const form = useForm<HomeImprovementsFormData>({
@@ -43,8 +45,30 @@ const NativeHomeImprovementsForm = () => {
   };
 
   const onSubmit = async (data: HomeImprovementsFormData) => {
+    // Prevent rapid successive submissions
+    const now = Date.now();
+    if (isSubmitting) {
+      console.warn('Form submission already in progress');
+      toast.warning("Please wait, your enquiry is being submitted...");
+      return;
+    }
+
+    // Prevent submissions within 5 seconds of last attempt
+    if (now - lastSubmissionTime < 5000) {
+      toast.warning("Please wait a moment before submitting again.");
+      return;
+    }
+
+    // Limit submission attempts
+    if (submitAttempts >= 3) {
+      toast.error("Too many submission attempts. Please refresh the page and try again.");
+      return;
+    }
+
     console.log('🚀 Home Improvements form submission started:', data);
     setIsSubmitting(true);
+    setSubmitAttempts(prev => prev + 1);
+    setLastSubmissionTime(now);
     
     try {
       // Save to Supabase database using the enhanced service
@@ -66,6 +90,7 @@ const NativeHomeImprovementsForm = () => {
       // Show success message and reset form
       setShowSuccess(true);
       form.reset();
+      setSubmitAttempts(0); // Reset attempts on success
       
       // Scroll to top to ensure success message is visible
       setTimeout(() => {
@@ -74,14 +99,26 @@ const NativeHomeImprovementsForm = () => {
       
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
       
-      // Hide success message after 8 seconds (longer to ensure user sees it)
+      // Hide success message after 10 seconds
       setTimeout(() => {
         setShowSuccess(false);
-      }, 8000);
+      }, 10000);
       
     } catch (error) {
       console.error('💥 Home Improvements form submission failed:', error);
-      toast.error("Something went wrong. Please try again or call us directly.");
+      
+      // Provide more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes('Duplicate submission')) {
+          toast.error("You've already submitted this form recently. Please wait before submitting again.");
+        } else if (error.message.includes('timeout') || error.message.includes('aborted')) {
+          toast.error("The request timed out. Please check your connection and try again.");
+        } else {
+          toast.error("Something went wrong. Please try again or call us directly.");
+        }
+      } else {
+        toast.error("Something went wrong. Please try again or call us directly.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -132,6 +169,7 @@ const NativeHomeImprovementsForm = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your full name"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -151,6 +189,7 @@ const NativeHomeImprovementsForm = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your address"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -170,6 +209,7 @@ const NativeHomeImprovementsForm = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="G1 1AA"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -196,6 +236,7 @@ const NativeHomeImprovementsForm = () => {
                       type="email"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="your.email@example.com"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -222,6 +263,7 @@ const NativeHomeImprovementsForm = () => {
                       type="tel"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="07xxx xxx xxx"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -231,11 +273,24 @@ const NativeHomeImprovementsForm = () => {
 
             <Button 
               type="submit" 
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold h-12 mt-6"
-              disabled={isSubmitting}
+              className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12 mt-6"
+              disabled={isSubmitting || submitAttempts >= 3}
             >
-              {isSubmitting ? 'Sending...' : 'Submit'}
+              {isSubmitting ? 'Sending...' : submitAttempts >= 3 ? 'Please refresh page' : 'Submit'}
             </Button>
+            
+            {submitAttempts >= 3 && (
+              <p className="text-yellow-300 text-xs text-center mt-2">
+                Too many attempts. Please refresh the page to try again.
+              </p>
+            )}
+            
+            {isSubmitting && (
+              <div className="flex items-center justify-center mt-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span className="ml-2 text-white text-sm">Submitting your enquiry...</span>
+              </div>
+            )}
           </form>
         </Form>
       </CardContent>
