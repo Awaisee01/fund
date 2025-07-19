@@ -164,12 +164,11 @@ const NativeSolarForm = () => {
                   <FormItem>
                     <FormLabel className="text-white text-xs">Full Name</FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-                        placeholder="Enter your full name"
-                        disabled={isSubmitting}
-                      />
+                        <Input 
+                          {...field} 
+                          className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
+                          placeholder="Enter your full name"
+                        />
                     </FormControl>
                     <FormMessage className="text-red-300 text-xs" />
                   </FormItem>
@@ -184,12 +183,11 @@ const NativeSolarForm = () => {
                   <FormItem>
                     <FormLabel className="text-white text-xs">Address</FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-                        placeholder="Enter your address"
-                        disabled={isSubmitting}
-                      />
+                        <Input 
+                          {...field} 
+                          className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
+                          placeholder="Enter your address"
+                        />
                     </FormControl>
                     <FormMessage className="text-red-300 text-xs" />
                   </FormItem>
@@ -204,12 +202,11 @@ const NativeSolarForm = () => {
                   <FormItem>
                     <FormLabel className="text-white text-xs">Post Code</FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-                        placeholder="G1 1AA"
-                        disabled={isSubmitting}
-                      />
+                        <Input 
+                          {...field} 
+                          className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
+                          placeholder="G1 1AA"
+                        />
                     </FormControl>
                     <FormMessage className="text-red-300 text-xs" />
                   </FormItem>
@@ -230,13 +227,12 @@ const NativeSolarForm = () => {
                   <FormItem>
                     <FormLabel className="text-white text-xs">Email</FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        type="email"
-                        className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-                        placeholder="your.email@example.com"
-                        disabled={isSubmitting}
-                      />
+                        <Input 
+                          {...field} 
+                          type="email"
+                          className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
+                          placeholder="your.email@example.com"
+                        />
                     </FormControl>
                     <FormMessage className="text-red-300 text-xs" />
                   </FormItem>
@@ -257,13 +253,12 @@ const NativeSolarForm = () => {
                   <FormItem>
                     <FormLabel className="text-white text-xs">Phone</FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        type="tel"
-                        className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-                        placeholder="07xxx xxx xxx"
-                        disabled={isSubmitting}
-                      />
+                        <Input 
+                          {...field} 
+                          type="tel"
+                          className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
+                          placeholder="07xxx xxx xxx"
+                        />
                     </FormControl>
                     <FormMessage className="text-red-300 text-xs" />
                   </FormItem>
@@ -282,12 +277,11 @@ const NativeSolarForm = () => {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900"
-                          disabled={isSubmitting}
-                        />
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900"
+                          />
                       </FormControl>
                       <FormLabel className="text-white text-sm cursor-pointer">
                         I understand

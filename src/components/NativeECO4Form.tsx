@@ -173,7 +173,6 @@ const NativeECO4Form = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your full name"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -193,7 +192,6 @@ const NativeECO4Form = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your address"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -213,7 +211,6 @@ const NativeECO4Form = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="G1 1AA"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -240,7 +237,6 @@ const NativeECO4Form = () => {
                       type="email"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="your.email@example.com"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -267,7 +263,6 @@ const NativeECO4Form = () => {
                       type="tel"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="07xxx xxx xxx"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -291,7 +286,6 @@ const NativeECO4Form = () => {
                         checked={field.value}
                         onCheckedChange={field.onChange}
                         className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900"
-                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormLabel className="text-white text-sm cursor-pointer">

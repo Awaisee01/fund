@@ -169,7 +169,6 @@ const NativeHomeImprovementsForm = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your full name"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -189,7 +188,6 @@ const NativeHomeImprovementsForm = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your address"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -209,7 +207,6 @@ const NativeHomeImprovementsForm = () => {
                       {...field} 
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="G1 1AA"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -236,7 +233,6 @@ const NativeHomeImprovementsForm = () => {
                       type="email"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="your.email@example.com"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -263,7 +259,6 @@ const NativeHomeImprovementsForm = () => {
                       type="tel"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="07xxx xxx xxx"
-                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
