@@ -33,14 +33,6 @@ const NativeGasBoilersForm = () => {
   });
 
   const scrollToTop = () => {
-    if (cardRef.current) {
-      cardRef.current.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start',
-        inline: 'nearest'
-      });
-    }
-    // Also scroll window to top as fallback
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

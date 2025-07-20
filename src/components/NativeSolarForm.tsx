@@ -38,13 +38,6 @@ const NativeSolarForm = () => {
   });
 
   const scrollToTop = () => {
-    if (cardRef.current) {
-      cardRef.current.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start',
-        inline: 'nearest'
-      });
-    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
