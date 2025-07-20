@@ -269,7 +269,7 @@ const NativeSolarForm = () => {
               />
 
               <div className="pt-2">
-                <p className="text-white text-sm text-left mb-3">
+                <p className="text-white text-sm text-left mb-3 font-bold">
                   * Only for homes with Air Source Heat Pumps
                 </p>
                 

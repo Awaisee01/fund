@@ -263,7 +263,7 @@ const NativeECO4Form = () => {
             />
 
             <div className="pt-2">
-              <p className="text-white text-sm text-left mb-3">
+              <p className="text-white text-sm text-left mb-3 font-bold">
                 * Does not apply to Mains Gas properties
               </p>
               
