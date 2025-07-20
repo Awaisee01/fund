@@ -23,6 +23,7 @@ const NativeSolarForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitAttempts, setSubmitAttempts] = useState(0);
+  const [lastSubmissionTime, setLastSubmissionTime] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   
   const form = useForm<SolarFormData>({
@@ -49,20 +50,29 @@ const NativeSolarForm = () => {
 
   const onSubmit = async (data: SolarFormData) => {
     // Prevent rapid successive submissions
+    const now = Date.now();
     if (isSubmitting) {
       console.warn('Form submission already in progress');
+      toast.warning("Please wait, your enquiry is being submitted...");
+      return;
+    }
+
+    // Prevent submissions within 5 seconds of last attempt
+    if (now - lastSubmissionTime < 5000) {
+      toast.warning("Please wait a moment before submitting again.");
       return;
     }
 
     // Limit submission attempts
     if (submitAttempts >= 3) {
-      toast.error("Too many submission attempts. Please wait a moment before trying again.");
+      toast.error("Too many submission attempts. Please refresh the page and try again.");
       return;
     }
 
     console.log('🚀 Solar form submission started:', data);
     setIsSubmitting(true);
     setSubmitAttempts(prev => prev + 1);
+    setLastSubmissionTime(now);
     
     try {
       // Save to Supabase database using the enhanced service
@@ -94,10 +104,10 @@ const NativeSolarForm = () => {
       
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours to discuss your options.");
       
-      // Hide success message after 8 seconds
+      // Hide success message after 10 seconds
       setTimeout(() => {
         setShowSuccess(false);
-      }, 8000);
+      }, 10000);
       
     } catch (error) {
       console.error('💥 Solar form submission failed:', error);
