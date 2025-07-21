@@ -170,6 +170,11 @@ serve(async (req) => {
     }
 
     console.log('Facebook Conversions API success:', result)
+    
+    // Check for warnings in the response
+    if (result.messages && result.messages.length > 0) {
+      console.warn('⚠️ Facebook API warnings:', result.messages)
+    }
 
     return new Response(
       JSON.stringify({ success: true, result }),
