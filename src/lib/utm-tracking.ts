@@ -66,7 +66,8 @@ export const trackPixelEventWithUTM = (
 
     // Add event ID if provided for deduplication (must match CAPI format)
     if (eventId) {
-      enhancedEventData.eventID = eventId; // Pixel uses camelCase
+      enhancedEventData.eventID = eventId; // Pixel must use camelCase
+      console.log('📊 Pixel event ID (eventID):', eventId);
     }
 
     // Only include custom_data if there are UTM parameters

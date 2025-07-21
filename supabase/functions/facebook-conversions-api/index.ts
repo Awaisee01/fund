@@ -143,11 +143,14 @@ serve(async (req) => {
     // Add event ID for deduplication if provided
     if (data.eventId) {
       eventPayload.event_id = data.eventId
+      console.log('📊 CAPI event ID (event_id):', data.eventId);
     }
 
     const eventData = {
       data: [eventPayload]
     }
+
+    console.log('📊 Complete CAPI payload being sent to Facebook:', JSON.stringify(eventData, null, 2));
 
     // Send to Facebook Conversions API
     const response = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events`, {
