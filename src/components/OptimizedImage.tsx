@@ -10,6 +10,8 @@ interface OptimizedImageProps {
   style?: React.CSSProperties;
   onLoad?: () => void;
   onError?: () => void;
+  sizes?: string;
+  responsive?: boolean;
 }
 
 const OptimizedImage = ({ 
@@ -21,10 +23,42 @@ const OptimizedImage = ({
   height,
   style,
   onLoad,
-  onError
+  onError,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
+  responsive = false
 }: OptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+
+  // Generate WebP/AVIF sources from original src
+  const generateSources = (originalSrc: string) => {
+    const extension = originalSrc.split('.').pop()?.toLowerCase();
+    const basePath = originalSrc.replace(`.${extension}`, '');
+    
+    return {
+      avif: `${basePath}.avif`,
+      webp: `${basePath}.webp`,
+      original: originalSrc
+    };
+  };
+
+  const sources = generateSources(src);
+
+  // Generate responsive srcSets if responsive is enabled
+  const generateSrcSet = (baseSrc: string) => {
+    if (!responsive || !width) return baseSrc;
+    
+    const extension = baseSrc.split('.').pop();
+    const basePath = baseSrc.replace(`.${extension}`, '');
+    
+    return [
+      `${basePath}-400w.${extension} 400w`,
+      `${basePath}-800w.${extension} 800w`,
+      `${basePath}-1200w.${extension} 1200w`,
+      `${basePath}-1600w.${extension} 1600w`,
+      `${baseSrc} ${width}w`
+    ].join(', ');
+  };
 
   const handleLoad = useCallback(() => {
     setIsLoaded(true);
@@ -69,22 +103,43 @@ const OptimizedImage = ({
           }}
         />
       )}
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        onLoad={handleLoad}
-        onError={handleError}
-        className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
-        style={{ 
-          contentVisibility: 'auto',
-          containIntrinsicSize: width && height ? `${width}px ${height}px` : 'auto',
-          aspectRatio: width && height ? `${width}/${height}` : 'auto'
-        }}
-      />
+      <picture className="w-full h-full">
+        {/* AVIF source for best compression */}
+        <source 
+          srcSet={responsive ? generateSrcSet(sources.avif) : sources.avif}
+          sizes={responsive ? sizes : undefined}
+          type="image/avif" 
+        />
+        
+        {/* WebP source for good compression */}
+        <source 
+          srcSet={responsive ? generateSrcSet(sources.webp) : sources.webp}
+          sizes={responsive ? sizes : undefined}
+          type="image/webp" 
+        />
+        
+        {/* Fallback to original format */}
+        <img
+          src={src}
+          srcSet={responsive ? generateSrcSet(src) : undefined}
+          sizes={responsive ? sizes : undefined}
+          alt={alt}
+          width={width}
+          height={height}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={priority ? "high" : "auto"}
+          onLoad={handleLoad}
+          onError={handleError}
+          className={`w-full h-full ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
+          style={{ 
+            contentVisibility: 'auto',
+            containIntrinsicSize: width && height ? `${width}px ${height}px` : 'auto',
+            aspectRatio: width && height ? `${width}/${height}` : 'auto',
+            objectFit: 'cover'
+          }}
+        />
+      </picture>
       <style>
         {`
           @keyframes shimmer {
