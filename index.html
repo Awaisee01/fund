@@ -15,6 +15,10 @@
     <link rel="preconnect" href="https://api.leadconnectorhq.com">
     <link rel="preconnect" href="https://link.msgsndr.com">
     
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    
     <!-- DNS prefetch for performance -->
     <link rel="dns-prefetch" href="//cdn.gpteng.co">
 
@@ -25,7 +29,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
 
-    <!-- Preload critical images -->
+    <!-- Preload critical hero images -->
+    <link rel="preload" as="image" href="/hero-images/eco4-hero.webp" type="image/webp">
+    <link rel="preload" as="image" href="/hero-images/gas-boiler-hero.webp" type="image/webp">
+    <link rel="preload" as="image" href="/hero-images/home-improvements-hero.webp" type="image/webp">
+    
+    <!-- Preload trust badge images -->
     <link rel="preload" as="image" href="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png">
     <link rel="preload" as="image" href="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png">
     <link rel="preload" as="image" href="/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png">
@@ -45,22 +54,134 @@
     <meta name="twitter:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
     <meta name="twitter:image" content="/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png" />
     
-    <!-- Optimize text rendering -->
+    <!-- Critical CSS for above-the-fold content -->
     <style>
-      /* Improve font loading and text rendering */
+      /* CSS Reset and base styles */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
       html {
         font-display: swap;
         text-rendering: optimizeSpeed;
+        scroll-behavior: smooth;
+        scroll-padding-top: 4rem;
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
       }
       
-      /* Prevent layout shift during font loading */
       body {
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: hsl(var(--background));
+        color: hsl(var(--foreground));
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+      
+      /* Critical hero section styles */
+      .hero-section {
+        position: relative;
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #059669 100%);
+        color: white;
+        overflow: hidden;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+      
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+      }
+      
+      .hero-image {
+        position: absolute;
+        inset: 0;
+        opacity: 0.3;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        mix-blend-mode: multiply;
+      }
+      
+      .hero-content {
+        position: relative;
+        z-index: 10;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 5rem 1rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        align-items: center;
+      }
+      
+      @media (min-width: 1024px) {
+        .hero-content {
+          grid-template-columns: 1fr 1fr;
+          gap: 3rem;
+        }
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+      }
+      
+      @media (min-width: 1024px) {
+        .hero-title {
+          font-size: 3.75rem;
+        }
+      }
+      
+      /* Critical navigation styles */
+      .nav-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       }
       
       /* Optimize image loading */
       img {
         content-visibility: auto;
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Loading skeleton styles */
+      .skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+      
+      @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      
+      /* Hide content until loaded */
+      .loading #root {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      .loaded #root {
+        opacity: 1;
       }
     </style>
 
@@ -95,7 +216,29 @@
     <!-- End UTM Parameter Tracking -->
   </head>
 
-  <body>
+  <body class="loading">
+    <!-- Loading optimization script -->
+    <script>
+      // Add loaded class when page is ready for faster perceived performance
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.className = 'loaded';
+      });
+      
+      // Preload critical resources immediately
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.dataset.src;
+              img.classList.remove('lazy');
+              observer.unobserve(img);
+            }
+          });
+        });
+      }
+    </script>
+    
     <!-- Meta Pixel Noscript Fallback -->
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"
