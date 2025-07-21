@@ -176,6 +176,38 @@ export const trackLeadWithUTM = (leadData: {
 };
 
 /**
+ * Helper function specifically for ViewContent events with UTM data
+ */
+export const trackViewContentWithUTM = (contentData: {
+  content_name: string;
+  content_category: string;
+  value?: number;
+  currency?: string;
+}, eventId?: string): void => {
+  trackPixelEventWithUTM('ViewContent', {
+    ...contentData,
+    value: contentData.value || 1,
+    currency: contentData.currency || 'GBP'
+  }, eventId);
+};
+
+/**
+ * Helper function specifically for InitiateCheckout events with UTM data
+ */
+export const trackInitiateCheckoutWithUTM = (checkoutData: {
+  content_name: string;
+  content_category: string;
+  value?: number;
+  currency?: string;
+}, eventId?: string): void => {
+  trackPixelEventWithUTM('InitiateCheckout', {
+    ...checkoutData,
+    value: checkoutData.value || 1,
+    currency: checkoutData.currency || 'GBP'
+  }, eventId);
+};
+
+/**
  * Helper function specifically for Purchase events with UTM data
  */
 export const trackPurchaseWithUTM = (purchaseData: {

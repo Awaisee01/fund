@@ -1,10 +1,12 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
 const ECO4CustomForm = () => {
   const [showForm, setShowForm] = useState(false);
+  const hasTrackedView = useRef(false);
+  const hasTrackedInteraction = useRef(false);
 
   useEffect(() => {
     // Load the GoHighLevel form embed script
@@ -16,6 +18,14 @@ const ECO4CustomForm = () => {
     // Show form after a longer delay to ensure it's fully loaded
     const showTimer = setTimeout(() => {
       setShowForm(true);
+      
+      // Track ViewContent when form loads
+      if (!hasTrackedView.current) {
+        hasTrackedView.current = true;
+        import('@/services/formSubmissionService').then(({ trackViewContent }) => {
+          trackViewContent('ECO4 Custom Form', 'eco4');
+        });
+      }
     }, 3000);
 
     return () => {
@@ -32,6 +42,18 @@ const ECO4CustomForm = () => {
     setTimeout(() => {
       setShowForm(true);
     }, 1000);
+  };
+
+  const handleFormInteraction = async () => {
+    if (!hasTrackedInteraction.current) {
+      hasTrackedInteraction.current = true;
+      try {
+        const { trackInitiateCheckout } = await import('@/services/formSubmissionService');
+        await trackInitiateCheckout('ECO4 Custom Form', 'eco4');
+      } catch (error) {
+        console.error('❌ InitiateCheckout tracking failed:', error);
+      }
+    }
   };
 
   const handleMetaPixelClick = async () => {
@@ -100,6 +122,8 @@ const ECO4CustomForm = () => {
             className={`transition-opacity duration-700 ${
               showForm ? 'opacity-100' : 'opacity-0'
             }`}
+            onClick={handleFormInteraction}
+            onFocus={handleFormInteraction}
           >
             <iframe
               src="https://api.leadconnectorhq.com/widget/form/cJ1J84PqSZEi3RCJZYb5"

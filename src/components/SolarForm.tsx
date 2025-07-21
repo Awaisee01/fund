@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -10,6 +10,8 @@ const SolarForm = () => {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [scriptLoadError, setScriptLoadError] = useState(false);
   const [hasTracked, setHasTracked] = useState(false);
+  const hasTrackedView = useRef(false);
+  const hasTrackedInteraction = useRef(false);
 
   useEffect(() => {
     // Check if script is already loaded
@@ -29,6 +31,14 @@ const SolarForm = () => {
       setIsScriptLoaded(true);
       setTimeout(() => {
         setShowForm(true);
+        
+        // Track ViewContent when form loads
+        if (!hasTrackedView.current) {
+          hasTrackedView.current = true;
+          import('@/services/formSubmissionService').then(({ trackViewContent }) => {
+            trackViewContent('Solar Form', 'solar');
+          });
+        }
       }, 1000);
     };
 
@@ -48,6 +58,18 @@ const SolarForm = () => {
     setTimeout(() => {
       setShowForm(true);
     }, 300);
+  };
+
+  const handleFormInteraction = async () => {
+    if (!hasTrackedInteraction.current) {
+      hasTrackedInteraction.current = true;
+      try {
+        const { trackInitiateCheckout } = await import('@/services/formSubmissionService');
+        await trackInitiateCheckout('Solar Form', 'solar');
+      } catch (error) {
+        console.error('❌ InitiateCheckout tracking failed:', error);
+      }
+    }
   };
 
   const handleMetaPixelClick = async () => {
@@ -140,6 +162,8 @@ const SolarForm = () => {
               className={`transition-opacity duration-500 ${
                 showForm ? 'opacity-100' : 'opacity-0'
               }`}
+              onClick={handleFormInteraction}
+              onFocus={handleFormInteraction}
             >
               <iframe
                 src="https://api.leadconnectorhq.com/widget/form/9lDaU9yEdGltsGe35Bwh"

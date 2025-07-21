@@ -1,10 +1,12 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
 const GasBoilersForm = () => {
   const [showForm, setShowForm] = useState(false);
+  const hasTrackedView = useRef(false);
+  const hasTrackedInteraction = useRef(false);
 
   useEffect(() => {
     // Load the GoHighLevel form embed script
@@ -16,6 +18,14 @@ const GasBoilersForm = () => {
     // Show form after a longer delay to ensure it's fully loaded
     const showTimer = setTimeout(() => {
       setShowForm(true);
+      
+      // Track ViewContent when form loads
+      if (!hasTrackedView.current) {
+        hasTrackedView.current = true;
+        import('@/services/formSubmissionService').then(({ trackViewContent }) => {
+          trackViewContent('Gas Boiler Form', 'gas_boilers');
+        });
+      }
     }, 3000);
 
     return () => {
@@ -32,6 +42,18 @@ const GasBoilersForm = () => {
     setTimeout(() => {
       setShowForm(true);
     }, 1000);
+  };
+
+  const handleFormInteraction = async () => {
+    if (!hasTrackedInteraction.current) {
+      hasTrackedInteraction.current = true;
+      try {
+        const { trackInitiateCheckout } = await import('@/services/formSubmissionService');
+        await trackInitiateCheckout('Gas Boiler Form', 'gas_boilers');
+      } catch (error) {
+        console.error('❌ InitiateCheckout tracking failed:', error);
+      }
+    }
   };
 
   const handleMetaPixelClick = async () => {
@@ -98,6 +120,8 @@ const GasBoilersForm = () => {
             className={`transition-opacity duration-700 ${
               showForm ? 'opacity-100' : 'opacity-0'
             }`}
+            onClick={handleFormInteraction}
+            onFocus={handleFormInteraction}
           >
             <iframe
               src="https://api.leadconnectorhq.com/widget/form/IQdjy6881LRm0K7ogyiF"

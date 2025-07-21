@@ -306,3 +306,146 @@ const debouncedTrackFormSubmission = debounce((formName: string, category: strin
 }, 1000); // Debounce for 1 second
 
 export const trackFormSubmission = debouncedTrackFormSubmission;
+
+/**
+ * Track ViewContent event for Facebook Pixel and Conversions API
+ */
+export const trackViewContent = async (formName: string, serviceType: string) => {
+  const eventId = `viewcontent_${serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  
+  try {
+    // Import tracking functions dynamically
+    const { trackViewContentWithUTM } = await import('@/lib/utm-tracking');
+    
+    // Track via Pixel
+    trackViewContentWithUTM({
+      content_name: `${formName} Form View`,
+      content_category: serviceType,
+      value: 1,
+      currency: 'GBP'
+    }, eventId);
+    
+    // Send to Conversions API
+    setTimeout(async () => {
+      try {
+        const utmData = getUTMData();
+        const fbc = getFacebookClickId();
+        const fbp = getFacebookBrowserId();
+        
+        const fbPayload = {
+          data: {
+            eventName: 'ViewContent',
+            eventId: String(eventId),
+            userData: {
+              fbc: fbc || undefined,
+              fbp: fbp || undefined,
+              external_id: eventId
+            },
+            customData: {
+              content_name: `${formName} Form View`,
+              content_category: serviceType,
+              value: 1,
+              currency: 'GBP'
+            },
+            eventSourceUrl: window.location.href,
+            utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
+            userAgent: navigator.userAgent
+          }
+        };
+        
+        const { error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
+          body: fbPayload
+        });
+        
+        if (fbError) {
+          console.error('❌ ViewContent Conversions API failed:', fbError);
+        } else {
+          console.log('✅ ViewContent Conversions API sent successfully');
+        }
+      } catch (error) {
+        console.error('❌ ViewContent Conversions API error:', error);
+      }
+    }, 0);
+    
+  } catch (error) {
+    console.error('❌ ViewContent tracking failed:', error);
+  }
+};
+
+/**
+ * Track InitiateCheckout event for Facebook Pixel and Conversions API
+ */
+export const trackInitiateCheckout = async (formName: string, serviceType: string, userData?: { name?: string; email?: string; phone?: string }) => {
+  const eventId = `initiatecheckout_${serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  
+  try {
+    // Import tracking functions dynamically
+    const { trackInitiateCheckoutWithUTM } = await import('@/lib/utm-tracking');
+    
+    // Track via Pixel
+    trackInitiateCheckoutWithUTM({
+      content_name: `${formName} Form Interaction`,
+      content_category: serviceType,
+      value: 1,
+      currency: 'GBP'
+    }, eventId);
+    
+    // Send to Conversions API
+    setTimeout(async () => {
+      try {
+        const utmData = getUTMData();
+        const fbc = getFacebookClickId();
+        const fbp = getFacebookBrowserId();
+        
+        // Parse name if provided
+        let firstName = '';
+        let lastName = '';
+        if (userData?.name) {
+          const [first, ...lastParts] = userData.name.split(' ');
+          firstName = first;
+          lastName = lastParts.join(' ');
+        }
+        
+        const fbPayload = {
+          data: {
+            eventName: 'InitiateCheckout',
+            eventId: String(eventId),
+            userData: {
+              email: userData?.email || undefined,
+              phone: userData?.phone || undefined,
+              firstName: firstName || undefined,
+              lastName: lastName || undefined,
+              fbc: fbc || undefined,
+              fbp: fbp || undefined,
+              external_id: eventId
+            },
+            customData: {
+              content_name: `${formName} Form Interaction`,
+              content_category: serviceType,
+              value: 1,
+              currency: 'GBP'
+            },
+            eventSourceUrl: window.location.href,
+            utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
+            userAgent: navigator.userAgent
+          }
+        };
+        
+        const { error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
+          body: fbPayload
+        });
+        
+        if (fbError) {
+          console.error('❌ InitiateCheckout Conversions API failed:', fbError);
+        } else {
+          console.log('✅ InitiateCheckout Conversions API sent successfully');
+        }
+      } catch (error) {
+        console.error('❌ InitiateCheckout Conversions API error:', error);
+      }
+    }, 0);
+    
+  } catch (error) {
+    console.error('❌ InitiateCheckout tracking failed:', error);
+  }
+};
