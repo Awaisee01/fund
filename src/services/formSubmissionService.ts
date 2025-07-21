@@ -104,24 +104,28 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     // Send email notification asynchronously - don't block form completion
     setTimeout(async () => {
       try {
-        console.log('📧 Sending email notification...');
+        console.log('📧 Sending email notification for:', data.serviceType, data.name);
         
-        const { error: emailError } = await supabase.functions.invoke('send-enquiry-notification', {
-          body: {
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            postcode: data.postcode,
-            service_type: data.serviceType,
-            address: data.address,
-            created_at: result[0].created_at
-          }
+        const notificationBody = {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          postcode: data.postcode,
+          service_type: data.serviceType,
+          address: data.address,
+          created_at: result[0].created_at
+        };
+        
+        console.log('📧 Notification payload:', notificationBody);
+        
+        const { data: emailData, error: emailError } = await supabase.functions.invoke('send-enquiry-notification', {
+          body: notificationBody
         });
 
         if (emailError) {
           console.error('❌ Email notification failed:', emailError);
         } else {
-          console.log('✅ Email notification sent successfully');
+          console.log('✅ Email notification sent successfully:', emailData);
         }
       } catch (emailError) {
         console.error('❌ Email notification error:', emailError);
