@@ -1,7 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
-import { trackLeadWithUTM, getUTMData } from '@/lib/utm-tracking';
+import { trackLeadWithUTM, getUTMData, getFacebookClickId, getFacebookBrowserId } from '@/lib/utm-tracking';
 import analyticsTracker from '@/lib/analytics-tracking';
 
 type ServiceType = Database['public']['Enums']['service_type'];
@@ -183,22 +183,16 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           }
         }
         
-        // Extract Facebook Click ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const fbc = urlParams.get('fbclid');
-        
-        // Get Facebook Browser ID from cookies (set by Pixel)
-        const fbpCookie = document.cookie
-          .split('; ')
-          .find(row => row.startsWith('_fbp='))
-          ?.split('=')[1];
+        // Get Facebook identifiers using utility functions
+        const fbc = getFacebookClickId();
+        const fbp = getFacebookBrowserId();
         
         // Generate external_id for better matching (always present)
         const externalId = eventId;
         
         console.log('📊 Facebook identifiers:', { 
           fbc: fbc ? 'present' : 'missing', 
-          fbp: fbpCookie ? 'present' : 'missing',
+          fbp: fbp ? 'present' : 'missing',
           external_id: externalId ? 'present' : 'missing'
         });
         
@@ -215,7 +209,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
               city: city || undefined,
               county: county || undefined,
               fbc: fbc || undefined, // Facebook Click ID
-              fbp: fbpCookie || undefined, // Facebook Browser ID
+              fbp: fbp || undefined, // Facebook Browser ID
               external_id: externalId // Always present - use our event ID as external identifier
             },
             customData: {

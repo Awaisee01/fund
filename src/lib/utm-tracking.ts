@@ -9,6 +9,58 @@ export interface UTMData {
 }
 
 /**
+ * Gets Facebook Click ID from _fbc cookie
+ */
+export const getFacebookClickId = (): string | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    const cookies = document.cookie.split(';');
+    const fbcCookie = cookies.find(cookie => cookie.trim().startsWith('_fbc='));
+    
+    if (fbcCookie) {
+      const fbc = fbcCookie.split('=')[1];
+      console.log('📊 Facebook Click ID (_fbc) found:', fbc);
+      return fbc;
+    }
+    
+    console.log('📊 No Facebook Click ID (_fbc) cookie found');
+    return null;
+  } catch (error) {
+    console.warn('⚠️ Error retrieving Facebook Click ID:', error);
+    return null;
+  }
+};
+
+/**
+ * Gets Facebook Browser ID from _fbp cookie
+ */
+export const getFacebookBrowserId = (): string | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    const cookies = document.cookie.split(';');
+    const fbpCookie = cookies.find(cookie => cookie.trim().startsWith('_fbp='));
+    
+    if (fbpCookie) {
+      const fbp = fbpCookie.split('=')[1];
+      console.log('📊 Facebook Browser ID (_fbp) found:', fbp);
+      return fbp;
+    }
+    
+    console.log('📊 No Facebook Browser ID (_fbp) cookie found');
+    return null;
+  } catch (error) {
+    console.warn('⚠️ Error retrieving Facebook Browser ID:', error);
+    return null;
+  }
+};
+
+/**
  * Retrieves UTM parameters from localStorage
  * Returns an object with UTM data or empty object if no UTM data exists
  */
