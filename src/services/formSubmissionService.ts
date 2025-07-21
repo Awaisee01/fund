@@ -132,10 +132,10 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
       }
     }, 0);
 
-    // Send Facebook Conversions API data asynchronously
-    setTimeout(async () => {
+    // Send Facebook Conversions API data asynchronously - but immediately
+    const sendFacebookConversions = async () => {
       try {
-        console.log('📊 Sending Facebook Conversions API data...');
+        console.log('📊 Sending Facebook Conversions API data for:', data.serviceType, data.name);
         
         const utmData = getUTMData();
         const [firstName, ...lastNameParts] = data.name.split(' ');
@@ -183,43 +183,61 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           }
         }
         
-        const { error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
-          body: {
-            data: {
-              eventName: 'Lead',
-              eventId: eventId, // For deduplication
-              userData: {
-                email: data.email,
-                phone: data.phone,
-                firstName: firstName,
-                lastName: lastName || '',
-                zipCode: data.postcode,
-                city: city || undefined,
-                county: county || undefined
-              },
-              customData: {
-                content_name: `${data.serviceType} Form Submission`,
-                content_category: data.serviceType,
-                value: 1,
-                currency: 'GBP'
-              },
-              eventSourceUrl: window.location.href,
-              utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
-              userAgent: navigator.userAgent,
-              ipAddress: undefined // Will be handled server-side
-            }
+        const fbPayload = {
+          data: {
+            eventName: 'Lead',
+            eventId: eventId, // For deduplication with Pixel
+            userData: {
+              email: data.email,
+              phone: data.phone,
+              firstName: firstName,
+              lastName: lastName || '',
+              zipCode: data.postcode,
+              city: city || undefined,
+              county: county || undefined
+            },
+            customData: {
+              content_name: `${data.serviceType} Form Submission`,
+              content_category: data.serviceType,
+              value: 1,
+              currency: 'GBP'
+            },
+            eventSourceUrl: window.location.href,
+            utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
+            userAgent: navigator.userAgent,
+            ipAddress: undefined // Will be handled server-side
           }
+        };
+        
+        console.log('📊 Facebook CAPI payload:', fbPayload);
+        
+        const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
+          body: fbPayload
         });
 
         if (fbError) {
           console.error('❌ Facebook Conversions API failed:', fbError);
         } else {
-          console.log('✅ Facebook Conversions API sent successfully');
+          console.log('✅ Facebook Conversions API sent successfully:', fbResponse);
         }
       } catch (fbError) {
         console.error('❌ Facebook Conversions API error:', fbError);
       }
-    }, 100);
+    };
+
+    // Execute both async operations immediately (not in setTimeout)
+    Promise.allSettled([
+      sendFacebookConversions()
+    ]).then((results) => {
+      results.forEach((result, index) => {
+        const operation = index === 0 ? 'Facebook CAPI' : 'Unknown';
+        if (result.status === 'rejected') {
+          console.error(`❌ ${operation} operation failed:`, result.reason);
+        } else {
+          console.log(`✅ ${operation} operation completed successfully`);
+        }
+      });
+    });
     
     return { success: true, data: result };
   } catch (error) {
