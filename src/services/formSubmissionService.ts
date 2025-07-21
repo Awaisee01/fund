@@ -183,6 +183,16 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           }
         }
         
+        // Extract Facebook Click ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const fbc = urlParams.get('fbclid');
+        
+        // Get Facebook Browser ID from cookies (set by Pixel)
+        const fbpCookie = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('_fbp='))
+          ?.split('=')[1];
+        
         const fbPayload = {
           data: {
             eventName: 'Lead',
@@ -194,7 +204,10 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
               lastName: lastName || '',
               zipCode: data.postcode,
               city: city || undefined,
-              county: county || undefined
+              county: county || undefined,
+              fbc: fbc || undefined, // Facebook Click ID
+              fbp: fbpCookie || undefined, // Facebook Browser ID
+              external_id: eventId // Use our event ID as external identifier
             },
             customData: {
               content_name: `${data.serviceType} Form Submission`,
