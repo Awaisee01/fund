@@ -16,6 +16,9 @@ interface ConversionData {
     zipCode?: string
     city?: string
     county?: string // UK uses County not State
+    fbc?: string // Facebook Click ID
+    fbp?: string // Facebook Browser ID  
+    external_id?: string // External identifier
   }
   customData: {
     content_name: string
@@ -87,6 +90,32 @@ serve(async (req) => {
     }
     if (data.userData.county) {
       userData.st = await hashData(data.userData.county) // Facebook uses 'st' field for regional data
+    }
+    
+    // Add Facebook-specific identifiers
+    if (data.userData.fbc) {
+      userData.fbc = data.userData.fbc // Facebook Click ID (no hashing needed)
+    }
+    if (data.userData.fbp) {
+      userData.fbp = data.userData.fbp // Facebook Browser ID (no hashing needed)
+    }
+    if (data.userData.external_id) {
+      userData.external_id = await hashData(data.userData.external_id)
+    }
+    
+    // Extract client IP address from request headers
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] || 
+                    req.headers.get('x-real-ip') || 
+                    req.headers.get('cf-connecting-ip') || 
+                    undefined
+    
+    if (clientIp) {
+      userData.client_ip_address = clientIp
+    }
+    
+    // Add user agent
+    if (data.userAgent) {
+      userData.client_user_agent = data.userAgent
     }
 
     // Build custom data with UTM parameters

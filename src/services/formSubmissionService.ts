@@ -218,7 +218,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
             eventSourceUrl: window.location.href,
             utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
             userAgent: navigator.userAgent,
-            ipAddress: undefined // Will be handled server-side
+            ipAddress: undefined // Will be extracted server-side from request headers
           }
         };
         
