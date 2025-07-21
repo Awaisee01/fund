@@ -193,6 +193,15 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           .find(row => row.startsWith('_fbp='))
           ?.split('=')[1];
         
+        // Generate external_id for better matching (always present)
+        const externalId = eventId;
+        
+        console.log('📊 Facebook identifiers:', { 
+          fbc: fbc ? 'present' : 'missing', 
+          fbp: fbpCookie ? 'present' : 'missing',
+          external_id: externalId ? 'present' : 'missing'
+        });
+        
         const fbPayload = {
           data: {
             eventName: 'Lead',
@@ -207,7 +216,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
               county: county || undefined,
               fbc: fbc || undefined, // Facebook Click ID
               fbp: fbpCookie || undefined, // Facebook Browser ID
-              external_id: eventId // Use our event ID as external identifier
+              external_id: externalId // Always present - use our event ID as external identifier
             },
             customData: {
               content_name: `${data.serviceType} Form Submission`,
