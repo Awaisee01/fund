@@ -28,9 +28,9 @@ const Navigation = () => {
               <img 
                 src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                 alt="Funding For Scotland Logo" 
-                className="h-4 sm:h-6 lg:h-8 w-auto object-contain"
-                width="120"
-                height="48"
+                className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+                width="140"
+                height="56"
               />
             </Link>
           </div>
