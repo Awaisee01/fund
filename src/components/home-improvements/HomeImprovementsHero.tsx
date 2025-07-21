@@ -18,14 +18,12 @@ const HomeImprovementsHero = () => {
       {/* Static background image without parallax */}
       <div className="absolute inset-0 opacity-30">
         <OptimizedImage
-          src="/hero-images/home-improvements-hero.webp"
+          src="/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png"
           alt="Home Improvements Background - Modern house exterior with driveway"
-          className="object-cover mix-blend-multiply"
+          className="w-full h-full object-cover mix-blend-multiply"
           priority={true}
-          responsive={true}
           width={1920}
           height={1080}
-          sizes="100vw"
         />
       </div>
       
