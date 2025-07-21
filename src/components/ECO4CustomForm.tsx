@@ -34,15 +34,37 @@ const ECO4CustomForm = () => {
     }, 1000);
   };
 
-  const handleMetaPixelClick = () => {
+  const handleMetaPixelClick = async () => {
     console.log('Tracking button clicked');
-    // Import and use enhanced UTM tracking
-    import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
-      trackLeadWithUTM({
-        content_name: 'ECO4 Form Submission',
-        content_category: 'ECO4 Grants'
+    
+    try {
+      // Use the enhanced form submission service for full deduplication + CAPI
+      const { submitFormToDatabase } = await import('@/services/formSubmissionService');
+      
+      // Create a proper form data object for the embedded form
+      const formData = {
+        serviceType: 'eco4' as const,
+        name: 'ECO4 Form User', // GoHighLevel handles actual form data
+        phone: '',
+        email: '',
+        postcode: '',
+        address: '',
+        formName: 'ECO4 Form',
+        formData: { category: 'ECO4 Grants' }
+      };
+      
+      await submitFormToDatabase(formData);
+      console.log('✅ ECO4 embedded form tracking successful');
+    } catch (error) {
+      console.error('❌ ECO4 embedded form tracking failed:', error);
+      // Fallback to basic pixel tracking
+      import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
+        trackLeadWithUTM({
+          content_name: 'ECO4 Form Submission',
+          content_category: 'ECO4 Grants'
+        });
       });
-    });
+    }
     
     // Also trigger a custom event for Google Analytics if needed
     if (typeof window !== 'undefined' && (window as any).gtag) {

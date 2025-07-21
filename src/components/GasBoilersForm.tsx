@@ -34,14 +34,35 @@ const GasBoilersForm = () => {
     }, 1000);
   };
 
-  const handleMetaPixelClick = () => {
-    // Enhanced Meta Pixel tracking with UTM data
-    import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
-      trackLeadWithUTM({
-        content_name: 'Gas Boiler Form Submission',
-        content_category: 'Gas Boilers'
+  const handleMetaPixelClick = async () => {
+    try {
+      // Use the enhanced form submission service for full deduplication + CAPI
+      const { submitFormToDatabase } = await import('@/services/formSubmissionService');
+      
+      // Create a proper form data object for the embedded form
+      const formData = {
+        serviceType: 'gas_boilers' as const,
+        name: 'Gas Boiler Form User', // GoHighLevel handles actual form data
+        phone: '',
+        email: '',
+        postcode: '',
+        address: '',
+        formName: 'Gas Boiler Form',
+        formData: { category: 'Gas Boilers' }
+      };
+      
+      await submitFormToDatabase(formData);
+      console.log('✅ Gas Boiler embedded form tracking successful');
+    } catch (error) {
+      console.error('❌ Gas Boiler embedded form tracking failed:', error);
+      // Fallback to basic pixel tracking
+      import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
+        trackLeadWithUTM({
+          content_name: 'Gas Boiler Form Submission',
+          content_category: 'Gas Boilers'
+        });
       });
-    });
+    }
     
     // Also trigger a custom event for Google Analytics if needed
     if (typeof window !== 'undefined' && (window as any).gtag) {

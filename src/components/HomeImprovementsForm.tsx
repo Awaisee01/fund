@@ -34,14 +34,35 @@ const HomeImprovementsForm = () => {
     }, 1000);
   };
 
-  const handleMetaPixelClick = () => {
-    // Enhanced Meta Pixel tracking with UTM data
-    import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
-      trackLeadWithUTM({
-        content_name: 'Home Improvements Form Submission',
-        content_category: 'Home Improvements'
+  const handleMetaPixelClick = async () => {
+    try {
+      // Use the enhanced form submission service for full deduplication + CAPI
+      const { submitFormToDatabase } = await import('@/services/formSubmissionService');
+      
+      // Create a proper form data object for the embedded form
+      const formData = {
+        serviceType: 'home_improvements' as const,
+        name: 'Home Improvements Form User', // GoHighLevel handles actual form data
+        phone: '',
+        email: '',
+        postcode: '',
+        address: '',
+        formName: 'Home Improvements Form',
+        formData: { category: 'Home Improvements' }
+      };
+      
+      await submitFormToDatabase(formData);
+      console.log('✅ Home Improvements embedded form tracking successful');
+    } catch (error) {
+      console.error('❌ Home Improvements embedded form tracking failed:', error);
+      // Fallback to basic pixel tracking
+      import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
+        trackLeadWithUTM({
+          content_name: 'Home Improvements Form Submission',
+          content_category: 'Home Improvements'
+        });
       });
-    });
+    }
     
     // Also trigger a custom event for Google Analytics if needed
     if (typeof window !== 'undefined' && (window as any).gtag) {

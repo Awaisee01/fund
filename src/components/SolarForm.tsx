@@ -50,7 +50,7 @@ const SolarForm = () => {
     }, 300);
   };
 
-  const handleMetaPixelClick = () => {
+  const handleMetaPixelClick = async () => {
     // Prevent multiple tracking calls
     if (hasTracked) {
       console.log('Tracking already called for this session');
@@ -60,14 +60,23 @@ const SolarForm = () => {
     setHasTracked(true);
     
     try {
-      // Enhanced Meta Pixel tracking with UTM data
-      import('@/lib/utm-tracking').then(({ trackLeadWithUTM }) => {
-        trackLeadWithUTM({
-          content_name: 'Solar Form Submission',
-          content_category: 'Solar Panels'
-        });
-        console.log('✅ Solar form Meta Pixel tracking successful');
-      });
+      // Use the enhanced form submission service for full deduplication + CAPI
+      const { submitFormToDatabase } = await import('@/services/formSubmissionService');
+      
+      // Create a proper form data object for the embedded form
+      const formData = {
+        serviceType: 'solar' as const,
+        name: 'Solar Form User', // GoHighLevel handles actual form data
+        phone: '',
+        email: '',
+        postcode: '',
+        address: '',
+        formName: 'Solar Form',
+        formData: { category: 'Solar Panels' }
+      };
+      
+      await submitFormToDatabase(formData);
+      console.log('✅ Solar embedded form tracking successful');
       
       // Also trigger a custom event for Google Analytics if needed
       if (typeof window !== 'undefined' && (window as any).gtag && typeof (window as any).gtag === 'function') {
