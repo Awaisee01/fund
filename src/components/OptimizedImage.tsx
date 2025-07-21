@@ -103,43 +103,23 @@ const OptimizedImage = ({
           }}
         />
       )}
-      <picture className="w-full h-full">
-        {/* AVIF source for best compression */}
-        <source 
-          srcSet={responsive ? generateSrcSet(sources.avif) : sources.avif}
-          sizes={responsive ? sizes : undefined}
-          type="image/avif" 
-        />
-        
-        {/* WebP source for good compression */}
-        <source 
-          srcSet={responsive ? generateSrcSet(sources.webp) : sources.webp}
-          sizes={responsive ? sizes : undefined}
-          type="image/webp" 
-        />
-        
-        {/* Fallback to original format */}
-        <img
-          src={src}
-          srcSet={responsive ? generateSrcSet(src) : undefined}
-          sizes={responsive ? sizes : undefined}
-          alt={alt}
-          width={width}
-          height={height}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          fetchPriority={priority ? "high" : "auto"}
-          onLoad={handleLoad}
-          onError={handleError}
-          className={`w-full h-full ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
-          style={{ 
-            contentVisibility: 'auto',
-            containIntrinsicSize: width && height ? `${width}px ${height}px` : 'auto',
-            aspectRatio: width && height ? `${width}/${height}` : 'auto',
-            objectFit: 'cover'
-          }}
-        />
-      </picture>
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        onLoad={handleLoad}
+        onError={handleError}
+        className={`w-full h-full ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
+        style={{ 
+          contentVisibility: 'auto',
+          containIntrinsicSize: width && height ? `${width}px ${height}px` : 'auto',
+          aspectRatio: width && height ? `${width}/${height}` : 'auto',
+          objectFit: 'cover'
+        }}
+      />
       <style>
         {`
           @keyframes shimmer {
