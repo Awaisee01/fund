@@ -23,15 +23,14 @@ const Navigation = () => {
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
-          <div className="flex items-center py-1">
+          <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <OptimizedImage 
-                src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png?v=2" 
+              <img 
+                src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                 alt="Funding For Scotland Logo" 
-                className="h-6 sm:h-8 lg:h-10 max-w-none w-auto object-contain"
-                priority={true}
-                width={150}
-                height={60}
+                className="h-4 sm:h-6 lg:h-8 w-auto object-contain"
+                width="120"
+                height="48"
               />
             </Link>
           </div>
