@@ -19,11 +19,15 @@ const HomeImprovementsHero = () => {
       <div className="absolute inset-0 opacity-30">
         <OptimizedImage
           src="/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png"
+          webpSrc="/images/hero-home-improvements.webp"
+          mobileWebpSrc="/images/hero-home-improvements-mobile.webp"
           alt="Home Improvements Background - Modern house exterior with driveway"
           className="w-full h-full object-cover mix-blend-multiply"
           priority={true}
+          responsive={true}
           width={1920}
           height={1080}
+          sizes="100vw"
         />
       </div>
       
