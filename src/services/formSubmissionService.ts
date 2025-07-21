@@ -205,7 +205,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         const fbPayload = {
           data: {
             eventName: 'Lead',
-            eventId: eventId, // For deduplication with Pixel
+            eventId: String(eventId), // Ensure it's always a string for Facebook
             userData: {
               email: data.email,
               phone: data.phone,
@@ -232,6 +232,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         };
         
         console.log('📊 Facebook CAPI payload:', fbPayload);
+        console.log('📊 RAW CAPI Payload (exact JSON):', JSON.stringify(fbPayload, null, 2));
         
         const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload

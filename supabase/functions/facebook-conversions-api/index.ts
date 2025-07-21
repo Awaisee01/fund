@@ -142,8 +142,8 @@ serve(async (req) => {
 
     // Add event ID for deduplication if provided
     if (data.eventId) {
-      eventPayload.event_id = data.eventId
-      console.log('📊 CAPI event ID (event_id):', data.eventId);
+      eventPayload.event_id = String(data.eventId) // Ensure it's always a string
+      console.log('📊 CAPI event ID (event_id):', String(data.eventId));
     }
 
     const eventData = {
