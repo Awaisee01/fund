@@ -3,11 +3,20 @@ import { useEffect, useState, Suspense, lazy } from 'react';
 import Hero from '@/components/Hero';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
+import { LazyLoader, preloadComponent } from '@/components/LazyLoader';
 
-// Lazy load below-the-fold content for better performance
+// Lazy load below-the-fold content with priority
 const ServicesGrid = lazy(() => import('@/components/ServicesGrid'));
 const TrustBadges = lazy(() => import('@/components/TrustBadges'));
 const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
+
+// Preload critical below-the-fold components after hero loads
+const preloadBelowFoldComponents = () => {
+  setTimeout(() => {
+    preloadComponent(() => import('@/components/ServicesGrid'));
+    preloadComponent(() => import('@/components/TrustBadges'));
+  }, 1000); // Start preloading after 1 second
+};
 
 // Loading fallback components
 const SectionSkeleton = () => (
@@ -32,8 +41,9 @@ const Home = () => {
       metaDescription.setAttribute('content', 'Scotland\'s leading consultancy for homeowner grants and funding. Access ECO4 grants, solar panels, boiler replacements, and home improvement funding up to £25,000.');
     }
 
-    // Mark hero as loaded immediately for faster perceived performance
+    // Mark hero as loaded and start preloading below-fold content
     setHeroLoaded(true);
+    preloadBelowFoldComponents();
   }, []);
 
   if (!heroLoaded) {
