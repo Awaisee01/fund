@@ -35,15 +35,15 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
 
-    <!-- Preload critical hero images -->
-    <link rel="preload" as="image" href="/lovable-uploads/7dfe5a80-6453-471d-805e-51f9a0a3224e.png" type="image/png">
-    <link rel="preload" as="image" href="/lovable-uploads/e749188a-d4a1-4569-8677-581f59aeb61f.png" type="image/png">
-    <link rel="preload" as="image" href="/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png" type="image/png">
+    <!-- Preload new WebP hero images -->
+    <link rel="preload" as="image" href="/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png" type="image/png">
+    <link rel="preload" as="image" href="/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png" type="image/png">
+    <link rel="preload" as="image" href="/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png" type="image/png">
+    <link rel="preload" as="image" href="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png" type="image/png">
     
     <!-- Preload trust badge images -->
     <link rel="preload" as="image" href="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png">
     <link rel="preload" as="image" href="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png">
-    <link rel="preload" as="image" href="/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png">
     <link rel="preload" as="image" href="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png">
     <link rel="preload" as="image" href="/lovable-uploads/8fdd29b5-d86d-491f-9c2f-9e692f13c11c.png">
 
@@ -191,7 +191,7 @@
       }
     </style>
 
-    <!-- Meta Pixel Code -->
+    <!-- Critical analytics loaded immediately for tracking -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -204,44 +204,45 @@
     fbq('init', '1423013825182147');
     fbq('track', 'PageView');
     </script>
-    <!-- End Meta Pixel Code -->
 
-    <!-- UTM Parameter Tracking -->
+    <!-- Critical UTM tracking - inline for immediate execution -->
     <script>
     (function() {
       const params = new URLSearchParams(window.location.search);
       const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
       utms.forEach(key => {
         const value = params.get(key);
-        if (value) {
-          localStorage.setItem(key, value);
-        }
+        if (value) localStorage.setItem(key, value);
       });
     })();
     </script>
-    <!-- End UTM Parameter Tracking -->
   </head>
 
   <body class="loading">
-    <!-- Loading optimization script -->
+    <!-- Critical performance script - executed immediately -->
     <script>
       // Add loaded class when page is ready for faster perceived performance
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
       });
       
-      // Preload critical resources immediately
+      // Initialize critical performance features
       if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries, observer) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               const img = entry.target;
-              img.src = img.dataset.src;
-              img.classList.remove('lazy');
-              observer.unobserve(img);
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                observer.unobserve(img);
+              }
             }
           });
-        });
+        }, { rootMargin: '50px' });
+        
+        // Store observer globally for use by components
+        window.imageObserver = imageObserver;
       }
     </script>
     
@@ -252,9 +253,9 @@
     
     <div id="root"></div>
     
-    <!-- Service Worker Registration for Enhanced Caching -->
+    <!-- Deferred non-critical scripts below the fold -->
     <script>
-      // Register service worker for advanced caching
+      // Service Worker registration - deferred until after critical content loads
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('/sw.js')
@@ -267,9 +268,31 @@
         });
       }
       
-      // Defer non-essential scripts until after page load
+      // Resource hints for future navigation
       window.addEventListener('load', function() {
-        console.log('Page fully loaded - non-critical scripts can run');
+        // Prefetch likely next pages
+        const prefetchLinks = [
+          '/eco4',
+          '/gas-boilers', 
+          '/home-improvements',
+          '/solar',
+          '/contact'
+        ];
+        
+        prefetchLinks.forEach(href => {
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.href = href;
+          document.head.appendChild(link);
+        });
+        
+        // Preload non-critical CSS after initial render
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/src/index.css';
+        link.media = 'print';
+        link.onload = function() { this.media = 'all'; };
+        document.head.appendChild(link);
       });
     </script>
     
