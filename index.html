@@ -292,26 +292,70 @@
     /></noscript>
     
     <div id="root">
-      <!-- Critical loading fallback for immediate FCP -->
-      <div class="min-h-screen flex flex-col bg-white">
-        <nav class="bg-white shadow-lg h-16 flex items-center justify-center">
-          <div class="flex items-center">
+      <!-- CRITICAL: Immediate navigation that shows instantly -->
+      <style>
+        .critical-nav { 
+          background: white; 
+          box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+          position: sticky; 
+          top: 0; 
+          z-index: 9999;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 16px;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        .critical-nav .logo { 
+          height: 32px; 
+          width: auto; 
+          object-fit: contain; 
+        }
+        .critical-nav .nav-links {
+          display: none;
+        }
+        @media (min-width: 1024px) {
+          .critical-nav .nav-links {
+            display: flex;
+            gap: 16px;
+          }
+          .critical-nav .nav-link {
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            transition: all 0.15s;
+          }
+          .critical-nav .nav-link:hover {
+            background: #eff6ff;
+            color: #2563eb;
+          }
+        }
+      </style>
+      
+      <nav class="critical-nav">
+        <div>
+          <a href="/">
             <img 
               src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
-              alt="Funding For Scotland Logo" 
-              class="h-8 w-auto object-contain"
+              alt="Funding For Scotland" 
+              class="logo"
               width="140"
               height="56"
             />
-          </div>
-        </nav>
-        <main class="flex-1 flex items-center justify-center bg-gray-50">
-          <div class="text-center">
-            <div class="inline-block animate-pulse bg-gray-300 h-8 w-48 rounded mb-4"></div>
-            <div class="inline-block animate-pulse bg-gray-200 h-4 w-32 rounded"></div>
-          </div>
-        </main>
-      </div>
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/eco4" class="nav-link">ECO4</a>
+          <a href="/solar" class="nav-link">Solar</a>
+          <a href="/gas-boilers" class="nav-link">Gas Boilers</a>
+          <a href="/home-improvements" class="nav-link">Home Improvements</a>
+          <a href="/contact" class="nav-link">Contact</a>
+        </div>
+      </nav>
     </div>
     
     <!-- Load main app script immediately for critical rendering -->

@@ -61,7 +61,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
-            {/* Critical above-the-fold content loads immediately */}
+            {/* React Navigation will replace the HTML fallback */}
             <div className="min-h-screen flex flex-col">
               <Navigation />
               
