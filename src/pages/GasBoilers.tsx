@@ -7,8 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { CheckCircle, Home, Thermometer, Zap, Shield, Flame, Wrench, PoundSterling } from 'lucide-react';
 // Performance hooks removed
 
-// Lazy load below-the-fold content
-const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
+import EligibilitySection from '@/components/EligibilitySection';
 
 const GasBoilers = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -129,140 +128,110 @@ const GasBoilers = () => {
         </div>
       </section>
       
-      <Suspense fallback={
-        <div className="py-20 bg-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-48 bg-gray-300 rounded"></div>
-                ))}
-              </div>
-            </div>
+      <section className="py-20 bg-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Gas Boiler Qualifying Criteria
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
+            </p>
           </div>
-        </div>
-      }>
-        <section className="py-20 bg-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                Gas Boiler Qualifying Criteria
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {eligibilityRequirements.map((requirement, index) => {
-                const Icon = requirement.icon;
-                return (
-                  <div key={index} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-orange-500 rounded-full flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {requirement.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {requirement.description}
-                    </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {eligibilityRequirements.map((requirement, index) => {
+              const Icon = requirement.icon;
+              return (
+                <div key={index} className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-500 rounded-full flex items-center justify-center">
+                    <Icon className="w-8 h-8 text-white" />
                   </div>
-                );
-              })}
-            </div>
-            
-            <EligibilitySection />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {requirement.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {requirement.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
-        </section>
-      </Suspense>
+          
+          <EligibilitySection />
+        </div>
+      </section>
       
-      <Suspense fallback={
-        <div className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-32 bg-gray-300 rounded"></div>
-                ))}
-              </div>
-            </div>
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              What Does Gas Boiler Replacement Cover?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our fully funded gas boiler replacement service includes everything you need for a complete heating system upgrade.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <Card className="text-center">
+              <CardHeader>
+                <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
+                  <Flame className="w-8 h-8 text-orange-600" />
+                </div>
+                <CardTitle>New Boiler</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  High-efficiency gas boiler installation with modern technology for optimal performance and energy savings.
+                </CardDescription>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center">
+              <CardHeader>
+                <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Wrench className="w-8 h-8 text-blue-600" />
+                </div>
+                <CardTitle>Professional Installation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Certified engineers handle complete installation, testing, and commissioning of your new heating system.
+                </CardDescription>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center">
+              <CardHeader>
+                <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <Thermometer className="w-8 h-8 text-green-600" />
+                </div>
+                <CardTitle>System Controls</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Modern heating controls and thermostats for better temperature management and energy efficiency.
+                </CardDescription>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center">
+              <CardHeader>
+                <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                  <PoundSterling className="w-8 h-8 text-purple-600" />
+                </div>
+                <CardTitle>Warranty Included</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Comprehensive warranty on your new boiler and installation work for complete peace of mind.
+                </CardDescription>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      }>
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                What Does Gas Boiler Replacement Cover?
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our fully funded gas boiler replacement service includes everything you need for a complete heating system upgrade.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
-                    <Flame className="w-8 h-8 text-orange-600" />
-                  </div>
-                  <CardTitle>New Boiler</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    High-efficiency gas boiler installation with modern technology for optimal performance and energy savings.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Wrench className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <CardTitle>Professional Installation</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Certified engineers handle complete installation, testing, and commissioning of your new heating system.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-                    <Thermometer className="w-8 h-8 text-green-600" />
-                  </div>
-                  <CardTitle>System Controls</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Modern heating controls and thermostats for better temperature management and energy efficiency.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
-                    <PoundSterling className="w-8 h-8 text-purple-600" />
-                  </div>
-                  <CardTitle>Warranty Included</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Comprehensive warranty on your new boiler and installation work for complete peace of mind.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-      </Suspense>
+      </section>
     </div>
   );
 };

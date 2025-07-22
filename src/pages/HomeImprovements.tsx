@@ -4,9 +4,8 @@ import HomeImprovementsHero from '@/components/home-improvements/HomeImprovement
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 // Performance hooks removed
 
-// Lazy load non-critical components
-const ProcessSteps = lazy(() => import('@/components/home-improvements/ProcessSteps'));
-const BeforeAfterCarousel = lazy(() => import('@/components/home-improvements/BeforeAfterCarousel'));
+import ProcessSteps from '@/components/home-improvements/ProcessSteps';
+import BeforeAfterCarousel from '@/components/home-improvements/BeforeAfterCarousel';
 
 const HomeImprovements = () => {
   const [heroLoaded, setHeroLoaded] = useState(false);
@@ -32,35 +31,8 @@ const HomeImprovements = () => {
     <div>
       <HomeImprovementsHero />
       
-      <Suspense fallback={
-        <div className="py-20 bg-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-64 bg-gray-300 rounded"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      }>
-        <ProcessSteps />
-      </Suspense>
-      
-      <Suspense fallback={
-        <div className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              <div className="h-96 bg-gray-300 rounded"></div>
-            </div>
-          </div>
-        </div>
-      }>
-        <BeforeAfterCarousel />
-      </Suspense>
+      <ProcessSteps />
+      <BeforeAfterCarousel />
 
       {/* Wall Renovation Colours Section */}
       <section className="py-16">
