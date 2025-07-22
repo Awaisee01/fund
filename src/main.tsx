@@ -2,6 +2,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import PerformanceOptimizer from "./components/PerformanceOptimizer";
 import "./index.css";
 
 console.log('Main.tsx loading...');
@@ -18,7 +19,9 @@ const root = createRoot(rootElement);
 console.log('Rendering App...');
 root.render(
   <StrictMode>
-    <App />
+    <PerformanceOptimizer>
+      <App />
+    </PerformanceOptimizer>
   </StrictMode>
 );
 

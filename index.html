@@ -5,9 +5,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Basic resource hints only -->
+    <!-- Critical resource hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+    
+    <!-- Preload critical hero images for LCP optimization -->
+    <link rel="preload" as="image" href="/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png" fetchpriority="high">
+    <link rel="preload" as="image" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
     
     <link rel="manifest" href="/manifest.json" />
     
@@ -15,10 +20,11 @@
     <meta name="description" content="Scotland's leading consultancy for homeowner grants and funding. Access ECO4 grants, solar panels, boiler replacements, and home improvement funding up to £25,000." />
     <meta name="keywords" content="Scottish grants, ECO4, solar panels, boiler replacement, home improvements, funding, Scotland" />
 
-    <!-- Simplified font loading -->
+    <!-- Optimized font loading with font-display swap -->
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 
-    <!-- Basic favicon only -->
+    <!-- Optimized favicon -->
     <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
 
     <!-- Essential meta tags -->
@@ -57,20 +63,36 @@
       }
     </style>
 
-    <!-- Simplified Facebook Pixel -->
+    <!-- Facebook Pixel - Deferred for TBT optimization -->
     <script>
-    console.log('Loading Facebook Pixel...');
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1423013825182147');
-    fbq('track', 'PageView');
-    console.log('Facebook Pixel loaded');
+    // Initialize placeholder for early tracking
+    window.fbq = window.fbq || function() {
+      (window.fbq.q = window.fbq.q || []).push(arguments);
+    };
+    window.fbq.q = [];
+    
+    // Load Facebook Pixel after initial render
+    function loadFacebookPixel() {
+      if (window.fbPixelLoaded) return;
+      window.fbPixelLoaded = true;
+      
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=window.fbq.q||[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1423013825182147');
+      fbq('track', 'PageView');
+    }
+    
+    // Load after 2 seconds or user interaction
+    setTimeout(loadFacebookPixel, 2000);
+    ['mousedown', 'touchstart', 'scroll'].forEach(event => {
+      document.addEventListener(event, loadFacebookPixel, { once: true, passive: true });
+    });
     </script>
   </head>
 

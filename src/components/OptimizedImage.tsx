@@ -11,6 +11,8 @@ interface OptimizedImageProps {
   sizes?: string;
   preload?: boolean;
   style?: React.CSSProperties;
+  fetchPriority?: 'high' | 'low' | 'auto';
+  decoding?: 'async' | 'sync' | 'auto';
 }
 
 const OptimizedImage = ({ 
@@ -20,6 +22,9 @@ const OptimizedImage = ({
   width,
   height,
   priority = false,
+  sizes,
+  fetchPriority = 'auto',
+  decoding = 'async',
   style
 }: OptimizedImageProps) => {
   return (
@@ -29,6 +34,9 @@ const OptimizedImage = ({
       width={width}
       height={height}
       loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : fetchPriority}
+      decoding={decoding}
+      sizes={sizes}
       className={className}
       style={style}
     />
