@@ -20,7 +20,7 @@ const Index = () => {
       <Hero 
         title="Unlock Scottish Grants & Funding"
         subtitle=""
-        description="From heating upgrades, to free solar panels, to improving the look of Scotland homes. Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to"
+        description="From heating upgrades, to free solar panels, to improving the look of Scotland's homes. Funding for Scotland are here to help people unlock the funding and grant schemes they are entitled to."
         benefits={[
           "Free Solar Panels",
           "Free Heating Upgrades", 
