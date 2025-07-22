@@ -1,7 +1,7 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
 import NativeSolarForm from '@/components/NativeSolarForm';
-import OptimizedImage from '@/components/OptimizedImage';
+import SimplifiedHero from '@/components/SimplifiedHero';
 import HeroSkeleton from '@/components/HeroSkeleton';
 import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
 import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
@@ -81,56 +81,16 @@ const Solar = () => {
 
   return (
     <div>
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="absolute inset-0 opacity-30 will-change-transform">
-          <OptimizedImage
-            src="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png"
-            alt="Solar Panels Background"
-            className="w-full h-full object-cover mix-blend-multiply"
-            priority={true}
-            responsive={true}
-            preload={true}
-            width={1920}
-            height={1080}
-            sizes="100vw"
-            style={{ 
-              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
-            }}
-          />
-        </div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                Free Solar Panels
-              </h1>
-              <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-                Completely free solar panels.
-              </p>
-              <p className="text-lg mb-8 text-blue-50 leading-relaxed">
-                If your current heating system is an Air Source Heat Pump, you could qualify for free solar through the ECO4 Scheme.
-              </p>
-              
-              <div className="mb-8">
-                <ul className="space-y-3">
-                  {benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-center space-x-3">
-                      <CheckCircle className="h-6 w-6 text-green-300 flex-shrink-0" />
-                      <span className="text-blue-50">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            
-            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
-              <NativeSolarForm />
-            </div>
-          </div>
-        </div>
-      </section>
+      <SimplifiedHero
+        title="Free Solar Panels"
+        subtitle="Completely free solar panels."
+        description="If your current heating system is an Air Source Heat Pump, you could qualify for free solar through the ECO4 Scheme."
+        benefits={benefits}
+        heroImage="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png"
+        altText="Solar Panels Background"
+      >
+        <NativeSolarForm />
+      </SimplifiedHero>
       
       <Suspense fallback={
         <div className="py-20 bg-gray-100">
