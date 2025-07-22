@@ -16,14 +16,14 @@ class AnalyticsTracker {
   private initialized: boolean = false;
 
   constructor() {
-    // Don't initialize during SSR/build time
-    if (typeof window !== 'undefined') {
-      this.init();
-    }
+    // Completely defer initialization until explicitly called
+    // This prevents any build-time execution
   }
 
-  private init() {
-    if (this.initialized) return;
+  // Make init() public so it can be called when needed
+  public init() {
+    // Only initialize in browser environment
+    if (typeof window === 'undefined' || this.initialized) return;
     
     this.visitorId = this.getOrCreateVisitorId();
     this.sessionId = this.getOrCreateSessionId();
@@ -37,6 +37,13 @@ class AnalyticsTracker {
     this.setupPageUnloadTracking();
     
     this.initialized = true;
+  }
+
+  // Method to safely call any tracking function
+  private ensureInitialized() {
+    if (!this.initialized && typeof window !== 'undefined') {
+      this.init();
+    }
   }
 
   private generateUUID(): string {
@@ -186,10 +193,9 @@ class AnalyticsTracker {
   async trackPageView(pagePath?: string): Promise<void> {
     if (typeof window === 'undefined') return;
     
-    // Initialize if not already done
-    if (!this.initialized) {
-      this.init();
-    }
+    // Ensure we're properly initialized
+    this.ensureInitialized();
+    if (!this.initialized) return;
     
     try {
       const currentPath = pagePath || window.location.pathname;
@@ -230,10 +236,9 @@ class AnalyticsTracker {
   async trackConversion(): Promise<void> {
     if (typeof window === 'undefined') return;
     
-    // Initialize if not already done
-    if (!this.initialized) {
-      this.init();
-    }
+    // Ensure we're properly initialized
+    this.ensureInitialized();
+    if (!this.initialized) return;
     
     try {
       await supabase
@@ -251,17 +256,13 @@ class AnalyticsTracker {
 
   getVisitorId(): string {
     if (typeof window === 'undefined') return 'ssr-visitor-id';
-    if (!this.initialized) {
-      this.init();
-    }
+    this.ensureInitialized();
     return this.visitorId || 'ssr-visitor-id';
   }
 
   getSessionId(): string {
     if (typeof window === 'undefined') return 'ssr-session-id';
-    if (!this.initialized) {
-      this.init();
-    }
+    this.ensureInitialized();
     return this.sessionId || 'ssr-session-id';
   }
 }
