@@ -6,6 +6,8 @@ const SEOStructuredData = () => {
   const location = useLocation();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     // Remove existing structured data
     const existingScript = document.querySelector('#structured-data');
     if (existingScript) {

@@ -38,7 +38,9 @@ const ImageConverter = () => {
   const convertImage = async (imageUrl: string, outputName: string) => {
     try {
       // Convert relative URL to absolute URL
-      const fullImageUrl = `${window.location.origin}${imageUrl}`;
+      const fullImageUrl = typeof window !== 'undefined' 
+        ? `${window.location.origin}${imageUrl}` 
+        : imageUrl;
       
       const response = await fetch('/functions/v1/convert-images-to-webp', {
         method: 'POST',
@@ -130,6 +132,8 @@ const ImageConverter = () => {
   };
 
   const downloadImage = async (url: string, filename: string) => {
+    if (typeof window === 'undefined') return;
+    
     try {
       const response = await fetch(url);
       const blob = await response.blob();
