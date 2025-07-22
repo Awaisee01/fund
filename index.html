@@ -45,8 +45,9 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     
-    <!-- Critical CSS only -->
+    <!-- Critical CSS for above-the-fold content -->
     <style>
+      /* Reset and critical layout - inline for immediate rendering */
       * {
         box-sizing: border-box;
         margin: 0;
@@ -54,66 +55,147 @@
       }
       
       html {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
       }
       
       body {
-        background: white;
+        background: #ffffff;
         color: #1a1a1a;
         -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        line-height: 1.6;
       }
       
-      /* Basic loading state */
+      /* Critical hero section styles for immediate paint */
+      .hero-gradient {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 35%, #059669 100%);
+      }
+      
+      .hero-text-white { color: #ffffff; }
+      .hero-text-blue-100 { color: #dbeafe; }
+      .hero-text-blue-50 { color: #eff6ff; }
+      .hero-text-green-300 { color: #86efac; }
+      
+      /* Critical layout utilities */
+      .relative { position: relative; }
+      .absolute { position: absolute; }
+      .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+      .flex { display: flex; }
+      .grid { display: grid; }
+      .hidden { display: none; }
+      .w-full { width: 100%; }
+      .h-full { height: 100%; }
+      .min-h-screen { min-height: 100vh; }
+      .items-center { align-items: center; }
+      .justify-center { justify-content: center; }
+      
+      /* Critical text utilities */
+      .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+      .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+      .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+      .font-bold { font-weight: 700; }
+      .font-medium { font-weight: 500; }
+      
+      /* Critical spacing */
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mb-8 { margin-bottom: 2rem; }
+      .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+      
+      /* Loading optimization */
       .loading #root {
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.2s ease;
       }
       
       .loaded #root {
         opacity: 1;
       }
+      
+      /* Prevent layout shift for hero image */
+      .hero-image-container {
+        aspect-ratio: 16/9;
+        background-color: #f3f4f6;
+      }
+      
+      /* Critical form styles */
+      .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      
+      @media (min-width: 1024px) {
+        .text-4xl { font-size: 3.75rem; line-height: 1; }
+        .py-20 { padding-top: 6rem; padding-bottom: 6rem; }
+      }
     </style>
 
-    <!-- Facebook Pixel - Deferred for TBT optimization -->
+    <!-- Optimized Facebook Pixel - Critical path separated -->
     <script>
-    // Initialize placeholder for early tracking
-    window.fbq = window.fbq || function() {
-      (window.fbq.q = window.fbq.q || []).push(arguments);
-    };
-    window.fbq.q = [];
-    
-    // Load Facebook Pixel after initial render
-    function loadFacebookPixel() {
-      if (window.fbPixelLoaded) return;
-      window.fbPixelLoaded = true;
+      // Initialize minimal tracking queue immediately
+      window.fbq = window.fbq || function() {
+        (window.fbq.q = window.fbq.q || []).push(arguments);
+      };
+      window.fbq.q = [];
       
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=window.fbq.q||[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1423013825182147');
-      fbq('track', 'PageView');
-    }
-    
-    // Load after 2 seconds or user interaction
-    setTimeout(loadFacebookPixel, 2000);
-    ['mousedown', 'touchstart', 'scroll'].forEach(event => {
-      document.addEventListener(event, loadFacebookPixel, { once: true, passive: true });
-    });
+      // Defer pixel loading to not block critical rendering
+      function loadFacebookPixel() {
+        if (window.fbPixelLoaded) return;
+        window.fbPixelLoaded = true;
+        
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+        script.onload = function() {
+          fbq('init', '1423013825182147');
+          fbq('track', 'PageView');
+        };
+        document.head.appendChild(script);
+      }
+      
+      // Load after critical rendering or user interaction
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(loadFacebookPixel, 1000);
+        });
+      } else {
+        setTimeout(loadFacebookPixel, 1000);
+      }
+      
+      // Also load on first user interaction
+      ['mousedown', 'touchstart', 'scroll', 'keydown'].forEach(event => {
+        document.addEventListener(event, loadFacebookPixel, { once: true, passive: true });
+      });
     </script>
   </head>
 
   <body class="loading">
-    <!-- Basic performance script -->
+    <!-- Immediate critical path script -->
     <script>
+      // Mark DOM ready and start paint immediately
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
+        
+        // Preconnect to critical domains after DOMContentLoaded
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(function() {
+            // Preconnect to form submission endpoint
+            const link = document.createElement('link');
+            link.rel = 'preconnect';
+            link.href = 'https://script.google.com';
+            document.head.appendChild(link);
+          });
+        }
       });
+      
+      // Performance mark for critical rendering
+      if ('performance' in window && 'mark' in performance) {
+        performance.mark('critical-css-loaded');
+      }
     </script>
     
     <!-- Meta Pixel Noscript -->
@@ -123,7 +205,23 @@
     
     <div id="root"></div>
     
-    <!-- Main app script -->
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Deferred main app script with performance optimization -->
+    <script>
+      // Defer main script loading until critical path is complete
+      function loadMainScript() {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = '/src/main.tsx';
+        script.async = true;
+        document.body.appendChild(script);
+      }
+      
+      // Load main script after critical rendering
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadMainScript);
+      } else {
+        loadMainScript();
+      }
+    </script>
   </body>
 </html>
