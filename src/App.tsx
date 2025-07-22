@@ -18,13 +18,9 @@ const FacebookPixelPageView = lazy(() => import("./components/FacebookPixelPageV
 // Code-split all pages for better performance
 const Index = lazy(() => import("./pages/Index"));
 const ECO4 = lazy(() => import("./pages/ECO4"));
-const ECO4New = lazy(() => import("./pages/ECO4New"));
 const Solar = lazy(() => import("./pages/Solar"));
-const SolarNew = lazy(() => import("./pages/SolarNew"));
 const GasBoilers = lazy(() => import("./pages/GasBoilers"));
-const GasBoilersNew = lazy(() => import("./pages/GasBoilersNew"));
 const HomeImprovements = lazy(() => import("./pages/HomeImprovements"));
-const HomeImprovementsNew = lazy(() => import("./pages/HomeImprovementsNew"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Admin = lazy(() => import("./pages/Admin"));
 
@@ -164,13 +160,9 @@ const App = () => {
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/eco4" element={<ECO4 />} />
-                    <Route path="/eco4-new" element={<ECO4New />} />
                     <Route path="/solar" element={<Solar />} />
-                    <Route path="/solar-new" element={<SolarNew />} />
                     <Route path="/gas-boilers" element={<GasBoilers />} />
-                    <Route path="/gas-boilers-new" element={<GasBoilersNew />} />
                     <Route path="/home-improvements" element={<HomeImprovements />} />
-                    <Route path="/home-improvements-new" element={<HomeImprovementsNew />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/admin" element={<Admin />} />
                     
