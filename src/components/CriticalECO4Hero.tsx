@@ -29,7 +29,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
   }, []);
 
   return (
-    <section className="relative hero-gradient text-white overflow-hidden min-h-screen">
+    <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen">
       <div className="absolute inset-0 bg-black opacity-20"></div>
       <div className="absolute inset-0 opacity-30 will-change-transform">
         <div 
@@ -72,10 +72,10 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               ECO4 Scheme
             </h1>
-            <p className="text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 hero-text-blue-100 font-medium">
-              Free energy efficiency upgrades for your home
-            </p>
-            <p className="text-base sm:text-lg mb-6 sm:mb-8 hero-text-blue-50 leading-relaxed">
+             <p className="text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-blue-100 font-medium">
+               Free energy efficiency upgrades for your home
+             </p>
+             <p className="text-base sm:text-lg mb-6 sm:mb-8 text-blue-50 leading-relaxed">
               The Westminster backed ECO4 scheme provides free heating upgrades, solar panels, and insulation to eligible households across Scotland.
             </p>
             
@@ -83,8 +83,8 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
               <ul className="space-y-3 text-left max-w-md mx-auto lg:mx-0">
                 {benefits.map((benefit, index) => (
                   <li key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 hero-text-green-300 flex-shrink-0" />
-                    <span className="hero-text-blue-50 text-sm sm:text-base">{benefit}</span>
+                    <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-300 flex-shrink-0" />
+                    <span className="text-blue-50 text-sm sm:text-base">{benefit}</span>
                   </li>
                 ))}
               </ul>
