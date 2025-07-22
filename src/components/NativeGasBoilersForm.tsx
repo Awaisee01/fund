@@ -260,7 +260,7 @@ const NativeGasBoilersForm = () => {
               )}
             />
 
-            <div className="mt-8">
+            <div style={{ marginTop: '2rem' }}>
               <Button 
                 type="submit" 
                 className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12"
