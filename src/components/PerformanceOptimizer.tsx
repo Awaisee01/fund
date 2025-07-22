@@ -8,6 +8,13 @@ const PerformanceOptimizer = ({ children }: PerformanceOptimizerProps) => {
   useEffect(() => {
     // Defer non-critical resource loading
     const deferNonCriticalResources = () => {
+      // Add Facebook Pixel preconnect after LCP (if needed)
+      const fbPreconnect = document.createElement('link');
+      fbPreconnect.rel = 'preconnect';
+      fbPreconnect.href = 'https://connect.facebook.net';
+      fbPreconnect.crossOrigin = 'anonymous';
+      document.head.appendChild(fbPreconnect);
+      
       // Defer additional font weights after LCP
       const additionalFonts = document.createElement('link');
       additionalFonts.rel = 'stylesheet';
