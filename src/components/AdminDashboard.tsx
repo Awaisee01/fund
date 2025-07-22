@@ -86,8 +86,10 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminAuthenticated');
-    localStorage.removeItem('adminAuthTime');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('adminAuthenticated');
+      localStorage.removeItem('adminAuthTime');
+    }
     onLogout();
   };
 

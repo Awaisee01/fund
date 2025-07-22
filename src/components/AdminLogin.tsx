@@ -91,9 +91,11 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
       }
 
       if (data?.success) {
-        localStorage.setItem('adminAuthenticated', 'true');
-        localStorage.setItem('adminAuthTime', Date.now().toString());
-        localStorage.setItem('adminUser', JSON.stringify(data.user));
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('adminAuthenticated', 'true');
+          localStorage.setItem('adminAuthTime', Date.now().toString());
+          localStorage.setItem('adminUser', JSON.stringify(data.user));
+        }
         
         toast({
           title: "Login successful",
