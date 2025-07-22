@@ -152,11 +152,15 @@
       }
     </style>
     
-    <!-- Load non-critical Tailwind CSS after critical rendering -->
+    <!-- Defer non-critical CSS loading -->
     <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
+    
+    <!-- Defer critical ECO4 styles until after FCP -->
+    <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Optimized Facebook Pixel - Minimal critical tracking -->
+    <!-- Defer Facebook Pixel until after critical rendering -->
     <script>
       window.fbq=window.fbq||function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};window.fbq.q=[];
       
@@ -166,8 +170,19 @@
         s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};document.head.appendChild(s);
       }
       
-      document.readyState==='loading'?document.addEventListener('DOMContentLoaded',function(){setTimeout(loadFacebookPixel,1000)}):setTimeout(loadFacebookPixel,1000);
-      ['mousedown','touchstart','scroll','keydown'].forEach(e=>document.addEventListener(e,loadFacebookPixel,{once:true,passive:true}));
+      // Load pixel after critical path renders
+      if(document.readyState==='loading'){
+        document.addEventListener('DOMContentLoaded',function(){
+          setTimeout(loadFacebookPixel,2000);
+        });
+      }else{
+        setTimeout(loadFacebookPixel,2000);
+      }
+      
+      // Load on first user interaction
+      ['mousedown','touchstart','scroll','keydown'].forEach(e=>
+        document.addEventListener(e,loadFacebookPixel,{once:true,passive:true})
+      );
     </script>
   </head>
 
