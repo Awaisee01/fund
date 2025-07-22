@@ -83,7 +83,9 @@ export const useViewportOptimization = () => {
     document.head.appendChild(styleElement);
 
     return () => {
-      document.head.removeChild(styleElement);
+      if (document.head.contains(styleElement)) {
+        document.head.removeChild(styleElement);
+      }
     };
   }, []);
 };
