@@ -66,9 +66,11 @@ class AnalyticsTracker {
     const sessionId = this.generateUUID();
     const sessionStart = new Date().toISOString();
     
-    localStorage.setItem('session_id', sessionId);
-    localStorage.setItem('session_start', sessionStart);
-    localStorage.setItem('pages_visited', '0');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('session_id', sessionId);
+      localStorage.setItem('session_start', sessionStart);
+      localStorage.setItem('pages_visited', '0');
+    }
     
     // Create session record in database
     this.createVisitorSession();
@@ -77,10 +79,12 @@ class AnalyticsTracker {
   }
 
   private getSessionStart(): string {
+    if (typeof window === 'undefined') return new Date().toISOString();
     return localStorage.getItem('session_start') || new Date().toISOString();
   }
 
   private loadSessionData(): void {
+    if (typeof window === 'undefined') return;
     this.pagesVisited = parseInt(localStorage.getItem('pages_visited') || '0');
   }
 
@@ -109,6 +113,8 @@ class AnalyticsTracker {
   }
 
   private async createVisitorSession(): Promise<void> {
+    if (typeof window === 'undefined') return;
+    
     try {
       const utmParams = this.getUTMParameters();
       
@@ -145,6 +151,16 @@ class AnalyticsTracker {
   }
 
   private getUTMParameters() {
+    if (typeof window === 'undefined') {
+      return {
+        utm_source: null,
+        utm_medium: null,
+        utm_campaign: null,
+        utm_content: null,
+        utm_term: null,
+      };
+    }
+    
     const urlParams = new URLSearchParams(window.location.search);
     return {
       utm_source: urlParams.get('utm_source'),
@@ -156,6 +172,8 @@ class AnalyticsTracker {
   }
 
   async trackPageView(pagePath?: string): Promise<void> {
+    if (typeof window === 'undefined') return;
+    
     try {
       const currentPath = pagePath || window.location.pathname;
       const utmParams = this.getUTMParameters();
