@@ -28,6 +28,7 @@ const HomeImprovements = lazy(() => import("./pages/HomeImprovements"));
 const HomeImprovementsNew = lazy(() => import("./pages/HomeImprovementsNew"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Admin = lazy(() => import("./pages/Admin"));
+const ImageConverter = lazy(() => import("./pages/ImageConverter"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Create query client with optimized defaults
@@ -87,6 +88,7 @@ const App = () => {
                     <Route path="/home-improvements-new" element={<HomeImprovementsNew />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/image-converter" element={<ImageConverter />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </Suspense>
