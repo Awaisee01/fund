@@ -44,7 +44,7 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div style={{ display: 'none' }} className="lg:block">
+          <div className="hidden lg:block">
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               {navItems.map((item) => (
                 <Link
