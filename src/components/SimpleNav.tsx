@@ -29,7 +29,11 @@ const SimpleNav = () => {
     { name: 'Contact Us', path: '/contact' },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    const active = location.pathname === path;
+    console.log(`Checking ${path} against ${location.pathname}: ${active}`);
+    return active;
+  };
 
   return (
     <nav style={{
@@ -75,9 +79,10 @@ const SimpleNav = () => {
                   textDecoration: 'none',
                   fontWeight: '500',
                   fontSize: '14px',
-                  backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
-                  color: isActive(item.path) ? '#ffffff' : '#374151',
-                  transition: 'all 0.2s'
+                  backgroundColor: isActive(item.path) ? '#2563eb !important' : 'transparent',
+                  color: isActive(item.path) ? '#ffffff !important' : '#374151',
+                  transition: 'all 0.2s',
+                  border: isActive(item.path) ? '2px solid #2563eb' : 'none'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive(item.path)) {
