@@ -34,11 +34,6 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Fix React duplication issues
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
-    exclude: ['@vite/client', '@vite/env']
-  },
   build: {
     // PERFORMANCE OPTIMIZED BUILD - Maximized for Lighthouse scores
     sourcemap: false, // Remove sourcemaps for faster loading
@@ -48,36 +43,19 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true, // Split CSS for better loading
     rollupOptions: {
       output: {
-        // AGGRESSIVE code splitting for maximum performance
+        // Simplified code splitting to prevent React bundle corruption
         manualChunks: (id) => {
-          // Core React bundle - small and cacheable
+          // Keep React together to prevent createContext errors
           if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-core';
+            return 'react-vendor';
           }
-          // Router bundle - separate for better caching
-          if (id.includes('react-router')) {
-            return 'router';
-          }
-          // UI components - split to reduce main bundle
+          // UI libraries
           if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-            return 'ui-libs';
+            return 'ui-vendor';
           }
-          // Supabase and analytics - defer loading
-          if (id.includes('@supabase') || id.includes('@tanstack/react-query')) {
-            return 'backend';
-          }
-          // Forms - separate for pages that need them
-          if (id.includes('react-hook-form') || id.includes('zod')) {
-            return 'forms';
-          }
-          // Third-party vendor code
+          // Other vendor code
           if (id.includes('node_modules')) {
             return 'vendor';
-          }
-          // Page-specific bundles for code splitting
-          if (id.includes('/pages/')) {
-            const pageName = id.split('/pages/')[1]?.split('.')[0];
-            return `page-${pageName}`;
           }
         },
         // Optimize asset naming for better caching
