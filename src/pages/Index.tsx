@@ -27,7 +27,7 @@ const Index = () => {
       'Get free home insulation, solar panels, and energy efficiency upgrades through government ECO4 scheme. Check eligibility and apply today for sustainable energy solutions.'
     );
 
-    // Mark hero as loaded and start preloading below-fold content
+    // Mark hero as loaded
     setHeroLoaded(true);
   }, []);
 
@@ -45,7 +45,7 @@ const Index = () => {
         description="From heating upgrades, to free solar panels, to improving the look of Scotland's homes. Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to"
         benefits={[
           "Free Solar Panels",
-          "Free Heating Upgrades",
+          "Free Heating Upgrades", 
           "Free Insulation",
           "Free Gas Boilers",
           "Grants for Home Improvements"
