@@ -84,7 +84,7 @@ const ECO4 = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
+            src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp"
             alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
@@ -93,7 +93,7 @@ const ECO4 = () => {
             width={1920}
             height={1080}
             sizes="100vw"
-            modernFormats={false}
+            modernFormats={true}
             fetchPriority="high"
             style={{ 
               transform: `translate3d(0, ${scrollY * 0.3}px, 0)`

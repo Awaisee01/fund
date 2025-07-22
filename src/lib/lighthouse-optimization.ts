@@ -17,7 +17,7 @@ export const criticalResourceHints = {
     ],
     images: [
       // Only preload ECO4 hero image that affects LCP
-      '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png'
+      '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp'
     ]
   }
 };
@@ -41,7 +41,7 @@ export const fontOptimization = {
 export const imageOptimization = {
   // Critical images for LCP
   critical: [
-    '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png'
+    '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp'
   ],
   
   // Lazy load everything else
