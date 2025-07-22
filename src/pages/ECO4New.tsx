@@ -86,7 +86,7 @@ const ECO4New = () => {
             width={1920}
             height={1080}
             sizes="100vw"
-            modernFormats={true}
+            modernFormats={false}
             fetchPriority="high"
             style={{ 
               transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
