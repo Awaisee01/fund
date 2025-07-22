@@ -130,61 +130,26 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Facebook Pixel Script - Single Implementation -->
+    <!-- Facebook Pixel Script - Clean Single Implementation -->
     <script>
-      console.log('🔥 DEBUG: Initializing Facebook Pixel queue');
+      // Initialize fbq queue immediately and globally
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize fbq queue only once
-      if (!window.fbq) {
-        window.fbq = function(){
-          (window.fbq.q = window.fbq.q || []).push(arguments);
-        };
-        window.fbq.q = [];
-      }
+      // Initialize with our Pixel ID
+      fbq('init', '1423013825182147');
       
-      function loadFacebookPixel(){
-        if (window.fbPixelLoaded) {
-          console.log('🔥 DEBUG: Facebook Pixel already loaded');
-          return;
-        }
-        
-        console.log('🔥 DEBUG: Loading Facebook Pixel script');
-        window.fbPixelLoaded = true;
-        
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-        
-        script.onload = function() {
-          console.log('🔥 DEBUG: Facebook Pixel script loaded, initializing with ID 1423013825182147');
-          fbq('init', '1423013825182147');
-          console.log('🔥 DEBUG: Facebook Pixel initialized, tracking PageView');
-          fbq('track', 'PageView');
-          console.log('🔥 DEBUG: Facebook Pixel PageView tracked successfully');
-        };
-        
-        script.onerror = function() {
-          console.error('❌ PIXEL: Failed to load Facebook Pixel script');
-        };
-        
-        document.head.appendChild(script);
-      }
+      // Track PageView immediately
+      fbq('track', 'PageView');
       
-      // Load pixel immediately on DOM ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          console.log('🔥 DEBUG: DOM loaded, starting Facebook Pixel immediately');
-          loadFacebookPixel();
-        });
-      } else {
-        console.log('🔥 DEBUG: DOM already ready, starting Facebook Pixel immediately');
-        loadFacebookPixel();
-      }
-      
-      // Also load on first user interaction as backup
-      ['mousedown', 'touchstart', 'scroll', 'keydown'].forEach(event => 
-        document.addEventListener(event, loadFacebookPixel, { once: true, passive: true })
-      );
+      console.log('✅ Meta Pixel initialized and PageView tracked');
+      console.log('✅ fbq function available:', typeof fbq);
     </script>
   </head>
 
