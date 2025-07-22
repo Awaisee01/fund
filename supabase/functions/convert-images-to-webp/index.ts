@@ -30,33 +30,35 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Checking for API key...');
+    console.log('=== Function start ===');
+    console.log('Environment check...');
+    
+    // List all available environment variables (without values for security)
+    const envKeys = Object.keys(Deno.env.toObject());
+    console.log('Available env keys:', envKeys);
+    
     const apiKey = Deno.env.get('RUNWARE_API_KEY');
+    console.log('RUNWARE_API_KEY exists:', !!apiKey);
+    console.log('RUNWARE_API_KEY length:', apiKey ? apiKey.length : 'undefined');
+    
     if (!apiKey) {
       console.error('RUNWARE_API_KEY not found in environment variables');
       throw new Error('RUNWARE_API_KEY not found in environment variables');
     }
 
-    console.log('API key found, length:', apiKey.length);
+    console.log('API key found, processing request...');
 
-    // Default image URLs to convert
-    const imageUrls = [
-      'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/7dfe5a80-6453-471d-805e-51f9a0a3224e.png',
-      'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/e749188a-d4a1-4569-8677-581f59aeb61f.png',
-      'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png',
-      'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png'
-    ];
-
-    const filenames = [
-      'hero-eco4.webp',
-      'hero-gas-boiler.webp', 
-      'hero-home-improvements.webp',
-      'hero-solar.webp'
-    ];
-
-    console.log(`Converting ${imageUrls.length} images...`);
-
-    const convertedImages: ConvertedImage[] = [];
+    // Simplified test - just return success for now to see if the function runs
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'Function executed successfully, API key found',
+        convertedImages: []
+      } as ConvertImageResponse),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
 
     // Convert each image using Runware API
     for (let i = 0; i < imageUrls.length; i++) {
