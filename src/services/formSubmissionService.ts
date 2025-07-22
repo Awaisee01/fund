@@ -222,8 +222,8 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
             customData: {
               content_name: `${data.serviceType} Form Submission`,
               content_category: data.serviceType,
-              value: 1,
-              currency: 'GBP',
+              value: 1, // CRITICAL: ALWAYS number (not string) for Facebook Events Manager
+              currency: "GBP", // CRITICAL: ALWAYS 3-letter ISO code for Facebook Events Manager
               event_value_id: eventId
             },
             eventSourceUrl: window.location.href,
@@ -233,15 +233,26 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           }
         };
         
-        console.log('📊 CAPI: Sending Lead event to Facebook Conversions API');
-        console.log('📊 CAPI: Event ID for deduplication:', String(eventId));
-        console.log('📊 CAPI: Complete payload:', JSON.stringify(fbPayload, null, 2));
+        console.log('✅ CAPI: Sending Lead event to Facebook Conversions API');
+        console.log('✅ CAPI: Event ID for deduplication:', String(eventId));
+        console.log('✅ CAPI: Value type check:', typeof fbPayload.data.customData.value, '(must be number)');
+        console.log('✅ CAPI: Currency format check:', fbPayload.data.customData.currency, '(must be 3-letter ISO)');
+        console.log('✅ CAPI: Complete Lead payload:', JSON.stringify(fbPayload, null, 2));
         
         const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload
         });
 
-        console.log('✅ CAPI: Facebook API Response:', {
+        if (fbError) {
+          console.error('❌ CAPI: Facebook Conversions API failed:', fbError);
+          console.error('❌ CAPI: Error details:', JSON.stringify(fbError, null, 2));
+        } else {
+          console.log('✅ CAPI: Facebook Conversions API SUCCESS!');
+          console.log('✅ CAPI: Response:', JSON.stringify(fbResponse, null, 2));
+          console.log('✅ CAPI: Event ID sent for deduplication:', String(eventId));
+        }
+
+        console.log('✅ CAPI: Facebook API Response Summary:', {
           success: !fbError,
           error: fbError,
           response: fbResponse,
@@ -259,7 +270,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
       }
     };
 
-    // Execute both async operations immediately (not in setTimeout)
+    // Execute Facebook Conversions API immediately (not in setTimeout)
     Promise.allSettled([
       sendFacebookConversions()
     ]).then((results) => {
@@ -368,8 +379,8 @@ export const trackViewContent = async (formName: string, serviceType: string) =>
             customData: {
               content_name: `${formName} Form View`,
               content_category: serviceType,
-              value: 1,
-              currency: 'GBP'
+              value: 1, // CRITICAL: ALWAYS number for Facebook Events Manager
+              currency: "GBP" // CRITICAL: ALWAYS 3-letter ISO code
             },
             eventSourceUrl: window.location.href,
             utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
@@ -453,8 +464,8 @@ export const trackInitiateCheckout = async (formName: string, serviceType: strin
             customData: {
               content_name: `${formName} Form Interaction`,
               content_category: serviceType,
-              value: 1,
-              currency: 'GBP'
+              value: 1, // CRITICAL: ALWAYS number for Facebook Events Manager
+              currency: "GBP" // CRITICAL: ALWAYS 3-letter ISO code
             },
             eventSourceUrl: window.location.href,
             utmData: Object.keys(utmData).length > 0 ? utmData : undefined,

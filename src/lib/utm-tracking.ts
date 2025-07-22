@@ -128,18 +128,18 @@ export const trackPixelEventWithUTM = (
     // Only include custom_data if there are UTM parameters
     const hasUTMData = Object.keys(utmData).length > 0;
     
-    console.log('🔥 DEBUG: PIXEL Final event data being sent to Facebook Pixel:');
-    console.log(JSON.stringify({
-      event: eventName,
-      data: enhancedEventData,
-      hasUTM: hasUTMData,
-      eventID: String(eventId)
-    }, null, 2));
+    console.log('✅ PIXEL: Final event payload being sent to Facebook Pixel:');
+    console.log('✅ PIXEL: Event name:', eventName);
+    console.log('✅ PIXEL: Event data (with UTM):', JSON.stringify(enhancedEventData, null, 2));
+    console.log('✅ PIXEL: Event ID for deduplication:', String(eventId));
+    console.log('✅ PIXEL: Value type check:', typeof enhancedEventData.value, '(must be number)');
+    console.log('✅ PIXEL: Currency format check:', enhancedEventData.currency, '(must be 3-letter ISO)');
 
     // Track the event with enhanced data
     if (typeof (window as any).fbq === 'function') {
       (window as any).fbq('track', eventName, enhancedEventData);
-      console.log(`🔥 DEBUG: PIXEL Facebook Pixel ${eventName} tracking fired successfully with eventID:`, String(eventId));
+      console.log(`✅ PIXEL: Facebook Pixel ${eventName} event fired successfully!`);
+      console.log(`✅ PIXEL: Deduplication eventID sent:`, String(eventId));
     } else {
       console.warn('⚠️ PIXEL: Facebook Pixel fbq function not properly loaded');
       
@@ -180,12 +180,18 @@ export const trackLeadWithUTM = (leadData: {
   console.log('🔥 DEBUG: trackLeadWithUTM called with:', { leadData, eventId });
   console.log('🔥 DEBUG: Facebook Pixel function available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
   
-  trackPixelEventWithUTM('Lead', {
+  // CRITICAL: Ensure value is ALWAYS a number and currency is ALWAYS "GBP" for Facebook Events Manager
+  const standardizedLeadData = {
     ...leadData,
-    value: 1,
-    currency: 'GBP',
+    value: 1, // ALWAYS send as number (not string) for Facebook Events Manager
+    currency: "GBP", // ALWAYS send as 3-letter ISO code for Facebook Events Manager
     event_value_id: leadData.event_value_id || eventId
-  }, eventId);
+  };
+  
+  console.log('✅ PIXEL: Lead event data (standardized for Facebook Events Manager):', standardizedLeadData);
+  
+  trackPixelEventWithUTM('Lead', standardizedLeadData, eventId);
+  console.log('✅ PIXEL: Lead tracking completed with eventID:', String(eventId));
 };
 
 /**
@@ -198,12 +204,18 @@ export const trackViewContentWithUTM = (contentData: {
   currency?: string;
 }, eventId?: string): void => {
   console.log('🔥 DEBUG: trackViewContentWithUTM called with eventId:', eventId);
-  trackPixelEventWithUTM('ViewContent', {
+  
+  // CRITICAL: Ensure value is ALWAYS a number and currency is ALWAYS "GBP"
+  const standardizedContentData = {
     ...contentData,
-    value: contentData.value || 1,
-    currency: contentData.currency || 'GBP'
-  }, eventId);
-  console.log('🔥 DEBUG: ViewContent Pixel tracking completed');
+    value: 1, // ALWAYS number for Facebook Events Manager
+    currency: "GBP" // ALWAYS 3-letter ISO code
+  };
+  
+  console.log('✅ PIXEL: ViewContent event data (standardized):', standardizedContentData);
+  
+  trackPixelEventWithUTM('ViewContent', standardizedContentData, eventId);
+  console.log('✅ PIXEL: ViewContent tracking completed with eventID:', String(eventId));
 };
 
 /**
@@ -216,12 +228,18 @@ export const trackInitiateCheckoutWithUTM = (checkoutData: {
   currency?: string;
 }, eventId?: string): void => {
   console.log('🔥 DEBUG: trackInitiateCheckoutWithUTM called with eventId:', eventId);
-  trackPixelEventWithUTM('InitiateCheckout', {
+  
+  // CRITICAL: Ensure value is ALWAYS a number and currency is ALWAYS "GBP"
+  const standardizedCheckoutData = {
     ...checkoutData,
-    value: checkoutData.value || 1,
-    currency: checkoutData.currency || 'GBP'
-  }, eventId);
-  console.log('🔥 DEBUG: InitiateCheckout Pixel tracking completed');
+    value: 1, // ALWAYS number for Facebook Events Manager
+    currency: "GBP" // ALWAYS 3-letter ISO code
+  };
+  
+  console.log('✅ PIXEL: InitiateCheckout event data (standardized):', standardizedCheckoutData);
+  
+  trackPixelEventWithUTM('InitiateCheckout', standardizedCheckoutData, eventId);
+  console.log('✅ PIXEL: InitiateCheckout tracking completed with eventID:', String(eventId));
 };
 
 /**
