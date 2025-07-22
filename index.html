@@ -30,9 +30,16 @@
     <meta name="keywords" content="Scottish grants, ECO4, solar panels, boiler replacement, home improvements, funding, Scotland" />
 
     
-    <!-- Optimized font loading with compression -->
+    <!-- Critical font preloading with optimized loading strategy -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyYAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Load Google Fonts with optimized fallback -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'; this.onload=null;">
+    
+    <!-- Critical CSS preload (main application styles) -->
+    <link rel="preload" href="/src/index.css" as="style">
     
     <!-- Fallback for font loading -->
     <noscript>
@@ -46,17 +53,18 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
 
-    <!-- Preload new WebP hero images -->
-    <link rel="preload" as="image" href="/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png" type="image/png">
-    <link rel="preload" as="image" href="/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png" type="image/png">
-    <link rel="preload" as="image" href="/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png" type="image/png">
-    <link rel="preload" as="image" href="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png" type="image/png">
+    <!-- Preload critical hero images for all pages -->
+    <link rel="preload" as="image" href="/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png" type="image/png" media="(max-width: 768px)">
+    <link rel="preload" as="image" href="/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png" type="image/png" media="(min-width: 769px)">
     
-    <!-- Preload trust badge images -->
-    <link rel="preload" as="image" href="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png">
-    <link rel="preload" as="image" href="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png">
-    <link rel="preload" as="image" href="/lovable-uploads/b2e276c6-dcac-4400-b7e2-efab434730c4.png">
-    <link rel="preload" as="image" href="/lovable-uploads/8fdd29b5-d86d-491f-9c2f-9e692f13c11c.png">
+    <!-- Preload other hero images for navigation -->
+    <link rel="prefetch" as="image" href="/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png" type="image/png">
+    <link rel="prefetch" as="image" href="/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png" type="image/png">
+    <link rel="prefetch" as="image" href="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png" type="image/png">
+    
+    <!-- Preload critical trust badge images -->
+    <link rel="preload" as="image" href="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" type="image/png">
+    <link rel="preload" as="image" href="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png" type="image/png">
 
     <meta property="og:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
     <meta property="og:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
@@ -230,12 +238,32 @@
   </head>
 
   <body class="loading">
-    <!-- Critical performance script - executed immediately -->
+    <!-- Critical performance script with smart preloading -->
     <script>
       // Add loaded class when page is ready for faster perceived performance
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
       });
+      
+      // Smart preloading based on current route
+      const currentPath = window.location.pathname;
+      const routeImageMap = {
+        '/': '/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png', // ECO4 as default
+        '/eco4': '/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png',
+        '/gas-boilers': '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png',
+        '/home-improvements': '/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png',
+        '/solar': '/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png'
+      };
+      
+      // Preload specific hero image for current route
+      if (routeImageMap[currentPath] && currentPath !== '/') {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = routeImageMap[currentPath];
+        link.type = 'image/png';
+        document.head.appendChild(link);
+      }
       
       // Initialize critical performance features
       if ('IntersectionObserver' in window) {
@@ -254,6 +282,14 @@
         
         // Store observer globally for use by components
         window.imageObserver = imageObserver;
+      }
+      
+      // Preload critical JavaScript modules
+      if ('modulepreload' in HTMLLinkElement.prototype) {
+        const moduleLink = document.createElement('link');
+        moduleLink.rel = 'modulepreload';
+        moduleLink.href = '/src/main.tsx';
+        document.head.appendChild(moduleLink);
       }
     </script>
     
