@@ -99,14 +99,22 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     // Track form submission immediately with the same event ID for both Pixel and CAPI
     console.log('✅ TRACKING: Starting Lead event tracking with eventId:', eventId);
     console.log('✅ TRACKING: Form name:', data.formName);
+    console.log('✅ TRACKING: Service type:', data.serviceType);
+    console.log('✅ TRACKING: Full form data received:', JSON.stringify(data, null, 2));
     
+    // CRITICAL: Always track Lead event regardless of formName presence
     if (data.formName) {
+      console.log('🔥 DEBUG: Form name exists, calling trackFormSubmission');
       // This will trigger both Pixel tracking via trackLeadWithUTM() and the browser event
       trackFormSubmission(data.formName, data.serviceType, eventId);
       console.log('✅ TRACKING: trackFormSubmission called - will fire both Pixel and GA events');
     } else {
-      console.warn('⚠️ TRACKING: No formName provided, tracking may be incomplete');
+      console.warn('⚠️ TRACKING: No formName provided, using fallback tracking');
+      // Fallback: use service type as form name
+      trackFormSubmission(data.serviceType || 'Unknown Form', data.serviceType, eventId);
     }
+    
+    console.log('🔥 DEBUG: About to call Facebook Conversions API for Lead event with eventId:', eventId);
 
     // Send email notification asynchronously - don't block form completion
     setTimeout(async () => {
@@ -302,9 +310,13 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
 
 // Debounced tracking function to prevent excessive calls
 const debouncedTrackFormSubmission = debounce((formName: string, category: string, eventId?: string) => {
-  console.log('🔥 DEBUG: debouncedTrackFormSubmission called:', { formName, category, eventId });
-  console.log('🔥 DEBUG: PIXEL Starting Lead event tracking with eventID:', eventId);
+  console.log('🟢🟢🟢 DEBOUNCED TRACKER CALLED!');
+  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Form name:', formName);
+  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Category:', category);
+  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Event ID:', eventId);
+  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Starting Lead event tracking with eventID:', eventId);
   
+  console.log('🟢🟢🟢 DEBOUNCED TRACKER: About to call trackLeadWithUTM...');
   // Enhanced Meta Pixel tracking with UTM data and event ID for deduplication
   trackLeadWithUTM({
     content_name: `${formName} Form Submission`,
@@ -314,7 +326,7 @@ const debouncedTrackFormSubmission = debounce((formName: string, category: strin
     event_value_id: eventId
   }, eventId);
   
-  console.log('🔥 DEBUG: PIXEL Lead event tracking completed');
+  console.log('🟢🟢🟢 DEBOUNCED TRACKER: trackLeadWithUTM call completed');
   
   // Google Analytics tracking with better error handling
   if (typeof window !== 'undefined' && (window as any).gtag) {

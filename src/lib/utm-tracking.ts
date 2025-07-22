@@ -104,11 +104,26 @@ export const trackPixelEventWithUTM = (
   eventData: Record<string, any> = {},
   eventId?: string
 ): void => {
-  console.log('🔥 DEBUG: trackPixelEventWithUTM called', { eventName, eventData, eventId });
-  console.log('🔥 DEBUG: Facebook Pixel function available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
+  console.log('🚨🚨🚨 UBER CRITICAL: trackPixelEventWithUTM ENTRY POINT!');
+  console.log('🚨🚨🚨 UBER CRITICAL: Event name:', eventName);
+  console.log('🚨🚨🚨 UBER CRITICAL: Event data:', JSON.stringify(eventData, null, 2));
+  console.log('🚨🚨🚨 UBER CRITICAL: Event ID:', eventId);
+  console.log('🚨🚨🚨 UBER CRITICAL: Window available?', typeof window !== 'undefined');
+  console.log('🚨🚨🚨 UBER CRITICAL: fbq function available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
+  console.log('🚨🚨🚨 UBER CRITICAL: fbq function type:', typeof (window as any)?.fbq);
+  console.log('🚨🚨🚨 UBER CRITICAL: Complete window.fbq inspection:', (window as any)?.fbq);
   
-  if (typeof window === 'undefined' || !(window as any).fbq) {
-    console.warn('⚠️ PIXEL: Facebook Pixel not available');
+  if (typeof window === 'undefined') {
+    console.error('❌❌❌ CRITICAL ERROR: Window is undefined - running on server side!');
+    return;
+  }
+  
+  if (!(window as any).fbq) {
+    console.error('❌❌❌ CRITICAL ERROR: Facebook Pixel (fbq) not available!');
+    console.error('❌❌❌ CRITICAL ERROR: Available window properties:', Object.keys(window));
+    console.error('❌❌❌ CRITICAL ERROR: Searching for any fb-related properties...');
+    const fbProps = Object.keys(window).filter(key => key.toLowerCase().includes('fb'));
+    console.error('❌❌❌ CRITICAL ERROR: Facebook-related properties found:', fbProps);
     return;
   }
 
@@ -177,8 +192,12 @@ export const trackLeadWithUTM = (leadData: {
   currency?: string;
   event_value_id?: string;
 }, eventId?: string): void => {
-  console.log('🔥 DEBUG: trackLeadWithUTM called with:', { leadData, eventId });
-  console.log('🔥 DEBUG: Facebook Pixel function available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
+  console.log('🔥🔥🔥 CRITICAL DEBUG: trackLeadWithUTM CALLED!');
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Lead data received:', JSON.stringify(leadData, null, 2));
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Event ID received:', eventId);
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Facebook Pixel function available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Window object exists?', typeof window !== 'undefined');
+  console.log('🔥🔥🔥 CRITICAL DEBUG: fbq function type:', typeof (window as any)?.fbq);
   
   // CRITICAL: Ensure value is ALWAYS a number and currency is ALWAYS "GBP" for Facebook Events Manager
   const standardizedLeadData = {
@@ -188,10 +207,15 @@ export const trackLeadWithUTM = (leadData: {
     event_value_id: leadData.event_value_id || eventId
   };
   
-  console.log('✅ PIXEL: Lead event data (standardized for Facebook Events Manager):', standardizedLeadData);
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Standardized Lead event data for Facebook Events Manager:');
+  console.log('🔥🔥🔥 CRITICAL DEBUG:', JSON.stringify(standardizedLeadData, null, 2));
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Value type check:', typeof standardizedLeadData.value, '(MUST be number)');
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Currency format check:', standardizedLeadData.currency, '(MUST be "GBP")');
   
+  console.log('🔥🔥🔥 CRITICAL DEBUG: About to call trackPixelEventWithUTM...');
   trackPixelEventWithUTM('Lead', standardizedLeadData, eventId);
-  console.log('✅ PIXEL: Lead tracking completed with eventID:', String(eventId));
+  console.log('🔥🔥🔥 CRITICAL DEBUG: trackPixelEventWithUTM call completed');
+  console.log('🔥🔥🔥 CRITICAL DEBUG: Lead tracking completed with eventID:', String(eventId));
 };
 
 /**
