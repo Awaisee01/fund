@@ -2,7 +2,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
 import { trackLeadWithUTM, getUTMData, getFacebookClickId, getFacebookBrowserId } from '@/lib/utm-tracking';
-import analyticsTracker from '@/lib/analytics-tracking';
+import tracker from '@/lib/analytics-tracking';
 
 type ServiceType = Database['public']['Enums']['service_type'];
 
@@ -91,7 +91,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     console.log('✅ Form submission saved successfully:', result);
 
     // Track conversion in analytics
-    await analyticsTracker.trackConversion();
+    await tracker.trackConversion();
 
     // Generate unique event ID for deduplication between Pixel and Conversions API
     const eventId = `${data.serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
