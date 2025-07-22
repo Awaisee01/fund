@@ -3,7 +3,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Optimized viewport for mobile - prevents zoom issues and ensures proper scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    
+    <!-- Mobile-specific optimizations -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="apple-mobile-web-app-title" content="Funding For Scotland" />
     
     <!-- Critical resource hints for fastest loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -43,10 +51,72 @@
     <!-- Optimized favicon -->
     <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
 
-    <!-- Ultra-compressed critical CSS for immediate rendering -->
+    <!-- Ultra-compressed critical CSS with mobile-first optimizations -->
     <style>
-      /* Minified critical path CSS - ECO4 specific */
-      *{box-sizing:border-box;margin:0;padding:0}html{font-family:'Inter',system-ui,-apple-system,sans-serif;scroll-behavior:smooth;-webkit-text-size-adjust:100%}body{background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;line-height:1.6}.hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 35%,#059669 100%)}.hero-text-white{color:#fff}.hero-text-blue-100{color:#dbeafe}.hero-text-blue-50{color:#eff6ff}.hero-text-green-300{color:#86efac}.relative{position:relative}.absolute{position:absolute}.inset-0{top:0;right:0;bottom:0;left:0}.flex{display:flex}.grid{display:grid}.w-full{width:100%}.h-full{height:100%}.items-center{align-items:center}.justify-center{justify-content:center}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.leading-tight{line-height:1.25}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.px-4{padding:0 1rem}.py-20{padding:5rem 0}.gap-12{gap:3rem}.hero-image-container{aspect-ratio:16/9;background:#f3f4f6}.form-card{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:.75rem;box-shadow:0 20px 25px -5px rgba(0,0,0,.1)}.loading #root{opacity:0;transition:opacity .2s}.loaded #root{opacity:1}.order-1{order:1}.order-2{order:2}@media (min-width:1024px){.text-4xl,.lg\:text-6xl{font-size:3.75rem;line-height:1}.py-20,.lg\:py-24{padding:6rem 0}.lg\:grid-cols-2{grid-template-columns:1fr 1fr}.lg\:order-1{order:1}.lg\:order-2{order:2}.lg\:justify-end{justify-content:flex-end}.lg\:px-8{padding-left:2rem;padding-right:2rem}}
+      /* Mobile-first critical CSS - optimized for touch devices */
+      *{box-sizing:border-box;margin:0;padding:0}html{font-family:'Inter',system-ui,-apple-system,sans-serif;scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}body{background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;line-height:1.6;touch-action:manipulation}
+      
+      /* Mobile touch optimization */
+      button,a,[role="button"]{min-height:44px;min-width:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+      
+      /* Critical hero styles with mobile-first approach */
+      .hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 35%,#059669 100%)}.hero-text-white{color:#fff}.hero-text-blue-100{color:#dbeafe}.hero-text-blue-50{color:#eff6ff}.hero-text-green-300{color:#86efac}
+      
+      /* Mobile-optimized layout */
+      .relative{position:relative}.absolute{position:absolute}.inset-0{top:0;right:0;bottom:0;left:0}.flex{display:flex}.grid{display:grid}.w-full{width:100%}.h-full{height:100%}.items-center{align-items:center}.justify-center{justify-content:center}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}
+      
+      /* Mobile typography - larger sizes for readability */
+      .text-4xl{font-size:2rem;line-height:2.25rem}.text-xl{font-size:1.125rem;line-height:1.75rem}.text-lg{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.leading-tight{line-height:1.25}
+      
+      /* Mobile spacing - optimized for touch */
+      .mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.px-4{padding:0 1rem}.py-20{padding:3rem 0}.gap-12{gap:2rem}
+      
+      /* Mobile hero image with performance optimization */
+      .hero-image-container{aspect-ratio:16/9;background:#f3f4f6;transform:translateZ(0);will-change:transform}
+      
+      /* Mobile form optimization */
+      .form-card{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:.75rem;box-shadow:0 10px 15px -3px rgba(0,0,0,.1);padding:1.5rem;max-width:100%}
+      
+      /* Touch-optimized inputs */
+      input,textarea,select{min-height:44px;font-size:16px;border-radius:.5rem;border:1px solid #d1d5db;padding:.75rem;width:100%}
+      input:focus,textarea:focus,select:focus{outline:2px solid #2563eb;outline-offset:2px;border-color:#2563eb}
+      
+      /* Loading states */
+      .loading #root{opacity:0;transition:opacity .2s}.loaded #root{opacity:1}
+      .order-1{order:1}.order-2{order:2}
+      
+      /* Mobile-first responsive breakpoints */
+      @media (min-width:640px){
+        .text-4xl{font-size:2.25rem;line-height:2.5rem}
+        .py-20{padding:4rem 0}
+        .gap-12{gap:2.5rem}
+        .form-card{padding:2rem}
+      }
+      
+      @media (min-width:1024px){
+        .text-4xl,.lg\:text-6xl{font-size:3.75rem;line-height:1}
+        .py-20,.lg\:py-24{padding:6rem 0}
+        .lg\:grid-cols-2{grid-template-columns:1fr 1fr}
+        .lg\:order-1{order:1}
+        .lg\:order-2{order:2}
+        .lg\:justify-end{justify-content:flex-end}
+        .lg\:px-8{padding-left:2rem;padding-right:2rem}
+        .gap-12{gap:3rem}
+        
+        /* Desktop-specific touch target adjustments */
+        button,a,[role="button"]{min-height:40px;min-width:40px}
+      }
+      
+      /* High-DPI screen optimizations */
+      @media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi){
+        .hero-image-container{background-size:cover;background-position:center}
+      }
+      
+      /* Reduce motion for accessibility */
+      @media (prefers-reduced-motion:reduce){
+        *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+        .hero-image-container{transform:none !important}
+      }
     </style>
     
     <!-- Load non-critical Tailwind CSS after critical rendering -->
