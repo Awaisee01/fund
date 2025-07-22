@@ -5,7 +5,7 @@ import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Flame, Wrench, PoundSterling } from 'lucide-react';
-import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
+// Performance hooks removed
 
 // Lazy load below-the-fold content
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
@@ -14,8 +14,7 @@ const GasBoilers = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
   
-  usePagePerformance('gas-boilers');
-  useViewportOptimization();
+  // Performance hooks removed
 
   useEffect(() => {
     document.title = "Free Gas Boiler Replacement & Repair Scotland - Government Grants | Funding For Scotland";

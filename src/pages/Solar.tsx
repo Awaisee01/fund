@@ -4,7 +4,7 @@ import NativeSolarForm from '@/components/NativeSolarForm';
 import SimplifiedHero from '@/components/SimplifiedHero';
 import HeroSkeleton from '@/components/HeroSkeleton';
 import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
-import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
+// Performance hooks removed
 
 // Lazy load sections that are below the fold
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
@@ -14,8 +14,7 @@ const Solar = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
   
-  usePagePerformance('solar');
-  useViewportOptimization();
+  // Performance hooks removed
 
   useEffect(() => {
     document.title = "Free Solar Panels Scotland - Government Grants & Installation | Funding For Scotland";

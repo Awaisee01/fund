@@ -2,7 +2,7 @@
 import { useEffect, useState, Suspense, lazy } from 'react';
 import HomeImprovementsHero from '@/components/home-improvements/HomeImprovementsHero';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
-import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
+// Performance hooks removed
 
 // Lazy load non-critical components
 const ProcessSteps = lazy(() => import('@/components/home-improvements/ProcessSteps'));
@@ -12,8 +12,7 @@ const HomeImprovements = () => {
   const [heroLoaded, setHeroLoaded] = useState(false);
 
   // Performance optimizations
-  usePagePerformance('home-improvements');
-  useViewportOptimization();
+  // Performance hooks removed
 
   useEffect(() => {
     document.title = "Free Home Improvements Scotland - Government Grants & Upgrades | Funding For Scotland";

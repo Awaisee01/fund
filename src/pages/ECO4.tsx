@@ -4,7 +4,7 @@ import OptimizedImage from '@/components/OptimizedImage';
 import HeroSkeleton from '@/components/HeroSkeleton';
 import LazySection from '@/components/LazySection';
 import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
-import { usePagePerformance, useViewportOptimization } from '@/hooks/usePerformanceOptimization';
+// Performance hooks removed
 
 // Lazy load sections that are below the fold
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
@@ -14,8 +14,7 @@ const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
   
-  usePagePerformance('eco4');
-  useViewportOptimization();
+  // Performance hooks removed
 
   useEffect(() => {
     document.title = "Free ECO4 Grants Scotland - Government Energy Efficiency Scheme | Funding For Scotland";
