@@ -93,9 +93,10 @@ export default defineConfig(({ mode }) => ({
   },
   // Enable tree-shaking for better bundle size
   define: {
-    // Remove console.log in production
-    'console.log': 'void 0',
-    'console.warn': 'void 0',
-    'console.error': 'console.error', // Keep errors
+    // Remove console.log in production (only in production mode)
+    ...(mode === 'production' ? {
+      'console.log': '(() => {})',
+      'console.warn': '(() => {})',
+    } : {}),
   },
 }));
