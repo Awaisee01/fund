@@ -18,7 +18,7 @@ const HomeImprovementsHero = () => {
       {/* Static background image without parallax */}
       <div className="absolute inset-0 opacity-30">
         <OptimizedImage
-          src="/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png"
+          src="/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png"
           alt="Home Improvements Background - Modern house exterior with driveway"
           className="w-full h-full object-cover mix-blend-multiply"
           priority={true}

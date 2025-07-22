@@ -85,7 +85,7 @@ const Solar = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png"
+            src="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png"
             alt="Solar Panels Background"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
