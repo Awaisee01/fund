@@ -9,6 +9,7 @@ import "./styles/mobile-optimized.css";
 import "./styles/mobile-fixes.css";
 import "./styles/emergency-fixes.css";
 import "./styles/mobile-form-first.css";
+import "./styles/mobile-layout-fix.css";
 
 
 
