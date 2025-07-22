@@ -1,5 +1,5 @@
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
+import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface SolarFormData {
@@ -36,6 +36,16 @@ const NativeSolarForm = () => {
       understand: false
     }
   });
+
+  // Track ViewContent when form loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log('📊 Solar Form: Tracking ViewContent event');
+      trackViewContent('Solar', 'solar');
+    }, 1000); // Wait 1 second for form to be fully rendered
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {

@@ -140,13 +140,13 @@
         s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};document.head.appendChild(s);
       }
       
-      // Load pixel after critical path renders
+      // Load pixel after critical path renders - reduced delay for better tracking
       if(document.readyState==='loading'){
         document.addEventListener('DOMContentLoaded',function(){
-          setTimeout(loadFacebookPixel,2000);
+          setTimeout(loadFacebookPixel,500); // Reduced from 2000ms to 500ms
         });
       }else{
-        setTimeout(loadFacebookPixel,2000);
+        setTimeout(loadFacebookPixel,500); // Reduced from 2000ms to 500ms
       }
       
       // Load on first user interaction

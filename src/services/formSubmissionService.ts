@@ -135,7 +135,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     // Send Facebook Conversions API data asynchronously - but immediately
     const sendFacebookConversions = async () => {
       try {
-        console.log('📊 Sending Facebook Conversions API data for:', data.serviceType, data.name);
+        console.log('📊 CAPI: Starting Facebook Conversions API data for:', data.serviceType, data.name);
         
         const utmData = getUTMData();
         const [firstName, ...lastNameParts] = data.name.split(' ');
@@ -190,7 +190,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         // Generate external_id for better matching (always present)
         const externalId = eventId;
         
-        console.log('📊 Facebook identifiers:', { 
+        console.log('📊 CAPI: Facebook identifiers:', { 
           fbc: fbc ? 'present' : 'missing', 
           fbp: fbp ? 'present' : 'missing',
           external_id: externalId ? 'present' : 'missing'
@@ -199,7 +199,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         const fbPayload = {
           data: {
             eventName: 'Lead',
-            eventId: String(eventId), // Ensure it's always a string for Facebook
+            eventId: String(eventId), // Ensure it's always a string for Facebook (snake_case)
             userData: {
               email: data.email,
               phone: data.phone,
@@ -226,20 +226,20 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           }
         };
         
-        console.log('📊 Facebook CAPI payload:', fbPayload);
-        console.log('📊 RAW CAPI Payload (exact JSON):', JSON.stringify(fbPayload, null, 2));
+        console.log('📊 CAPI: Complete Facebook CAPI payload (with all required fields):');
+        console.log(JSON.stringify(fbPayload, null, 2));
         
         const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload
         });
 
         if (fbError) {
-          console.error('❌ Facebook Conversions API failed:', fbError);
+          console.error('❌ CAPI: Facebook Conversions API failed:', fbError);
         } else {
-          console.log('✅ Facebook Conversions API sent successfully:', fbResponse);
+          console.log('✅ CAPI: Facebook Conversions API sent successfully:', fbResponse);
         }
       } catch (fbError) {
-        console.error('❌ Facebook Conversions API error:', fbError);
+        console.error('❌ CAPI: Facebook Conversions API error:', fbError);
       }
     };
 
@@ -276,6 +276,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
 // Debounced tracking function to prevent excessive calls
 const debouncedTrackFormSubmission = debounce((formName: string, category: string, eventId?: string) => {
   console.log('📊 Tracking form submission:', { formName, category, eventId });
+  console.log('📊 PIXEL: Starting Lead event tracking with eventID:', eventId);
   
   // Enhanced Meta Pixel tracking with UTM data and event ID for deduplication
   trackLeadWithUTM({
@@ -285,6 +286,8 @@ const debouncedTrackFormSubmission = debounce((formName: string, category: strin
     currency: 'GBP',
     event_value_id: eventId
   }, eventId);
+  
+  console.log('📊 PIXEL: Lead event fired successfully');
   
   // Google Analytics tracking with better error handling
   if (typeof window !== 'undefined' && (window as any).gtag) {

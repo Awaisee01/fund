@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
+import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
 
 interface GasBoilersFormData {
   fullName: string;
@@ -31,6 +31,16 @@ const NativeGasBoilersForm = () => {
       phone: ''
     }
   });
+
+  // Track ViewContent when form loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log('📊 Gas Boilers Form: Tracking ViewContent event');
+      trackViewContent('Gas Boilers', 'gas_boilers');
+    }, 1000); // Wait 1 second for form to be fully rendered
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {

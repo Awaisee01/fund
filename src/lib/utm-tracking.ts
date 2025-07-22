@@ -118,43 +118,48 @@ export const trackPixelEventWithUTM = (
 
     // Add event ID if provided for deduplication (must match CAPI format)
     if (eventId) {
-      enhancedEventData.eventID = String(eventId); // Ensure it's always a string
-      console.log('📊 Pixel event ID (eventID):', String(eventId));
+      enhancedEventData.eventID = String(eventId); // Ensure it's always a string (camelCase for Pixel)
+      console.log('📊 PIXEL: Adding eventID for deduplication:', String(eventId));
     }
 
     // Only include custom_data if there are UTM parameters
     const hasUTMData = Object.keys(utmData).length > 0;
     
-    if (hasUTMData || eventId) {
-      console.log('📊 Tracking Facebook Pixel event with enhanced data:', {
-        event: eventName,
-        data: enhancedEventData,
-        eventId: eventId
-      });
-    } else {
-      console.log('📊 Tracking Facebook Pixel event (basic):', {
-        event: eventName,
-        data: eventData
-      });
-    }
+    console.log('📊 PIXEL: Final event data being sent to Facebook Pixel:');
+    console.log(JSON.stringify({
+      event: eventName,
+      data: enhancedEventData,
+      hasUTM: hasUTMData,
+      eventID: eventId
+    }, null, 2));
 
     // Track the event with enhanced data
     if (typeof (window as any).fbq === 'function') {
       (window as any).fbq('track', eventName, enhancedEventData);
-      console.log(`✅ Facebook Pixel ${eventName} tracking successful`);
+      console.log(`✅ PIXEL: Facebook Pixel ${eventName} tracking fired successfully`);
     } else {
-      console.warn('⚠️ Facebook Pixel fbq function not properly loaded');
+      console.warn('⚠️ PIXEL: Facebook Pixel fbq function not properly loaded');
+      
+      // Check if Pixel is being loaded
+      if (typeof window !== 'undefined' && !(window as any).fbPixelLoaded) {
+        console.warn('⚠️ PIXEL: Facebook Pixel script not loaded yet - attempting to queue event');
+        // Try to queue the event if fbq queue exists
+        if ((window as any).fbq && (window as any).fbq.q) {
+          (window as any).fbq('track', eventName, enhancedEventData);
+          console.log(`⚠️ PIXEL: Event queued for when Facebook Pixel loads`);
+        }
+      }
     }
   } catch (error) {
-    console.error('❌ Facebook Pixel tracking failed:', error);
+    console.error('❌ PIXEL: Facebook Pixel tracking failed:', error);
     // Fallback to basic tracking without UTM data
     try {
       if (typeof (window as any).fbq === 'function') {
         (window as any).fbq('track', eventName, eventData);
-        console.log(`✅ Facebook Pixel ${eventName} fallback tracking successful`);
+        console.log(`✅ PIXEL: Facebook Pixel ${eventName} fallback tracking successful`);
       }
     } catch (fallbackError) {
-      console.error('❌ Facebook Pixel fallback tracking also failed:', fallbackError);
+      console.error('❌ PIXEL: Facebook Pixel fallback tracking also failed:', fallbackError);
     }
   }
 };
