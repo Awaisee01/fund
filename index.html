@@ -142,13 +142,17 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize with our Pixel ID
-      fbq('init', '1423013825182147');
+      // Initialize with our Pixel ID and disable auto-detection
+      fbq('init', '1423013825182147', {
+        disable_auto_config: true,
+        autoConfig: false,
+        em: 'disabled'
+      });
       
       // Track PageView immediately
       fbq('track', 'PageView');
       
-      console.log('✅ Meta Pixel initialized and PageView tracked');
+      console.log('✅ Meta Pixel initialized with auto-detection disabled');
       console.log('✅ fbq function available:', typeof fbq);
     </script>
   </head>
