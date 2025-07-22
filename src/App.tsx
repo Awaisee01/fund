@@ -69,7 +69,9 @@ const App = () => {
                 position: 'sticky',
                 top: '0',
                 zIndex: '1000',
-                width: '100%'
+                width: '100%',
+                minHeight: '64px',
+                display: 'block'
               }}>
                 <div style={{
                   maxWidth: '1200px',
