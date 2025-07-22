@@ -1,10 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -44,59 +55,62 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation - HIDDEN ON MOBILE */}
-          <div className="hidden lg:flex items-center gap-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                style={{
-                  padding: '0.5rem 0.75rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  fontWeight: '500',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s',
-                  backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
-                  color: isActive(item.path) ? '#ffffff' : '#374151'
-                }}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
+          {/* Desktop Navigation - ONLY SHOW ON DESKTOP */}
+          {!isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  style={{
+                    padding: '0.5rem 0.75rem',
+                    borderRadius: '0.375rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s',
+                    backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
+                    color: isActive(item.path) ? '#ffffff' : '#374151'
+                  }}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          )}
 
-          {/* Mobile hamburger menu - VISIBLE ON MOBILE ONLY */}
-          <div className="lg:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              style={{
-                padding: '0.5rem',
-                borderRadius: '0.375rem',
-                color: '#374151',
-                cursor: 'pointer',
-                border: 'none',
-                backgroundColor: 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+          {/* Mobile hamburger menu - ONLY SHOW ON MOBILE */}
+          {isMobile && (
+            <div>
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                style={{
+                  padding: '0.5rem',
+                  borderRadius: '0.375rem',
+                  color: '#374151',
+                  cursor: 'pointer',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                aria-label="Toggle menu"
+              >
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Mobile dropdown menu */}
-        {isOpen && (
+        {/* Mobile dropdown menu - ONLY SHOW ON MOBILE WHEN OPEN */}
+        {isMobile && isOpen && (
           <div style={{
-            display: 'block',
             borderTop: '1px solid #e5e7eb',
             backgroundColor: '#ffffff',
             paddingTop: '0.5rem',
             paddingBottom: '0.75rem'
-          }} className="lg:hidden">
+          }}>
             <div style={{ padding: '0 0.5rem' }}>
               {navItems.map((item) => (
                 <Link
