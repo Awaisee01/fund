@@ -36,6 +36,8 @@ class AnalyticsTracker {
   }
 
   private getOrCreateVisitorId(): string {
+    if (typeof window === 'undefined') return 'ssr-visitor-id';
+    
     let visitorId = localStorage.getItem('visitor_id');
     if (!visitorId) {
       visitorId = this.generateUUID();
@@ -45,6 +47,8 @@ class AnalyticsTracker {
   }
 
   private getOrCreateSessionId(): string {
+    if (typeof window === 'undefined') return 'ssr-session-id';
+    
     const sessionTimeout = 30 * 60 * 1000; // 30 minutes
     const lastActivity = localStorage.getItem('last_activity');
     const currentTime = Date.now();
@@ -82,22 +86,26 @@ class AnalyticsTracker {
 
   private setupSessionTimeout(): void {
     // Update last activity every 30 seconds while user is active
-    setInterval(() => {
-      localStorage.setItem('last_activity', Date.now().toString());
-    }, 30000);
+    if (typeof window !== 'undefined') {
+      setInterval(() => {
+        localStorage.setItem('last_activity', Date.now().toString());
+      }, 30000);
+    }
   }
 
   private setupPageUnloadTracking(): void {
-    window.addEventListener('beforeunload', () => {
-      this.updateSessionEnd();
-    });
-
-    // Also update on visibility change
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeunload', () => {
         this.updateSessionEnd();
-      }
-    });
+      });
+
+      // Also update on visibility change
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          this.updateSessionEnd();
+        }
+      });
+    }
   }
 
   private async createVisitorSession(): Promise<void> {
