@@ -161,6 +161,7 @@ const ImageConversionStatus = () => {
             <li>ECO4 Hero Image → hero-eco4.webp</li>
             <li>Gas Boiler Hero Image → hero-gas-boiler.webp</li>
             <li>Home Improvements Hero Image → hero-home-improvements.webp</li>
+            <li>Solar Hero Image → hero-solar.webp</li>
           </ul>
         </div>
       </CardContent>

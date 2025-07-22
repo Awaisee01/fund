@@ -41,13 +41,15 @@ serve(async (req) => {
     const imageUrls = [
       'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/7dfe5a80-6453-471d-805e-51f9a0a3224e.png',
       'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/e749188a-d4a1-4569-8677-581f59aeb61f.png',
-      'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png'
+      'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/afaedb6c-8cc8-4d04-ab6b-bfcfcf8d836a.png',
+      'https://nncpapnlnrtssbruzkla.lovableproject.com/lovable-uploads/c276cb6c-c378-46e1-bd25-bb8becd28703.png'
     ];
 
     const filenames = [
       'hero-eco4.webp',
       'hero-gas-boiler.webp', 
-      'hero-home-improvements.webp'
+      'hero-home-improvements.webp',
+      'hero-solar.webp'
     ];
 
     console.log(`Converting ${imageUrls.length} images...`);
