@@ -1,0 +1,62 @@
+/* EMERGENCY NAVBAR FIX - HIGHEST PRIORITY */
+nav {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 9999 !important;
+  background-color: white !important;
+  width: 100% !important;
+  min-height: 64px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+nav div {
+  display: flex !important;
+  visibility: visible !important;
+}
+
+nav img {
+  display: block !important;
+  visibility: visible !important;
+  height: 32px !important;
+  width: auto !important;
+}
+
+nav a {
+  display: block !important;
+  visibility: visible !important;
+  text-decoration: none !important;
+  color: #374151 !important;
+}
+
+/* MOBILE FORM-FIRST LAYOUT FIX */
+@media (max-width: 1024px) {
+  /* Force mobile layout to be form first */
+  .flex.flex-col.lg\\:grid.lg\\:grid-cols-2 {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  /* Form container should be first */
+  .order-2.lg\\:order-2 {
+    order: 1 !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  /* Text content should be second */
+  .order-1.lg\\:order-1 {
+    order: 2 !important;
+  }
+  
+  /* Ensure full width on mobile */
+  .w-full {
+    width: 100% !important;
+  }
+  
+  /* Center form on mobile */
+  .flex.justify-center.lg\\:justify-end {
+    justify-content: center !important;
+  }
+}

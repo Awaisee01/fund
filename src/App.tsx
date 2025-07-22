@@ -68,10 +68,12 @@ const App = () => {
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                 position: 'sticky',
                 top: '0',
-                zIndex: '1000',
+                zIndex: '9999',
                 width: '100%',
                 minHeight: '64px',
-                display: 'block'
+                display: 'block',
+                visibility: 'visible',
+                opacity: '1'
               }}>
                 <div style={{
                   maxWidth: '1200px',
@@ -80,71 +82,71 @@ const App = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  height: '64px'
+                  height: '64px',
+                  width: '100%'
                 }}>
-                  <div>
-                    <a href="/" style={{ textDecoration: 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <a href="/" style={{ textDecoration: 'none', display: 'block' }}>
                       <img 
                         src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                         alt="Funding For Scotland" 
-                        style={{ height: '32px', width: 'auto' }}
+                        style={{ height: '32px', width: 'auto', display: 'block' }}
                       />
                     </a>
                   </div>
-                  <div className="hidden md:flex" style={{ gap: '20px' }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: '20px',
+                    alignItems: 'center'
+                  }}>
                     <a href="/" style={{ 
                       textDecoration: 'none', 
                       color: '#374151', 
                       fontWeight: '500',
                       padding: '8px 12px',
-                      borderRadius: '6px'
+                      borderRadius: '6px',
+                      display: 'block'
                     }}>Home</a>
                     <a href="/eco4" style={{ 
                       textDecoration: 'none', 
                       color: '#374151', 
                       fontWeight: '500',
                       padding: '8px 12px',
-                      borderRadius: '6px'
+                      borderRadius: '6px',
+                      display: 'block'
                     }}>ECO4</a>
                     <a href="/solar" style={{ 
                       textDecoration: 'none', 
                       color: '#374151', 
                       fontWeight: '500',
                       padding: '8px 12px',
-                      borderRadius: '6px'
+                      borderRadius: '6px',
+                      display: 'block'
                     }}>Solar</a>
                     <a href="/gas-boilers" style={{ 
                       textDecoration: 'none', 
                       color: '#374151', 
                       fontWeight: '500',
                       padding: '8px 12px',
-                      borderRadius: '6px'
+                      borderRadius: '6px',
+                      display: 'block'
                     }}>Gas Boilers</a>
                     <a href="/home-improvements" style={{ 
                       textDecoration: 'none', 
                       color: '#374151', 
                       fontWeight: '500',
                       padding: '8px 12px',
-                      borderRadius: '6px'
+                      borderRadius: '6px',
+                      display: 'block'
                     }}>Home Improvements</a>
                     <a href="/contact" style={{ 
                       textDecoration: 'none', 
                       color: '#374151', 
                       fontWeight: '500',
                       padding: '8px 12px',
-                      borderRadius: '6px'
+                      borderRadius: '6px',
+                      display: 'block'
                     }}>Contact</a>
-                  </div>
-                  
-                  {/* Mobile hamburger menu */}
-                  <div className="block md:hidden">
-                    <button style={{
-                      background: 'none',
-                      border: 'none',
-                      fontSize: '24px',
-                      cursor: 'pointer',
-                      padding: '8px'
-                    }}>☰</button>
                   </div>
                 </div>
               </nav>

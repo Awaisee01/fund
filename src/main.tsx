@@ -7,6 +7,7 @@ import "./lib/console-override";
 import "./index.css";
 import "./styles/mobile-optimized.css";
 import "./styles/mobile-fixes.css";
+import "./styles/emergency-fixes.css";
 
 
 
