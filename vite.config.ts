@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           'react-core': ['react', 'react-dom'],
           'supabase': ['@supabase/supabase-js'],
-          'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-form'],
+          'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
           'routing': ['react-router-dom'],
           'forms': ['react-hook-form', '@hookform/resolvers', 'zod']
         },
