@@ -138,6 +138,16 @@ class AnalyticsTracker {
   private async createVisitorSession(): Promise<void> {
     if (typeof window === 'undefined') return;
     
+    // Ensure we have valid session data before attempting database insert
+    if (!this.sessionId || !this.visitorId || !this.sessionStart) {
+      console.warn('Cannot create visitor session: missing required data', {
+        sessionId: this.sessionId,
+        visitorId: this.visitorId,
+        sessionStart: this.sessionStart
+      });
+      return;
+    }
+    
     try {
       const utmParams = this.getUTMParameters();
       
