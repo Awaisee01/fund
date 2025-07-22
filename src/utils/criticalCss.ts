@@ -82,15 +82,37 @@ export const criticalCssExtractor = {
 export const loadNonCriticalCSS = () => {
   if (typeof window !== 'undefined') {
     window.addEventListener('load', () => {
-      // Load additional stylesheets for below-the-fold content
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = '/src/styles/deferred.css';
-      (link as any).media = 'print';
-      link.onload = function() {
-        (this as any).media = 'all';
-      };
-      document.head.appendChild(link);
+      // Add non-critical styles dynamically
+      const style = document.createElement('style');
+      style.textContent = `
+        /* Below-the-fold animations */
+        .lazy-load {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .lazy-load.loaded {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        
+        /* Performance optimizations */
+        .will-change-transform {
+          will-change: transform;
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
+        }
+      `;
+      document.head.appendChild(style);
     });
   }
 };

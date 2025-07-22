@@ -287,12 +287,14 @@
         });
         
         // Preload non-critical CSS after initial render
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '/src/index.css';
-        link.media = 'print';
-        link.onload = function() { this.media = 'all'; };
-        document.head.appendChild(link);
+        const style = document.createElement('style');
+        style.textContent = `
+          .hover-scale { transition: transform 0.2s ease; }
+          .hover-scale:hover { transform: scale(1.05); }
+          .fade-in { opacity: 0; animation: fadeIn 0.3s ease forwards; }
+          @keyframes fadeIn { to { opacity: 1; } }
+        `;
+        document.head.appendChild(style);
       });
     </script>
     
