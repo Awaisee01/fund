@@ -1,8 +1,8 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { CheckCircle } from 'lucide-react';
 
-// Lazy load the mobile-optimized form for optimal performance
-const MobileOptimizedECO4Form = lazy(() => import('@/components/MobileOptimizedECO4Form'));
+// Lazy load the native ECO4 form for optimal performance
+const NativeECO4Form = lazy(() => import('@/components/NativeECO4Form'));
 
 interface CriticalECO4HeroProps {
   scrollY: number;
@@ -110,7 +110,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
                     </div>
                   </div>
                 }>
-                  <MobileOptimizedECO4Form />
+                  <NativeECO4Form />
                 </Suspense>
               ) : (
                 <div className="form-card">
