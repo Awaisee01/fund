@@ -41,18 +41,20 @@ const PerformanceOptimizer = ({ children }: PerformanceOptimizerProps) => {
 
     // Optimize image loading for better LCP
     const optimizeImageLoading = () => {
-      // Set fetchpriority for hero images
-      const heroImages = document.querySelectorAll('img[src*="aceccd77-e1e4-46e3-9541-75492bfd3619"]');
+      // Set fetchpriority for ECO4 hero images (WebP optimized)
+      const heroImages = document.querySelectorAll('img[src*="eco4-hero-optimized"], img[src*="aceccd77-e1e4-46e3-9541-75492bfd3619"]');
       heroImages.forEach(img => {
         img.setAttribute('fetchpriority', 'high');
         img.setAttribute('loading', 'eager');
+        img.setAttribute('decoding', 'sync'); // Decode synchronously for LCP
       });
       
       // Ensure lazy loading for below-fold images
-      const belowFoldImages = document.querySelectorAll('img:not([src*="aceccd77-e1e4-46e3-9541-75492bfd3619"])');
+      const belowFoldImages = document.querySelectorAll('img:not([src*="eco4-hero-optimized"]):not([src*="aceccd77-e1e4-46e3-9541-75492bfd3619"])');
       belowFoldImages.forEach(img => {
         if (!img.getAttribute('loading')) {
           img.setAttribute('loading', 'lazy');
+          img.setAttribute('decoding', 'async');
         }
       });
     };

@@ -4,6 +4,7 @@ import OptimizedImage from '@/components/OptimizedImage';
 import HeroSkeleton from '@/components/HeroSkeleton';
 import LazySection from '@/components/LazySection';
 import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
+import eco4HeroOptimized from '@/assets/eco4-hero-optimized.webp';
 // Performance hooks removed
 
 // Lazy load sections that are below the fold
@@ -84,7 +85,7 @@ const ECO4 = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src="/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png"
+            src={eco4HeroOptimized}
             alt="ECO4 Energy Efficiency Background - Aerial view of modern houses with solar panels"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
@@ -93,6 +94,8 @@ const ECO4 = () => {
             width={1920}
             height={1080}
             sizes="100vw"
+            modernFormats={true}
+            fetchPriority="high"
             style={{ 
               transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
             }}

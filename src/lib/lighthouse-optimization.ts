@@ -16,8 +16,8 @@ export const criticalResourceHints = {
       'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2'
     ],
     images: [
-      // Only preload hero image that affects LCP
-      '/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png'
+      // Only preload optimized ECO4 hero image that affects LCP
+      '/src/assets/eco4-hero-optimized.webp'
     ]
   }
 };
@@ -41,7 +41,7 @@ export const fontOptimization = {
 export const imageOptimization = {
   // Critical images for LCP
   critical: [
-    '/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png'
+    '/src/assets/eco4-hero-optimized.webp'
   ],
   
   // Lazy load everything else
