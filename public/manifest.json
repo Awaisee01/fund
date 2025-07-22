@@ -10,15 +10,33 @@
   "icons": [
     {
       "src": "/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png",
-      "sizes": "192x192",
+      "sizes": "48x48",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
-      "src": "/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png", 
-      "sizes": "512x512",
+      "src": "/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png",
+      "sizes": "72x72",
+      "type": "image/png", 
+      "purpose": "any"
+    },
+    {
+      "src": "/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png",
+      "sizes": "96x96",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
+    },
+    {
+      "src": "/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "categories": ["business", "finance", "utilities"],
