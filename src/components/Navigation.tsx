@@ -23,7 +23,8 @@ const Navigation = () => {
       boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
       position: 'sticky',
       top: 0,
-      zIndex: 50
+      zIndex: 50,
+      width: '100%'
     }}>
       <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '0 1rem' }}>
         <div style={{ 
@@ -43,28 +44,43 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - HIDDEN ON MOBILE */}
           <div className="hidden lg:flex items-center gap-4">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive(item.path)
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-                }`}
+                style={{
+                  padding: '0.5rem 0.75rem',
+                  borderRadius: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s',
+                  backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
+                  color: isActive(item.path) ? '#ffffff' : '#374151'
+                }}
               >
                 {item.name}
               </Link>
             ))}
           </div>
 
-          {/* Mobile hamburger menu */}
+          {/* Mobile hamburger menu - VISIBLE ON MOBILE ONLY */}
           <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{
+                padding: '0.5rem',
+                borderRadius: '0.375rem',
+                color: '#374151',
+                cursor: 'pointer',
+                border: 'none',
+                backgroundColor: 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -74,18 +90,31 @@ const Navigation = () => {
 
         {/* Mobile dropdown menu */}
         {isOpen && (
-          <div className="lg:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+          <div style={{
+            display: 'block',
+            borderTop: '1px solid #e5e7eb',
+            backgroundColor: '#ffffff',
+            paddingTop: '0.5rem',
+            paddingBottom: '0.75rem'
+          }} className="lg:hidden">
+            <div style={{ padding: '0 0.5rem' }}>
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    isActive(item.path)
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-                  }`}
+                  style={{
+                    display: 'block',
+                    padding: '0.75rem',
+                    borderRadius: '0.375rem',
+                    fontSize: '1rem',
+                    fontWeight: '500',
+                    textDecoration: 'none',
+                    marginBottom: '0.25rem',
+                    transition: 'all 0.2s',
+                    backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
+                    color: isActive(item.path) ? '#ffffff' : '#374151'
+                  }}
                 >
                   {item.name}
                 </Link>
@@ -93,6 +122,7 @@ const Navigation = () => {
             </div>
           </div>
         )}
+      </div>
     </nav>
   );
 };
