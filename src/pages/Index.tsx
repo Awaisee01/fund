@@ -1,48 +1,41 @@
-import React, { Suspense, useState, useEffect, lazy } from 'react';
-import Hero from '@/components/Hero';
-
-// Lazy load below-the-fold components
-const ServicesGrid = lazy(() => import('@/components/ServicesGrid'));
-const TrustBadges = lazy(() => import('@/components/TrustBadges'));
-const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
-
 const Index = () => {
-  const [heroLoaded, setHeroLoaded] = useState(true);
-
-  useEffect(() => {
-    document.title = 'Scottish Grants & Funding';
-  }, []);
-
   return (
-    <div className="min-h-screen">
-      {/* Hero section with proper form and navigation */}
-      <Hero 
-        title="Unlock Scottish Grants & Funding"
-        subtitle=""
-        description="From heating upgrades, to free solar panels, to improving the look of Scotland homes. Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to"
-        benefits={[
-          "Free Solar Panels",
-          "Free Heating Upgrades", 
-          "Free Insulation",
-          "Free Gas Boilers",
-          "Grants for Home Improvements"
-        ]}
-      />
-      
-      {/* Services grid section */}
-      <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse"></div>}>
-        <ServicesGrid />
-      </Suspense>
-
-      {/* Trust badges section */}
-      <Suspense fallback={<div className="h-32 bg-gray-100 animate-pulse"></div>}>
-        <TrustBadges />
-      </Suspense>
-
-      {/* Call to action section */}
-      <Suspense fallback={<div className="h-64 bg-gray-100 animate-pulse"></div>}>
-        <CallToActionSection />
-      </Suspense>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #2563eb, #059669)',
+      color: 'white',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      padding: '20px'
+    }}>
+      <div style={{ maxWidth: '800px' }}>
+        <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '2rem' }}>
+          Unlock Scottish Grants & Funding
+        </h1>
+        <p style={{ fontSize: '1.2rem', marginBottom: '2rem', lineHeight: '1.6' }}>
+          From heating upgrades, to free solar panels, to improving the look of Scotland homes. 
+          Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+          <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' }}>
+            ✅ Free Solar Panels
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' }}>
+            ✅ Free Heating Upgrades
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' }}>
+            ✅ Free Insulation
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' }}>
+            ✅ Free Gas Boilers
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px' }}>
+            ✅ Grants for Home Improvements
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
