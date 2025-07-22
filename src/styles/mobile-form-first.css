@@ -1,0 +1,46 @@
+/* ABSOLUTE MOBILE FORM FIRST FIX - MAXIMUM PRIORITY */
+
+@media (max-width: 1023px) {
+  /* FORCE ALL HERO GRIDS TO BE FLEX COLUMN ON MOBILE */
+  .grid.lg\\:grid-cols-2,
+  .grid.gap-8.lg\\:gap-12,
+  .grid.gap-6.lg\\:grid-cols-2 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+  }
+  
+  /* FORM SECTIONS - FORCE TO TOP ON MOBILE */
+  .order-1.lg\\:order-2 {
+    order: 1 !important;
+    width: 100% !important;
+  }
+  
+  /* TEXT CONTENT - FORCE TO BOTTOM ON MOBILE */
+  .order-2.lg\\:order-1 {
+    order: 2 !important;
+    width: 100% !important;
+  }
+  
+  /* FORCE CENTER ALIGNMENT FOR FORMS ON MOBILE */
+  .w-full.flex.justify-center.lg\\:justify-end {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+  
+  /* FORM CONTAINERS FULL WIDTH */
+  .bg-white\\/10,
+  .max-w-md {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* MOBILE TEXT ADJUSTMENT */
+@media (max-width: 1023px) {
+  /* ENSURE TEXT SECTIONS ARE PROPERLY CENTERED ON MOBILE */
+  .order-2.lg\\:order-1 {
+    text-align: center !important;
+  }
+}

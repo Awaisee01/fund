@@ -33,37 +33,55 @@ nav a {
 
 /* MOBILE FORM-FIRST LAYOUT FIX - MOBILE ONLY! */
 @media (max-width: 1023px) {
-  /* Only apply form-first layout on mobile/tablet */
-  .grid.gap-6.lg\\:grid-cols-2 {
+  /* FORCE FORM FIRST ON ALL HERO SECTIONS */
+  .grid.gap-6.lg\\:grid-cols-2,
+  .grid.gap-8.lg\\:grid-cols-2,
+  .grid.lg\\:grid-cols-2 {
     display: flex !important;
     flex-direction: column !important;
   }
   
-  /* Form container should be first on mobile */
-  .order-1.lg\\:order-2 {
+  /* FORM CONTAINERS - ALWAYS FIRST ON MOBILE */
+  .order-1.lg\\:order-2,
+  .order-2.lg\\:order-1 {
     order: 1 !important;
     margin-bottom: 2rem !important;
   }
   
-  /* Text content should be second on mobile */
-  .order-2.lg\\:order-1 {
+  /* TEXT CONTENT - ALWAYS SECOND ON MOBILE */
+  .order-2.lg\\:order-1,
+  .order-1.lg\\:order-1 {
     order: 2 !important;
   }
   
-  /* Ensure full width on mobile */
-  .w-full {
-    width: 100% !important;
+  /* HOME PAGE FORM FIRST FIX */
+  .grid.lg\\:grid-cols-2.gap-8 .order-1.lg\\:order-2 {
+    order: 1 !important;
   }
   
-  /* Center form on mobile */
-  .flex.justify-center.lg\\:justify-end {
+  .grid.lg\\:grid-cols-2.gap-8 .order-2.lg\\:order-1 {
+    order: 2 !important;
+  }
+  
+  /* ENSURE FULL WIDTH ON MOBILE */
+  .w-full,
+  .max-w-md {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* CENTER FORMS ON MOBILE */
+  .flex.justify-center.lg\\:justify-end,
+  .w-full.flex.justify-center.lg\\:justify-end {
     justify-content: center !important;
   }
 }
 
-/* DESKTOP: Keep original grid layout */
+/* DESKTOP: Keep original grid layout - DON'T TOUCH */
 @media (min-width: 1024px) {
-  .grid.gap-6.lg\\:grid-cols-2 {
+  .grid.gap-6.lg\\:grid-cols-2,
+  .grid.gap-8.lg\\:grid-cols-2,
+  .grid.lg\\:grid-cols-2 {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
   }
