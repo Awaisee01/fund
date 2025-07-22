@@ -11,7 +11,7 @@ interface LazyScriptProps {
 
 const LazyScript = ({ 
   src, 
-  async = true, 
+  async: isAsync = true, 
   defer = false, 
   onLoad, 
   condition = true,
@@ -26,7 +26,7 @@ const LazyScript = ({
       
       const script = document.createElement('script');
       script.src = src;
-      script.async = async;
+      script.async = isAsync;
       script.defer = defer;
       
       if (onLoad) {
@@ -49,7 +49,7 @@ const LazyScript = ({
         return () => window.removeEventListener('load', loadScript);
       }
     }
-  }, [src, async, defer, onLoad, condition, delay]);
+  }, [src, isAsync, defer, onLoad, condition, delay]);
 
   return null;
 };
