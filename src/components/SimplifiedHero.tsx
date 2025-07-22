@@ -25,17 +25,14 @@ const SimplifiedHero = ({
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white min-h-screen">
       {/* Simplified background with single overlay */}
       <div className="absolute inset-0 bg-black/20">
-        <OptimizedImage
+        <img
           src={heroImage}
           alt={altText}
           className="w-full h-full object-cover mix-blend-multiply opacity-30"
-          priority={true}
-          responsive={true}
-          preload={true}
+          loading="eager"
+          fetchPriority="high"
           width={1920}
           height={1080}
-          sizes="100vw"
-          modernFormats={false}
         />
       </div>
       

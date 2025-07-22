@@ -85,8 +85,8 @@ const Solar = () => {
         subtitle="Completely free solar panels."
         description="If your current heating system is an Air Source Heat Pump, you could qualify for free solar through the ECO4 Scheme."
         benefits={benefits}
-        heroImage="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png"
-        altText="Solar Panels Background"
+        heroImage="/src/assets/solar-hero-houses.webp"
+        altText="Modern houses with solar panels on roofs against blue sky"
       >
         <NativeSolarForm />
       </SimplifiedHero>

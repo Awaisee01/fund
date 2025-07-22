@@ -21,10 +21,15 @@
     <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" type="font/woff2" crossorigin>
     
-    <!-- Preload critical ECO4 hero image with highest priority -->
-    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high" type="image/png">
+    <!-- Preload critical hero images with highest priority -->
+    <link rel="preload" as="image" href="/src/assets/eco4-hero-aerial.webp" fetchpriority="high" type="image/webp">
+    <link rel="preload" as="image" href="/src/assets/solar-hero-houses.webp" fetchpriority="high" type="image/webp">
     
-    <!-- Preload critical CSS as inline (already done below) -->
+    <!-- Inline critical hero CSS for instant rendering -->
+    <style>
+      /* Critical CSS for Hero Sections - Inlined for faster FCP */
+      .hero-section{position:relative;background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 50%,#059669 100%);color:white;min-height:100vh;overflow:hidden}.hero-background{position:absolute;inset:0;background-color:rgba(0,0,0,0.2)}.hero-image{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:0.3}.hero-content{position:relative;max-width:1280px;margin:0 auto;padding:5rem 1rem;display:grid;gap:2rem;align-items:center}.hero-title{font-size:2.25rem;font-weight:700;line-height:1.2;margin-bottom:1rem}.hero-subtitle{font-size:1.25rem;font-weight:500;color:#dbeafe;margin-bottom:1rem}.hero-description{font-size:1.125rem;color:#eff6ff;line-height:1.6;margin-bottom:1.5rem}.hero-benefits{list-style:none;padding:0;margin:0}.hero-benefit-item{display:flex;align-items:center;margin-bottom:0.75rem;gap:0.75rem}.hero-benefit-icon{width:1.5rem;height:1.5rem;color:#86efac;flex-shrink:0}.hero-benefit-text{color:#eff6ff}@media (min-width:1024px){.hero-content{padding:6rem 1rem;grid-template-columns:1fr 1fr;gap:3rem}.hero-title{font-size:3.75rem}.hero-subtitle{font-size:1.5rem}}
+    </style>
     
     <link rel="manifest" href="/manifest.json" />
     
@@ -35,6 +40,25 @@
     <!-- Load critical fonts with optimal strategy and font-display: swap -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap"></noscript>
+    
+    <!-- Defer non-critical scripts -->
+    <script>
+      // Defer analytics and tracking scripts
+      window.addEventListener('load', function() {
+        // Load Facebook Pixel asynchronously
+        setTimeout(function() {
+          const fbScript = document.createElement('script');
+          fbScript.async = true;
+          fbScript.src = 'https://connect.facebook.net/en_US/fbevents.js';
+          document.head.appendChild(fbScript);
+        }, 2000);
+        
+        // Load other tracking scripts with delay
+        setTimeout(function() {
+          // Additional tracking scripts can be loaded here
+        }, 3000);
+      });
+    </script>
 
     <!-- Essential meta tags for social sharing -->
     <meta property="og:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
