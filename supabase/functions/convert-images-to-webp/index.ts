@@ -30,12 +30,14 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Checking for API key...');
     const apiKey = Deno.env.get('RUNWARE_API_KEY');
     if (!apiKey) {
+      console.error('RUNWARE_API_KEY not found in environment variables');
       throw new Error('RUNWARE_API_KEY not found in environment variables');
     }
 
-    console.log('API key found, processing request...');
+    console.log('API key found, length:', apiKey.length);
 
     // Default image URLs to convert
     const imageUrls = [
