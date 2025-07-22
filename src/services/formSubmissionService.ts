@@ -96,13 +96,17 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     // Generate unique event ID for deduplication between Pixel and Conversions API
     const eventId = `${data.serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
-    // Track form submission immediately with the same event ID
-    console.log('🔥 DEBUG: About to track form submission with eventId:', eventId);
-    console.log('🔥 DEBUG: Form name available?', !!data.formName);
+    // Track form submission immediately with the same event ID for both Pixel and CAPI
+    console.log('✅ TRACKING: Starting Lead event tracking with eventId:', eventId);
+    console.log('✅ TRACKING: Form name:', data.formName);
+    
     if (data.formName) {
+      // This will trigger both Pixel tracking via trackLeadWithUTM() and the browser event
       trackFormSubmission(data.formName, data.serviceType, eventId);
+      console.log('✅ TRACKING: trackFormSubmission called - will fire both Pixel and GA events');
+    } else {
+      console.warn('⚠️ TRACKING: No formName provided, tracking may be incomplete');
     }
-    console.log('🔥 DEBUG: Form submission tracking called');
 
     // Send email notification asynchronously - don't block form completion
     setTimeout(async () => {
@@ -202,7 +206,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         const fbPayload = {
           data: {
             eventName: 'Lead',
-            eventId: String(eventId), // Ensure it's always a string for Facebook (snake_case)
+            eventId: String(eventId), // CRITICAL: This must match exactly with Pixel eventID for deduplication
             userData: {
               email: data.email,
               phone: data.phone,
@@ -229,17 +233,19 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           }
         };
         
-        console.log('📊 CAPI: Complete Facebook CAPI payload (with all required fields):');
-        console.log(JSON.stringify(fbPayload, null, 2));
+        console.log('📊 CAPI: Sending Lead event to Facebook Conversions API');
+        console.log('📊 CAPI: Event ID for deduplication:', String(eventId));
+        console.log('📊 CAPI: Complete payload:', JSON.stringify(fbPayload, null, 2));
         
         const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload
         });
 
-        console.log('🔥 DEBUG: Facebook CAPI Response:', {
+        console.log('✅ CAPI: Facebook API Response:', {
           success: !fbError,
           error: fbError,
           response: fbResponse,
+          eventId: String(eventId),
           timestamp: new Date().toISOString()
         });
 
