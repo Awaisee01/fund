@@ -93,18 +93,7 @@ export default defineConfig(({ mode }) => ({
       }
     }
   },
-  // Fixed dependency optimization to prevent import errors
-  optimizeDeps: {
-    include: [
-      'react', 
-      'react-dom', 
-      'react-router-dom',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-select',
-      'lucide-react'
-    ],
-    exclude: ['@supabase/supabase-js']
-  },
+  // Remove problematic optimizeDeps to fix Supabase PostgREST import error
   // CSS optimization
   css: {
     devSourcemap: false,
