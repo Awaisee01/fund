@@ -14,6 +14,7 @@ const Footer = lazy(() => import("./components/Footer"));
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
 const SEOStructuredData = lazy(() => import("./components/SEOStructuredData"));
 const FacebookPixelPageView = lazy(() => import("./components/FacebookPixelPageView"));
+const PerformanceMonitor = lazy(() => import("./components/PerformanceMonitor"));
 
 // Code-split all pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -71,6 +72,7 @@ const App = () => {
                 <ScrollToTop />
                 <SEOStructuredData />
                 <FacebookPixelPageView />
+                <PerformanceMonitor />
               </Suspense>
               
               <main className="flex-1">
