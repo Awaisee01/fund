@@ -101,9 +101,12 @@ export default defineConfig(({ mode }) => ({
       'react-router-dom',
       '@radix-ui/react-dialog',
       '@radix-ui/react-select',
-      'lucide-react'
+      'lucide-react',
+      '@supabase/supabase-js',
+      '@supabase/postgrest-js',
+      '@tanstack/react-query'
     ],
-    exclude: ['@supabase/supabase-js'] // Keep supabase separate for better caching
+    force: true // Force re-optimization to fix module issues
   },
   // CSS optimization
   css: {
