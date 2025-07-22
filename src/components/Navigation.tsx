@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -19,34 +18,61 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-        <div className="flex justify-between items-center h-14 sm:h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center">
+    <nav style={{
+      backgroundColor: '#ffffff',
+      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50
+    }}>
+      <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '0 1rem' }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          height: '4rem' 
+        }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
               <img 
                 src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                 alt="Funding For Scotland Logo" 
-                className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
-                width="140"
-                height="56"
-                loading="eager"
+                style={{ height: '2rem', width: 'auto', objectFit: 'contain' }}
               />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:block">
-            <div className="ml-10 flex items-baseline space-x-2 xl:space-x-4">
+          <div style={{ display: 'none' }} className="lg:block">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`px-2 xl:px-3 py-2 rounded-md text-sm font-medium text-center transition-colors ${
-                    isActive(item.path)
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-                  }`}
+                  style={{
+                    padding: '0.5rem 0.75rem',
+                    borderRadius: '0.375rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    textAlign: 'center',
+                    textDecoration: 'none',
+                    transition: 'all 0.15s ease',
+                    backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
+                    color: isActive(item.path) ? '#ffffff' : '#374151'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive(item.path)) {
+                      e.currentTarget.style.backgroundColor = '#eff6ff';
+                      e.currentTarget.style.color = '#2563eb';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive(item.path)) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#374151';
+                    }
+                  }}
                 >
                   {item.name}
                 </Link>
@@ -58,10 +84,27 @@ const Navigation = () => {
           <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-3 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 touch-manipulation"
-              aria-label="Toggle menu"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0.75rem',
+                borderRadius: '0.375rem',
+                border: 'none',
+                backgroundColor: 'transparent',
+                color: '#374151',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#2563eb';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#374151';
+              }}
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
@@ -70,17 +113,43 @@ const Navigation = () => {
       {/* Mobile Navigation */}
       {isOpen && (
         <div className="lg:hidden">
-          <div className="px-3 pt-2 pb-3 space-y-1 bg-white border-t shadow-lg">
+          <div style={{
+            padding: '0.75rem',
+            paddingTop: '0.5rem',
+            paddingBottom: '0.75rem',
+            backgroundColor: '#ffffff',
+            borderTop: '1px solid #e5e7eb',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+          }}>
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
                 onClick={() => setIsOpen(false)}
-                className={`block px-4 py-4 rounded-md text-base font-medium transition-colors touch-manipulation ${
-                  isActive(item.path)
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-                }`}
+                style={{
+                  display: 'block',
+                  padding: '1rem',
+                  borderRadius: '0.375rem',
+                  fontSize: '1rem',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  transition: 'all 0.15s ease',
+                  marginBottom: '0.25rem',
+                  backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
+                  color: isActive(item.path) ? '#ffffff' : '#374151'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive(item.path)) {
+                    e.currentTarget.style.backgroundColor = '#eff6ff';
+                    e.currentTarget.style.color = '#2563eb';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive(item.path)) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = '#374151';
+                  }
+                }}
               >
                 {item.name}
               </Link>
