@@ -260,13 +260,15 @@ const NativeHomeImprovementsForm = () => {
               )}
             />
 
-            <Button 
-              type="submit" 
-              className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12 mt-8"
-              disabled={isSubmitting || submitAttempts >= 3}
-            >
-              {isSubmitting ? 'Sending...' : submitAttempts >= 3 ? 'Please refresh page' : 'Submit'}
-            </Button>
+            <div className="mt-8">
+              <Button 
+                type="submit" 
+                className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12"
+                disabled={isSubmitting || submitAttempts >= 3}
+              >
+                {isSubmitting ? 'Sending...' : submitAttempts >= 3 ? 'Please refresh page' : 'Submit'}
+              </Button>
+            </div>
             
             {submitAttempts >= 3 && (
               <p className="text-yellow-300 text-xs text-center mt-2">
