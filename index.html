@@ -62,8 +62,18 @@
       /* Critical hero styles with mobile-first approach */
       .hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 35%,#059669 100%)}.hero-text-white{color:#fff}.hero-text-blue-100{color:#dbeafe}.hero-text-blue-50{color:#eff6ff}.hero-text-green-300{color:#86efac}
       
+      /* Critical layout classes for immediate rendering */
+      .min-h-screen{min-height:100vh}.flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1 1 0%}.items-center{align-items:center}.justify-center{justify-content:center}.text-center{text-align:center}
+      .bg-white{background-color:#fff}.bg-gray-50{background-color:#f9fafb}.bg-gray-200{background-color:#e5e7eb}.bg-gray-300{background-color:#d1d5db}
+      .h-4{height:1rem}.h-8{height:2rem}.h-16{height:4rem}.w-auto{width:auto}.w-32{width:8rem}.w-48{width:12rem}
+      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}
+      .rounded{border-radius:.25rem}.mb-4{margin-bottom:1rem}.inline-block{display:inline-block}.object-contain{object-fit:contain}
+      
+      /* Animation for loading states */
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
+      
       /* Mobile-optimized layout */
-      .relative{position:relative}.absolute{position:absolute}.inset-0{top:0;right:0;bottom:0;left:0}.flex{display:flex}.grid{display:grid}.w-full{width:100%}.h-full{height:100%}.items-center{align-items:center}.justify-center{justify-content:center}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}
+      .relative{position:relative}.absolute{position:absolute}.inset-0{top:0;right:0;bottom:0;left:0}.grid{display:grid}.w-full{width:100%}.h-full{height:100%}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}
       
       /* Mobile typography - larger sizes for readability */
       .text-4xl{font-size:2rem;line-height:2.25rem}.text-xl{font-size:1.125rem;line-height:1.75rem}.text-lg{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.leading-tight{line-height:1.25}
@@ -212,25 +222,30 @@
     src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"
     /></noscript>
     
-    <div id="root"></div>
+    <div id="root">
+      <!-- Critical loading fallback for immediate FCP -->
+      <div class="min-h-screen flex flex-col bg-white">
+        <nav class="bg-white shadow-lg h-16 flex items-center justify-center">
+          <div class="flex items-center">
+            <img 
+              src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
+              alt="Funding For Scotland Logo" 
+              class="h-8 w-auto object-contain"
+              width="140"
+              height="56"
+            />
+          </div>
+        </nav>
+        <main class="flex-1 flex items-center justify-center bg-gray-50">
+          <div class="text-center">
+            <div class="inline-block animate-pulse bg-gray-300 h-8 w-48 rounded mb-4"></div>
+            <div class="inline-block animate-pulse bg-gray-200 h-4 w-32 rounded"></div>
+          </div>
+        </main>
+      </div>
+    </div>
     
-    <!-- Deferred main app script with performance optimization -->
-    <script>
-      // Defer main script loading until critical path is complete
-      function loadMainScript() {
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = '/src/main.tsx';
-        script.async = true;
-        document.body.appendChild(script);
-      }
-      
-      // Load main script after critical rendering
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadMainScript);
-      } else {
-        loadMainScript();
-      }
-    </script>
+    <!-- Load main app script immediately for critical rendering -->
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
