@@ -130,26 +130,48 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Defer Facebook Pixel until after critical rendering -->
+    <!-- Facebook Pixel Script -->
     <script>
+      console.log('🔥 DEBUG: Initializing Facebook Pixel queue');
       window.fbq=window.fbq||function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};window.fbq.q=[];
       
       function loadFacebookPixel(){
-        if(window.fbPixelLoaded)return;window.fbPixelLoaded=true;
-        const s=document.createElement('script');s.async=true;s.src='https://connect.facebook.net/en_US/fbevents.js';
-        s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};document.head.appendChild(s);
+        if(window.fbPixelLoaded){
+          console.log('🔥 DEBUG: Facebook Pixel already loaded');
+          return;
+        }
+        
+        console.log('🔥 DEBUG: Loading Facebook Pixel script');
+        window.fbPixelLoaded=true;
+        
+        const s=document.createElement('script');
+        s.async=true;
+        s.src='https://connect.facebook.net/en_US/fbevents.js';
+        s.onload=function(){
+          console.log('🔥 DEBUG: Facebook Pixel script loaded, initializing with ID 1423013825182147');
+          fbq('init','1423013825182147');
+          console.log('🔥 DEBUG: Facebook Pixel initialized, tracking PageView');
+          fbq('track','PageView');
+          console.log('🔥 DEBUG: Facebook Pixel PageView tracked');
+        };
+        s.onerror=function(){
+          console.error('❌ PIXEL: Failed to load Facebook Pixel script');
+        };
+        document.head.appendChild(s);
       }
       
-      // Load pixel after critical path renders - reduced delay for better tracking
+      // Load pixel immediately on DOM ready
       if(document.readyState==='loading'){
         document.addEventListener('DOMContentLoaded',function(){
-          setTimeout(loadFacebookPixel,500); // Reduced from 2000ms to 500ms
+          console.log('🔥 DEBUG: DOM loaded, starting Facebook Pixel in 100ms');
+          setTimeout(loadFacebookPixel,100); // Very short delay for immediate tracking
         });
       }else{
-        setTimeout(loadFacebookPixel,500); // Reduced from 2000ms to 500ms
+        console.log('🔥 DEBUG: DOM already ready, starting Facebook Pixel immediately');
+        setTimeout(loadFacebookPixel,100);
       }
       
-      // Load on first user interaction
+      // Also load on first user interaction as backup
       ['mousedown','touchstart','scroll','keydown'].forEach(e=>
         document.addEventListener(e,loadFacebookPixel,{once:true,passive:true})
       );
