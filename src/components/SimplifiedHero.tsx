@@ -26,8 +26,8 @@ const SimplifiedHero = ({
       {/* Simplified background with single overlay */}
       <div className="absolute inset-0 bg-black/20">
         <OptimizedImage
-          src={heroImage}
-          alt={altText}
+          src="/lovable-uploads/339dccf0-fb0b-4516-8463-6609ffa65db5.png"
+          alt="Solar panels on modern houses - Free solar installation background"
           className="w-full h-full object-cover mix-blend-multiply opacity-30"
           priority={true}
           responsive={true}
