@@ -8,13 +8,23 @@ interface VisitorSession {
 }
 
 class AnalyticsTracker {
-  private visitorId: string;
-  private sessionId: string;
-  private sessionStart: string;
+  private visitorId: string | null = null;
+  private sessionId: string | null = null;
+  private sessionStart: string | null = null;
   private pagesVisited: number = 0;
   private lastActivity: number = Date.now();
+  private initialized: boolean = false;
 
   constructor() {
+    // Don't initialize during SSR/build time
+    if (typeof window !== 'undefined') {
+      this.init();
+    }
+  }
+
+  private init() {
+    if (this.initialized) return;
+    
     this.visitorId = this.getOrCreateVisitorId();
     this.sessionId = this.getOrCreateSessionId();
     this.sessionStart = this.getSessionStart();
@@ -25,6 +35,8 @@ class AnalyticsTracker {
     
     // Track page unload to update session end time
     this.setupPageUnloadTracking();
+    
+    this.initialized = true;
   }
 
   private generateUUID(): string {
@@ -174,6 +186,11 @@ class AnalyticsTracker {
   async trackPageView(pagePath?: string): Promise<void> {
     if (typeof window === 'undefined') return;
     
+    // Initialize if not already done
+    if (!this.initialized) {
+      this.init();
+    }
+    
     try {
       const currentPath = pagePath || window.location.pathname;
       const utmParams = this.getUTMParameters();
@@ -211,6 +228,13 @@ class AnalyticsTracker {
   }
 
   async trackConversion(): Promise<void> {
+    if (typeof window === 'undefined') return;
+    
+    // Initialize if not already done
+    if (!this.initialized) {
+      this.init();
+    }
+    
     try {
       await supabase
         .from('visitor_sessions')
@@ -226,11 +250,19 @@ class AnalyticsTracker {
   }
 
   getVisitorId(): string {
-    return this.visitorId;
+    if (typeof window === 'undefined') return 'ssr-visitor-id';
+    if (!this.initialized) {
+      this.init();
+    }
+    return this.visitorId || 'ssr-visitor-id';
   }
 
   getSessionId(): string {
-    return this.sessionId;
+    if (typeof window === 'undefined') return 'ssr-session-id';
+    if (!this.initialized) {
+      this.init();
+    }
+    return this.sessionId || 'ssr-session-id';
   }
 }
 
