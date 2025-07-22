@@ -164,12 +164,24 @@ serve(async (req) => {
 
     const result = await response.json()
     
+    console.log('🔥 DEBUG: Facebook API Response Details:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok,
+      headers: Object.fromEntries(response.headers.entries()),
+      result: result
+    });
+    
     if (!response.ok) {
-      console.error('Facebook Conversions API error:', result)
-      throw new Error(`Facebook API error: ${result.error?.message || 'Unknown error'}`)
+      console.error('❌ Facebook Conversions API HTTP error:', {
+        status: response.status,
+        statusText: response.statusText,
+        result: result
+      });
+      throw new Error(`Facebook API HTTP ${response.status}: ${result.error?.message || 'Unknown error'}`)
     }
 
-    console.log('Facebook Conversions API success:', result)
+    console.log('✅ Facebook Conversions API success:', result)
     
     // Check for warnings in the response
     if (result.messages && result.messages.length > 0) {

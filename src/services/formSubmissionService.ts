@@ -97,9 +97,11 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     const eventId = `${data.serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Track form submission immediately with the same event ID
+    console.log('🔥 DEBUG: About to track form submission with eventId:', eventId);
     if (data.formName) {
       trackFormSubmission(data.formName, data.serviceType, eventId);
     }
+    console.log('🔥 DEBUG: Form submission tracking called');
 
     // Send email notification asynchronously - don't block form completion
     setTimeout(async () => {
@@ -231,6 +233,13 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         
         const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload
+        });
+
+        console.log('🔥 DEBUG: Facebook CAPI Response:', {
+          success: !fbError,
+          error: fbError,
+          response: fbResponse,
+          timestamp: new Date().toISOString()
         });
 
         if (fbError) {

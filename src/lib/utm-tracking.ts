@@ -174,6 +174,9 @@ export const trackLeadWithUTM = (leadData: {
   currency?: string;
   event_value_id?: string;
 }, eventId?: string): void => {
+  console.log('🔥 DEBUG: trackLeadWithUTM called with:', { leadData, eventId });
+  console.log('🔥 DEBUG: Facebook Pixel available?', typeof window !== 'undefined' && !!(window as any).fbq);
+  
   trackPixelEventWithUTM('Lead', {
     ...leadData,
     value: 1,
