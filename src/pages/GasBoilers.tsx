@@ -99,6 +99,10 @@ const GasBoilers = () => {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+              <NativeGasBoilersForm />
+            </div>
+            
             <div className="order-2 lg:order-1">
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
                 Free Gas Boiler Replacement
@@ -120,10 +124,6 @@ const GasBoilers = () => {
                   ))}
                 </ul>
               </div>
-            </div>
-            
-            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
-              <NativeGasBoilersForm />
             </div>
           </div>
         </div>
