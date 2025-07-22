@@ -2,16 +2,21 @@ import { useEffect, useState, Suspense, lazy } from 'react';
 import CriticalECO4Hero from '@/components/CriticalECO4Hero';
 import HeroSkeleton from '@/components/HeroSkeleton';
 import LazySection from '@/components/LazySection';
+import ResourcePrefetcher from '@/components/ResourcePrefetcher';
 import { Home, Thermometer, Heart, Shield } from 'lucide-react';
 
-// Split heavy components for better performance
-const NativeECO4Form = lazy(() => import('@/components/NativeECO4Form'));
+// Aggressively split non-critical components for minimal initial bundle
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
 const ProcessSection = lazy(() => import('@/components/ProcessSection'));
 
 const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const [userBehavior, setUserBehavior] = useState({
+    scrollDepth: 0,
+    timeOnPage: 0,
+    interactions: 0
+  });
 
   useEffect(() => {
     document.title = "Free ECO4 Grants Scotland - Government Energy Efficiency Scheme | Funding For Scotland";
@@ -20,13 +25,22 @@ const ECO4 = () => {
       metaDescription.setAttribute('content', 'Get free ECO4 grants in Scotland for energy efficiency improvements. Free insulation, boilers, and home upgrades through government schemes.');
     }
 
-    // Mark hero as loaded immediately for faster perceived performance
     setHeroLoaded(true);
 
-    // Optimized scroll handling with debouncing
+    // Track user behavior for intelligent prefetching
+    const startTime = Date.now();
+    let maxScrollDepth = 0;
+    let interactionCount = 0;
+
+    // Optimized scroll handling with behavior tracking
     let ticking = false;
     const updateScrollY = () => {
-      setScrollY(window.scrollY);
+      const currentScroll = window.scrollY;
+      const scrollPercent = Math.round((currentScroll / (document.body.scrollHeight - window.innerHeight)) * 100);
+      maxScrollDepth = Math.max(maxScrollDepth, scrollPercent);
+      
+      setScrollY(currentScroll);
+      setUserBehavior(prev => ({ ...prev, scrollDepth: maxScrollDepth }));
       ticking = false;
     };
 
@@ -37,8 +51,31 @@ const ECO4 = () => {
       }
     };
 
+    // Track interactions for prefetching intelligence
+    const trackInteraction = () => {
+      interactionCount++;
+      setUserBehavior(prev => ({ ...prev, interactions: interactionCount }));
+    };
+
+    // Track time on page
+    const timeTracker = setInterval(() => {
+      const timeOnPage = Math.round((Date.now() - startTime) / 1000);
+      setUserBehavior(prev => ({ ...prev, timeOnPage }));
+    }, 5000);
+
+    // Event listeners
     window.addEventListener('scroll', handleSmoothScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleSmoothScroll);
+    ['click', 'touchstart', 'keydown'].forEach(event => {
+      document.addEventListener(event, trackInteraction, { passive: true });
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleSmoothScroll);
+      ['click', 'touchstart', 'keydown'].forEach(event => {
+        document.removeEventListener(event, trackInteraction);
+      });
+      clearInterval(timeTracker);
+    };
   }, []);
 
   const eligibilityRequirements = [
@@ -70,6 +107,9 @@ const ECO4 = () => {
 
   return (
     <div>
+      {/* Intelligent resource prefetching based on user behavior */}
+      <ResourcePrefetcher currentPage="eco4" userBehavior={userBehavior} />
+      
       <CriticalECO4Hero scrollY={scrollY} />
       
         <LazySection fallback={

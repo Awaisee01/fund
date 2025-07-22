@@ -5,12 +5,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Critical resource hints only -->
+    <!-- Critical resource hints for fastest loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Only preload critical hero image for LCP -->
-    <link rel="preload" as="image" href="/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png" fetchpriority="high">
+    <!-- Preload critical Inter font weights immediately -->
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" type="font/woff2" crossorigin>
+    
+    <!-- Preload critical ECO4 hero image with highest priority -->
+    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high" type="image/png">
+    
+    <!-- Preload critical CSS as inline (already done below) -->
     
     <link rel="manifest" href="/manifest.json" />
     
@@ -18,158 +25,46 @@
     <meta name="description" content="Scotland's leading consultancy for homeowner grants and funding. Access ECO4 grants, solar panels, boiler replacements, and home improvement funding up to £25,000." />
     <meta name="keywords" content="Scottish grants, ECO4, solar panels, boiler replacement, home improvements, funding, Scotland" />
 
-    <!-- Optimized font loading - minimal weights, swap for performance -->
+    <!-- Load critical fonts with optimal strategy -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
 
-    <!-- Preload critical ECO4 hero image for LCP optimization -->
-    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high" type="image/png" media="(min-width: 768px)">
-    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high" type="image/png" media="(max-width: 767px)">
-
-    <!-- Optimized favicon -->
-    <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
-
-    <!-- Essential meta tags -->
+    <!-- Essential meta tags for social sharing -->
     <meta property="og:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
     <meta property="og:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png" />
-    <meta property="og:url" content="https://fundingforscotland.com" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
-    <meta name="twitter:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
+    <meta property="og:image" content="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" />
     <meta name="robots" content="index, follow" />
-    <meta name="author" content="Funding For Scotland" />
     
-    <!-- Security headers - Note: X-Frame-Options should be set at server level -->
+    <!-- Security headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     
-    <!-- Critical CSS for above-the-fold content -->
-    <style>
-      /* Reset and critical layout - inline for immediate rendering */
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      
-      html {
-        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        scroll-behavior: smooth;
-        -webkit-text-size-adjust: 100%;
-      }
-      
-      body {
-        background: #ffffff;
-        color: #1a1a1a;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        line-height: 1.6;
-      }
-      
-      /* Critical hero section styles for immediate paint */
-      .hero-gradient {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 35%, #059669 100%);
-      }
-      
-      .hero-text-white { color: #ffffff; }
-      .hero-text-blue-100 { color: #dbeafe; }
-      .hero-text-blue-50 { color: #eff6ff; }
-      .hero-text-green-300 { color: #86efac; }
-      
-      /* Critical layout utilities */
-      .relative { position: relative; }
-      .absolute { position: absolute; }
-      .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-      .flex { display: flex; }
-      .grid { display: grid; }
-      .hidden { display: none; }
-      .w-full { width: 100%; }
-      .h-full { height: 100%; }
-      .min-h-screen { min-height: 100vh; }
-      .items-center { align-items: center; }
-      .justify-center { justify-content: center; }
-      
-      /* Critical text utilities */
-      .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
-      .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-      .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-      .font-bold { font-weight: 700; }
-      .font-medium { font-weight: 500; }
-      
-      /* Critical spacing */
-      .mb-6 { margin-bottom: 1.5rem; }
-      .mb-8 { margin-bottom: 2rem; }
-      .px-4 { padding-left: 1rem; padding-right: 1rem; }
-      .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
-      
-      /* Loading optimization */
-      .loading #root {
-        opacity: 0;
-        transition: opacity 0.2s ease;
-      }
-      
-      .loaded #root {
-        opacity: 1;
-      }
-      
-      /* Prevent layout shift for hero image */
-      .hero-image-container {
-        aspect-ratio: 16/9;
-        background-color: #f3f4f6;
-      }
-      
-      /* Critical form styles */
-      .form-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 0.75rem;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      }
-      
-      @media (min-width: 1024px) {
-        .text-4xl { font-size: 3.75rem; line-height: 1; }
-        .py-20 { padding-top: 6rem; padding-bottom: 6rem; }
-      }
-    </style>
+    <!-- Optimized favicon -->
+    <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
 
-    <!-- Optimized Facebook Pixel - Critical path separated -->
+    <!-- Ultra-compressed critical CSS for immediate rendering -->
+    <style>
+      /* Minified critical path CSS - ECO4 specific */
+      *{box-sizing:border-box;margin:0;padding:0}html{font-family:'Inter',system-ui,-apple-system,sans-serif;scroll-behavior:smooth;-webkit-text-size-adjust:100%}body{background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;line-height:1.6}.hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 35%,#059669 100%)}.hero-text-white{color:#fff}.hero-text-blue-100{color:#dbeafe}.hero-text-blue-50{color:#eff6ff}.hero-text-green-300{color:#86efac}.relative{position:relative}.absolute{position:absolute}.inset-0{top:0;right:0;bottom:0;left:0}.flex{display:flex}.grid{display:grid}.w-full{width:100%}.h-full{height:100%}.items-center{align-items:center}.justify-center{justify-content:center}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.leading-tight{line-height:1.25}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.px-4{padding:0 1rem}.py-20{padding:5rem 0}.gap-12{gap:3rem}.hero-image-container{aspect-ratio:16/9;background:#f3f4f6}.form-card{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:.75rem;box-shadow:0 20px 25px -5px rgba(0,0,0,.1)}.loading #root{opacity:0;transition:opacity .2s}.loaded #root{opacity:1}.order-1{order:1}.order-2{order:2}@media (min-width:1024px){.text-4xl,.lg\:text-6xl{font-size:3.75rem;line-height:1}.py-20,.lg\:py-24{padding:6rem 0}.lg\:grid-cols-2{grid-template-columns:1fr 1fr}.lg\:order-1{order:1}.lg\:order-2{order:2}.lg\:justify-end{justify-content:flex-end}.lg\:px-8{padding-left:2rem;padding-right:2rem}}
+    </style>
+    
+    <!-- Load non-critical Tailwind CSS after critical rendering -->
+    <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
+
+    <!-- Optimized Facebook Pixel - Minimal critical tracking -->
     <script>
-      // Initialize minimal tracking queue immediately
-      window.fbq = window.fbq || function() {
-        (window.fbq.q = window.fbq.q || []).push(arguments);
-      };
-      window.fbq.q = [];
+      window.fbq=window.fbq||function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};window.fbq.q=[];
       
-      // Defer pixel loading to not block critical rendering
-      function loadFacebookPixel() {
-        if (window.fbPixelLoaded) return;
-        window.fbPixelLoaded = true;
-        
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-        script.onload = function() {
-          fbq('init', '1423013825182147');
-          fbq('track', 'PageView');
-        };
-        document.head.appendChild(script);
+      function loadFacebookPixel(){
+        if(window.fbPixelLoaded)return;window.fbPixelLoaded=true;
+        const s=document.createElement('script');s.async=true;s.src='https://connect.facebook.net/en_US/fbevents.js';
+        s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};document.head.appendChild(s);
       }
       
-      // Load after critical rendering or user interaction
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadFacebookPixel, 1000);
-        });
-      } else {
-        setTimeout(loadFacebookPixel, 1000);
-      }
-      
-      // Also load on first user interaction
-      ['mousedown', 'touchstart', 'scroll', 'keydown'].forEach(event => {
-        document.addEventListener(event, loadFacebookPixel, { once: true, passive: true });
-      });
+      document.readyState==='loading'?document.addEventListener('DOMContentLoaded',function(){setTimeout(loadFacebookPixel,1000)}):setTimeout(loadFacebookPixel,1000);
+      ['mousedown','touchstart','scroll','keydown'].forEach(e=>document.addEventListener(e,loadFacebookPixel,{once:true,passive:true}));
     </script>
   </head>
 
@@ -180,17 +75,61 @@
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
         
-        // Preconnect to critical domains after DOMContentLoaded
+        // Intelligent resource prefetching after critical rendering
         if ('requestIdleCallback' in window) {
           requestIdleCallback(function() {
-            // Preconnect to form submission endpoint
-            const link = document.createElement('link');
-            link.rel = 'preconnect';
-            link.href = 'https://script.google.com';
-            document.head.appendChild(link);
+            prefetchLikelyResources();
           });
+        } else {
+          setTimeout(prefetchLikelyResources, 2000);
         }
       });
+      
+      // Prefetch strategy for likely next navigations from ECO4
+      function prefetchLikelyResources() {
+        const likelyPages = [
+          { path: '/solar', priority: 'high' },
+          { path: '/gas-boilers', priority: 'high' },
+          { path: '/home-improvements', priority: 'medium' },
+          { path: '/contact', priority: 'low' }
+        ];
+        
+        // Prefetch likely page routes
+        likelyPages.forEach(page => {
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.href = page.path;
+          link.fetchPriority = page.priority;
+          document.head.appendChild(link);
+        });
+        
+        // Prefetch likely hero images for next pages
+        const likelyImages = [
+          '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png', // Gas boilers
+          '/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png'  // Home improvements
+        ];
+        
+        likelyImages.forEach((src, index) => {
+          setTimeout(() => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.as = 'image';
+            link.href = src;
+            link.fetchPriority = 'low';
+            document.head.appendChild(link);
+          }, index * 500); // Stagger to avoid bandwidth competition
+        });
+        
+        // Preconnect to form submission domains
+        const formDomains = ['https://script.google.com', 'https://hooks.zapier.com'];
+        formDomains.forEach(domain => {
+          const link = document.createElement('link');
+          link.rel = 'preconnect';
+          link.href = domain;
+          link.crossOrigin = 'anonymous';
+          document.head.appendChild(link);
+        });
+      }
       
       // Performance mark for critical rendering
       if ('performance' in window && 'mark' in performance) {
