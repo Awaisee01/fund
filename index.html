@@ -170,18 +170,19 @@
         };
       }
       
-      // Remove any existing Facebook Pixel elements
-      const removeExistingPixels = () => {
-        // Remove scripts
+      // Remove only WRONG Facebook Pixel elements
+      const removeWrongPixels = () => {
+        // Only remove scripts that are NOT our correct pixel script
         const existingScripts = document.querySelectorAll('script[src*="fbevents.js"], script[src*="facebook.com"]');
         existingScripts.forEach(script => {
-          if (script.src.includes('fbevents.js')) {
-            console.warn('🚨 ULTIMATE: Removing existing Facebook Pixel script:', script.src);
+          // Don't remove our own correct pixel script
+          if (script.src.includes('fbevents.js') && script.innerHTML && script.innerHTML.includes(WRONG_PIXEL_ID)) {
+            console.warn('🚨 ULTIMATE: Removing wrong Pixel script with wrong ID');
             script.remove();
           }
         });
         
-        // Remove noscript images
+        // Remove noscript images with wrong ID only
         const existingImages = document.querySelectorAll('img[src*="facebook.com/tr"]');
         existingImages.forEach(img => {
           if (img.src.includes(WRONG_PIXEL_ID)) {
@@ -190,7 +191,7 @@
           }
         });
         
-        // Remove preload links
+        // Remove preload links with wrong ID only
         const existingLinks = document.querySelectorAll('link[href*="facebook.com"]');
         existingLinks.forEach(link => {
           if (link.href.includes(WRONG_PIXEL_ID)) {
@@ -201,9 +202,9 @@
       };
       
       // Clean up immediately and on DOM changes
-      removeExistingPixels();
+      removeWrongPixels();
       if ('MutationObserver' in window) {
-        const observer = new MutationObserver(() => removeExistingPixels());
+        const observer = new MutationObserver(() => removeWrongPixels());
         observer.observe(document.documentElement, { childList: true, subtree: true });
       }
       
