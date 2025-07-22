@@ -13,7 +13,7 @@ const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
 const Footer = lazy(() => import("./components/Footer"));
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
 const SEOStructuredData = lazy(() => import("./components/SEOStructuredData"));
-const FacebookPixelPageView = lazy(() => import("./components/FacebookPixelPageView"));
+// Removed FacebookPixelPageView - PageView tracking handled in index.html
 
 // Code-split all pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -64,7 +64,7 @@ const App = () => {
                 <AnalyticsTracker />
                 <ScrollToTop />
                 <SEOStructuredData />
-                <FacebookPixelPageView />
+                {/* Removed FacebookPixelPageView to prevent duplicate tracking */}
               </Suspense>
               
               <main className="flex-1">
