@@ -55,56 +55,52 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation - ONLY SHOW ON DESKTOP */}
-          {!isMobile && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  style={{
-                    padding: '0.5rem 0.75rem',
-                    borderRadius: '0.375rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '500',
-                    textDecoration: 'none',
-                    transition: 'all 0.2s',
-                    backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
-                    color: isActive(item.path) ? '#ffffff' : '#374151'
-                  }}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          )}
-
-          {/* Mobile hamburger menu - ONLY SHOW ON MOBILE */}
-          {isMobile && (
-            <div>
-              <button
-                onClick={() => setIsOpen(!isOpen)}
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
                 style={{
-                  padding: '0.5rem',
+                  padding: '0.5rem 0.75rem',
                   borderRadius: '0.375rem',
-                  color: '#374151',
-                  cursor: 'pointer',
-                  border: 'none',
-                  backgroundColor: 'transparent',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s',
+                  backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
+                  color: isActive(item.path) ? '#ffffff' : '#374151'
                 }}
-                aria-label="Toggle menu"
               >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-          )}
+                {item.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Mobile hamburger menu */}
+          <div className="lg:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              style={{
+                padding: '0.5rem',
+                borderRadius: '0.375rem',
+                color: '#374151',
+                cursor: 'pointer',
+                border: 'none',
+                backgroundColor: 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile dropdown menu - ONLY SHOW ON MOBILE WHEN OPEN */}
-        {isMobile && isOpen && (
+        {/* Mobile dropdown menu */}
+        {isOpen && (
           <div style={{
             borderTop: '1px solid #e5e7eb',
             backgroundColor: '#ffffff',
