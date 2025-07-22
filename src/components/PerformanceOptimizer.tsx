@@ -15,15 +15,7 @@ const PerformanceOptimizer = ({ children }: PerformanceOptimizerProps) => {
       fbPreconnect.crossOrigin = 'anonymous';
       document.head.appendChild(fbPreconnect);
       
-      // Defer additional font weights after LCP
-      const additionalFonts = document.createElement('link');
-      additionalFonts.rel = 'stylesheet';
-      additionalFonts.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap';
-      additionalFonts.media = 'print';
-      additionalFonts.onload = function() {
-        (this as HTMLLinkElement).media = 'all';
-      };
-      document.head.appendChild(additionalFonts);
+      // Remove unused font weight 500 to reduce requests
       
       // Preload next likely navigation targets after initial load
       const criticalRoutes = ['/gas-boilers', '/home-improvements', '/solar'];
