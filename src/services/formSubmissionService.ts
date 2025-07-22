@@ -103,7 +103,8 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     console.log('✅ TRACKING: Full form data received:', JSON.stringify(data, null, 2));
     
     // CRITICAL LEAD TRACKING: Send rich Lead event with full deduplication
-    console.log('🔥 PIXEL Lead event starting with eventId:', eventId);
+    console.log('🔥 PIXEL: Starting Lead tracking with eventId:', eventId);
+    console.log('🔥 PIXEL: Window.fbq available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
     
     // Import tracking functions
     const { trackLeadWithUTM, getFacebookClickId, getFacebookBrowserId } = await import('@/lib/utm-tracking');
@@ -112,12 +113,13 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     const fbc = getFacebookClickId();
     const fbp = getFacebookBrowserId();
     
-    console.log('🔥 PIXEL Facebook IDs found:', { 
+    console.log('🔥 PIXEL: Facebook IDs found:', { 
       fbc: fbc ? 'present' : 'missing', 
       fbp: fbp ? 'present' : 'missing' 
     });
     
     // IMMEDIATE: Fire rich Lead event to browser Pixel with all parameters
+    console.log('🔥 PIXEL: About to call trackLeadWithUTM...');
     trackLeadWithUTM({
       content_name: `${data.formName || data.serviceType} Form Submission`,
       content_category: data.serviceType,
@@ -135,7 +137,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
       zp: data.postcode || undefined
     }, eventId);
     
-    console.log('🔥 PIXEL Lead event sent with full payload');
+    console.log('🔥 PIXEL: trackLeadWithUTM call completed');
     
     // Also call debounced function for GA tracking
     trackFormSubmission(data.formName || data.serviceType, data.serviceType, eventId);

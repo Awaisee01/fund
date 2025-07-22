@@ -130,8 +130,15 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Facebook Pixel Script - Clean Single Implementation -->
+    <!-- Facebook Pixel Script - Clean Single Implementation with Conflict Detection -->
     <script>
+      // Clear any existing Facebook Pixel to prevent conflicts
+      if (window.fbq) {
+        console.warn('🚨 CONFLICT: Existing fbq detected - clearing it');
+        delete window.fbq;
+        delete window._fbq;
+      }
+      
       // Initialize fbq queue immediately and globally
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -142,8 +149,11 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize with our Pixel ID and disable auto-detection
-      fbq('init', '1423013825182147', {
+      // Force our correct Pixel ID and disable auto-detection
+      const CORRECT_PIXEL_ID = '1423013825182147';
+      console.log('🔥 PIXEL: Initializing with CORRECT Pixel ID:', CORRECT_PIXEL_ID);
+      
+      fbq('init', CORRECT_PIXEL_ID, {
         disable_auto_config: true,
         autoConfig: false,
         em: 'disabled'
@@ -152,8 +162,19 @@
       // Track PageView immediately
       fbq('track', 'PageView');
       
-      console.log('✅ Meta Pixel initialized with auto-detection disabled');
+      console.log('✅ Meta Pixel initialized with CORRECT ID:', CORRECT_PIXEL_ID);
       console.log('✅ fbq function available:', typeof fbq);
+      
+      // Monitor for any incorrect Pixel IDs
+      const originalFbq = window.fbq;
+      window.fbq = function() {
+        const args = Array.from(arguments);
+        if (args[0] === 'init' && args[1] !== CORRECT_PIXEL_ID) {
+          console.error('🚨 BLOCKED: Attempt to init wrong Pixel ID:', args[1], 'Expected:', CORRECT_PIXEL_ID);
+          return; // Block incorrect Pixel initialization
+        }
+        return originalFbq.apply(this, arguments);
+      };
     </script>
   </head>
 
