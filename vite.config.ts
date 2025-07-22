@@ -35,27 +35,44 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // PERFORMANCE OPTIMIZED BUILD - Maximized for Lighthouse scores
-    sourcemap: false, // Remove sourcemaps for faster loading
-    minify: 'esbuild', // Fastest minifier
-    target: ['es2020'], // Modern browsers for better optimization
-    chunkSizeWarningLimit: 1000, // Smaller chunks for better caching
-    cssCodeSplit: true, // Split CSS for better loading
+    // Performance optimized build
+    sourcemap: false,
+    minify: 'esbuild',
+    target: ['es2020'],
+    chunkSizeWarningLimit: 1500,
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
-        // Simplified code splitting to prevent React bundle corruption
+        // Aggressive code splitting for better caching
         manualChunks: (id) => {
-          // Keep React together to prevent createContext errors
+          // React core bundle
           if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-vendor';
+            return 'react-core';
           }
-          // UI libraries
+          // Router bundle
+          if (id.includes('react-router')) {
+            return 'router';
+          }
+          // Forms bundle
+          if (id.includes('react-hook-form') || id.includes('zod') || id.includes('@hookform')) {
+            return 'forms';
+          }
+          // UI components bundle
           if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-            return 'ui-vendor';
+            return 'ui-components';
           }
-          // Other vendor code
+          // Supabase bundle
+          if (id.includes('@supabase') || id.includes('@tanstack/react-query')) {
+            return 'supabase';
+          }
+          // Third-party libraries
           if (id.includes('node_modules')) {
             return 'vendor';
+          }
+          // Page components
+          if (id.includes('/pages/')) {
+            const pageName = id.split('/pages/')[1]?.split('.')[0];
+            return `page-${pageName}`;
           }
         },
         // Optimize asset naming for better caching
@@ -75,6 +92,21 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: 'assets/js/[name]-[hash].js'
       }
     }
+  },
+  // Enhanced dependency optimization
+  optimizeDeps: {
+    include: [
+      'react', 
+      'react-dom', 
+      'react-router-dom',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-select',
+      'lucide-react',
+      '@supabase/supabase-js',
+      '@supabase/postgrest-js',
+      '@tanstack/react-query'
+    ],
+    force: true // Force re-optimization to fix module issues
   },
   // CSS optimization
   css: {

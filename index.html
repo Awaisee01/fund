@@ -17,11 +17,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- PERFORMANCE FIX: Load minimal Inter font weights for faster loading -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"></noscript>
+    <!-- Preload critical Inter font weights immediately -->
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" type="font/woff2" crossorigin>
     
-    <!-- No hero image preload needed for homepage -->
+    <!-- Preload critical ECO4 hero image with highest priority -->
+    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high" type="image/png">
     
     <!-- Preload critical CSS as inline (already done below) -->
     
@@ -31,13 +33,15 @@
     <meta name="description" content="Scotland's leading consultancy for homeowner grants and funding. Access ECO4 grants, solar panels, boiler replacements, and home improvement funding up to £25,000." />
     <meta name="keywords" content="Scottish grants, ECO4, solar panels, boiler replacement, home improvements, funding, Scotland" />
 
-    <!-- Font loading moved above to prevent 404s -->
+    <!-- Load critical fonts with optimal strategy -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
 
     <!-- Essential meta tags for social sharing -->
     <meta property="og:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
     <meta property="og:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png" />
+    <meta property="og:image" content="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" />
     <meta name="robots" content="index, follow" />
     
     <!-- Security headers -->
@@ -47,173 +51,130 @@
     <!-- Optimized favicon -->
     <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
 
-    <!-- CRITICAL CSS - Essential classes for homepage rendering -->
+    <!-- Ultra-compressed critical CSS with mobile-first optimizations -->
     <style>
-      /* Reset and base styles */
-      *{box-sizing:border-box;margin:0;padding:0}
-      html{font-family:'Inter',system-ui,sans-serif;-webkit-text-size-adjust:100%}
-      body{background:#fff;color:#1a1a1a;line-height:1.6}
+      /* Mobile-first critical CSS - optimized for touch devices */
+      *{box-sizing:border-box;margin:0;padding:0}html{font-family:'Inter',system-ui,-apple-system,sans-serif;scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}body{background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;line-height:1.6;touch-action:manipulation}
       
-      /* Critical hero gradient */
-      .hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#059669 100%)}
-      .hero-text-white{color:#fff}
-      .hero-text-blue-100{color:#dbeafe}
-      .hero-text-blue-50{color:#eff6ff}
-      .hero-text-green-300{color:#86efac}
+      /* Mobile touch optimization */
+      button,a,[role="button"]{min-height:44px;min-width:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
       
-      /* Essential layout classes */
-      .min-h-screen{min-height:100vh}
-      .flex{display:flex}
-      .flex-col{flex-direction:column}
-      .flex-1{flex:1}
-      .items-center{align-items:center}
-      .justify-center{justify-content:center}
-      .justify-end{justify-content:flex-end}
-      .relative{position:relative}
-      .absolute{position:absolute}
-      .inset-0{top:0;right:0;bottom:0;left:0}
-      .grid{display:grid}
-      .w-full{width:100%}
-      .h-full{height:100%}
-      .overflow-hidden{overflow:hidden}
-      .text-white{color:#fff}
-      .text-center{text-align:center}
+      /* Critical hero styles with mobile-first approach */
+      .hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 35%,#059669 100%)}.hero-text-white{color:#fff}.hero-text-blue-100{color:#dbeafe}.hero-text-blue-50{color:#eff6ff}.hero-text-green-300{color:#86efac}
       
-      /* Container and spacing */
-      .max-w-7xl{max-width:80rem}
-      .max-w-md{max-width:28rem}
-      .mx-auto{margin-left:auto;margin-right:auto}
-      .px-4{padding-left:1rem;padding-right:1rem}
-      .py-16{padding-top:4rem;padding-bottom:4rem}
-      .py-6{padding-top:1.5rem;padding-bottom:1.5rem}
-      .mb-4{margin-bottom:1rem}
-      .mb-6{margin-bottom:1.5rem}
-      .mb-8{margin-bottom:2rem}
-      .gap-8{gap:2rem}
-      .gap-3{gap:0.75rem}
+      /* Critical layout classes for immediate rendering */
+      .min-h-screen{min-height:100vh}.flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1 1 0%}.items-center{align-items:center}.justify-center{justify-content:center}.text-center{text-align:center}
+      .bg-white{background-color:#fff}.bg-gray-50{background-color:#f9fafb}.bg-gray-200{background-color:#e5e7eb}.bg-gray-300{background-color:#d1d5db}
+      .h-4{height:1rem}.h-8{height:2rem}.h-16{height:4rem}.w-auto{width:auto}.w-32{width:8rem}.w-48{width:12rem}
+      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}
+      .rounded{border-radius:.25rem}.mb-4{margin-bottom:1rem}.inline-block{display:inline-block}.object-contain{object-fit:contain}
       
-      /* Text sizing and weights */
-      .text-4xl{font-size:2.25rem;line-height:2.5rem}
-      .text-lg{font-size:1.125rem;line-height:1.75rem}
-      .text-xl{font-size:1.25rem;line-height:1.75rem}
-      .font-bold{font-weight:700}
-      .font-medium{font-weight:500}
-      .leading-tight{line-height:1.25}
-      .leading-relaxed{line-height:1.625}
+      /* Animation for loading states */
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
       
-      /* Flexbox utilities */
-      .flex-shrink-0{flex-shrink:0}
-      .space-y-3>:not([hidden])~:not([hidden]){margin-top:0.75rem}
-      .space-x-3>:not([hidden])~:not([hidden]){margin-left:0.75rem}
+      /* Mobile-optimized layout */
+      .relative{position:relative}.absolute{position:absolute}.inset-0{top:0;right:0;bottom:0;left:0}.grid{display:grid}.w-full{width:100%}.h-full{height:100%}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}
       
-      /* Order utilities */
-      .order-1{order:1}
-      .order-2{order:2}
+      /* Mobile typography - larger sizes for readability */
+      .text-4xl{font-size:2rem;line-height:2.25rem}.text-xl{font-size:1.125rem;line-height:1.75rem}.text-lg{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.leading-tight{line-height:1.25}
       
-      /* Grid utilities */
-      .grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+      /* Mobile spacing - optimized for touch */
+      .mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.px-4{padding:0 1rem}.py-20{padding:3rem 0}.gap-12{gap:2rem}
       
-      /* Icon sizing */
-      .h-6{height:1.5rem}
-      .w-6{width:1.5rem}
+      /* Mobile hero image with performance optimization */
+      .hero-image-container{aspect-ratio:16/9;background:#f3f4f6;transform:translateZ(0);will-change:transform}
       
-      /* Form styling */
-      .bg-white\/10{background-color:rgba(255,255,255,0.1)}
-      .border{border-width:1px}
-      .border-white\/20{border-color:rgba(255,255,255,0.2)}
-      .rounded-2xl{border-radius:1rem}
-      .backdrop-blur-sm{backdrop-filter:blur(4px)}
+      /* Mobile form optimization */
+      .form-card{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:.75rem;box-shadow:0 10px 15px -3px rgba(0,0,0,.1);padding:1.5rem;max-width:100%}
+      
+      /* Touch-optimized inputs */
+      input,textarea,select{min-height:44px;font-size:16px;border-radius:.5rem;border:1px solid #d1d5db;padding:.75rem;width:100%}
+      input:focus,textarea:focus,select:focus{outline:2px solid #2563eb;outline-offset:2px;border-color:#2563eb}
       
       /* Loading states */
-      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-      .animate-pulse{animation:pulse 2s infinite}
-      .loading #root{opacity:0;transition:opacity .2s}
-      .loaded #root{opacity:1}
-      .bg-gray-100{background-color:#f3f4f6}
-      .h-96{height:24rem}
-      .h-32{height:8rem}
-      .h-64{height:16rem}
+      .loading #root{opacity:0;transition:opacity .2s}.loaded #root{opacity:1}
+      .order-1{order:1}.order-2{order:2}
       
-      /* Responsive breakpoints */
+      /* Mobile-first responsive breakpoints */
       @media (min-width:640px){
-        .sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}
-        .sm\:py-20{padding-top:5rem;padding-bottom:5rem}
-        .sm\:text-5xl{font-size:3rem;line-height:1}
-        .sm\:text-xl{font-size:1.25rem;line-height:1.75rem}
+        .text-4xl{font-size:2.25rem;line-height:2.5rem}
+        .py-20{padding:4rem 0}
+        .gap-12{gap:2.5rem}
+        .form-card{padding:2rem}
       }
       
       @media (min-width:1024px){
-        .lg\:px-8{padding-left:2rem;padding-right:2rem}
-        .lg\:py-24{padding-top:6rem;padding-bottom:6rem}
-        .lg\:text-6xl{font-size:3.75rem;line-height:1}
-        .lg\:text-2xl{font-size:1.5rem;line-height:2rem}
-        .lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-        .lg\:gap-12{gap:3rem}
+        .text-4xl,.lg\:text-6xl{font-size:3.75rem;line-height:1}
+        .py-20,.lg\:py-24{padding:6rem 0}
+        .lg\:grid-cols-2{grid-template-columns:1fr 1fr}
+        .lg\:order-1{order:1}
+        .lg\:order-2{order:2}
         .lg\:justify-end{justify-content:flex-end}
+        .lg\:px-8{padding-left:2rem;padding-right:2rem}
+        .gap-12{gap:3rem}
+        
+        /* Desktop-specific touch target adjustments */
+        button,a,[role="button"]{min-height:40px;min-width:40px}
       }
       
-      @media (min-width:1280px){
-        .xl\:px-8{padding-left:2rem;padding-right:2rem}
-        .xl\:py-8{padding-top:2rem;padding-bottom:2rem}
-        .xl\:text-2xl{font-size:1.5rem;line-height:2rem}
-        .xl\:mb-6{margin-bottom:1.5rem}
-        .xl\:gap-4{gap:1rem}
-        .xl\:p-4{padding:1rem}
+      /* High-DPI screen optimizations */
+      @media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi){
+        .hero-image-container{background-size:cover;background-position:center}
       }
-    </style>
-    
-    <!-- Load additional critical styles for buttons and interactions -->
-    <style id="critical-buttons">
-      /* Button and interaction styles */
-      .hover\:bg-white\/20:hover{background-color:rgba(255,255,255,0.2)}
-      .hover\:text-white:hover{color:#fff}
-      .hover\:font-bold:hover{font-weight:700}
-      .transition-all{transition:all 0.15s ease}
-      .duration-300{transition-duration:0.3s}
-      .hover\:scale-105:hover{transform:scale(1.05)}
-      .touch-manipulation{touch-action:manipulation}
-      .min-h-\[48px\]{min-height:48px}
-      .p-3{padding:0.75rem}
-      .justify-center{justify-content:center}
-      /* Additional utility classes needed */
-      .lg\:text-left{text-align:left}
-      .w-auto{width:auto}
-      .object-contain{object-fit:contain}
-      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1)}
-      .h-8{height:2rem}
-      .h-16{height:4rem}
-      .bg-gray-50{background-color:#f9fafb}
-      .bg-gray-200{background-color:#e5e7eb}
-      .bg-gray-300{background-color:#d1d5db}
-      .inline-block{display:inline-block}
-      .rounded{border-radius:0.25rem}
-      .w-48{width:12rem}
-      .w-32{width:8rem}
+      
+      /* Reduce motion for accessibility */
+      @media (prefers-reduced-motion:reduce){
+        *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+        .hero-image-container{transform:none !important}
+      }
     </style>
     
     <!-- Load non-critical Tailwind CSS after critical rendering -->
     <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
-    <!-- Facebook Pixel will be loaded by React component only -->
+    <!-- Ultra-optimized Facebook Pixel - Delayed until user interaction -->
+    <script>
+      window.fbq=window.fbq||function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};window.fbq.q=[];
+      
+      let fbPixelLoaded = false;
+      function loadFacebookPixel(){
+        if(fbPixelLoaded) return;
+        fbPixelLoaded = true;
+        const s=document.createElement('script');
+        s.async=true;
+        s.src='https://connect.facebook.net/en_US/fbevents.js';
+        s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};
+        document.head.appendChild(s);
+      }
+      
+      // Only load after significant user interaction or after 3 seconds
+      let interactionTimer = setTimeout(loadFacebookPixel, 3000);
+      ['mousedown','touchstart','scroll','keydown'].forEach(e=>{
+        document.addEventListener(e, function() {
+          clearTimeout(interactionTimer);
+          loadFacebookPixel();
+        }, {once:true, passive:true});
+      });
+    </script>
   </head>
 
   <body class="loading">
-    <!-- PERFORMANCE FIX: Optimized critical path script -->
+    <!-- Immediate critical path script -->
     <script>
-      // Mark DOM ready and minimize processing
+      // Mark DOM ready and start paint immediately
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
         
-        // MINIMAL prefetching after 3 seconds to prioritize critical loading
-        setTimeout(prefetchResources, 3000);
+        // High-priority resource prefetching after LCP
+        requestIdleCallback ? requestIdleCallback(prefetchResources, {timeout: 1000}) : setTimeout(prefetchResources, 2000);
       });
       
-      // PERFORMANCE FIX: Minimal prefetching to reduce network overhead
+      // Intelligent prefetching optimized for performance
       function prefetchResources() {
-        // Only prefetch after the page is completely stable
+        // Only prefetch after the page is stable
         if (document.readyState !== 'complete') {
-          setTimeout(prefetchResources, 1000);
+          setTimeout(prefetchResources, 500);
           return;
         }
         
@@ -229,10 +190,10 @@
           }, index * 200);
         });
         
-        // Prefetch critical images for next likely pages using updated WebP images
+        // Prefetch critical images for next likely pages
         const criticalImages = [
-          '/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png?w=768&q=75',
-          '/lovable-uploads/339dccf0-fb0b-4516-8463-6609ffa65db5.png?w=768&q=75'
+          '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png?w=768&q=75&f=webp',
+          '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png?w=768&q=75&f=webp'
         ];
         
         criticalImages.forEach((src, index) => {

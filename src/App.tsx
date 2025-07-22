@@ -66,7 +66,7 @@ const App = () => {
             <div className="min-h-screen flex flex-col">
               <Navigation />
               
-              {/* Analytics re-enabled with performance fixes applied */}
+              {/* Defer non-critical tracking components */}
               <Suspense fallback={<ComponentSkeleton />}>
                 <AnalyticsTracker />
                 <ScrollToTop />

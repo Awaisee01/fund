@@ -38,28 +38,66 @@ const OptimizedHero = ({
   };
 
   return (
-    <section className="relative hero-gradient text-white overflow-hidden min-h-screen flex items-center">
-      {/* No background image for homepage */}
+    <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-[80vh] flex items-center">
+      <div className="absolute inset-0 bg-black opacity-20"></div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 w-full">
+      {/* Optimized background image loading */}
+      {backgroundImage && showImage && (
+        <div className="absolute inset-0 opacity-30">
+          <picture>
+            <source
+              media="(max-width: 768px)"
+              srcSet={`${backgroundImage}?w=768&q=75&f=webp`}
+              type="image/webp"
+            />
+            <source
+              media="(max-width: 1200px)"
+              srcSet={`${backgroundImage}?w=1200&q=80&f=webp`}
+              type="image/webp"
+            />
+            <source
+              srcSet={`${backgroundImage}?w=1920&q=85&f=webp`}
+              type="image/webp"
+            />
+            <img
+              src={`${backgroundImage}?w=1920&q=80`}
+              alt=""
+              className="w-full h-full object-cover mix-blend-multiply"
+              loading="lazy"
+              decoding="async"
+              onLoad={handleImageLoad}
+              style={{
+                opacity: imageLoaded ? 1 : 0,
+                transition: 'opacity 0.3s ease'
+              }}
+            />
+          </picture>
+        </div>
+      )}
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 w-full">
         {/* Text-first layout for LCP optimization */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           
           {/* Content Section - Priority for LCP */}
           <div className="order-1">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">{title}</h1>
-            {subtitle && (
-              <p className="text-xl lg:text-2xl mb-6 hero-text-blue-100 font-medium">{subtitle}</p>
-            )}
-            <p className="text-lg hero-text-blue-50 leading-relaxed mb-8">{description}</p>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
+              {title}
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-blue-100 font-medium">
+              {subtitle}
+            </p>
+            <p className="text-base sm:text-lg mb-6 sm:mb-8 text-blue-50 leading-relaxed">
+              {description}
+            </p>
             
             {benefits.length > 0 && (
-              <div className="mb-8">
-                <ul className="space-y-3">
+              <div className="mb-6 sm:mb-8">
+                <ul className="space-y-2 sm:space-y-3">
                   {benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-center space-x-3">
-                      <CheckCircle className="h-6 w-6 hero-text-green-300 flex-shrink-0" />
-                      <span className="hero-text-blue-50">{benefit}</span>
+                    <li key={index} className="flex items-start space-x-3">
+                      <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-300 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <span className="text-sm sm:text-base text-blue-50">{benefit}</span>
                     </li>
                   ))}
                 </ul>

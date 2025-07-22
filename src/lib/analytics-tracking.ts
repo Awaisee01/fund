@@ -138,31 +138,21 @@ class AnalyticsTracker {
   private async createVisitorSession(): Promise<void> {
     if (typeof window === 'undefined') return;
     
-    // PERFORMANCE FIX: Defer session creation to avoid blocking page load
-    const deferredCreate = async () => {
-      try {
-        const utmParams = this.getUTMParameters();
-        
-        await supabase.from('visitor_sessions').insert({
-          id: this.sessionId,
-          visitor_id: this.visitorId,
-          session_start: this.sessionStart,
-          pages_visited: 1,
-          referrer: document.referrer || null,
-          utm_source: utmParams.utm_source,
-          utm_medium: utmParams.utm_medium,
-          utm_campaign: utmParams.utm_campaign,
-        });
-      } catch (error) {
-        console.error('Error creating visitor session:', error);
-      }
-    };
-
-    // Use requestIdleCallback to defer session creation
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(deferredCreate, { timeout: 3000 });
-    } else {
-      setTimeout(deferredCreate, 1000);
+    try {
+      const utmParams = this.getUTMParameters();
+      
+      await supabase.from('visitor_sessions').insert({
+        id: this.sessionId,
+        visitor_id: this.visitorId,
+        session_start: this.sessionStart,
+        pages_visited: 1,
+        referrer: document.referrer || null,
+        utm_source: utmParams.utm_source,
+        utm_medium: utmParams.utm_medium,
+        utm_campaign: utmParams.utm_campaign,
+      });
+    } catch (error) {
+      console.error('Error creating visitor session:', error);
     }
   }
 
@@ -220,60 +210,34 @@ class AnalyticsTracker {
       const currentPath = pagePath || window.location.pathname;
       console.log('Tracking page view:', currentPath);
       
-      // PERFORMANCE FIX: Defer analytics tracking to prevent blocking page load
-      this.deferredTrackPageView(currentPath);
+      const utmParams = this.getUTMParameters();
       
-      console.log('Page view tracking deferred to prevent blocking');
+      this.pagesVisited++;
+      localStorage.setItem('pages_visited', this.pagesVisited.toString());
+      
+      await supabase.from('page_visits').insert({
+        visitor_id: this.visitorId,
+        session_id: this.sessionId,
+        page_path: currentPath,
+        referrer: document.referrer || null,
+        utm_source: utmParams.utm_source,
+        utm_medium: utmParams.utm_medium,
+        utm_campaign: utmParams.utm_campaign,
+        utm_content: utmParams.utm_content,
+        utm_term: utmParams.utm_term,
+        user_agent: navigator.userAgent,
+      });
+
+      await supabase
+        .from('visitor_sessions')
+        .update({
+          pages_visited: this.pagesVisited,
+        })
+        .eq('id', this.sessionId);
+
+      console.log('Page view tracked successfully');
     } catch (error) {
-      console.error('Error setting up page view tracking:', error);
-    }
-  }
-
-  private async deferredTrackPageView(currentPath: string): Promise<void> {
-    // Use requestIdleCallback to ensure analytics don't block critical rendering
-    const trackFunction = async () => {
-      try {
-        const utmParams = this.getUTMParameters();
-        
-        this.pagesVisited++;
-        localStorage.setItem('pages_visited', this.pagesVisited.toString());
-        
-        // Batch analytics calls to reduce network overhead
-        const promises = [
-          supabase.from('page_visits').insert({
-            visitor_id: this.visitorId,
-            session_id: this.sessionId,
-            page_path: currentPath,
-            referrer: document.referrer || null,
-            utm_source: utmParams.utm_source,
-            utm_medium: utmParams.utm_medium,
-            utm_campaign: utmParams.utm_campaign,
-            utm_content: utmParams.utm_content,
-            utm_term: utmParams.utm_term,
-            user_agent: navigator.userAgent,
-          }),
-          
-          supabase
-            .from('visitor_sessions')
-            .update({
-              pages_visited: this.pagesVisited,
-            })
-            .eq('id', this.sessionId)
-        ];
-
-        await Promise.all(promises);
-        console.log('Deferred page view tracked successfully');
-      } catch (error) {
-        console.error('Error in deferred page view tracking:', error);
-      }
-    };
-
-    // Use requestIdleCallback with fallback for better performance
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(trackFunction, { timeout: 5000 });
-    } else {
-      // Fallback for browsers without requestIdleCallback
-      setTimeout(trackFunction, 2000);
+      console.error('Error tracking page view:', error);
     }
   }
 
