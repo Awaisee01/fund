@@ -1,46 +1,72 @@
 /* ABSOLUTE MOBILE FORM FIRST FIX - MAXIMUM PRIORITY */
+/* FORCE FORM FIRST ON MOBILE - NO EXCEPTIONS */
 
 @media (max-width: 1023px) {
-  /* FORCE ALL HERO GRIDS TO BE FLEX COLUMN ON MOBILE */
+  /* NUCLEAR OPTION - FORCE ALL GRIDS TO FLEX COLUMN */
+  .grid,
   .grid.lg\\:grid-cols-2,
   .grid.gap-8.lg\\:gap-12,
-  .grid.gap-6.lg\\:grid-cols-2 {
+  .grid.gap-6.lg\\:grid-cols-2,
+  div[class*="grid"] {
     display: flex !important;
     flex-direction: column !important;
     gap: 2rem !important;
   }
   
-  /* FORM SECTIONS - FORCE TO TOP ON MOBILE */
-  .order-1.lg\\:order-2 {
-    order: 1 !important;
+  /* FORM SECTIONS - ABSOLUTE PRIORITY ON MOBILE */
+  .order-1,
+  .order-1.lg\\:order-2,
+  [class*="order-1"] {
+    order: -999 !important;
     width: 100% !important;
+    flex: 0 0 auto !important;
   }
   
   /* TEXT CONTENT - FORCE TO BOTTOM ON MOBILE */
-  .order-2.lg\\:order-1 {
-    order: 2 !important;
+  .order-2,
+  .order-2.lg\\:order-1,
+  [class*="order-2"] {
+    order: 999 !important;
     width: 100% !important;
+    flex: 0 0 auto !important;
   }
   
   /* FORCE CENTER ALIGNMENT FOR FORMS ON MOBILE */
-  .w-full.flex.justify-center.lg\\:justify-end {
+  .w-full.flex.justify-center.lg\\:justify-end,
+  .flex.justify-center.lg\\:justify-end,
+  .flex.justify-center,
+  div[class*="justify-center"] {
     justify-content: center !important;
     width: 100% !important;
+    display: flex !important;
   }
   
   /* FORM CONTAINERS FULL WIDTH */
   .bg-white\\/10,
-  .max-w-md {
+  .max-w-md,
+  .w-full.max-w-md,
+  div[class*="max-w-md"] {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto !important;
   }
-}
-
-/* MOBILE TEXT ADJUSTMENT */
-@media (max-width: 1023px) {
-  /* ENSURE TEXT SECTIONS ARE PROPERLY CENTERED ON MOBILE */
-  .order-2.lg\\:order-1 {
+  
+  /* HERO SECTIONS SPECIFIC */
+  section[class*="hero"] .grid,
+  section .grid.grid-cols-1.lg\\:grid-cols-2 {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  /* FORCE TEXT SECTIONS TO BE CENTERED ON MOBILE */
+  .order-2.lg\\:order-1,
+  div[class*="order-2"] {
     text-align: center !important;
+    margin-top: 2rem !important;
+  }
+  
+  /* REMOVE ANY CONFLICTING STYLES */
+  .min-h-\\[calc\\(100vh-4rem\\)\\] {
+    min-height: auto !important;
   }
 }
