@@ -22,7 +22,7 @@ const SimplifiedHero = ({
   children
 }: SimplifiedHeroProps) => {
   return (
-    <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white min-h-screen">
+    <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white min-h-screen lg:min-h-screen">
       {/* Simplified background with single overlay */}
       <div className="absolute inset-0 bg-black/20">
         <img
@@ -37,7 +37,7 @@ const SimplifiedHero = ({
       </div>
       
       {/* Simplified content structure */}
-      <div className="relative max-w-7xl mx-auto px-4 py-20 lg:py-24">
+      <div className="relative max-w-7xl mx-auto px-4 py-8 lg:py-24">
         {/* Mobile-first grid with reduced complexity */}
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
           

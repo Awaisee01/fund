@@ -29,7 +29,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
   }, []);
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen">
+    <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen lg:min-h-screen">
       <div className="absolute inset-0 bg-black opacity-20"></div>
       <div className="absolute inset-0 opacity-30 will-change-transform">
         <div 
@@ -66,8 +66,8 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
         </div>
       </div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
           <div className="order-2 lg:order-1 text-center lg:text-left">
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               ECO4 Scheme
