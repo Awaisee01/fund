@@ -133,29 +133,18 @@
     <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
-    <!-- Ultra-optimized Facebook Pixel - Delayed until user interaction -->
+    <!-- Optimized Facebook Pixel - Minimal critical tracking -->
     <script>
       window.fbq=window.fbq||function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};window.fbq.q=[];
       
-      let fbPixelLoaded = false;
       function loadFacebookPixel(){
-        if(fbPixelLoaded) return;
-        fbPixelLoaded = true;
-        const s=document.createElement('script');
-        s.async=true;
-        s.src='https://connect.facebook.net/en_US/fbevents.js';
-        s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};
-        document.head.appendChild(s);
+        if(window.fbPixelLoaded)return;window.fbPixelLoaded=true;
+        const s=document.createElement('script');s.async=true;s.src='https://connect.facebook.net/en_US/fbevents.js';
+        s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};document.head.appendChild(s);
       }
       
-      // Only load after significant user interaction or after 3 seconds
-      let interactionTimer = setTimeout(loadFacebookPixel, 3000);
-      ['mousedown','touchstart','scroll','keydown'].forEach(e=>{
-        document.addEventListener(e, function() {
-          clearTimeout(interactionTimer);
-          loadFacebookPixel();
-        }, {once:true, passive:true});
-      });
+      document.readyState==='loading'?document.addEventListener('DOMContentLoaded',function(){setTimeout(loadFacebookPixel,1000)}):setTimeout(loadFacebookPixel,1000);
+      ['mousedown','touchstart','scroll','keydown'].forEach(e=>document.addEventListener(e,loadFacebookPixel,{once:true,passive:true}));
     </script>
   </head>
 
@@ -166,37 +155,41 @@
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
         
-        // High-priority resource prefetching after LCP
-        requestIdleCallback ? requestIdleCallback(prefetchResources, {timeout: 1000}) : setTimeout(prefetchResources, 2000);
+        // Intelligent resource prefetching after critical rendering
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(function() {
+            prefetchLikelyResources();
+          });
+        } else {
+          setTimeout(prefetchLikelyResources, 2000);
+        }
       });
       
-      // Intelligent prefetching optimized for performance
-      function prefetchResources() {
-        // Only prefetch after the page is stable
-        if (document.readyState !== 'complete') {
-          setTimeout(prefetchResources, 500);
-          return;
-        }
-        
-        // Prefetch likely next pages with lower priority
-        const likelyPages = ['/eco4', '/solar', '/gas-boilers', '/home-improvements'];
-        likelyPages.forEach((path, index) => {
-          setTimeout(() => {
-            const link = document.createElement('link');
-            link.rel = 'prefetch';
-            link.href = path;
-            link.fetchPriority = 'low';
-            document.head.appendChild(link);
-          }, index * 200);
-        });
-        
-        // Prefetch critical images for next likely pages
-        const criticalImages = [
-          '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png?w=768&q=75&f=webp',
-          '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png?w=768&q=75&f=webp'
+      // Prefetch strategy for likely next navigations from ECO4
+      function prefetchLikelyResources() {
+        const likelyPages = [
+          { path: '/solar', priority: 'high' },
+          { path: '/gas-boilers', priority: 'high' },
+          { path: '/home-improvements', priority: 'medium' },
+          { path: '/contact', priority: 'low' }
         ];
         
-        criticalImages.forEach((src, index) => {
+        // Prefetch likely page routes
+        likelyPages.forEach(page => {
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.href = page.path;
+          link.fetchPriority = page.priority;
+          document.head.appendChild(link);
+        });
+        
+        // Prefetch likely hero images for next pages
+        const likelyImages = [
+          '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png', // Gas boilers
+          '/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png'  // Home improvements
+        ];
+        
+        likelyImages.forEach((src, index) => {
           setTimeout(() => {
             const link = document.createElement('link');
             link.rel = 'prefetch';
@@ -204,14 +197,23 @@
             link.href = src;
             link.fetchPriority = 'low';
             document.head.appendChild(link);
-          }, (index + likelyPages.length) * 200);
+          }, index * 500); // Stagger to avoid bandwidth competition
+        });
+        
+        // Preconnect to form submission domains
+        const formDomains = ['https://script.google.com', 'https://hooks.zapier.com'];
+        formDomains.forEach(domain => {
+          const link = document.createElement('link');
+          link.rel = 'preconnect';
+          link.href = domain;
+          link.crossOrigin = 'anonymous';
+          document.head.appendChild(link);
         });
       }
       
-      // Performance timing
+      // Performance mark for critical rendering
       if ('performance' in window && 'mark' in performance) {
         performance.mark('critical-css-loaded');
-        window.addEventListener('load', () => performance.mark('page-loaded'));
       }
     </script>
     

@@ -3,9 +3,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import compression from 'vite-plugin-compression';
 
-// High-performance config optimized for Lighthouse scores
+// Simplified config to avoid build timeouts
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
@@ -14,20 +13,6 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
-    // Brotli compression for better performance
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      threshold: 1024,
-      deleteOriginFile: false
-    }),
-    // Gzip fallback
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz',
-      threshold: 1024,
-      deleteOriginFile: false
-    })
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -35,56 +20,28 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Performance optimized build
+    // Optimized build config for performance
     sourcemap: false,
     minify: 'esbuild',
     target: ['es2020'],
-    chunkSizeWarningLimit: 1500,
+    chunkSizeWarningLimit: 2000,
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        // Aggressive code splitting for better caching
-        manualChunks: (id) => {
-          // React core bundle
-          if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-core';
-          }
-          // Router bundle
-          if (id.includes('react-router')) {
-            return 'router';
-          }
-          // Forms bundle
-          if (id.includes('react-hook-form') || id.includes('zod') || id.includes('@hookform')) {
-            return 'forms';
-          }
-          // UI components bundle
-          if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-            return 'ui-components';
-          }
-          // Supabase bundle
-          if (id.includes('@supabase') || id.includes('@tanstack/react-query')) {
-            return 'supabase';
-          }
-          // Third-party libraries
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-          // Page components
-          if (id.includes('/pages/')) {
-            const pageName = id.split('/pages/')[1]?.split('.')[0];
-            return `page-${pageName}`;
-          }
+        manualChunks: {
+          'react-core': ['react', 'react-dom'],
+          'supabase': ['@supabase/supabase-js'],
+          'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
+          'routing': ['react-router-dom'],
+          'forms': ['react-hook-form', '@hookform/resolvers', 'zod']
         },
         // Optimize asset naming for better caching
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return `assets/[name]-[hash][extname]`;
           const info = assetInfo.name.split('.');
           const ext = info[info.length - 1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp|avif/i.test(ext)) {
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
             return `assets/images/[name]-[hash][extname]`;
-          }
-          if (/css/i.test(ext)) {
-            return `assets/css/[name]-[hash][extname]`;
           }
           return `assets/[name]-[hash][extname]`;
         },
@@ -93,24 +50,8 @@ export default defineConfig(({ mode }) => ({
       }
     }
   },
-  // Enhanced dependency optimization
+  // Basic dependency optimization
   optimizeDeps: {
-    include: [
-      'react', 
-      'react-dom', 
-      'react-router-dom',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-select',
-      'lucide-react',
-      '@supabase/supabase-js',
-      '@supabase/postgrest-js',
-      '@tanstack/react-query'
-    ],
-    force: true // Force re-optimization to fix module issues
+    include: ['react', 'react-dom'],
   },
-  // CSS optimization
-  css: {
-    devSourcemap: false,
-    modules: false
-  }
 }));

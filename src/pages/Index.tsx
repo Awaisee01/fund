@@ -1,6 +1,6 @@
 
 import React, { Suspense, useEffect, lazy } from 'react';
-import OptimizedHero from '@/components/OptimizedHero';
+import Hero from '@/components/Hero';
 
 // Lazy load below-the-fold components
 const ServicesGrid = lazy(() => import('@/components/ServicesGrid'));
@@ -16,7 +16,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <OptimizedHero 
+      <Hero 
         title="Unlock Scottish Grants & Funding"
         subtitle=""
         description="From heating upgrades, to free solar panels, to improving the look of Scotland's homes. Funding for Scotland are here to help people unlock the funding and grant schemes they are entitled to."
