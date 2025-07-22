@@ -179,7 +179,20 @@ const NativeECO4Form = () => {
       </CardHeader>
       <CardContent className="p-4">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form 
+            onSubmit={(e) => {
+              console.log('🆘🆘🆘 FORM HTML SUBMIT EVENT TRIGGERED!');
+              console.log('🆘🆘🆘 Form validation state:', form.formState);
+              console.log('🆘🆘🆘 Form errors:', form.formState.errors);
+              console.log('🆘🆘🆘 Form values:', form.getValues());
+              e.preventDefault();
+              form.handleSubmit(onSubmit, (errors) => {
+                console.log('🆘🆘🆘 FORM VALIDATION FAILED!');
+                console.log('🆘🆘🆘 Validation errors:', errors);
+              })(e);
+            }} 
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="fullName"
@@ -320,6 +333,12 @@ const NativeECO4Form = () => {
               type="submit" 
               className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12 mt-6"
               disabled={isSubmitting || submitAttempts >= 3}
+              onClick={(e) => {
+                console.log('🆘🆘🆘 SUBMIT BUTTON CLICKED!');
+                console.log('🆘🆘🆘 Button disabled?', isSubmitting || submitAttempts >= 3);
+                console.log('🆘🆘🆘 isSubmitting:', isSubmitting);
+                console.log('🆘🆘🆘 submitAttempts:', submitAttempts);
+              }}
             >
               {isSubmitting ? 'Sending...' : submitAttempts >= 3 ? 'Please refresh page' : 'Submit'}
             </Button>
