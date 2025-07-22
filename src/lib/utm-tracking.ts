@@ -104,8 +104,11 @@ export const trackPixelEventWithUTM = (
   eventData: Record<string, any> = {},
   eventId?: string
 ): void => {
+  console.log('🔥 DEBUG: trackPixelEventWithUTM called', { eventName, eventData, eventId });
+  console.log('🔥 DEBUG: Facebook Pixel function available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
+  
   if (typeof window === 'undefined' || !(window as any).fbq) {
-    console.warn('⚠️ Facebook Pixel not available');
+    console.warn('⚠️ PIXEL: Facebook Pixel not available');
     return;
   }
 
@@ -119,24 +122,24 @@ export const trackPixelEventWithUTM = (
     // Add event ID if provided for deduplication (must match CAPI format)
     if (eventId) {
       enhancedEventData.eventID = String(eventId); // Ensure it's always a string (camelCase for Pixel)
-      console.log('📊 PIXEL: Adding eventID for deduplication:', String(eventId));
+      console.log('🔥 DEBUG: PIXEL event ID being sent:', String(eventId));
     }
 
     // Only include custom_data if there are UTM parameters
     const hasUTMData = Object.keys(utmData).length > 0;
     
-    console.log('📊 PIXEL: Final event data being sent to Facebook Pixel:');
+    console.log('🔥 DEBUG: PIXEL Final event data being sent to Facebook Pixel:');
     console.log(JSON.stringify({
       event: eventName,
       data: enhancedEventData,
       hasUTM: hasUTMData,
-      eventID: eventId
+      eventID: String(eventId)
     }, null, 2));
 
     // Track the event with enhanced data
     if (typeof (window as any).fbq === 'function') {
       (window as any).fbq('track', eventName, enhancedEventData);
-      console.log(`✅ PIXEL: Facebook Pixel ${eventName} tracking fired successfully`);
+      console.log(`🔥 DEBUG: PIXEL Facebook Pixel ${eventName} tracking fired successfully with eventID:`, String(eventId));
     } else {
       console.warn('⚠️ PIXEL: Facebook Pixel fbq function not properly loaded');
       
@@ -175,7 +178,7 @@ export const trackLeadWithUTM = (leadData: {
   event_value_id?: string;
 }, eventId?: string): void => {
   console.log('🔥 DEBUG: trackLeadWithUTM called with:', { leadData, eventId });
-  console.log('🔥 DEBUG: Facebook Pixel available?', typeof window !== 'undefined' && !!(window as any).fbq);
+  console.log('🔥 DEBUG: Facebook Pixel function available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
   
   trackPixelEventWithUTM('Lead', {
     ...leadData,

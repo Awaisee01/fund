@@ -98,6 +98,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     
     // Track form submission immediately with the same event ID
     console.log('🔥 DEBUG: About to track form submission with eventId:', eventId);
+    console.log('🔥 DEBUG: Form name available?', !!data.formName);
     if (data.formName) {
       trackFormSubmission(data.formName, data.serviceType, eventId);
     }
@@ -284,8 +285,8 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
 
 // Debounced tracking function to prevent excessive calls
 const debouncedTrackFormSubmission = debounce((formName: string, category: string, eventId?: string) => {
-  console.log('📊 Tracking form submission:', { formName, category, eventId });
-  console.log('📊 PIXEL: Starting Lead event tracking with eventID:', eventId);
+  console.log('🔥 DEBUG: debouncedTrackFormSubmission called:', { formName, category, eventId });
+  console.log('🔥 DEBUG: PIXEL Starting Lead event tracking with eventID:', eventId);
   
   // Enhanced Meta Pixel tracking with UTM data and event ID for deduplication
   trackLeadWithUTM({
@@ -296,7 +297,7 @@ const debouncedTrackFormSubmission = debounce((formName: string, category: strin
     event_value_id: eventId
   }, eventId);
   
-  console.log('📊 PIXEL: Lead event fired successfully');
+  console.log('🔥 DEBUG: PIXEL Lead event tracking completed');
   
   // Google Analytics tracking with better error handling
   if (typeof window !== 'undefined' && (window as any).gtag) {
