@@ -36,7 +36,7 @@ const Hero = ({
         {/* Mobile: Form first, Desktop: Content first */}
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* FORM SECTION - ALWAYS FIRST ON MOBILE */}
-          <div className="order-1 w-full flex justify-center lg:justify-end lg:order-2">
+          <div className="order-1 lg:order-2 w-full flex justify-center lg:justify-end">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 sm:px-6 xl:px-8 py-6 xl:py-8 border border-white/20 w-full max-w-md">
               <h3 className="text-lg sm:text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">What can we help with?</h3>
               <div className="grid grid-cols-1 gap-3 xl:gap-4">

@@ -69,7 +69,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
           {/* FORM SECTION - ALWAYS FIRST ON MOBILE */}
-          <div className="order-1 w-full flex justify-center lg:justify-end lg:order-2">
+          <div className="order-1 lg:order-2 w-full flex justify-center lg:justify-end">
             <div className="w-full max-w-md mx-auto lg:mx-0">
               {formReady ? (
                 <Suspense fallback={
@@ -106,7 +106,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
           </div>
           
           {/* TEXT CONTENT - ALWAYS SECOND ON MOBILE */}
-          <div className="order-2 w-full text-center lg:text-left lg:order-1">
+          <div className="order-2 lg:order-1 w-full text-center lg:text-left">
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               ECO4 Scheme
             </h1>
