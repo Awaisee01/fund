@@ -5,9 +5,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- PWA and Caching Optimization -->
-    <meta http-equiv="Cache-Control" content="public, max-age=31536000" />
+    <!-- HTTP/2 Push and Caching Optimization -->
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable" />
     <meta http-equiv="Expires" content="Thu, 31 Dec 2025 23:59:59 GMT" />
+    
+    <!-- Resource hints for HTTP/2 optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.leadconnectorhq.com" crossorigin>
+    <link rel="preconnect" href="https://link.msgsndr.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.gpteng.co" crossorigin>
+    
+    <!-- DNS prefetch for additional performance -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//api.leadconnectorhq.com">
+    <link rel="dns-prefetch" href="//cdn.gpteng.co">
+    
     <link rel="manifest" href="/manifest.json" />
     
     <title>Funding For Scotland - Scottish Home Improvement Grants & Funding</title>
@@ -15,18 +29,15 @@
     <meta name="author" content="Funding For Scotland" />
     <meta name="keywords" content="Scottish grants, ECO4, solar panels, boiler replacement, home improvements, funding, Scotland" />
 
-    <!-- Preconnect to external domains for faster loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://api.leadconnectorhq.com">
-    <link rel="preconnect" href="https://link.msgsndr.com">
     
-    <!-- Preload critical fonts -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <!-- Optimized font loading with compression -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
     
-    <!-- DNS prefetch for performance -->
-    <link rel="dns-prefetch" href="//cdn.gpteng.co">
+    <!-- Fallback for font loading -->
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    </noscript>
 
     <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
     <link rel="shortcut icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
