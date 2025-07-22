@@ -102,9 +102,10 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     console.log('✅ TRACKING: Service type:', data.serviceType);
     console.log('✅ TRACKING: Full form data received:', JSON.stringify(data, null, 2));
     
-    // CRITICAL: Always track Lead event regardless of formName presence
+    // CRITICAL: Always track Lead event for both Pixel and CAPI
     if (data.formName) {
       console.log('🔥 DEBUG: Form name exists, calling trackFormSubmission');
+      console.log('🔥 DEBUG: About to call debounced tracking function...');
       // This will trigger both Pixel tracking via trackLeadWithUTM() and the browser event
       trackFormSubmission(data.formName, data.serviceType, eventId);
       console.log('✅ TRACKING: trackFormSubmission called - will fire both Pixel and GA events');
@@ -112,6 +113,22 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
       console.warn('⚠️ TRACKING: No formName provided, using fallback tracking');
       // Fallback: use service type as form name
       trackFormSubmission(data.serviceType || 'Unknown Form', data.serviceType, eventId);
+    }
+    
+    // URGENT FIX: Directly call browser Pixel tracking to ensure it fires
+    console.log('🚨 URGENT FIX: Directly calling trackLeadWithUTM to ensure browser Pixel fires');
+    try {
+      const { trackLeadWithUTM } = await import('@/lib/utm-tracking');
+      trackLeadWithUTM({
+        content_name: `${data.formName || data.serviceType} Form Submission`,
+        content_category: data.serviceType,
+        value: 1,
+        currency: 'GBP',
+        event_value_id: eventId
+      }, eventId);
+      console.log('✅ URGENT FIX: Direct browser Pixel tracking completed');
+    } catch (error) {
+      console.error('❌ URGENT FIX: Direct browser Pixel tracking failed:', error);
     }
     
     console.log('🔥 DEBUG: About to call Facebook Conversions API for Lead event with eventId:', eventId);
