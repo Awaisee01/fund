@@ -1,3 +1,4 @@
+
 import React, { Suspense, useState, useEffect, lazy } from 'react';
 import Hero from '@/components/Hero';
 
@@ -10,12 +11,12 @@ const Index = () => {
   const [heroLoaded, setHeroLoaded] = useState(true);
 
   useEffect(() => {
+    console.log('Index page loaded');
     document.title = 'Scottish Grants & Funding';
   }, []);
 
   return (
     <div className="min-h-screen">
-      {/* Hero section with proper form and navigation */}
       <Hero 
         title="Unlock Scottish Grants & Funding"
         subtitle=""
@@ -29,17 +30,14 @@ const Index = () => {
         ]}
       />
       
-      {/* Services grid section */}
       <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse"></div>}>
         <ServicesGrid />
       </Suspense>
 
-      {/* Trust badges section */}
       <Suspense fallback={<div className="h-32 bg-gray-100 animate-pulse"></div>}>
         <TrustBadges />
       </Suspense>
 
-      {/* Call to action section */}
       <Suspense fallback={<div className="h-64 bg-gray-100 animate-pulse"></div>}>
         <CallToActionSection />
       </Suspense>

@@ -16,30 +16,40 @@ class AnalyticsTracker {
   private initialized: boolean = false;
 
   constructor() {
-    // Completely defer initialization until explicitly called
-    // This prevents any build-time execution
+    // No initialization in constructor to prevent build-time execution
+    console.log('Analytics tracker created (no initialization)');
   }
 
-  // Make init() public so it can be called when needed
   public init() {
     // Only initialize in browser environment
-    if (typeof window === 'undefined' || this.initialized) return;
+    if (typeof window === 'undefined') {
+      console.log('Analytics init skipped: not in browser');
+      return;
+    }
     
-    this.visitorId = this.getOrCreateVisitorId();
-    this.sessionId = this.getOrCreateSessionId();
-    this.sessionStart = this.getSessionStart();
-    this.loadSessionData();
-    
-    // Set up session timeout (30 minutes of inactivity)
-    this.setupSessionTimeout();
-    
-    // Track page unload to update session end time
-    this.setupPageUnloadTracking();
-    
-    this.initialized = true;
+    if (this.initialized) {
+      console.log('Analytics already initialized');
+      return;
+    }
+
+    try {
+      console.log('Initializing analytics tracker...');
+      
+      this.visitorId = this.getOrCreateVisitorId();
+      this.sessionId = this.getOrCreateSessionId();
+      this.sessionStart = this.getSessionStart();
+      this.loadSessionData();
+      
+      this.setupSessionTimeout();
+      this.setupPageUnloadTracking();
+      
+      this.initialized = true;
+      console.log('Analytics tracker initialized successfully');
+    } catch (error) {
+      console.error('Analytics initialization failed:', error);
+    }
   }
 
-  // Method to safely call any tracking function
   private ensureInitialized() {
     if (!this.initialized && typeof window !== 'undefined') {
       this.init();
@@ -73,10 +83,8 @@ class AnalyticsTracker {
     const currentTime = Date.now();
     
     if (lastActivity && (currentTime - parseInt(lastActivity)) < sessionTimeout) {
-      // Continue existing session
       return localStorage.getItem('session_id') || this.createNewSession();
     } else {
-      // Create new session
       return this.createNewSession();
     }
   }
@@ -91,9 +99,7 @@ class AnalyticsTracker {
       localStorage.setItem('pages_visited', '0');
     }
     
-    // Create session record in database
     this.createVisitorSession();
-    
     return sessionId;
   }
 
@@ -108,7 +114,6 @@ class AnalyticsTracker {
   }
 
   private setupSessionTimeout(): void {
-    // Update last activity every 30 seconds while user is active
     if (typeof window !== 'undefined') {
       setInterval(() => {
         localStorage.setItem('last_activity', Date.now().toString());
@@ -122,7 +127,6 @@ class AnalyticsTracker {
         this.updateSessionEnd();
       });
 
-      // Also update on visibility change
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') {
           this.updateSessionEnd();
@@ -191,21 +195,26 @@ class AnalyticsTracker {
   }
 
   async trackPageView(pagePath?: string): Promise<void> {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      console.log('Page view tracking skipped: not in browser');
+      return;
+    }
     
-    // Ensure we're properly initialized
     this.ensureInitialized();
-    if (!this.initialized) return;
+    if (!this.initialized) {
+      console.log('Page view tracking skipped: not initialized');
+      return;
+    }
     
     try {
       const currentPath = pagePath || window.location.pathname;
+      console.log('Tracking page view:', currentPath);
+      
       const utmParams = this.getUTMParameters();
       
-      // Increment pages visited
       this.pagesVisited++;
       localStorage.setItem('pages_visited', this.pagesVisited.toString());
       
-      // Track page visit
       await supabase.from('page_visits').insert({
         visitor_id: this.visitorId,
         session_id: this.sessionId,
@@ -219,7 +228,6 @@ class AnalyticsTracker {
         user_agent: navigator.userAgent,
       });
 
-      // Update session with new page count
       await supabase
         .from('visitor_sessions')
         .update({
@@ -227,7 +235,7 @@ class AnalyticsTracker {
         })
         .eq('id', this.sessionId);
 
-      console.log('Page view tracked:', currentPath);
+      console.log('Page view tracked successfully');
     } catch (error) {
       console.error('Error tracking page view:', error);
     }
@@ -236,7 +244,6 @@ class AnalyticsTracker {
   async trackConversion(): Promise<void> {
     if (typeof window === 'undefined') return;
     
-    // Ensure we're properly initialized
     this.ensureInitialized();
     if (!this.initialized) return;
     
@@ -267,7 +274,7 @@ class AnalyticsTracker {
   }
 }
 
-// Create singleton instance
+// Create singleton instance (no initialization in module scope)
 const tracker = new AnalyticsTracker();
 
 export default tracker;

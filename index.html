@@ -5,83 +5,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- HTTP/2 Push and Caching Optimization -->
-    <meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable" />
-    <meta http-equiv="Expires" content="Thu, 31 Dec 2025 23:59:59 GMT" />
-    
-    <!-- Resource hints for HTTP/2 optimization -->
+    <!-- Basic resource hints only -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://api.leadconnectorhq.com" crossorigin>
-    <link rel="preconnect" href="https://link.msgsndr.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.gpteng.co" crossorigin>
-    
-    <!-- DNS prefetch for additional performance -->
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="dns-prefetch" href="//api.leadconnectorhq.com">
-    <link rel="dns-prefetch" href="//cdn.gpteng.co">
     
     <link rel="manifest" href="/manifest.json" />
     
     <title>Funding For Scotland - Scottish Home Improvement Grants & Funding</title>
     <meta name="description" content="Scotland's leading consultancy for homeowner grants and funding. Access ECO4 grants, solar panels, boiler replacements, and home improvement funding up to £25,000." />
-    <meta name="author" content="Funding For Scotland" />
     <meta name="keywords" content="Scottish grants, ECO4, solar panels, boiler replacement, home improvements, funding, Scotland" />
 
-    
-    <!-- Critical font preloading with optimized loading strategy -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyYAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
-    
-    <!-- Load Google Fonts with optimized fallback -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'; this.onload=null;">
-    
-    <!-- Critical CSS preload (main application styles) -->
-    <link rel="preload" href="/src/index.css" as="style">
-    
-    <!-- Fallback for font loading -->
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    </noscript>
+    <!-- Simplified font loading -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 
+    <!-- Basic favicon only -->
     <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
-    <link rel="shortcut icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
-    <link rel="apple-touch-icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png">
 
-    <!-- Preload critical hero images for all pages -->
-    <link rel="preload" as="image" href="/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png" type="image/png" media="(max-width: 768px)">
-    <link rel="preload" as="image" href="/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png" type="image/png" media="(min-width: 769px)">
-    
-    <!-- Preload other hero images for navigation -->
-    <link rel="prefetch" as="image" href="/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png" type="image/png">
-    <link rel="prefetch" as="image" href="/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png" type="image/png">
-    <link rel="prefetch" as="image" href="/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png" type="image/png">
-    
-    <!-- Preload critical trust badge images -->
-    <link rel="preload" as="image" href="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" type="image/png">
-    <link rel="preload" as="image" href="/lovable-uploads/d938082e-41fe-4dc8-a369-85a57cd05599.png" type="image/png">
-
+    <!-- Essential meta tags -->
     <meta property="og:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
     <meta property="og:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://fundingforscotland.co.uk" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
-    <meta name="twitter:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
-    <meta name="twitter:image" content="/lovable-uploads/aceccd77-e1e4-46e3-9541-75492bfd3619.png" />
     
-    <!-- Critical CSS for above-the-fold content -->
+    <!-- Critical CSS only -->
     <style>
-      /* CSS Reset and base styles */
       * {
         box-sizing: border-box;
         margin: 0;
@@ -89,117 +36,17 @@
       }
       
       html {
-        font-display: swap;
-        text-rendering: optimizeSpeed;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         scroll-behavior: smooth;
-        scroll-padding-top: 4rem;
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
-        --primary: 222.2 47.4% 11.2%;
-        --primary-foreground: 210 40% 98%;
       }
       
       body {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        background: hsl(var(--background));
-        color: hsl(var(--foreground));
+        background: white;
+        color: #1a1a1a;
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
       }
       
-      /* Critical hero section styles */
-      .hero-section {
-        position: relative;
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #059669 100%);
-        color: white;
-        overflow: hidden;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-      }
-      
-      .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.2);
-      }
-      
-      .hero-image {
-        position: absolute;
-        inset: 0;
-        opacity: 0.3;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        mix-blend-mode: multiply;
-      }
-      
-      .hero-content {
-        position: relative;
-        z-index: 10;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 5rem 1rem;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 3rem;
-        align-items: center;
-      }
-      
-      @media (min-width: 1024px) {
-        .hero-content {
-          grid-template-columns: 1fr 1fr;
-          gap: 3rem;
-        }
-      }
-      
-      .hero-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        line-height: 1.1;
-        margin-bottom: 1.5rem;
-      }
-      
-      @media (min-width: 1024px) {
-        .hero-title {
-          font-size: 3.75rem;
-        }
-      }
-      
-      /* Critical navigation styles */
-      .nav-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 50;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      }
-      
-      /* Optimize image loading */
-      img {
-        content-visibility: auto;
-        max-width: 100%;
-        height: auto;
-      }
-      
-      /* Loading skeleton styles */
-      .skeleton {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: loading 1.5s infinite;
-      }
-      
-      @keyframes loading {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
-      }
-      
-      /* Hide content until loaded */
+      /* Basic loading state */
       .loading #root {
         opacity: 0;
         transition: opacity 0.3s ease;
@@ -210,8 +57,9 @@
       }
     </style>
 
-    <!-- Critical analytics loaded immediately for tracking -->
+    <!-- Simplified Facebook Pixel -->
     <script>
+    console.log('Loading Facebook Pixel...');
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -222,131 +70,28 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1423013825182147');
     fbq('track', 'PageView');
-    </script>
-
-    <!-- Critical UTM tracking - inline for immediate execution -->
-    <script>
-    (function() {
-      const params = new URLSearchParams(window.location.search);
-      const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
-      utms.forEach(key => {
-        const value = params.get(key);
-        if (value) localStorage.setItem(key, value);
-      });
-    })();
+    console.log('Facebook Pixel loaded');
     </script>
   </head>
 
   <body class="loading">
-    <!-- Critical performance script with smart preloading -->
+    <!-- Basic performance script -->
     <script>
-      // Add loaded class when page is ready for faster perceived performance
+      console.log('DOM loading...');
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
+        console.log('DOM loaded successfully');
       });
-      
-      // Smart preloading based on current route
-      const currentPath = window.location.pathname;
-      const routeImageMap = {
-        '/': '/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png', // ECO4 as default
-        '/eco4': '/lovable-uploads/fe8f7f3c-9088-4c6e-bf7e-4439b50db2ad.png',
-        '/gas-boilers': '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png',
-        '/home-improvements': '/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png',
-        '/solar': '/lovable-uploads/47a1f884-0d32-4cd7-bb93-4a5db7d24588.png'
-      };
-      
-      // Preload specific hero image for current route
-      if (routeImageMap[currentPath] && currentPath !== '/') {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = routeImageMap[currentPath];
-        link.type = 'image/png';
-        document.head.appendChild(link);
-      }
-      
-      // Initialize critical performance features
-      if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              if (img.dataset.src) {
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                observer.unobserve(img);
-              }
-            }
-          });
-        }, { rootMargin: '50px' });
-        
-        // Store observer globally for use by components
-        window.imageObserver = imageObserver;
-      }
-      
-      // Preload critical JavaScript modules
-      if ('modulepreload' in HTMLLinkElement.prototype) {
-        const moduleLink = document.createElement('link');
-        moduleLink.rel = 'modulepreload';
-        moduleLink.href = '/src/main.tsx';
-        document.head.appendChild(moduleLink);
-      }
     </script>
     
-    <!-- Meta Pixel Noscript Fallback -->
+    <!-- Meta Pixel Noscript -->
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"
     /></noscript>
     
     <div id="root"></div>
     
-    <!-- Deferred non-critical scripts below the fold -->
-    <script>
-      // Service Worker registration - deferred until after critical content loads
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('ServiceWorker registration successful');
-            })
-            .catch((error) => {
-              console.log('ServiceWorker registration failed: ', error);
-            });
-        });
-      }
-      
-      // Resource hints for future navigation
-      window.addEventListener('load', function() {
-        // Prefetch likely next pages
-        const prefetchLinks = [
-          '/eco4',
-          '/gas-boilers', 
-          '/home-improvements',
-          '/solar',
-          '/contact'
-        ];
-        
-        prefetchLinks.forEach(href => {
-          const link = document.createElement('link');
-          link.rel = 'prefetch';
-          link.href = href;
-          document.head.appendChild(link);
-        });
-        
-        // Preload non-critical CSS after initial render
-        const style = document.createElement('style');
-        style.textContent = `
-          .hover-scale { transition: transform 0.2s ease; }
-          .hover-scale:hover { transform: scale(1.05); }
-          .fade-in { opacity: 0; animation: fadeIn 0.3s ease forwards; }
-          @keyframes fadeIn { to { opacity: 1; } }
-        `;
-        document.head.appendChild(style);
-      });
-    </script>
-    
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module" defer></script>
+    <!-- Main app script -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
