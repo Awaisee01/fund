@@ -35,6 +35,7 @@ const SimplifiedHero = ({
           width={1920}
           height={1080}
           sizes="100vw"
+          modernFormats={false}
         />
       </div>
       
