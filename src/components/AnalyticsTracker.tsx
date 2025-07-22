@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import tracker from '@/lib/analytics-tracking';
 
-export const AnalyticsTracker = () => {
+const AnalyticsTracker = () => {
   const location = useLocation();
 
   useEffect(() => {
