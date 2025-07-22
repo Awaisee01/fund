@@ -76,7 +76,18 @@ const SimpleNav = () => {
                   fontWeight: '500',
                   fontSize: '14px',
                   backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
-                  color: isActive(item.path) ? '#ffffff' : '#374151'
+                  color: isActive(item.path) ? '#ffffff' : '#374151',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive(item.path)) {
+                    e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive(item.path)) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }
                 }}
               >
                 {item.name}
