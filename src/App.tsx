@@ -17,7 +17,7 @@ const SEOStructuredData = lazy(() => import("./components/SEOStructuredData"));
 const FacebookPixelPageView = lazy(() => import("./components/FacebookPixelPageView"));
 
 // Code-split all pages for better performance
-const Home = lazy(() => import("./pages/Home"));
+const Index = lazy(() => import("./pages/Index"));
 const ECO4 = lazy(() => import("./pages/ECO4"));
 const ECO4New = lazy(() => import("./pages/ECO4New"));
 const Solar = lazy(() => import("./pages/Solar"));
@@ -77,7 +77,7 @@ const App = () => {
               <main className="flex-1">
                 <Suspense fallback={<PageLoadingSkeleton />}>
                   <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Index />} />
                     <Route path="/eco4" element={<ECO4 />} />
                     <Route path="/eco4-new" element={<ECO4New />} />
                     <Route path="/solar" element={<Solar />} />
