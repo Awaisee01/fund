@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Critical above-the-fold components (loaded immediately)
-import Navigation from "./components/Navigation";
+import Navigation from "./components/MobileHamburgerNav";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 // Defer non-critical components
