@@ -85,8 +85,6 @@ const ECO4 = () => {
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
             src="/lovable-uploads/7dfe5a80-6453-471d-805e-51f9a0a3224e.png"
-            webpSrc="/images/hero-eco4.webp"
-            mobileWebpSrc="/images/hero-eco4-mobile.webp"
             alt="ECO4 Energy Efficiency Background - Aerial view of modern houses with solar panels"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
