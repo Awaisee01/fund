@@ -17,13 +17,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Preload critical Inter font weights immediately -->
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" type="font/woff2" crossorigin>
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2" type="font/woff2" crossorigin>
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" type="font/woff2" crossorigin>
+    <!-- Load Inter font efficiently without preload 404s -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
     
-    <!-- Preload critical ECO4 hero image with highest priority -->
-    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high" type="image/png">
+    <!-- Preload updated hero images with highest priority -->
+    <link rel="preload" as="image" href="/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png" fetchpriority="high" type="image/webp">
     
     <!-- Preload critical CSS as inline (already done below) -->
     
@@ -33,15 +32,13 @@
     <meta name="description" content="Scotland's leading consultancy for homeowner grants and funding. Access ECO4 grants, solar panels, boiler replacements, and home improvement funding up to £25,000." />
     <meta name="keywords" content="Scottish grants, ECO4, solar panels, boiler replacement, home improvements, funding, Scotland" />
 
-    <!-- Load critical fonts with optimal strategy -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
+    <!-- Font loading moved above to prevent 404s -->
 
     <!-- Essential meta tags for social sharing -->
     <meta property="og:title" content="Funding For Scotland - Unlock Scottish Grants & Funding" />
     <meta property="og:description" content="Access up to £25,000 in government grants for home improvements, solar panels, and energy efficiency upgrades across Scotland." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" />
+    <meta property="og:image" content="/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png" />
     <meta name="robots" content="index, follow" />
     
     <!-- Security headers -->
@@ -129,6 +126,22 @@
       }
     </style>
     
+    <!-- Load critical Tailwind CSS inline for Speed Index optimization -->
+    <style id="critical-tailwind">
+      /* Additional critical classes for homepage performance */
+      .order-1{order:1}.order-2{order:2}.lg\:order-1{order:1}.lg\:order-2{order:2}
+      .justify-center{justify-content:center}.lg\:justify-end{justify-content:flex-end}
+      .text-center{text-align:center}.lg\:text-left{text-align:left}
+      .max-w-md{max-width:28rem}.mx-auto{margin-left:auto;margin-right:auto}
+      .lg\:mx-0{margin-left:0;margin-right:0}.lg\:ml-auto{margin-left:auto}
+      .backdrop-blur-sm{backdrop-filter:blur(4px)}.bg-white\/10{background-color:rgba(255,255,255,0.1)}
+      .border-white\/20{border-color:rgba(255,255,255,0.2)}.rounded-2xl{border-radius:1rem}
+      .hover\:bg-white\/20:hover{background-color:rgba(255,255,255,0.2)}
+      .transition-all{transition:all 0.15s ease}.duration-300{transition-duration:0.3s}
+      .transform{transform:translateZ(0)}.hover\:scale-105:hover{transform:scale(1.05)}
+      .touch-manipulation{touch-action:manipulation}
+    </style>
+    
     <!-- Load non-critical Tailwind CSS after critical rendering -->
     <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
@@ -190,10 +203,10 @@
           }, index * 200);
         });
         
-        // Prefetch critical images for next likely pages
+        // Prefetch critical images for next likely pages using updated WebP images
         const criticalImages = [
-          '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png?w=768&q=75&f=webp',
-          '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png?w=768&q=75&f=webp'
+          '/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png?w=768&q=75',
+          '/lovable-uploads/339dccf0-fb0b-4516-8463-6609ffa65db5.png?w=768&q=75'
         ];
         
         criticalImages.forEach((src, index) => {
