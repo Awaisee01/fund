@@ -33,7 +33,7 @@ const HomeImprovementsHero = () => {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
         {/* Mobile: Form first, Desktop: Content first */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Form Section - First on mobile, second on desktop */}
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
             <NativeHomeImprovementsForm />

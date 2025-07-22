@@ -39,7 +39,7 @@ const SimplifiedHero = ({
       {/* Simplified content structure */}
       <div className="relative max-w-7xl mx-auto px-4 py-8 lg:py-24">
         {/* Mobile-first grid with reduced complexity */}
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           
           {/* Form first on mobile for better conversion */}
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
