@@ -34,7 +34,7 @@ const Hero = ({
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 xl:py-32">
         {/* Mobile: Form first, Desktop: Content first */}
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* FORM SECTION - ALWAYS FIRST ON MOBILE */}
           <div className="order-1 lg:order-2 w-full flex justify-center lg:justify-end">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 sm:px-6 xl:px-8 py-6 xl:py-8 border border-white/20 w-full max-w-md">
