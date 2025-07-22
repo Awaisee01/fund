@@ -23,9 +23,12 @@ const Index = () => {
   useEffect(() => {
     // Set page metadata
     document.title = 'ECO4 Scheme & Solar Panel Grants | Free Energy Efficiency Upgrades';
-    document.querySelector('meta[name="description"]')?.setAttribute('content', 
-      'Get free home insulation, solar panels, and energy efficiency upgrades through government ECO4 scheme. Check eligibility and apply today for sustainable energy solutions.'
-    );
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 
+        'Get free home insulation, solar panels, and energy efficiency upgrades through government ECO4 scheme. Check eligibility and apply today for sustainable energy solutions.'
+      );
+    }
 
     // Mark hero as loaded
     setHeroLoaded(true);
@@ -38,11 +41,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Above-the-fold hero section */}
       <Hero 
         title="Unlock Scottish Grants & Funding"
         subtitle=""
-        description="From heating upgrades, to free solar panels, to improving the look of Scotland's homes. Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to"
+        description="From heating upgrades, to free solar panels, to improving the look of Scotland homes. Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to"
         benefits={[
           "Free Solar Panels",
           "Free Heating Upgrades", 
@@ -52,7 +54,6 @@ const Index = () => {
         ]}
       />
       
-      {/* Below-the-fold content with lazy loading */}
       <Suspense fallback={<ServicesGridSkeleton />}>
         <ServicesGrid />
       </Suspense>
