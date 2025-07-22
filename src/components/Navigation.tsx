@@ -55,8 +55,12 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-4">
+          {/* Desktop Navigation - ONLY SHOW ON DESKTOP */}
+          <div style={{ 
+            display: window.innerWidth >= 768 ? 'flex' : 'none',
+            alignItems: 'center', 
+            gap: '1rem' 
+          }}>
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -77,8 +81,10 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* Mobile hamburger menu */}
-          <div className="lg:hidden">
+          {/* Mobile hamburger menu - ONLY SHOW ON MOBILE */}
+          <div style={{ 
+            display: window.innerWidth < 768 ? 'block' : 'none'
+          }}>
             <button
               onClick={() => setIsOpen(!isOpen)}
               style={{
