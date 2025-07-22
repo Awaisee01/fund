@@ -182,17 +182,16 @@ const OptimizedImage = ({
         )}
         
         {/* Fallback with responsive images */}
-        <img
-          src={src}
-          srcSet={responsive ? generateFallbackSrcSet() : undefined}
-          sizes={responsive ? sizes : undefined}
-          alt={alt}
-          width={width}
-          height={height}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          fetchPriority={priority ? "high" : "auto"}
-          onLoad={handleLoad}
+          <img
+            src={src}
+            srcSet={responsive ? generateFallbackSrcSet() : undefined}
+            sizes={responsive ? sizes : undefined}
+            alt={alt}
+            width={width}
+            height={height}
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            onLoad={handleLoad}
           onError={handleError}
           className={`w-full h-full ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
           style={{ 
