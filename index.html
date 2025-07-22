@@ -130,14 +130,38 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Facebook Pixel Script - Clean Single Implementation with Conflict Detection -->
+    <!-- Facebook Pixel Script - NUCLEAR Option to Override All Conflicts -->
     <script>
-      // Clear any existing Facebook Pixel to prevent conflicts
+      // NUCLEAR: Block all Facebook tracking requests with wrong Pixel ID
+      const CORRECT_PIXEL_ID = '1423013825182147';
+      const WRONG_PIXEL_ID = '9151671744940732';
+      
+      // Intercept and block any requests to wrong Pixel ID
+      if ('fetch' in window) {
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+          const url = args[0];
+          if (typeof url === 'string' && url.includes(WRONG_PIXEL_ID)) {
+            console.error('🚨 BLOCKED: Wrong Pixel ID request:', url);
+            return Promise.resolve(new Response('blocked', { status: 200 }));
+          }
+          return originalFetch.apply(this, args);
+        };
+      }
+      
+      // Clear any existing Facebook Pixel completely
       if (window.fbq) {
-        console.warn('🚨 CONFLICT: Existing fbq detected - clearing it');
+        console.warn('🚨 CONFLICT: Existing fbq detected - nuking it');
         delete window.fbq;
         delete window._fbq;
       }
+      
+      // Remove any existing Facebook Pixel scripts
+      const existingScripts = document.querySelectorAll('script[src*="fbevents.js"]');
+      existingScripts.forEach(script => {
+        console.warn('🚨 REMOVING: Existing Facebook Pixel script');
+        script.remove();
+      });
       
       // Initialize fbq queue immediately and globally
       !function(f,b,e,v,n,t,s)
@@ -149,8 +173,7 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Force our correct Pixel ID and disable auto-detection
-      const CORRECT_PIXEL_ID = '1423013825182147';
+      // Force our correct Pixel ID
       console.log('🔥 PIXEL: Initializing with CORRECT Pixel ID:', CORRECT_PIXEL_ID);
       
       fbq('init', CORRECT_PIXEL_ID, {
@@ -165,16 +188,25 @@
       console.log('✅ Meta Pixel initialized with CORRECT ID:', CORRECT_PIXEL_ID);
       console.log('✅ fbq function available:', typeof fbq);
       
-      // Monitor for any incorrect Pixel IDs
+      // NUCLEAR: Override any future fbq calls that try to use wrong Pixel ID
       const originalFbq = window.fbq;
       window.fbq = function() {
         const args = Array.from(arguments);
-        if (args[0] === 'init' && args[1] !== CORRECT_PIXEL_ID) {
-          console.error('🚨 BLOCKED: Attempt to init wrong Pixel ID:', args[1], 'Expected:', CORRECT_PIXEL_ID);
-          return; // Block incorrect Pixel initialization
+        if (args[0] === 'init' && args[1] === WRONG_PIXEL_ID) {
+          console.error('🚨 NUCLEAR BLOCK: Wrong Pixel ID init attempt blocked:', args[1]);
+          // Replace with correct Pixel ID
+          args[1] = CORRECT_PIXEL_ID;
+          console.log('🔥 FIXED: Replaced with correct Pixel ID:', CORRECT_PIXEL_ID);
         }
         return originalFbq.apply(this, arguments);
       };
+      
+      // Preserve original fbq properties
+      Object.keys(originalFbq).forEach(key => {
+        if (typeof originalFbq[key] !== 'function') {
+          window.fbq[key] = originalFbq[key];
+        }
+      });
     </script>
   </head>
 
