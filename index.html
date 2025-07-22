@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Load Inter font efficiently without preload 404s -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
+    <!-- PERFORMANCE FIX: Load minimal Inter font weights for faster loading -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"></noscript>
     
     <!-- No hero image preload needed for homepage -->
     
@@ -47,81 +47,52 @@
     <!-- Optimized favicon -->
     <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
 
-    <!-- Ultra-compressed critical CSS with mobile-first optimizations -->
+    <!-- ULTRA-COMPRESSED CRITICAL CSS - Only essential styles for FCP -->
     <style>
-      /* Mobile-first critical CSS - optimized for touch devices */
-      *{box-sizing:border-box;margin:0;padding:0}html{font-family:'Inter',system-ui,-apple-system,sans-serif;scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}body{background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;line-height:1.6;touch-action:manipulation}
+      /* PERFORMANCE FIX: Minimal critical CSS for instant FCP */
+      *{box-sizing:border-box;margin:0;padding:0}
+      html{font-family:'Inter',system-ui,sans-serif;-webkit-text-size-adjust:100%}
+      body{background:#fff;color:#1a1a1a;line-height:1.6}
       
-      /* Mobile touch optimization */
-      button,a,[role="button"]{min-height:44px;min-width:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+      /* Critical hero gradient - absolute minimum */
+      .hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#059669 100%)}
+      .hero-text-white{color:#fff}
+      .hero-text-blue-100{color:#dbeafe}
+      .hero-text-blue-50{color:#eff6ff}
+      .hero-text-green-300{color:#86efac}
       
-      /* Critical hero styles with mobile-first approach */
-      .hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 35%,#059669 100%)}.hero-text-white{color:#fff}.hero-text-blue-100{color:#dbeafe}.hero-text-blue-50{color:#eff6ff}.hero-text-green-300{color:#86efac}
+      /* Absolute minimum layout classes */
+      .min-h-screen{min-height:100vh}
+      .flex{display:flex}
+      .flex-col{flex-direction:column}
+      .flex-1{flex:1}
+      .items-center{align-items:center}
+      .justify-center{justify-content:center}
+      .relative{position:relative}
+      .absolute{position:absolute}
+      .inset-0{top:0;right:0;bottom:0;left:0}
+      .grid{display:grid}
+      .w-full{width:100%}
+      .h-full{height:100%}
+      .overflow-hidden{overflow:hidden}
       
-      /* Critical layout classes for immediate rendering */
-      .min-h-screen{min-height:100vh}.flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1 1 0%}.items-center{align-items:center}.justify-center{justify-content:center}.text-center{text-align:center}
-      .bg-white{background-color:#fff}.bg-gray-50{background-color:#f9fafb}.bg-gray-200{background-color:#e5e7eb}.bg-gray-300{background-color:#d1d5db}
-      .h-4{height:1rem}.h-8{height:2rem}.h-16{height:4rem}.w-auto{width:auto}.w-32{width:8rem}.w-48{width:12rem}
-      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}
-      .rounded{border-radius:.25rem}.mb-4{margin-bottom:1rem}.inline-block{display:inline-block}.object-contain{object-fit:contain}
+      /* Essential text sizing */
+      .text-4xl{font-size:2.25rem;line-height:2.5rem}
+      .font-bold{font-weight:600}
+      .leading-tight{line-height:1.25}
       
-      /* Animation for loading states */
-      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
-      
-      /* Mobile-optimized layout */
-      .relative{position:relative}.absolute{position:absolute}.inset-0{top:0;right:0;bottom:0;left:0}.grid{display:grid}.w-full{width:100%}.h-full{height:100%}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}
-      
-      /* Mobile typography - larger sizes for readability */
-      .text-4xl{font-size:2rem;line-height:2.25rem}.text-xl{font-size:1.125rem;line-height:1.75rem}.text-lg{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.leading-tight{line-height:1.25}
-      
-      /* Mobile spacing - optimized for touch */
-      .mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.px-4{padding:0 1rem}.py-20{padding:3rem 0}.gap-12{gap:2rem}
-      
-      /* Mobile hero image with performance optimization */
-      .hero-image-container{aspect-ratio:16/9;background:#f3f4f6;transform:translateZ(0);will-change:transform}
-      
-      /* Mobile form optimization */
-      .form-card{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:.75rem;box-shadow:0 10px 15px -3px rgba(0,0,0,.1);padding:1.5rem;max-width:100%}
-      
-      /* Touch-optimized inputs */
-      input,textarea,select{min-height:44px;font-size:16px;border-radius:.5rem;border:1px solid #d1d5db;padding:.75rem;width:100%}
-      input:focus,textarea:focus,select:focus{outline:2px solid #2563eb;outline-offset:2px;border-color:#2563eb}
+      /* Loading animation */
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+      .animate-pulse{animation:pulse 2s infinite}
       
       /* Loading states */
-      .loading #root{opacity:0;transition:opacity .2s}.loaded #root{opacity:1}
-      .order-1{order:1}.order-2{order:2}
+      .loading #root{opacity:0;transition:opacity .2s}
+      .loaded #root{opacity:1}
       
-      /* Mobile-first responsive breakpoints */
-      @media (min-width:640px){
-        .text-4xl{font-size:2.25rem;line-height:2.5rem}
-        .py-20{padding:4rem 0}
-        .gap-12{gap:2.5rem}
-        .form-card{padding:2rem}
-      }
-      
+      /* Mobile breakpoints - only essential */
       @media (min-width:1024px){
-        .text-4xl,.lg\:text-6xl{font-size:3.75rem;line-height:1}
-        .py-20,.lg\:py-24{padding:6rem 0}
+        .lg\:text-6xl{font-size:3.75rem;line-height:1}
         .lg\:grid-cols-2{grid-template-columns:1fr 1fr}
-        .lg\:order-1{order:1}
-        .lg\:order-2{order:2}
-        .lg\:justify-end{justify-content:flex-end}
-        .lg\:px-8{padding-left:2rem;padding-right:2rem}
-        .gap-12{gap:3rem}
-        
-        /* Desktop-specific touch target adjustments */
-        button,a,[role="button"]{min-height:40px;min-width:40px}
-      }
-      
-      /* High-DPI screen optimizations */
-      @media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi){
-        .hero-image-container{background-size:cover;background-position:center}
-      }
-      
-      /* Reduce motion for accessibility */
-      @media (prefers-reduced-motion:reduce){
-        *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
-        .hero-image-container{transform:none !important}
       }
     </style>
     
@@ -145,7 +116,7 @@
     <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
-    <!-- Ultra-optimized Facebook Pixel - Delayed until user interaction -->
+    <!-- Ultra-optimized Facebook Pixel - Delayed until user interaction or 5 seconds -->
     <script>
       window.fbq=window.fbq||function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};window.fbq.q=[];
       
@@ -160,33 +131,33 @@
         document.head.appendChild(s);
       }
       
-      // Only load after significant user interaction or after 3 seconds
-      let interactionTimer = setTimeout(loadFacebookPixel, 3000);
-      ['mousedown','touchstart','scroll','keydown'].forEach(e=>{
+      // PERFORMANCE FIX: Longer delay to prioritize critical page loading
+      let interactionTimer = setTimeout(loadFacebookPixel, 5000);
+      ['click','scroll'].forEach(e=>{
         document.addEventListener(e, function() {
           clearTimeout(interactionTimer);
-          loadFacebookPixel();
+          setTimeout(loadFacebookPixel, 100); // Small delay even after interaction
         }, {once:true, passive:true});
       });
     </script>
   </head>
 
   <body class="loading">
-    <!-- Immediate critical path script -->
+    <!-- PERFORMANCE FIX: Optimized critical path script -->
     <script>
-      // Mark DOM ready and start paint immediately
+      // Mark DOM ready and minimize processing
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
         
-        // High-priority resource prefetching after LCP
-        requestIdleCallback ? requestIdleCallback(prefetchResources, {timeout: 1000}) : setTimeout(prefetchResources, 2000);
+        // MINIMAL prefetching after 3 seconds to prioritize critical loading
+        setTimeout(prefetchResources, 3000);
       });
       
-      // Intelligent prefetching optimized for performance
+      // PERFORMANCE FIX: Minimal prefetching to reduce network overhead
       function prefetchResources() {
-        // Only prefetch after the page is stable
+        // Only prefetch after the page is completely stable
         if (document.readyState !== 'complete') {
-          setTimeout(prefetchResources, 500);
+          setTimeout(prefetchResources, 1000);
           return;
         }
         

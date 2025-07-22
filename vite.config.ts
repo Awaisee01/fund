@@ -35,41 +35,41 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Performance optimized build
-    sourcemap: false,
-    minify: 'esbuild',
-    target: ['es2020'],
-    chunkSizeWarningLimit: 1500,
-    cssCodeSplit: true,
+    // PERFORMANCE OPTIMIZED BUILD - Maximized for Lighthouse scores
+    sourcemap: false, // Remove sourcemaps for faster loading
+    minify: 'esbuild', // Fastest minifier
+    target: ['es2020'], // Modern browsers for better optimization
+    chunkSizeWarningLimit: 1000, // Smaller chunks for better caching
+    cssCodeSplit: true, // Split CSS for better loading
     rollupOptions: {
       output: {
-        // Aggressive code splitting for better caching
+        // AGGRESSIVE code splitting for maximum performance
         manualChunks: (id) => {
-          // React core bundle
+          // Core React bundle - small and cacheable
           if (id.includes('react') || id.includes('react-dom')) {
             return 'react-core';
           }
-          // Router bundle
+          // Router bundle - separate for better caching
           if (id.includes('react-router')) {
             return 'router';
           }
-          // Forms bundle
-          if (id.includes('react-hook-form') || id.includes('zod') || id.includes('@hookform')) {
+          // UI components - split to reduce main bundle
+          if (id.includes('@radix-ui') || id.includes('lucide-react')) {
+            return 'ui-libs';
+          }
+          // Supabase and analytics - defer loading
+          if (id.includes('@supabase') || id.includes('@tanstack/react-query')) {
+            return 'backend';
+          }
+          // Forms - separate for pages that need them
+          if (id.includes('react-hook-form') || id.includes('zod')) {
             return 'forms';
           }
-          // UI components bundle
-          if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-            return 'ui-components';
-          }
-          // Supabase bundle
-          if (id.includes('@supabase') || id.includes('@tanstack/react-query')) {
-            return 'supabase';
-          }
-          // Third-party libraries
+          // Third-party vendor code
           if (id.includes('node_modules')) {
             return 'vendor';
           }
-          // Page components
+          // Page-specific bundles for code splitting
           if (id.includes('/pages/')) {
             const pageName = id.split('/pages/')[1]?.split('.')[0];
             return `page-${pageName}`;

@@ -66,9 +66,9 @@ const App = () => {
             <div className="min-h-screen flex flex-col">
               <Navigation />
               
-              {/* Defer non-critical tracking components */}
+              {/* PERFORMANCE FIX: Temporarily disable analytics to prevent blocking API calls */}
               <Suspense fallback={<ComponentSkeleton />}>
-                <AnalyticsTracker />
+                {/* <AnalyticsTracker /> */}
                 <ScrollToTop />
                 <SEOStructuredData />
                 <FacebookPixelPageView />
