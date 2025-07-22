@@ -31,6 +31,7 @@ const Navigation = () => {
                 className="h-6 sm:h-8 lg:h-10 w-auto object-contain"
                 width="140"
                 height="56"
+                loading="eager"
               />
             </Link>
           </div>
