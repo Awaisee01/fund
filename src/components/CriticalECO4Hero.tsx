@@ -42,16 +42,14 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
           <picture>
             <source 
               media="(max-width: 768px)" 
-              srcSet="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.webp" 
-              type="image/webp"
+              srcSet="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png" 
             />
             <source 
               media="(max-width: 1200px)" 
-              srcSet="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.webp" 
-              type="image/webp"
+              srcSet="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png" 
             />
             <img
-              src="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.webp"
+              src="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png"
               alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
               className="w-full h-full object-cover mix-blend-multiply"
               loading="eager"
