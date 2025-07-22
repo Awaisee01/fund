@@ -1,5 +1,5 @@
 
-import React, { Suspense, useState, useEffect, lazy } from 'react';
+import React, { Suspense, useEffect, lazy } from 'react';
 import Hero from '@/components/Hero';
 
 // Lazy load below-the-fold components
@@ -8,7 +8,6 @@ const TrustBadges = lazy(() => import('@/components/TrustBadges'));
 const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
 
 const Index = () => {
-  const [heroLoaded, setHeroLoaded] = useState(true);
 
   useEffect(() => {
     console.log('Index page loaded');
