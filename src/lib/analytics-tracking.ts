@@ -209,6 +209,6 @@ class AnalyticsTracker {
 }
 
 // Create singleton instance
-const analyticsTracker = new AnalyticsTracker();
+const tracker = new AnalyticsTracker();
 
-export default analyticsTracker;
+export default tracker;
