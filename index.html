@@ -130,40 +130,91 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Facebook Pixel Script - NUCLEAR Option to Override All Conflicts -->
+    <!-- Facebook Pixel Script - ULTIMATE Anti-Conflict System -->
     <script>
-      // NUCLEAR: Block all Facebook tracking requests with wrong Pixel ID
+      // ULTIMATE: Block all Facebook tracking requests with wrong Pixel ID at DNS level
       const CORRECT_PIXEL_ID = '1423013825182147';
       const WRONG_PIXEL_ID = '9151671744940732';
       
-      // Intercept and block any requests to wrong Pixel ID
+      console.log('🚨 ULTIMATE: Starting Facebook Pixel conflict resolution');
+      console.log('🚨 ULTIMATE: Correct Pixel ID:', CORRECT_PIXEL_ID);
+      console.log('🚨 ULTIMATE: Wrong Pixel ID to block:', WRONG_PIXEL_ID);
+      
+      // Block at the network level
       if ('fetch' in window) {
         const originalFetch = window.fetch;
         window.fetch = function(...args) {
           const url = args[0];
           if (typeof url === 'string' && url.includes(WRONG_PIXEL_ID)) {
-            console.error('🚨 BLOCKED: Wrong Pixel ID request:', url);
-            return Promise.resolve(new Response('blocked', { status: 200 }));
+            console.error('🚨 ULTIMATE: Blocked wrong Pixel request:', url);
+            return Promise.resolve(new Response('{"blocked": true}', { status: 200 }));
           }
           return originalFetch.apply(this, args);
         };
       }
       
-      // Clear any existing Facebook Pixel completely
+      // Block at XMLHttpRequest level too
+      if ('XMLHttpRequest' in window) {
+        const originalXHR = window.XMLHttpRequest;
+        window.XMLHttpRequest = function() {
+          const xhr = new originalXHR();
+          const originalOpen = xhr.open;
+          xhr.open = function(method, url, ...args) {
+            if (typeof url === 'string' && url.includes(WRONG_PIXEL_ID)) {
+              console.error('🚨 ULTIMATE: Blocked wrong Pixel XHR:', url);
+              return; // Block the request
+            }
+            return originalOpen.apply(this, [method, url, ...args]);
+          };
+          return xhr;
+        };
+      }
+      
+      // Remove any existing Facebook Pixel elements
+      const removeExistingPixels = () => {
+        // Remove scripts
+        const existingScripts = document.querySelectorAll('script[src*="fbevents.js"], script[src*="facebook.com"]');
+        existingScripts.forEach(script => {
+          if (script.src.includes('fbevents.js')) {
+            console.warn('🚨 ULTIMATE: Removing existing Facebook Pixel script:', script.src);
+            script.remove();
+          }
+        });
+        
+        // Remove noscript images
+        const existingImages = document.querySelectorAll('img[src*="facebook.com/tr"]');
+        existingImages.forEach(img => {
+          if (img.src.includes(WRONG_PIXEL_ID)) {
+            console.warn('🚨 ULTIMATE: Removing wrong Pixel noscript image:', img.src);
+            img.remove();
+          }
+        });
+        
+        // Remove preload links
+        const existingLinks = document.querySelectorAll('link[href*="facebook.com"]');
+        existingLinks.forEach(link => {
+          if (link.href.includes(WRONG_PIXEL_ID)) {
+            console.warn('🚨 ULTIMATE: Removing wrong Pixel preload link:', link.href);
+            link.remove();
+          }
+        });
+      };
+      
+      // Clean up immediately and on DOM changes
+      removeExistingPixels();
+      if ('MutationObserver' in window) {
+        const observer = new MutationObserver(() => removeExistingPixels());
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+      }
+      
+      // Clear any existing Facebook Pixel
       if (window.fbq) {
-        console.warn('🚨 CONFLICT: Existing fbq detected - nuking it');
+        console.warn('🚨 ULTIMATE: Existing fbq detected - clearing it');
         delete window.fbq;
         delete window._fbq;
       }
       
-      // Remove any existing Facebook Pixel scripts
-      const existingScripts = document.querySelectorAll('script[src*="fbevents.js"]');
-      existingScripts.forEach(script => {
-        console.warn('🚨 REMOVING: Existing Facebook Pixel script');
-        script.remove();
-      });
-      
-      // Initialize fbq queue immediately and globally
+      // Initialize our clean Pixel
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -174,7 +225,7 @@
       'https://connect.facebook.net/en_US/fbevents.js');
       
       // Force our correct Pixel ID
-      console.log('🔥 PIXEL: Initializing with CORRECT Pixel ID:', CORRECT_PIXEL_ID);
+      console.log('🔥 ULTIMATE: Initializing with CORRECT Pixel ID:', CORRECT_PIXEL_ID);
       
       fbq('init', CORRECT_PIXEL_ID, {
         disable_auto_config: true,
@@ -185,18 +236,16 @@
       // Track PageView immediately
       fbq('track', 'PageView');
       
-      console.log('✅ Meta Pixel initialized with CORRECT ID:', CORRECT_PIXEL_ID);
-      console.log('✅ fbq function available:', typeof fbq);
+      console.log('✅ ULTIMATE: Meta Pixel initialized with CORRECT ID:', CORRECT_PIXEL_ID);
+      console.log('✅ ULTIMATE: fbq function available:', typeof fbq);
       
-      // NUCLEAR: Override any future fbq calls that try to use wrong Pixel ID
+      // ULTIMATE: Override any future fbq calls
       const originalFbq = window.fbq;
       window.fbq = function() {
         const args = Array.from(arguments);
         if (args[0] === 'init' && args[1] === WRONG_PIXEL_ID) {
-          console.error('🚨 NUCLEAR BLOCK: Wrong Pixel ID init attempt blocked:', args[1]);
-          // Replace with correct Pixel ID
-          args[1] = CORRECT_PIXEL_ID;
-          console.log('🔥 FIXED: Replaced with correct Pixel ID:', CORRECT_PIXEL_ID);
+          console.error('🚨 ULTIMATE: Wrong Pixel ID init blocked:', args[1]);
+          return; // Block completely
         }
         return originalFbq.apply(this, arguments);
       };
@@ -207,6 +256,8 @@
           window.fbq[key] = originalFbq[key];
         }
       });
+      
+      console.log('🚨 ULTIMATE: Conflict protection system active');
     </script>
   </head>
 
@@ -279,10 +330,10 @@
       }
     </script>
     
-    <!-- Meta Pixel Noscript -->
-    <noscript><img height="1" width="1" style="display:none"
+    <!-- Meta Pixel Noscript - DISABLED to prevent conflicts -->
+    <!-- noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"
-    /></noscript>
+    /></noscript -->
     
     <div id="root"></div>
     
