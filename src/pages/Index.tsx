@@ -1,22 +1,48 @@
+import React, { Suspense, useState, useEffect, lazy } from 'react';
+import Hero from '@/components/Hero';
+
+// Lazy load below-the-fold components
+const ServicesGrid = lazy(() => import('@/components/ServicesGrid'));
+const TrustBadges = lazy(() => import('@/components/TrustBadges'));
+const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
+
 const Index = () => {
+  const [heroLoaded, setHeroLoaded] = useState(true);
+
+  useEffect(() => {
+    document.title = 'Scottish Grants & Funding';
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white flex items-center justify-center">
-      <div className="text-center max-w-4xl mx-auto px-4">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          Unlock Scottish Grants & Funding
-        </h1>
-        <p className="text-xl mb-8">
-          From heating upgrades, to free solar panels, to improving the look of Scotland homes. 
-          Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to
-        </p>
-        <div className="grid md:grid-cols-2 gap-4 text-lg">
-          <div className="bg-white/10 p-4 rounded">✅ Free Solar Panels</div>
-          <div className="bg-white/10 p-4 rounded">✅ Free Heating Upgrades</div>
-          <div className="bg-white/10 p-4 rounded">✅ Free Insulation</div>
-          <div className="bg-white/10 p-4 rounded">✅ Free Gas Boilers</div>
-          <div className="bg-white/10 p-4 rounded md:col-span-2">✅ Grants for Home Improvements</div>
-        </div>
-      </div>
+    <div className="min-h-screen">
+      {/* Hero section with proper form and navigation */}
+      <Hero 
+        title="Unlock Scottish Grants & Funding"
+        subtitle=""
+        description="From heating upgrades, to free solar panels, to improving the look of Scotland homes. Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to"
+        benefits={[
+          "Free Solar Panels",
+          "Free Heating Upgrades", 
+          "Free Insulation",
+          "Free Gas Boilers",
+          "Grants for Home Improvements"
+        ]}
+      />
+      
+      {/* Services grid section */}
+      <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse"></div>}>
+        <ServicesGrid />
+      </Suspense>
+
+      {/* Trust badges section */}
+      <Suspense fallback={<div className="h-32 bg-gray-100 animate-pulse"></div>}>
+        <TrustBadges />
+      </Suspense>
+
+      {/* Call to action section */}
+      <Suspense fallback={<div className="h-64 bg-gray-100 animate-pulse"></div>}>
+        <CallToActionSection />
+      </Suspense>
     </div>
   );
 };
