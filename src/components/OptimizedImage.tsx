@@ -192,7 +192,7 @@ const OptimizedImage = ({
             loading={priority ? "eager" : "lazy"}
             decoding="async"
             onLoad={handleLoad}
-          onError={handleError}
+            onError={handleError}
           className={`w-full h-full ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
           style={{ 
             contentVisibility: 'auto',
