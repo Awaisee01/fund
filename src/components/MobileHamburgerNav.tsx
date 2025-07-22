@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const MobileHamburgerNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -43,12 +45,13 @@ const MobileHamburgerNav = () => {
           />
         </Link>
 
-        {/* Desktop Menu */}
-        <div style={{ 
-          display: window.innerWidth >= 768 ? 'flex' : 'none',
-          gap: '1rem',
-          alignItems: 'center'
-        }}>
+        {/* Desktop Menu - ONLY ON DESKTOP */}
+        {!isMobile && (
+          <div style={{ 
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center'
+          }}>
           {navItems.map((item) => (
             <Link
               key={item.name}
@@ -67,12 +70,14 @@ const MobileHamburgerNav = () => {
               {item.name}
             </Link>
           ))}
-        </div>
+          </div>
+        )}
 
-        {/* Mobile Hamburger - ONLY SHOW ON MOBILE */}
-        <div style={{ 
-          display: window.innerWidth < 768 ? 'block' : 'none'
-        }}>
+        {/* Mobile Hamburger - ONLY ON MOBILE */}
+        {isMobile && (
+          <div style={{ 
+            display: 'block'
+          }}>
           <button
             onClick={() => setIsOpen(!isOpen)}
             style={{
@@ -114,11 +119,12 @@ const MobileHamburgerNav = () => {
               transform: isOpen ? 'rotate(45deg) translate(-4px, -4px)' : 'none'
             }} />
           </button>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Mobile Menu Dropdown */}
-      {isOpen && window.innerWidth < 768 && (
+      {isOpen && isMobile && (
         <div style={{
           backgroundColor: '#ffffff',
           borderTop: '1px solid #e5e7eb',
