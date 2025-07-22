@@ -40,15 +40,15 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Above-the-fold hero section */}
       <Hero 
-        title="Free Home Energy Upgrades"
-        subtitle="Get up to £25,000 in government grants"
-        description="Transform your home with free insulation, solar panels, and heating upgrades through government ECO4 scheme. No upfront costs, just savings on your energy bills."
+        title="Unlock Scottish Grants & Funding"
+        subtitle=""
+        description="From heating upgrades, to free solar panels, to improving the look of Scotland's homes. Funding for Scotland are here to help people in Scotland unlock the funding and grant schemes they are entitled to"
         benefits={[
-          "Free home insulation worth up to £10,000",
-          "Solar panels and battery storage",
-          "New heating systems and boilers",
-          "No upfront costs or hidden fees",
-          "Reduce energy bills by up to 40%"
+          "Free Solar Panels",
+          "Free Heating Upgrades",
+          "Free Insulation",
+          "Free Gas Boilers",
+          "Grants for Home Improvements"
         ]}
       />
       
