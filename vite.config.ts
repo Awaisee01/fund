@@ -93,21 +93,17 @@ export default defineConfig(({ mode }) => ({
       }
     }
   },
-  // Fixed dependency optimization to prevent createContext errors
+  // Fixed dependency optimization to prevent import errors
   optimizeDeps: {
     include: [
-      'react/jsx-runtime',
       'react', 
-      'react-dom/client', 
-      'react-router-dom'
-    ],
-    exclude: [
-      '@supabase/supabase-js',
-      '@tanstack/react-query',
+      'react-dom', 
+      'react-router-dom',
       '@radix-ui/react-dialog',
       '@radix-ui/react-select',
       'lucide-react'
-    ]
+    ],
+    exclude: ['@supabase/supabase-js']
   },
   // CSS optimization
   css: {

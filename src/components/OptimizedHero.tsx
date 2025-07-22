@@ -39,40 +39,7 @@ const OptimizedHero = ({
 
   return (
     <section className="relative hero-gradient text-white overflow-hidden min-h-screen flex items-center">
-      <div className="absolute inset-0 bg-black/20"></div>
-      
-      {/* Optimized background image loading with new WebP hero */}
-      {showImage && (
-        <div className="absolute inset-0 opacity-40">
-          <picture>
-            <source 
-              media="(max-width: 768px)" 
-              srcSet="/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png?w=768&q=75" 
-              type="image/webp"
-            />
-            <source 
-              media="(max-width: 1200px)" 
-              srcSet="/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png?w=1200&q=80" 
-              type="image/webp"
-            />
-            <img
-              src="/lovable-uploads/9c72256e-c008-468d-8fb8-782177d8fddb.png"
-              alt="Scottish houses with solar panels - Government funding background"
-              className="w-full h-full object-cover"
-              loading="eager"
-              fetchPriority="high"
-              decoding="sync"
-              width={1920}
-              height={1080}
-              onLoad={handleImageLoad}
-              style={{
-                opacity: imageLoaded ? 1 : 0,
-                transition: 'opacity 0.3s ease'
-              }}
-            />
-          </picture>
-        </div>
-      )}
+      {/* No background image for homepage */}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 w-full">
         {/* Text-first layout for LCP optimization */}
