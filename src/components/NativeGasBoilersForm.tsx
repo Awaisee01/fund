@@ -262,7 +262,7 @@ const NativeGasBoilersForm = () => {
 
             <Button 
               type="submit" 
-              className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12 mt-4"
+              className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12 mt-8"
               disabled={isSubmitting || submitAttempts >= 3}
             >
               {isSubmitting ? 'Sending...' : submitAttempts >= 3 ? 'Please refresh page' : 'Submit'}
