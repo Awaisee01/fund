@@ -5,7 +5,6 @@ import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Sun, Heart } from 'lucide-react';
-import eco4HeroOptimized from '@/assets/eco4-hero-optimized.webp';
 
 // Lazy load below-the-fold content
 const EligibilitySection = lazy(() => import('@/components/EligibilitySection'));
@@ -80,8 +79,8 @@ const ECO4New = () => {
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 opacity-30 will-change-transform">
           <OptimizedImage
-            src={eco4HeroOptimized}
-            alt="ECO4 Background - Modern Scottish houses with energy efficiency improvements"
+            src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
+            alt="ECO4 Background - Aerial view of modern Scottish houses with solar panels"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
             width={1920}

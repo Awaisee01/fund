@@ -41,8 +41,8 @@ const PerformanceOptimizer = ({ children }: PerformanceOptimizerProps) => {
 
     // Optimize image loading for better LCP
     const optimizeImageLoading = () => {
-      // Set fetchpriority for ECO4 hero images (WebP optimized)
-      const heroImages = document.querySelectorAll('img[src*="eco4-hero-optimized"], img[src*="aceccd77-e1e4-46e3-9541-75492bfd3619"]');
+      // Set fetchpriority for ECO4 hero images
+      const heroImages = document.querySelectorAll('img[src*="1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade"], img[src*="aceccd77-e1e4-46e3-9541-75492bfd3619"]');
       heroImages.forEach(img => {
         img.setAttribute('fetchpriority', 'high');
         img.setAttribute('loading', 'eager');
@@ -50,7 +50,7 @@ const PerformanceOptimizer = ({ children }: PerformanceOptimizerProps) => {
       });
       
       // Ensure lazy loading for below-fold images
-      const belowFoldImages = document.querySelectorAll('img:not([src*="eco4-hero-optimized"]):not([src*="aceccd77-e1e4-46e3-9541-75492bfd3619"])');
+      const belowFoldImages = document.querySelectorAll('img:not([src*="1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade"]):not([src*="aceccd77-e1e4-46e3-9541-75492bfd3619"])');
       belowFoldImages.forEach(img => {
         if (!img.getAttribute('loading')) {
           img.setAttribute('loading', 'lazy');
