@@ -167,11 +167,13 @@ export const trackLeadWithUTM = (leadData: {
   content_category: string;
   value?: number;
   currency?: string;
+  event_value_id?: string;
 }, eventId?: string): void => {
   trackPixelEventWithUTM('Lead', {
     ...leadData,
-    value: leadData.value || 1,
-    currency: leadData.currency || 'GBP'
+    value: 1,
+    currency: 'GBP',
+    event_value_id: leadData.event_value_id || eventId
   }, eventId);
 };
 

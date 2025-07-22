@@ -216,7 +216,8 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
               content_name: `${data.serviceType} Form Submission`,
               content_category: data.serviceType,
               value: 1,
-              currency: 'GBP'
+              currency: 'GBP',
+              event_value_id: eventId
             },
             eventSourceUrl: window.location.href,
             utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
@@ -281,7 +282,8 @@ const debouncedTrackFormSubmission = debounce((formName: string, category: strin
     content_name: `${formName} Form Submission`,
     content_category: category,
     value: 1,
-    currency: 'GBP'
+    currency: 'GBP',
+    event_value_id: eventId
   }, eventId);
   
   // Google Analytics tracking with better error handling
