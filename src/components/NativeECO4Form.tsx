@@ -52,6 +52,8 @@ const NativeECO4Form = () => {
   };
 
   const onSubmit = async (data: ECO4FormData) => {
+    console.log('🆘 URGENT DEBUG: Form onSubmit function called!');
+    console.log('🆘 URGENT DEBUG: Form data received:', JSON.stringify(data, null, 2));
     // Prevent rapid successive submissions
     const now = Date.now();
     if (isSubmitting) {
@@ -72,12 +74,25 @@ const NativeECO4Form = () => {
       return;
     }
 
+    console.log('🆘 URGENT DEBUG: About to start form submission process');
     console.log('🚀 ECO4 form submission started:', data);
     setIsSubmitting(true);
     setSubmitAttempts(prev => prev + 1);
     setLastSubmissionTime(now);
     
+    console.log('🆘 URGENT DEBUG: About to call submitFormToDatabase');
+    
     try {
+      console.log('🆘 URGENT DEBUG: Calling submitFormToDatabase with data:', {
+        serviceType: 'eco4',
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        postcode: data.postCode,
+        address: data.address,
+        formName: 'ECO4'
+      });
+      
       // Save to Supabase database using the enhanced service
       await submitFormToDatabase({
         serviceType: 'eco4',
