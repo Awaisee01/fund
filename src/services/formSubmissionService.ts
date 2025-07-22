@@ -102,34 +102,43 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     console.log('✅ TRACKING: Service type:', data.serviceType);
     console.log('✅ TRACKING: Full form data received:', JSON.stringify(data, null, 2));
     
-    // CRITICAL: Always track Lead event for both Pixel and CAPI
-    if (data.formName) {
-      console.log('🔥 DEBUG: Form name exists, calling trackFormSubmission');
-      console.log('🔥 DEBUG: About to call debounced tracking function...');
-      // This will trigger both Pixel tracking via trackLeadWithUTM() and the browser event
-      trackFormSubmission(data.formName, data.serviceType, eventId);
-      console.log('✅ TRACKING: trackFormSubmission called - will fire both Pixel and GA events');
-    } else {
-      console.warn('⚠️ TRACKING: No formName provided, using fallback tracking');
-      // Fallback: use service type as form name
-      trackFormSubmission(data.serviceType || 'Unknown Form', data.serviceType, eventId);
-    }
+    // CRITICAL LEAD TRACKING: Send rich Lead event with full deduplication
+    console.log('🔥 PIXEL Lead event starting with eventId:', eventId);
     
-    // URGENT FIX: Directly call browser Pixel tracking to ensure it fires
-    console.log('🚨 URGENT FIX: Directly calling trackLeadWithUTM to ensure browser Pixel fires');
-    try {
-      const { trackLeadWithUTM } = await import('@/lib/utm-tracking');
-      trackLeadWithUTM({
-        content_name: `${data.formName || data.serviceType} Form Submission`,
-        content_category: data.serviceType,
-        value: 1,
-        currency: 'GBP',
-        event_value_id: eventId
-      }, eventId);
-      console.log('✅ URGENT FIX: Direct browser Pixel tracking completed');
-    } catch (error) {
-      console.error('❌ URGENT FIX: Direct browser Pixel tracking failed:', error);
-    }
+    // Import tracking functions
+    const { trackLeadWithUTM, getFacebookClickId, getFacebookBrowserId } = await import('@/lib/utm-tracking');
+    
+    // Gather Facebook identifiers for enhanced tracking
+    const fbc = getFacebookClickId();
+    const fbp = getFacebookBrowserId();
+    
+    console.log('🔥 PIXEL Facebook IDs found:', { 
+      fbc: fbc ? 'present' : 'missing', 
+      fbp: fbp ? 'present' : 'missing' 
+    });
+    
+    // IMMEDIATE: Fire rich Lead event to browser Pixel with all parameters
+    trackLeadWithUTM({
+      content_name: `${data.formName || data.serviceType} Form Submission`,
+      content_category: data.serviceType,
+      value: 1, // Number for Events Manager
+      currency: 'GBP', // 3-letter ISO for Events Manager
+      event_value_id: eventId,
+      // Add Facebook IDs for enhanced matching
+      fbc: fbc || undefined,
+      fbp: fbp || undefined,
+      // Add user data for better matching (will be automatically hashed by Pixel)
+      em: data.email || undefined,
+      ph: data.phone || undefined,
+      fn: data.name?.split(' ')[0] || undefined,
+      ln: data.name?.split(' ').slice(1).join(' ') || undefined,
+      zp: data.postcode || undefined
+    }, eventId);
+    
+    console.log('🔥 PIXEL Lead event sent with full payload');
+    
+    // Also call debounced function for GA tracking
+    trackFormSubmission(data.formName || data.serviceType, data.serviceType, eventId);
     
     console.log('🔥 DEBUG: About to call Facebook Conversions API for Lead event with eventId:', eventId);
 
@@ -231,7 +240,7 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
         const fbPayload = {
           data: {
             eventName: 'Lead',
-            eventId: String(eventId), // CRITICAL: This must match exactly with Pixel eventID for deduplication
+            eventId: String(eventId), // CRITICAL: Must match Pixel eventID exactly for deduplication
             userData: {
               email: data.email,
               phone: data.phone,
@@ -242,27 +251,27 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
               county: county || undefined,
               fbc: fbc || undefined, // Facebook Click ID
               fbp: fbp || undefined, // Facebook Browser ID
-              external_id: externalId // Always present - use our event ID as external identifier
+              external_id: externalId // Always present - use event ID as external identifier
             },
             customData: {
-              content_name: `${data.serviceType} Form Submission`,
+              content_name: `${data.formName || data.serviceType} Form Submission`,
               content_category: data.serviceType,
-              value: 1, // CRITICAL: ALWAYS number (not string) for Facebook Events Manager
-              currency: "GBP", // CRITICAL: ALWAYS 3-letter ISO code for Facebook Events Manager
+              value: 1, // CRITICAL: Number for Events Manager
+              currency: "GBP", // CRITICAL: 3-letter ISO for Events Manager
               event_value_id: eventId
             },
             eventSourceUrl: window.location.href,
             utmData: Object.keys(utmData).length > 0 ? utmData : undefined,
             userAgent: navigator.userAgent,
-            ipAddress: undefined // Will be extracted server-side from request headers
+            ipAddress: undefined // Will be extracted server-side
           }
         };
         
-        console.log('✅ CAPI: Sending Lead event to Facebook Conversions API');
-        console.log('✅ CAPI: Event ID for deduplication:', String(eventId));
-        console.log('✅ CAPI: Value type check:', typeof fbPayload.data.customData.value, '(must be number)');
-        console.log('✅ CAPI: Currency format check:', fbPayload.data.customData.currency, '(must be 3-letter ISO)');
-        console.log('✅ CAPI: Complete Lead payload:', JSON.stringify(fbPayload, null, 2));
+        console.log('🚀 CAPI Lead event sent to Facebook Conversions API');
+        console.log('🚀 CAPI Event ID for deduplication:', String(eventId));
+        console.log('🚀 CAPI Value type:', typeof fbPayload.data.customData.value, '(must be number)');
+        console.log('🚀 CAPI Currency:', fbPayload.data.customData.currency, '(must be GBP)');
+        console.log('🚀 CAPI Complete payload:', JSON.stringify(fbPayload, null, 2));
         
         const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload
@@ -270,11 +279,11 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
 
         if (fbError) {
           console.error('❌ CAPI: Facebook Conversions API failed:', fbError);
-          console.error('❌ CAPI: Error details:', JSON.stringify(fbError, null, 2));
         } else {
-          console.log('✅ CAPI: Facebook Conversions API SUCCESS!');
-          console.log('✅ CAPI: Response:', JSON.stringify(fbResponse, null, 2));
-          console.log('✅ CAPI: Event ID sent for deduplication:', String(eventId));
+          console.log('🚀 CAPI: Facebook Conversions API SUCCESS!');
+          console.log('🚀 CAPI: Response:', JSON.stringify(fbResponse, null, 2));
+          console.log('🚀 CAPI: events_received:', fbResponse?.result?.events_received);
+          console.log('🚀 CAPI: Event ID for deduplication:', String(eventId));
         }
 
         console.log('✅ CAPI: Facebook API Response Summary:', {
@@ -325,46 +334,29 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
   }
 };
 
-// Debounced tracking function to prevent excessive calls
+// Debounced tracking function for Google Analytics only (Pixel already fired)
 const debouncedTrackFormSubmission = debounce((formName: string, category: string, eventId?: string) => {
-  console.log('🟢🟢🟢 DEBOUNCED TRACKER CALLED!');
-  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Form name:', formName);
-  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Category:', category);
-  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Event ID:', eventId);
-  console.log('🟢🟢🟢 DEBOUNCED TRACKER: Starting Lead event tracking with eventID:', eventId);
+  console.log('📊 GA: Google Analytics tracking for form:', formName);
   
-  console.log('🟢🟢🟢 DEBOUNCED TRACKER: About to call trackLeadWithUTM...');
-  // Enhanced Meta Pixel tracking with UTM data and event ID for deduplication
-  trackLeadWithUTM({
-    content_name: `${formName} Form Submission`,
-    content_category: category,
-    value: 1,
-    currency: 'GBP',
-    event_value_id: eventId
-  }, eventId);
-  
-  console.log('🟢🟢🟢 DEBOUNCED TRACKER: trackLeadWithUTM call completed');
-  
-  // Google Analytics tracking with better error handling
+  // Google Analytics tracking only (Pixel already fired immediately)
   if (typeof window !== 'undefined' && (window as any).gtag) {
     try {
-      // Check if gtag is actually loaded and ready
       if (typeof (window as any).gtag === 'function') {
         (window as any).gtag('event', 'form_submit', {
           form_name: `${formName.toLowerCase()}_enquiry_form`,
           form_location: `${formName.toLowerCase()}_page`
         });
-        console.log('✅ Google Analytics tracking successful');
+        console.log('✅ GA: Google Analytics tracking successful');
       } else {
-        console.warn('⚠️ Google Analytics gtag function not properly loaded');
+        console.warn('⚠️ GA: Google Analytics gtag function not loaded');
       }
     } catch (error) {
-      console.error('❌ Google Analytics tracking failed:', error);
+      console.error('❌ GA: Google Analytics tracking failed:', error);
     }
   } else {
     console.warn('⚠️ Google Analytics not available');
   }
-}, 1000); // Debounce for 1 second
+}, 1000);
 
 export const trackFormSubmission = debouncedTrackFormSubmission;
 
