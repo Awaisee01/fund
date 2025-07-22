@@ -93,7 +93,6 @@ export default defineConfig(({ mode }) => ({
       }
     }
   },
-  // Remove problematic optimizeDeps to fix Supabase PostgREST import error
   // CSS optimization
   css: {
     devSourcemap: false,

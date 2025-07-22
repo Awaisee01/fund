@@ -47,27 +47,28 @@
     <!-- Optimized favicon -->
     <link rel="icon" href="/lovable-uploads/4a90d040-76c6-4702-9385-ce01ad01cbc0.png" type="image/png">
 
-    <!-- ULTRA-COMPRESSED CRITICAL CSS - Only essential styles for FCP -->
+    <!-- CRITICAL CSS - Essential classes for homepage rendering -->
     <style>
-      /* PERFORMANCE FIX: Minimal critical CSS for instant FCP */
+      /* Reset and base styles */
       *{box-sizing:border-box;margin:0;padding:0}
       html{font-family:'Inter',system-ui,sans-serif;-webkit-text-size-adjust:100%}
       body{background:#fff;color:#1a1a1a;line-height:1.6}
       
-      /* Critical hero gradient - absolute minimum */
+      /* Critical hero gradient */
       .hero-gradient{background:linear-gradient(135deg,#2563eb 0%,#059669 100%)}
       .hero-text-white{color:#fff}
       .hero-text-blue-100{color:#dbeafe}
       .hero-text-blue-50{color:#eff6ff}
       .hero-text-green-300{color:#86efac}
       
-      /* Absolute minimum layout classes */
+      /* Essential layout classes */
       .min-h-screen{min-height:100vh}
       .flex{display:flex}
       .flex-col{flex-direction:column}
       .flex-1{flex:1}
       .items-center{align-items:center}
       .justify-center{justify-content:center}
+      .justify-end{justify-content:flex-end}
       .relative{position:relative}
       .absolute{position:absolute}
       .inset-0{top:0;right:0;bottom:0;left:0}
@@ -75,41 +76,119 @@
       .w-full{width:100%}
       .h-full{height:100%}
       .overflow-hidden{overflow:hidden}
+      .text-white{color:#fff}
+      .text-center{text-align:center}
       
-      /* Essential text sizing */
+      /* Container and spacing */
+      .max-w-7xl{max-width:80rem}
+      .max-w-md{max-width:28rem}
+      .mx-auto{margin-left:auto;margin-right:auto}
+      .px-4{padding-left:1rem;padding-right:1rem}
+      .py-16{padding-top:4rem;padding-bottom:4rem}
+      .py-6{padding-top:1.5rem;padding-bottom:1.5rem}
+      .mb-4{margin-bottom:1rem}
+      .mb-6{margin-bottom:1.5rem}
+      .mb-8{margin-bottom:2rem}
+      .gap-8{gap:2rem}
+      .gap-3{gap:0.75rem}
+      
+      /* Text sizing and weights */
       .text-4xl{font-size:2.25rem;line-height:2.5rem}
-      .font-bold{font-weight:600}
+      .text-lg{font-size:1.125rem;line-height:1.75rem}
+      .text-xl{font-size:1.25rem;line-height:1.75rem}
+      .font-bold{font-weight:700}
+      .font-medium{font-weight:500}
       .leading-tight{line-height:1.25}
+      .leading-relaxed{line-height:1.625}
       
-      /* Loading animation */
-      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-      .animate-pulse{animation:pulse 2s infinite}
+      /* Flexbox utilities */
+      .flex-shrink-0{flex-shrink:0}
+      .space-y-3>:not([hidden])~:not([hidden]){margin-top:0.75rem}
+      .space-x-3>:not([hidden])~:not([hidden]){margin-left:0.75rem}
+      
+      /* Order utilities */
+      .order-1{order:1}
+      .order-2{order:2}
+      
+      /* Grid utilities */
+      .grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+      
+      /* Icon sizing */
+      .h-6{height:1.5rem}
+      .w-6{width:1.5rem}
+      
+      /* Form styling */
+      .bg-white\/10{background-color:rgba(255,255,255,0.1)}
+      .border{border-width:1px}
+      .border-white\/20{border-color:rgba(255,255,255,0.2)}
+      .rounded-2xl{border-radius:1rem}
+      .backdrop-blur-sm{backdrop-filter:blur(4px)}
       
       /* Loading states */
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+      .animate-pulse{animation:pulse 2s infinite}
       .loading #root{opacity:0;transition:opacity .2s}
       .loaded #root{opacity:1}
+      .bg-gray-100{background-color:#f3f4f6}
+      .h-96{height:24rem}
+      .h-32{height:8rem}
+      .h-64{height:16rem}
       
-      /* Mobile breakpoints - only essential */
+      /* Responsive breakpoints */
+      @media (min-width:640px){
+        .sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}
+        .sm\:py-20{padding-top:5rem;padding-bottom:5rem}
+        .sm\:text-5xl{font-size:3rem;line-height:1}
+        .sm\:text-xl{font-size:1.25rem;line-height:1.75rem}
+      }
+      
       @media (min-width:1024px){
+        .lg\:px-8{padding-left:2rem;padding-right:2rem}
+        .lg\:py-24{padding-top:6rem;padding-bottom:6rem}
         .lg\:text-6xl{font-size:3.75rem;line-height:1}
-        .lg\:grid-cols-2{grid-template-columns:1fr 1fr}
+        .lg\:text-2xl{font-size:1.5rem;line-height:2rem}
+        .lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+        .lg\:gap-12{gap:3rem}
+        .lg\:justify-end{justify-content:flex-end}
+      }
+      
+      @media (min-width:1280px){
+        .xl\:px-8{padding-left:2rem;padding-right:2rem}
+        .xl\:py-8{padding-top:2rem;padding-bottom:2rem}
+        .xl\:text-2xl{font-size:1.5rem;line-height:2rem}
+        .xl\:mb-6{margin-bottom:1.5rem}
+        .xl\:gap-4{gap:1rem}
+        .xl\:p-4{padding:1rem}
       }
     </style>
     
-    <!-- Load critical Tailwind CSS inline for Speed Index optimization -->
-    <style id="critical-tailwind">
-      /* Additional critical classes for homepage performance */
-      .order-1{order:1}.order-2{order:2}.lg\:order-1{order:1}.lg\:order-2{order:2}
-      .justify-center{justify-content:center}.lg\:justify-end{justify-content:flex-end}
-      .text-center{text-align:center}.lg\:text-left{text-align:left}
-      .max-w-md{max-width:28rem}.mx-auto{margin-left:auto;margin-right:auto}
-      .lg\:mx-0{margin-left:0;margin-right:0}.lg\:ml-auto{margin-left:auto}
-      .backdrop-blur-sm{backdrop-filter:blur(4px)}.bg-white\/10{background-color:rgba(255,255,255,0.1)}
-      .border-white\/20{border-color:rgba(255,255,255,0.2)}.rounded-2xl{border-radius:1rem}
+    <!-- Load additional critical styles for buttons and interactions -->
+    <style id="critical-buttons">
+      /* Button and interaction styles */
       .hover\:bg-white\/20:hover{background-color:rgba(255,255,255,0.2)}
-      .transition-all{transition:all 0.15s ease}.duration-300{transition-duration:0.3s}
-      .transform{transform:translateZ(0)}.hover\:scale-105:hover{transform:scale(1.05)}
+      .hover\:text-white:hover{color:#fff}
+      .hover\:font-bold:hover{font-weight:700}
+      .transition-all{transition:all 0.15s ease}
+      .duration-300{transition-duration:0.3s}
+      .hover\:scale-105:hover{transform:scale(1.05)}
       .touch-manipulation{touch-action:manipulation}
+      .min-h-\[48px\]{min-height:48px}
+      .p-3{padding:0.75rem}
+      .justify-center{justify-content:center}
+      /* Additional utility classes needed */
+      .lg\:text-left{text-align:left}
+      .w-auto{width:auto}
+      .object-contain{object-fit:contain}
+      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1)}
+      .h-8{height:2rem}
+      .h-16{height:4rem}
+      .bg-gray-50{background-color:#f9fafb}
+      .bg-gray-200{background-color:#e5e7eb}
+      .bg-gray-300{background-color:#d1d5db}
+      .inline-block{display:inline-block}
+      .rounded{border-radius:0.25rem}
+      .w-48{width:12rem}
+      .w-32{width:8rem}
     </style>
     
     <!-- Load non-critical Tailwind CSS after critical rendering -->
