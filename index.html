@@ -291,74 +291,62 @@
     src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"
     /></noscript>
     
-    <div id="root">
-      <!-- CRITICAL: Immediate navigation that shows instantly -->
-      <style>
-        .critical-nav { 
-          background: white; 
-          box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
-          position: sticky; 
-          top: 0; 
-          z-index: 9999;
-          height: 64px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 16px;
-          border-bottom: 1px solid #e5e7eb;
-        }
-        .critical-nav .logo { 
-          height: 32px; 
-          width: auto; 
-          object-fit: contain; 
-        }
-        .critical-nav .nav-links {
-          display: none;
-        }
-        @media (min-width: 1024px) {
-          .critical-nav .nav-links {
-            display: flex;
-            gap: 16px;
-          }
-          .critical-nav .nav-link {
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #374151;
-            font-weight: 500;
-            transition: all 0.15s;
-          }
-          .critical-nav .nav-link:hover {
-            background: #eff6ff;
-            color: #2563eb;
-          }
-        }
-      </style>
-      
-      <nav class="critical-nav">
-        <div>
-          <a href="/">
-            <img 
-              src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
-              alt="Funding For Scotland" 
-              class="logo"
-              width="140"
-              height="56"
-            />
-          </a>
-        </div>
-        <div class="nav-links">
-          <a href="/" class="nav-link">Home</a>
-          <a href="/eco4" class="nav-link">ECO4</a>
-          <a href="/solar" class="nav-link">Solar</a>
-          <a href="/gas-boilers" class="nav-link">Gas Boilers</a>
-          <a href="/home-improvements" class="nav-link">Home Improvements</a>
-          <a href="/contact" class="nav-link">Contact</a>
-        </div>
-      </nav>
-    </div>
+    <div id="root"></div>
     
     <!-- Load main app script immediately for critical rendering -->
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Critical Script to ensure React Navigation loads immediately -->
+    <script>
+      // Hide HTML fallback nav when React loads and show React navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        // Mark that React is loading
+        document.body.classList.add('react-loading');
+        
+        // Set up a minimal navigation fallback while React loads
+        const rootDiv = document.getElementById('root');
+        if (rootDiv && !rootDiv.hasChildNodes()) {
+          rootDiv.innerHTML = `
+            <div class="min-h-screen flex flex-col">
+              <nav class="bg-white shadow-lg sticky top-0 z-50">
+                <div class="max-w-7xl mx-auto px-4">
+                  <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                      <a href="/" class="flex items-center">
+                        <img 
+                          src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
+                          alt="Funding For Scotland Logo" 
+                          class="h-8 w-auto object-contain"
+                          width="140"
+                          height="56"
+                        />
+                      </a>
+                    </div>
+                    <div class="hidden lg:block">
+                      <div class="flex space-x-4">
+                        <a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600">Home</a>
+                        <a href="/eco4" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600">ECO4</a>
+                        <a href="/solar" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600">Solar</a>
+                        <a href="/gas-boilers" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600">Gas Boilers</a>
+                        <a href="/home-improvements" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600">Home Improvements</a>
+                        <a href="/contact" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600">Contact</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </nav>
+              <main class="flex-1 flex items-center justify-center bg-gray-50">
+                <div class="text-center">
+                  <div class="animate-pulse">
+                    <div class="h-8 bg-gray-300 rounded w-48 mx-auto mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-32 mx-auto"></div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          `;
+        }
+      });
+    </script>
   </body>
 </html>

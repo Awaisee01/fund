@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import OptimizedImage from './OptimizedImage';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
