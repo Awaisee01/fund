@@ -156,21 +156,27 @@ const SimpleNav = () => {
           left: 0,
           right: 0,
           zIndex: 49,
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%'
         }}>
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <Link
               key={item.name}
               to={item.path}
               onClick={() => setIsOpen(false)}
               style={{
                 display: 'block',
-                padding: '12px 0',
+                padding: '16px 8px',
                 textDecoration: 'none',
                 fontWeight: '500',
                 fontSize: '16px',
                 color: isActive(item.path) ? '#2563eb' : '#374151',
-                borderBottom: navItems.indexOf(item) !== navItems.length - 1 ? '1px solid #f3f4f6' : 'none'
+                borderBottom: index !== navItems.length - 1 ? '1px solid #e5e7eb' : 'none',
+                textAlign: 'left',
+                width: '100%',
+                boxSizing: 'border-box'
               }}
             >
               {item.name}
