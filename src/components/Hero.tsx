@@ -34,9 +34,9 @@ const Hero = ({
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 xl:py-32">
         {/* Mobile: Form first, Desktop: Content first */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Form Section - First on mobile, second on desktop */}
-          <div className="order-1 lg:order-2 w-full flex justify-center lg:justify-end">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* FORM SECTION - ALWAYS FIRST ON MOBILE */}
+          <div className="order-1 w-full flex justify-center lg:justify-end lg:order-2">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 sm:px-6 xl:px-8 py-6 xl:py-8 border border-white/20 w-full max-w-md">
               <h3 className="text-lg sm:text-xl xl:text-2xl font-bold mb-4 xl:mb-6 text-center">What can we help with?</h3>
               <div className="grid grid-cols-1 gap-3 xl:gap-4">
@@ -80,8 +80,9 @@ const Hero = ({
             </div>
           </div>
           
-          {/* Content Section - Second on mobile, first on desktop */}
-          <div className="order-2 lg:order-1">{/* ... keep existing code */}
+          
+          {/* TEXT CONTENT - ALWAYS SECOND ON MOBILE */}
+          <div className="order-2 lg:order-1">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               {title}
             </h1>

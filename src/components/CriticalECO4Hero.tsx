@@ -67,31 +67,9 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
-        <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
-          <div className="order-2 lg:order-1 text-center lg:text-left w-full">
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-              ECO4 Scheme
-            </h1>
-             <p className="text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-blue-100 font-medium">
-               Free energy efficiency upgrades for your home
-             </p>
-             <p className="text-base sm:text-lg mb-6 sm:mb-8 text-blue-50 leading-relaxed">
-              The Westminster backed ECO4 scheme provides free heating upgrades, solar panels, and insulation to eligible households across Scotland.
-            </p>
-            
-            <div className="mb-6 sm:mb-8">
-              <ul className="space-y-3 text-left max-w-md mx-auto lg:mx-0">
-                {benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-300 flex-shrink-0" />
-                    <span className="text-blue-50 text-sm sm:text-base">{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          
-          <div className="flex justify-center lg:justify-end order-1 lg:order-2 w-full">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
+          {/* FORM SECTION - ALWAYS FIRST ON MOBILE */}
+          <div className="order-1 w-full flex justify-center lg:justify-end lg:order-2">
             <div className="w-full max-w-md mx-auto lg:mx-0">
               {formReady ? (
                 <Suspense fallback={
@@ -124,6 +102,30 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+          
+          {/* TEXT CONTENT - ALWAYS SECOND ON MOBILE */}
+          <div className="order-2 w-full text-center lg:text-left lg:order-1">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
+              ECO4 Scheme
+            </h1>
+             <p className="text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-blue-100 font-medium">
+               Free energy efficiency upgrades for your home
+             </p>
+             <p className="text-base sm:text-lg mb-6 sm:mb-8 text-blue-50 leading-relaxed">
+              The Westminster backed ECO4 scheme provides free heating upgrades, solar panels, and insulation to eligible households across Scotland.
+            </p>
+            
+            <div className="mb-6 sm:mb-8">
+              <ul className="space-y-3 text-left max-w-md mx-auto lg:mx-0">
+                {benefits.map((benefit, index) => (
+                  <li key={index} className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-300 flex-shrink-0" />
+                    <span className="text-blue-50 text-sm sm:text-base">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
