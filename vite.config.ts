@@ -34,6 +34,11 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Fix React duplication issues
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+    exclude: ['@vite/client', '@vite/env']
+  },
   build: {
     // PERFORMANCE OPTIMIZED BUILD - Maximized for Lighthouse scores
     sourcemap: false, // Remove sourcemaps for faster loading

@@ -195,30 +195,7 @@
     <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
-    <!-- Ultra-optimized Facebook Pixel - Delayed until user interaction or 5 seconds -->
-    <script>
-      window.fbq=window.fbq||function(){(window.fbq.q=window.fbq.q||[]).push(arguments)};window.fbq.q=[];
-      
-      let fbPixelLoaded = false;
-      function loadFacebookPixel(){
-        if(fbPixelLoaded) return;
-        fbPixelLoaded = true;
-        const s=document.createElement('script');
-        s.async=true;
-        s.src='https://connect.facebook.net/en_US/fbevents.js';
-        s.onload=function(){fbq('init','1423013825182147');fbq('track','PageView')};
-        document.head.appendChild(s);
-      }
-      
-      // PERFORMANCE FIX: Longer delay to prioritize critical page loading
-      let interactionTimer = setTimeout(loadFacebookPixel, 5000);
-      ['click','scroll'].forEach(e=>{
-        document.addEventListener(e, function() {
-          clearTimeout(interactionTimer);
-          setTimeout(loadFacebookPixel, 100); // Small delay even after interaction
-        }, {once:true, passive:true});
-      });
-    </script>
+    <!-- Facebook Pixel will be loaded by React component only -->
   </head>
 
   <body class="loading">
