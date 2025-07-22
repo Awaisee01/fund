@@ -61,8 +61,91 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
+            {/* DIRECT NAVBAR - NO DEPENDENCIES */}
             <div className="min-h-screen flex flex-col">
-              <Navigation />
+              <nav style={{
+                backgroundColor: '#ffffff',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                position: 'sticky',
+                top: '0',
+                zIndex: '1000',
+                width: '100%'
+              }}>
+                <div style={{
+                  maxWidth: '1200px',
+                  margin: '0 auto',
+                  padding: '0 16px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  height: '64px'
+                }}>
+                  <div>
+                    <a href="/" style={{ textDecoration: 'none' }}>
+                      <img 
+                        src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
+                        alt="Funding For Scotland" 
+                        style={{ height: '32px', width: 'auto' }}
+                      />
+                    </a>
+                  </div>
+                  <div className="hidden md:flex" style={{ gap: '20px' }}>
+                    <a href="/" style={{ 
+                      textDecoration: 'none', 
+                      color: '#374151', 
+                      fontWeight: '500',
+                      padding: '8px 12px',
+                      borderRadius: '6px'
+                    }}>Home</a>
+                    <a href="/eco4" style={{ 
+                      textDecoration: 'none', 
+                      color: '#374151', 
+                      fontWeight: '500',
+                      padding: '8px 12px',
+                      borderRadius: '6px'
+                    }}>ECO4</a>
+                    <a href="/solar" style={{ 
+                      textDecoration: 'none', 
+                      color: '#374151', 
+                      fontWeight: '500',
+                      padding: '8px 12px',
+                      borderRadius: '6px'
+                    }}>Solar</a>
+                    <a href="/gas-boilers" style={{ 
+                      textDecoration: 'none', 
+                      color: '#374151', 
+                      fontWeight: '500',
+                      padding: '8px 12px',
+                      borderRadius: '6px'
+                    }}>Gas Boilers</a>
+                    <a href="/home-improvements" style={{ 
+                      textDecoration: 'none', 
+                      color: '#374151', 
+                      fontWeight: '500',
+                      padding: '8px 12px',
+                      borderRadius: '6px'
+                    }}>Home Improvements</a>
+                    <a href="/contact" style={{ 
+                      textDecoration: 'none', 
+                      color: '#374151', 
+                      fontWeight: '500',
+                      padding: '8px 12px',
+                      borderRadius: '6px'
+                    }}>Contact</a>
+                  </div>
+                  
+                  {/* Mobile hamburger menu */}
+                  <div className="block md:hidden">
+                    <button style={{
+                      background: 'none',
+                      border: 'none',
+                      fontSize: '24px',
+                      cursor: 'pointer',
+                      padding: '8px'
+                    }}>☰</button>
+                  </div>
+                </div>
+              </nav>
               
               {/* Defer non-critical tracking components */}
               <Suspense fallback={<ComponentSkeleton />}>
