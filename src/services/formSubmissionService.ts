@@ -327,12 +327,14 @@ export const trackFormSubmission = debouncedTrackFormSubmission;
  */
 export const trackViewContent = async (formName: string, serviceType: string) => {
   const eventId = `viewcontent_${serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  console.log('🔥 DEBUG: trackViewContent called with eventId:', eventId);
   
   try {
     // Import tracking functions dynamically
     const { trackViewContentWithUTM } = await import('@/lib/utm-tracking');
     
     // Track via Pixel
+    console.log('🔥 DEBUG: Calling trackViewContentWithUTM for Pixel');
     trackViewContentWithUTM({
       content_name: `${formName} Form View`,
       content_category: serviceType,
@@ -343,6 +345,7 @@ export const trackViewContent = async (formName: string, serviceType: string) =>
     // Send to Conversions API
     setTimeout(async () => {
       try {
+        console.log('🔥 DEBUG: Preparing ViewContent CAPI payload');
         const utmData = getUTMData();
         const fbc = getFacebookClickId();
         const fbp = getFacebookBrowserId();
@@ -368,14 +371,18 @@ export const trackViewContent = async (formName: string, serviceType: string) =>
           }
         };
         
-        const { error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
+        console.log('🔥 DEBUG: ViewContent CAPI payload:', JSON.stringify(fbPayload, null, 2));
+        
+        const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload
         });
+        
+        console.log('🔥 DEBUG: ViewContent CAPI response:', { success: !fbError, error: fbError, response: fbResponse });
         
         if (fbError) {
           console.error('❌ ViewContent Conversions API failed:', fbError);
         } else {
-          console.log('✅ ViewContent Conversions API sent successfully');
+          console.log('✅ ViewContent Conversions API sent successfully:', fbResponse);
         }
       } catch (error) {
         console.error('❌ ViewContent Conversions API error:', error);
@@ -392,12 +399,14 @@ export const trackViewContent = async (formName: string, serviceType: string) =>
  */
 export const trackInitiateCheckout = async (formName: string, serviceType: string, userData?: { name?: string; email?: string; phone?: string }) => {
   const eventId = `initiatecheckout_${serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  console.log('🔥 DEBUG: trackInitiateCheckout called with eventId:', eventId);
   
   try {
     // Import tracking functions dynamically
     const { trackInitiateCheckoutWithUTM } = await import('@/lib/utm-tracking');
     
     // Track via Pixel
+    console.log('🔥 DEBUG: Calling trackInitiateCheckoutWithUTM for Pixel');
     trackInitiateCheckoutWithUTM({
       content_name: `${formName} Form Interaction`,
       content_category: serviceType,
@@ -408,6 +417,7 @@ export const trackInitiateCheckout = async (formName: string, serviceType: strin
     // Send to Conversions API
     setTimeout(async () => {
       try {
+        console.log('🔥 DEBUG: Preparing InitiateCheckout CAPI payload');
         const utmData = getUTMData();
         const fbc = getFacebookClickId();
         const fbp = getFacebookBrowserId();
@@ -446,14 +456,18 @@ export const trackInitiateCheckout = async (formName: string, serviceType: strin
           }
         };
         
-        const { error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
+        console.log('🔥 DEBUG: InitiateCheckout CAPI payload:', JSON.stringify(fbPayload, null, 2));
+        
+        const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
           body: fbPayload
         });
+        
+        console.log('🔥 DEBUG: InitiateCheckout CAPI response:', { success: !fbError, error: fbError, response: fbResponse });
         
         if (fbError) {
           console.error('❌ InitiateCheckout Conversions API failed:', fbError);
         } else {
-          console.log('✅ InitiateCheckout Conversions API sent successfully');
+          console.log('✅ InitiateCheckout Conversions API sent successfully:', fbResponse);
         }
       } catch (error) {
         console.error('❌ InitiateCheckout Conversions API error:', error);

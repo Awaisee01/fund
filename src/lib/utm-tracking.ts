@@ -197,11 +197,13 @@ export const trackViewContentWithUTM = (contentData: {
   value?: number;
   currency?: string;
 }, eventId?: string): void => {
+  console.log('🔥 DEBUG: trackViewContentWithUTM called with eventId:', eventId);
   trackPixelEventWithUTM('ViewContent', {
     ...contentData,
     value: contentData.value || 1,
     currency: contentData.currency || 'GBP'
   }, eventId);
+  console.log('🔥 DEBUG: ViewContent Pixel tracking completed');
 };
 
 /**
@@ -213,11 +215,13 @@ export const trackInitiateCheckoutWithUTM = (checkoutData: {
   value?: number;
   currency?: string;
 }, eventId?: string): void => {
+  console.log('🔥 DEBUG: trackInitiateCheckoutWithUTM called with eventId:', eventId);
   trackPixelEventWithUTM('InitiateCheckout', {
     ...checkoutData,
     value: checkoutData.value || 1,
     currency: checkoutData.currency || 'GBP'
   }, eventId);
+  console.log('🔥 DEBUG: InitiateCheckout Pixel tracking completed');
 };
 
 /**
