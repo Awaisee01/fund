@@ -31,22 +31,22 @@ nav a {
   color: #374151 !important;
 }
 
-/* MOBILE FORM-FIRST LAYOUT FIX */
-@media (max-width: 1024px) {
-  /* Force mobile layout to be form first */
-  .flex.flex-col.lg\\:grid.lg\\:grid-cols-2 {
+/* MOBILE FORM-FIRST LAYOUT FIX - MOBILE ONLY! */
+@media (max-width: 1023px) {
+  /* Only apply form-first layout on mobile/tablet */
+  .grid.gap-6.lg\\:grid-cols-2 {
     display: flex !important;
     flex-direction: column !important;
   }
   
-  /* Form container should be first */
-  .order-2.lg\\:order-2 {
+  /* Form container should be first on mobile */
+  .order-1.lg\\:order-2 {
     order: 1 !important;
     margin-bottom: 2rem !important;
   }
   
-  /* Text content should be second */
-  .order-1.lg\\:order-1 {
+  /* Text content should be second on mobile */
+  .order-2.lg\\:order-1 {
     order: 2 !important;
   }
   
@@ -58,5 +58,13 @@ nav a {
   /* Center form on mobile */
   .flex.justify-center.lg\\:justify-end {
     justify-content: center !important;
+  }
+}
+
+/* DESKTOP: Keep original grid layout */
+@media (min-width: 1024px) {
+  .grid.gap-6.lg\\:grid-cols-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
   }
 }
