@@ -121,6 +121,18 @@ export const trackPixelEventWithUTM = (
       ...utmData
     };
 
+    // CRITICAL: Filter out empty/invalid email addresses to prevent Facebook Pixel warnings
+    if (enhancedEventData.em === '' || enhancedEventData.em === null || enhancedEventData.em === undefined) {
+      delete enhancedEventData.em;
+    }
+    
+    // Filter out other empty user data fields
+    ['ph', 'fn', 'ln', 'zp'].forEach(field => {
+      if (enhancedEventData[field] === '' || enhancedEventData[field] === null || enhancedEventData[field] === undefined) {
+        delete enhancedEventData[field];
+      }
+    });
+
     // Add event ID for deduplication (must match CAPI format)
     if (eventId) {
       enhancedEventData.eventID = String(eventId); // camelCase for Pixel
@@ -133,7 +145,7 @@ export const trackPixelEventWithUTM = (
 
     // Fire the event
     (window as any).fbq('track', eventName, enhancedEventData);
-    console.log(`🔥 PIXEL ${eventName} event sent successfully with eventID: ${String(eventId)}`);
+    console.log(`✅ PIXEL ${eventName} event sent successfully with eventID: ${String(eventId)}`);
     
   } catch (error) {
     console.error(`❌ PIXEL: ${eventName} tracking failed:`, error);

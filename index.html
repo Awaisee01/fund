@@ -20,11 +20,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Load Google Fonts stylesheet immediately -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <!-- Load Google Fonts stylesheet immediately with proper font-display -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'; this.onload=null;">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
     
-    <!-- Only preload the actual ECO4 hero image used -->
-    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high">
+    <!-- Only preload the actual ECO4 hero image used immediately -->
+    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high" media="(min-width: 1px)">
     
     <!-- Inline ECO4 critical CSS for immediate hero rendering -->
     <style>
@@ -187,22 +188,43 @@
           document.head.appendChild(link);
         });
         
-        // Prefetch likely hero images for next pages
-        const likelyImages = [
-          '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png', // Gas boilers
-          '/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png'  // Home improvements
-        ];
+        // Only prefetch images after user interaction or significant delay
+        const prefetchImages = () => {
+          const likelyImages = [
+            '/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png', // Gas boilers
+            '/lovable-uploads/29502115-60f2-411e-928e-8d3f6c3383c7.png'  // Home improvements
+          ];
+          
+          likelyImages.forEach((src, index) => {
+            setTimeout(() => {
+              const link = document.createElement('link');
+              link.rel = 'prefetch';
+              link.as = 'image';
+              link.href = src;
+              link.fetchPriority = 'low';
+              document.head.appendChild(link);
+            }, index * 1000); // Longer delay to avoid preload warnings
+          });
+        };
         
-        likelyImages.forEach((src, index) => {
-          setTimeout(() => {
-            const link = document.createElement('link');
-            link.rel = 'prefetch';
-            link.as = 'image';
-            link.href = src;
-            link.fetchPriority = 'low';
-            document.head.appendChild(link);
-          }, index * 500); // Stagger to avoid bandwidth competition
+        // Only prefetch after significant user interaction or delay
+        let interacted = false;
+        const handleInteraction = () => {
+          if (!interacted) {
+            interacted = true;
+            setTimeout(prefetchImages, 2000);
+          }
+        };
+        
+        // Wait for user interaction before prefetching
+        ['click', 'scroll', 'keydown', 'touchstart'].forEach(event => {
+          document.addEventListener(event, handleInteraction, { once: true, passive: true });
         });
+        
+        // Fallback: prefetch after 10 seconds if no interaction
+        setTimeout(() => {
+          if (!interacted) prefetchImages();
+        }, 10000);
         
         // Preconnect to form submission domains
         const formDomains = ['https://script.google.com', 'https://hooks.zapier.com'];
