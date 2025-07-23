@@ -378,10 +378,26 @@ const debouncedTrackFormSubmission = debounce((formName: string, category: strin
 
 export const trackFormSubmission = debouncedTrackFormSubmission;
 
+// Global tracking state to prevent duplicate ViewContent events per page
+const pageViewContentTracked = new Set<string>();
+
 /**
  * Track ViewContent event for Facebook Pixel and Conversions API
+ * Prevents duplicate ViewContent events on the same page
  */
 export const trackViewContent = async (formName: string, serviceType: string) => {
+  // Create a unique key for this page/service combination
+  const pageKey = `${window.location.pathname}_${serviceType}`;
+  
+  // Prevent duplicate ViewContent tracking on the same page
+  if (pageViewContentTracked.has(pageKey)) {
+    console.log(`🚨 PIXEL: ViewContent already tracked for ${pageKey}, skipping duplicate`);
+    return;
+  }
+  
+  // Mark this page/service as tracked
+  pageViewContentTracked.add(pageKey);
+  
   const eventId = `viewcontent_${serviceType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   console.log('🔥 DEBUG: trackViewContent called with eventId:', eventId);
   
