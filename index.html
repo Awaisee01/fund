@@ -23,11 +23,12 @@
     <!-- Preload critical font for immediate text rendering -->
     <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" type="font/woff2" crossorigin>
     
-    <!-- Load Google Fonts stylesheet immediately with font-display swap -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="all">
+    <!-- Load critical Google Fonts with async loading -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
     
-    <!-- Preload the ECO4 hero image with highest priority -->
-    <link rel="preload" as="image" href="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png" fetchpriority="high" media="(min-width: 1px)">
+    <!-- Preload only the most critical ECO4 hero image -->
+    <link rel="preload" as="image" href="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png" fetchpriority="high">
     
     <!-- Inline ECO4 critical CSS for immediate hero rendering -->
     <style>
