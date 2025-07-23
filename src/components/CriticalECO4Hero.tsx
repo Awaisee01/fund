@@ -38,21 +38,35 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
             transform: `translate3d(0, ${scrollY * 0.2}px, 0)` // Reduced parallax for mobile
           }}
         >
-          {/* Optimized hero image for fastest LCP */}
-          <img
-            src="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png"
-            alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
-            className="w-full h-full object-cover mix-blend-multiply"
-            loading="eager"
-            fetchPriority="high"
-            width={1920}
-            height={1080}
-            onLoad={() => setImageLoaded(true)}
-            style={{ 
-              opacity: imageLoaded ? 1 : 0,
-              transition: 'opacity 0.2s ease'
-            }}
-          />
+          {/* Responsive hero image with optimized loading */}
+          <picture>
+            <source 
+              media="(max-width: 768px)" 
+              srcSet="/AerialTownMobile.webp"
+              width={768}
+              height={500}
+            />
+            <source 
+              media="(max-width: 1280px)" 
+              srcSet="/AerialTownTablet.webp"
+              width={1280}
+              height={600}
+            />
+            <img
+              src="/AerialTownDesktop.webp"
+              alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
+              className="w-full h-full object-cover mix-blend-multiply"
+              loading="eager"
+              fetchPriority="high"
+              width={1920}
+              height={900}
+              onLoad={() => setImageLoaded(true)}
+              style={{ 
+                opacity: imageLoaded ? 1 : 0,
+                transition: 'opacity 0.2s ease'
+              }}
+            />
+          </picture>
         </div>
       </div>
       
