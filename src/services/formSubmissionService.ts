@@ -121,12 +121,12 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     // IMMEDIATE: Fire rich Lead event to browser Pixel with all parameters
     console.log('🔥 PIXEL: About to call trackLeadWithUTM...');
     
-    // Filter user data - only include if not empty/undefined
-    const userDataForPixel: any = {
+    // Prepare Lead data for trackLeadWithUTM function
+    const leadData: any = {
       content_name: `${data.formName || data.serviceType} Form Submission`,
       content_category: data.serviceType,
-      value: 1, // Number for Events Manager
-      currency: 'GBP', // 3-letter ISO for Events Manager
+      value: 1,
+      currency: 'GBP',
       event_value_id: eventId,
       // Add Facebook IDs for enhanced matching
       fbc: fbc || undefined,
@@ -135,23 +135,24 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     
     // Only add user data fields if they have valid values (not empty strings)
     if (data.email && data.email.trim() !== '') {
-      userDataForPixel.em = data.email.trim();
+      leadData.em = data.email.trim();
     }
     if (data.phone && data.phone.trim() !== '') {
-      userDataForPixel.ph = data.phone.trim();
+      leadData.ph = data.phone.trim();
     }
     if (data.name && data.name.trim() !== '') {
       const nameParts = data.name.trim().split(' ');
-      userDataForPixel.fn = nameParts[0];
+      leadData.fn = nameParts[0];
       if (nameParts.length > 1) {
-        userDataForPixel.ln = nameParts.slice(1).join(' ');
+        leadData.ln = nameParts.slice(1).join(' ');
       }
     }
     if (data.postcode && data.postcode.trim() !== '') {
-      userDataForPixel.zp = data.postcode.trim();
+      leadData.zp = data.postcode.trim();
     }
     
-    trackLeadWithUTM(userDataForPixel, eventId);
+    // CRITICAL FIX: Call trackLeadWithUTM with correct parameters
+    trackLeadWithUTM(leadData, eventId);
     
     console.log('✅ PIXEL: trackLeadWithUTM call completed - Lead Event Sent Successfully');
     
