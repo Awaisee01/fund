@@ -129,90 +129,23 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- 🎯 FINAL SOLUTION: Work with Lovable's system, not against it -->
+    <!-- ✅ CLEAN PIXEL IMPLEMENTATION -->
     <script>
-      console.log('🎯 FINAL: Implementing coexistence with Lovable tracking...');
-      
-      // Allow Lovable's pixel to exist but ensure ours works properly
-      const OUR_PIXEL_ID = '1423013825182147';
-      const LOVABLE_PIXEL_ID = '9151671744940732'; // Lovable's platform pixel
-      
-      // Track our pixel state
-      let ourPixelInitialized = false;
-      let ourPageViewTracked = false;
-      
-      // Override fbq to coordinate both pixels
-      const originalFbq = window.fbq;
-      window.fbq = function() {
-        const args = Array.from(arguments);
-        const command = args[0];
-        const pixelId = args[1];
-        
-        // Handle init commands
-        if (command === 'init') {
-          if (pixelId === OUR_PIXEL_ID) {
-            if (ourPixelInitialized) {
-              console.log('✅ Our pixel already initialized, skipping duplicate');
-              return;
-            }
-            ourPixelInitialized = true;
-            console.log('🚀 FINAL: Our pixel initialization allowed:', pixelId);
-          } else if (pixelId === LOVABLE_PIXEL_ID) {
-            console.log('🔄 FINAL: Lovable pixel detected, allowing:', pixelId);
-          } else {
-            console.log('⚠️ FINAL: Unknown pixel:', pixelId);
-          }
-        }
-        
-        // Handle PageView tracking
-        if (command === 'track' && args[1] === 'PageView') {
-          if (!ourPageViewTracked && ourPixelInitialized) {
-            ourPageViewTracked = true;
-            console.log('✅ FINAL: Our PageView tracked');
-          }
-        }
-        
-        // Log all tracking calls for transparency
-        console.log('📊 FINAL: fbq call:', args);
-        
-        // Execute the call
-        if (window._realFbq) {
-          return window._realFbq.apply(this, arguments);
-        } else {
-          window._fbqQueue = window._fbqQueue || [];
-          window._fbqQueue.push(arguments);
-        }
-      };
-      
-      // Load Facebook SDK
+      // Simple, clean Facebook Pixel setup that actually works
       !function(f,b,e,v,n,t,s)
-      {if(f._realFbq)return;n=f._realFbq=function(){n.callMethod?
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      n.push=n;n.loaded=!0;n.version='2.0';
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
       n.queue=[];t=b.createElement(e);t.async=!0;
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize our pixel after a brief delay
-      setTimeout(() => {
-        console.log('🚀 FINAL: Initializing our pixel:', OUR_PIXEL_ID);
-        
-        // Process any queued calls first
-        if (window._fbqQueue) {
-          window._fbqQueue.forEach(args => {
-            window._realFbq.apply(null, args);
-          });
-          window._fbqQueue = [];
-        }
-        
-        // Initialize our pixel
-        window._realFbq('init', OUR_PIXEL_ID);
-        window._realFbq('track', 'PageView');
-        
-        console.log('✅ FINAL: Our pixel setup complete - should show as single clean pixel in Meta Helper');
-        
-      }, 300);
+      // Initialize our pixel immediately
+      fbq('init', '1423013825182147');
+      fbq('track', 'PageView');
+      
+      console.log('✅ CLEAN: Pixel 1423013825182147 initialized and PageView tracked');
     </script>
     
   </head>
