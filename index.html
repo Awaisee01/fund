@@ -129,73 +129,61 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- 🔥 ABSOLUTE NUCLEAR PIXEL CONTROL - NO MERCY FOR DUPLICATES 🔥 -->
+    <!-- 🔍 DETECTIVE MODE: Track down the mystery pixel source -->
     <script>
-      // 🚨 DEFCON 1: TOTAL PIXEL WARFARE MODE
-      console.log('🔥 DEFCON 1: Starting absolute pixel control...');
+      console.log('🕵️ DETECTIVE: Starting pixel investigation...');
       
-      // Store original fbq if it exists (for hijacking)
-      let originalFbq = window.fbq;
+      // Monitor ALL script additions to the page
+      const originalAppendChild = Node.prototype.appendChild;
+      const originalInsertBefore = Node.prototype.insertBefore;
       
-      // KILL EVERYTHING pixel-related in DOM
-      const killAllPixels = () => {
-        // Remove all Facebook script tags
-        document.querySelectorAll('script[src*="fbevents"], script[src*="facebook"], script[src*="meta"]').forEach(s => {
-          console.log('💀 KILLED: Facebook script', s.src);
-          s.remove();
-        });
-        
-        // Remove all tracking pixels in noscript
-        document.querySelectorAll('noscript img[src*="facebook.com/tr"], noscript img[src*="meta.com/tr"]').forEach(img => {
-          console.log('💀 KILLED: Tracking pixel', img.src);
-          img.remove();
-        });
-        
-        // Clear window objects
-        delete window.fbq;
-        delete window._fbq;
-        delete window.FB;
-        
-        console.log('💀 TOTAL KILL: All pixel objects destroyed');
+      Node.prototype.appendChild = function(child) {
+        if (child.tagName === 'SCRIPT' && child.src && child.src.includes('facebook')) {
+          console.log('🚨 DETECTIVE: Caught Facebook script being added!', {
+            src: child.src,
+            stack: new Error().stack
+          });
+        }
+        return originalAppendChild.call(this, child);
       };
       
-      // Execute kill operation
-      killAllPixels();
+      Node.prototype.insertBefore = function(newNode, referenceNode) {
+        if (newNode.tagName === 'SCRIPT' && newNode.src && newNode.src.includes('facebook')) {
+          console.log('🚨 DETECTIVE: Caught Facebook script being inserted!', {
+            src: newNode.src,
+            stack: new Error().stack
+          });
+        }
+        return originalInsertBefore.call(this, newNode, referenceNode);
+      };
       
-      // HIJACK: Override any future fbq attempts
-      const CORRECT_ID = '1423013825182147';
-      const BLOCKED_IDS = ['9151671744940732']; // Block the mystery pixel
+      // Monitor window.fbq calls
+      let fbqCallCount = 0;
+      const originalFbq = window.fbq;
       
       window.fbq = function() {
-        const args = Array.from(arguments);
+        fbqCallCount++;
+        console.log(`🕵️ FBQ CALL #${fbqCallCount}:`, Array.from(arguments), {
+          stack: new Error().stack.split('\n').slice(1, 4)
+        });
         
-        // Block init attempts with wrong IDs
-        if (args[0] === 'init' && args[1] && BLOCKED_IDS.includes(args[1])) {
-          console.log('🚫 BLOCKED: Rogue pixel init attempt with ID:', args[1]);
+        // Block the mystery pixel ID
+        if (arguments[0] === 'init' && arguments[1] === '9151671744940732') {
+          console.log('🚫 BLOCKED MYSTERY PIXEL: 9151671744940732');
           return;
         }
         
-        // Only allow our pixel ID
-        if (args[0] === 'init' && args[1] && args[1] !== CORRECT_ID) {
-          console.log('🚫 BLOCKED: Unauthorized pixel ID:', args[1], 'Expected:', CORRECT_ID);
-          return;
-        }
-        
-        // Log all tracking attempts
-        console.log('✅ ALLOWED: fbq call:', args);
-        
-        // Call original fbq if it exists, otherwise queue
-        if (window._actualFbq) {
-          return window._actualFbq.apply(this, arguments);
+        if (originalFbq) {
+          return originalFbq.apply(this, arguments);
         } else {
           window._fbqQueue = window._fbqQueue || [];
           window._fbqQueue.push(arguments);
         }
       };
       
-      // Now load OUR pixel properly
+      // Initialize OUR pixel cleanly
       !function(f,b,e,v,n,t,s)
-      {if(f._actualFbq)return;n=f._actualFbq=function(){n.callMethod?
+      {if(f._realFbq)return;n=f._realFbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
       n.push=n;n.loaded=!0;n.version='2.0';
       n.queue=[];t=b.createElement(e);t.async=!0;
@@ -203,29 +191,34 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // When script loads, process queue
-      window._actualFbq.loaded = true;
-      
-      // Initialize ONLY our pixel
+      // When loaded, initialize properly
       setTimeout(() => {
-        window._actualFbq('init', CORRECT_ID);
-        console.log('🚀 NUCLEAR SUCCESS: Single pixel initialized:', CORRECT_ID);
+        console.log('🚀 INITIALIZING: Our pixel 1423013825182147');
+        window._realFbq('init', '1423013825182147');
+        window._realFbq('track', 'PageView');
+        console.log('✅ SUCCESS: Our pixel initialized and PageView tracked');
         
         // Process any queued calls
         if (window._fbqQueue) {
+          console.log('🔄 PROCESSING: Queued fbq calls:', window._fbqQueue.length);
           window._fbqQueue.forEach(args => {
-            window._actualFbq.apply(null, args);
+            if (args[0] === 'init' && args[1] === '9151671744940732') {
+              console.log('🚫 SKIPPED: Mystery pixel in queue');
+              return;
+            }
+            window._realFbq.apply(null, args);
           });
           delete window._fbqQueue;
         }
-        
-        // Track single PageView
-        window._actualFbq('track', 'PageView');
-        console.log('🚀 NUCLEAR SUCCESS: Single PageView tracked');
-        
-        // Set global flag
-        window.PIXEL_NUCLEAR_ACTIVE = true;
-      }, 100);
+      }, 200);
+      
+      // Monitor for any dynamic script injections
+      setInterval(() => {
+        const scripts = document.querySelectorAll('script[src*="facebook"], script[src*="meta"]');
+        if (scripts.length > 1) {
+          console.log('🚨 ALERT: Multiple Facebook scripts detected!', scripts);
+        }
+      }, 1000);
     </script>
     
   </head>

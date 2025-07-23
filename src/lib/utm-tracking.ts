@@ -109,22 +109,15 @@ export const trackPixelEventWithUTM = (
     return;
   }
   
-  // NUCLEAR MODE: Use our hijacked pixel system
-  const actualFbq = (window as any)._actualFbq || (window as any).fbq;
+  // Use our detective-monitored pixel system
+  const pixelFn = (window as any)._realFbq || (window as any).fbq;
   
-  if (!actualFbq) {
-    console.error('❌ PIXEL: No pixel function available - nuclear mode failed');
+  if (!pixelFn) {
+    console.error('❌ PIXEL: No pixel function available');
     return;
   }
-  
-  // Verify nuclear mode is active
-  if ((window as any).PIXEL_NUCLEAR_ACTIVE) {
-    console.log('🚀 NUCLEAR: Pixel system confirmed active and secured');
-  } else {
-    console.warn('⚠️ NUCLEAR: Pixel system may not be fully secured');
-  }
 
-  console.log(`🔍 NUCLEAR PIXEL: Tracking ${eventName} via secured channel`);
+  console.log(`🔍 DETECTIVE TRACKING: ${eventName} via monitored channel`);
 
   try {
     const utmData = getUTMData();
@@ -155,8 +148,8 @@ export const trackPixelEventWithUTM = (
     console.log(`🔥 PIXEL Value type:`, typeof enhancedEventData.value, '(must be number)');
     console.log(`🔥 PIXEL Currency:`, enhancedEventData.currency, '(must be GBP)');
 
-    // Fire the event using nuclear-secured channel
-    actualFbq('track', eventName, enhancedEventData);
+     // Fire the event using detective-monitored channel
+     pixelFn('track', eventName, enhancedEventData);
     console.log(`✅ PIXEL ${eventName} event sent successfully with eventID: ${String(eventId)}`);
     
   } catch (error) {
