@@ -20,13 +20,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Preload exact Inter font weights used on ECO4 page -->
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" type="font/woff2" crossorigin>
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" type="font/woff2" crossorigin>
+    <!-- Load Google Fonts stylesheet immediately -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     
-    <!-- Preload critical hero images with highest priority -->
-    <link rel="preload" as="image" href="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png" fetchpriority="high">
-    <link rel="preload" as="image" href="/lovable-uploads/b993f86d-804c-40f3-8043-1561dd582987.png" fetchpriority="high">
+    <!-- Only preload the actual ECO4 hero image used -->
+    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high">
     
     <!-- Inline ECO4 critical CSS for immediate hero rendering -->
     <style>
@@ -130,65 +128,9 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Facebook Pixel Script - ULTIMATE Anti-Conflict System -->
+    <!-- Clean Facebook Pixel Implementation -->
     <script>
-      // ULTIMATE: Block all Facebook tracking requests with wrong Pixel ID at DNS level
-      const CORRECT_PIXEL_ID = '1423013825182147';
-      const WRONG_PIXEL_ID = '9151671744940732';
-      
-      console.log('🚨 ULTIMATE: Starting Facebook Pixel conflict resolution');
-      console.log('🚨 ULTIMATE: Correct Pixel ID:', CORRECT_PIXEL_ID);
-      console.log('🚨 ULTIMATE: Wrong Pixel ID to block:', WRONG_PIXEL_ID);
-      
-      // Block at the network level
-      if ('fetch' in window) {
-        const originalFetch = window.fetch;
-        window.fetch = function(...args) {
-          const url = args[0];
-          if (typeof url === 'string' && url.includes(WRONG_PIXEL_ID)) {
-            console.error('🚨 ULTIMATE: Blocked wrong Pixel request:', url);
-            return Promise.resolve(new Response('{"blocked": true}', { status: 200 }));
-          }
-          return originalFetch.apply(this, args);
-        };
-      }
-      
-      // Block at XMLHttpRequest level too
-      if ('XMLHttpRequest' in window) {
-        const originalXHR = window.XMLHttpRequest;
-        window.XMLHttpRequest = function() {
-          const xhr = new originalXHR();
-          const originalOpen = xhr.open;
-          xhr.open = function(method, url, ...args) {
-            if (typeof url === 'string' && url.includes(WRONG_PIXEL_ID)) {
-              console.error('🚨 ULTIMATE: Blocked wrong Pixel XHR:', url);
-              return; // Block the request
-            }
-            return originalOpen.apply(this, [method, url, ...args]);
-          };
-          return xhr;
-        };
-      }
-      
-      // SIMPLIFIED: Just log conflicts, don't remove scripts
-      const logPixelConflicts = () => {
-        const scripts = document.querySelectorAll('script[src*="fbevents.js"]');
-        if (scripts.length > 1) {
-          console.warn('🚨 ULTIMATE: Multiple Facebook Pixel scripts detected:', scripts.length);
-        }
-      };
-      
-      // Just log conflicts, don't interfere with scripts
-      logPixelConflicts();
-      
-      // Clear any existing Facebook Pixel
-      if (window.fbq) {
-        console.warn('🚨 ULTIMATE: Existing fbq detected - clearing it');
-        delete window.fbq;
-        delete window._fbq;
-      }
-      
-      // Initialize our clean Pixel
+      // Clean Facebook Pixel initialization - no conflicts
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -198,49 +140,8 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Force our correct Pixel ID
-      console.log('🔥 ULTIMATE: Initializing with CORRECT Pixel ID:', CORRECT_PIXEL_ID);
-      
-      fbq('init', CORRECT_PIXEL_ID, {
-        disable_auto_config: true,
-        autoConfig: false,
-        em: 'disabled'
-      });
-      
-      // Track PageView immediately
+      fbq('init', '1423013825182147');
       fbq('track', 'PageView');
-      
-      console.log('✅ ULTIMATE: Meta Pixel initialized with CORRECT ID:', CORRECT_PIXEL_ID);
-      console.log('✅ ULTIMATE: fbq function available:', typeof fbq);
-      
-      // ULTIMATE: Override any future fbq calls
-      const originalFbq = window.fbq;
-      window.fbq = function() {
-        const args = Array.from(arguments);
-        if (args[0] === 'init' && args[1] === WRONG_PIXEL_ID) {
-          console.error('🚨 ULTIMATE: Wrong Pixel ID init blocked:', args[1]);
-          return; // Block completely
-        }
-        return originalFbq.apply(this, arguments);
-      };
-      
-      // Preserve original fbq properties
-      Object.keys(originalFbq).forEach(key => {
-        if (typeof originalFbq[key] !== 'function') {
-          window.fbq[key] = originalFbq[key];
-        }
-      });
-      
-      console.log('🚨 ULTIMATE: Conflict protection system active');
-      
-      // Add debugging to check if Meta Pixel Helper can detect our pixel
-      setTimeout(() => {
-        console.log('🔍 PIXEL DEBUG: window.fbq exists:', !!window.fbq);
-        console.log('🔍 PIXEL DEBUG: fbq queue length:', window.fbq ? window.fbq.queue?.length : 'N/A');
-        console.log('🔍 PIXEL DEBUG: _fbq exists:', !!window._fbq);
-        console.log('🔍 PIXEL DEBUG: Facebook scripts:', document.querySelectorAll('script[src*="facebook"]').length);
-        console.log('🔍 PIXEL DEBUG: Current fbq version:', window.fbq?.version);
-      }, 1000);
     </script>
     
   </head>
