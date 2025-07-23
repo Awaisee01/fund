@@ -381,17 +381,30 @@ export const trackFormSubmission = debouncedTrackFormSubmission;
 // Global tracking state to prevent duplicate ViewContent events per page
 const pageViewContentTracked = new Set<string>();
 
+// Global state to prevent multiple pixel activations
+let pixelActivationCount = 0;
+
 /**
  * Track ViewContent event for Facebook Pixel and Conversions API
- * Prevents duplicate ViewContent events on the same page
+ * Prevents duplicate ViewContent events on the same page and multiple pixel activations
  */
 export const trackViewContent = async (formName: string, serviceType: string) => {
+  // Increment and check pixel activation count
+  pixelActivationCount++;
+  console.log(`🚨 PIXEL: Activation attempt #${pixelActivationCount} for ${serviceType}`);
+  
   // Create a unique key for this page/service combination
   const pageKey = `${window.location.pathname}_${serviceType}`;
   
   // Prevent duplicate ViewContent tracking on the same page
   if (pageViewContentTracked.has(pageKey)) {
-    console.log(`🚨 PIXEL: ViewContent already tracked for ${pageKey}, skipping duplicate`);
+    console.log(`🚨 PIXEL: ViewContent already tracked for ${pageKey}, skipping duplicate activation #${pixelActivationCount}`);
+    return;
+  }
+  
+  // Prevent too many pixel activations (Facebook shows warning after 3+)
+  if (pixelActivationCount > 2) {
+    console.log(`🚨 PIXEL: Too many activations (${pixelActivationCount}), stopping to prevent Meta Pixel Helper warnings`);
     return;
   }
   
