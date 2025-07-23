@@ -129,21 +129,36 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- SINGLE Facebook Pixel Implementation - NO DUPLICATES ALLOWED -->
+    <!-- EMERGENCY PIXEL CLEANUP - NUCLEAR OPTION -->
     <script>
-      // 🚨 NUCLEAR OPTION: Complete pixel cleanup to prevent ALL duplicates
-      console.log('🧹 CLEANING: Starting pixel cleanup...');
+      // 🚨 EMERGENCY: Stop ALL pixel activity and restart clean
+      console.log('🔥 EMERGENCY CLEANUP: Nuking all pixel state...');
       
-      // Clear any existing pixel state
-      delete window.fbq;
-      delete window._fbq;
-      delete window._pixelInitialized;
-      delete window.pixelInitCount;
+      // Kill everything pixel-related
+      if (window.fbq) {
+        console.log('🗑️ REMOVING: Existing fbq found, destroying...');
+        delete window.fbq;
+      }
+      if (window._fbq) {
+        console.log('🗑️ REMOVING: Existing _fbq found, destroying...');
+        delete window._fbq;
+      }
       
-      // SINGLE PIXEL ID - ONLY USE THIS ONE
-      const CORRECT_PIXEL_ID = '1423013825182147';
+      // Remove all existing pixel scripts from DOM
+      const existingScripts = document.querySelectorAll('script[src*="fbevents.js"]');
+      existingScripts.forEach(script => {
+        console.log('🗑️ REMOVING: Existing fbevents script from DOM');
+        script.remove();
+      });
       
-      // Initialize Facebook Pixel SDK ONCE
+      // Remove any tracking pixels in noscript tags
+      const existingNoscripts = document.querySelectorAll('noscript img[src*="facebook.com/tr"]');
+      existingNoscripts.forEach(img => {
+        console.log('🗑️ REMOVING: Existing noscript pixel');
+        img.remove();
+      });
+      
+      // Clean slate - initialize ONLY our pixel
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -153,17 +168,16 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize pixel with SINGLE ID
-      fbq('init', CORRECT_PIXEL_ID);
-      console.log('✅ PIXEL: SINGLE initialization complete with ID:', CORRECT_PIXEL_ID);
+      // Initialize with the CORRECT literal ID (not variable)
+      fbq('init', '1423013825182147');
+      console.log('✅ EMERGENCY: Clean pixel initialized with ID 1423013825182147');
       
-      // Track initial PageView ONCE
+      // Track PageView ONCE
       fbq('track', 'PageView');
-      console.log('✅ PIXEL: Initial PageView tracked ONCE');
+      console.log('✅ EMERGENCY: Single PageView tracked');
       
-      // Lock down to prevent ANY future initializations
-      window._PIXEL_LOCKED = true;
-      window._PIXEL_ID = CORRECT_PIXEL_ID;
+      // Lock it down permanently
+      window._PIXEL_EMERGENCY_LOCKED = true;
     </script>
     
   </head>

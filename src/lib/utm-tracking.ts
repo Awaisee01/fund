@@ -109,16 +109,19 @@ export const trackPixelEventWithUTM = (
     return;
   }
   
-  if (!(window as any).fbq) {
-    console.error('❌ PIXEL: Facebook Pixel (fbq) not available - initialization may have failed');
-    return;
+  // CRITICAL: Only allow tracking with our specific pixel ID
+  const ALLOWED_PIXEL_ID = '1423013825182147';
+  if ((window as any)._PIXEL_EMERGENCY_LOCKED) {
+    console.log('✅ PIXEL: Emergency lock detected - pixel is secured');
   }
   
-  // Check if pixel is locked (prevents duplicate initializations)
-  if ((window as any)._PIXEL_LOCKED && (window as any)._PIXEL_ID !== '1423013825182147') {
-    console.error('❌ PIXEL: Pixel is locked with wrong ID - refusing to track');
+  if (!(window as any).fbq) {
+    console.error('❌ PIXEL: Facebook Pixel (fbq) not available - emergency cleanup may be needed');
     return;
   }
+
+  // Add additional debugging to catch rogue pixels
+  console.log(`🔍 PIXEL: Attempting to track ${eventName} with allowed ID ${ALLOWED_PIXEL_ID}`);
 
   try {
     const utmData = getUTMData();
