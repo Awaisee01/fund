@@ -109,19 +109,22 @@ export const trackPixelEventWithUTM = (
     return;
   }
   
-  // CRITICAL: Only allow tracking with our specific pixel ID
-  const ALLOWED_PIXEL_ID = '1423013825182147';
-  if ((window as any)._PIXEL_EMERGENCY_LOCKED) {
-    console.log('✅ PIXEL: Emergency lock detected - pixel is secured');
-  }
+  // NUCLEAR MODE: Use our hijacked pixel system
+  const actualFbq = (window as any)._actualFbq || (window as any).fbq;
   
-  if (!(window as any).fbq) {
-    console.error('❌ PIXEL: Facebook Pixel (fbq) not available - emergency cleanup may be needed');
+  if (!actualFbq) {
+    console.error('❌ PIXEL: No pixel function available - nuclear mode failed');
     return;
   }
+  
+  // Verify nuclear mode is active
+  if ((window as any).PIXEL_NUCLEAR_ACTIVE) {
+    console.log('🚀 NUCLEAR: Pixel system confirmed active and secured');
+  } else {
+    console.warn('⚠️ NUCLEAR: Pixel system may not be fully secured');
+  }
 
-  // Add additional debugging to catch rogue pixels
-  console.log(`🔍 PIXEL: Attempting to track ${eventName} with allowed ID ${ALLOWED_PIXEL_ID}`);
+  console.log(`🔍 NUCLEAR PIXEL: Tracking ${eventName} via secured channel`);
 
   try {
     const utmData = getUTMData();
@@ -152,8 +155,8 @@ export const trackPixelEventWithUTM = (
     console.log(`🔥 PIXEL Value type:`, typeof enhancedEventData.value, '(must be number)');
     console.log(`🔥 PIXEL Currency:`, enhancedEventData.currency, '(must be GBP)');
 
-    // Fire the event
-    (window as any).fbq('track', eventName, enhancedEventData);
+    // Fire the event using nuclear-secured channel
+    actualFbq('track', eventName, enhancedEventData);
     console.log(`✅ PIXEL ${eventName} event sent successfully with eventID: ${String(eventId)}`);
     
   } catch (error) {
