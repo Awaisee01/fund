@@ -203,6 +203,9 @@ const NativeECO4Form = () => {
                   <FormControl>
                     <Input 
                       {...field} 
+                      id="fullName"
+                      name="fullName"
+                      autoComplete="name"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your full name"
                     />
@@ -222,6 +225,9 @@ const NativeECO4Form = () => {
                   <FormControl>
                     <Input 
                       {...field} 
+                      id="address"
+                      name="address"
+                      autoComplete="street-address"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your address"
                     />
@@ -241,6 +247,9 @@ const NativeECO4Form = () => {
                   <FormControl>
                     <Input 
                       {...field} 
+                      id="postCode"
+                      name="postCode"
+                      autoComplete="postal-code"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="G1 1AA"
                     />
@@ -266,7 +275,10 @@ const NativeECO4Form = () => {
                   <FormControl>
                     <Input 
                       {...field} 
+                      id="email"
+                      name="email"
                       type="email"
+                      autoComplete="email"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="your.email@example.com"
                     />
@@ -292,7 +304,10 @@ const NativeECO4Form = () => {
                   <FormControl>
                     <Input 
                       {...field} 
+                      id="phone"
+                      name="phone"
                       type="tel"
+                      autoComplete="tel"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="07xxx xxx xxx"
                     />
