@@ -20,12 +20,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Preload critical font for immediate text rendering -->
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" type="font/woff2" crossorigin>
+    <!-- Remove font preload to fix Lighthouse warnings about unused preloads -->
     
-    <!-- Load critical Google Fonts with async loading -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
+    <!-- Load only critical font weights with optimal loading strategy -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"></noscript>
     
     <!-- Preload only the most critical ECO4 hero image -->
     <link rel="preload" as="image" href="/lovable-uploads/200a5e09-4f99-4005-a06c-fd0075872cb2.png" fetchpriority="high">
@@ -198,8 +197,7 @@
     
     <div id="root"></div>
     
-    <!-- Load main app script with module preload for faster parsing -->
-    <link rel="modulepreload" href="/src/main.tsx">
+    <!-- Load main app script with proper module configuration -->
     <script type="module" src="/src/main.tsx"></script>
     
     <!-- Minimal navigation fallback - defer until after main content loads -->
