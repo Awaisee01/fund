@@ -42,18 +42,18 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
           <picture>
             <source 
               media="(max-width: 768px)" 
-              srcSet="/AerialTownMobile.webp"
+              srcSet="/lovable-uploads/efa76ce0-f28c-4307-93cc-12337acd5a34.png"
               width={768}
               height={500}
             />
             <source 
               media="(max-width: 1280px)" 
-              srcSet="/AerialTownTablet.webp"
+              srcSet="/lovable-uploads/add2d2b3-7eb5-4a31-aaf7-00c3bc2c2341.png"
               width={1280}
               height={600}
             />
             <img
-              src="/AerialTownDesktop.webp"
+              src="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png"
               alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
               className="w-full h-full object-cover mix-blend-multiply"
               loading="eager"
