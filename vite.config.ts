@@ -9,7 +9,14 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // Fix MIME type issues for TypeScript modules
+    middlewareMode: false,
+    headers: {
+      'Cache-Control': 'no-store'
+    }
   },
+  // Ensure proper MIME types for TypeScript/JSX files
+  assetsInclude: [],
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
