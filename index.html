@@ -20,8 +20,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Load fonts asynchronously to avoid render blocking -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Optimized font loading - load immediately to avoid preload warnings -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" media="print" onload="this.media='all'; this.onload=null;">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"></noscript>
     
     <!-- Preload hero image with highest priority for LCP optimization -->
@@ -121,8 +121,8 @@
       @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
     </style>
     
-    <!-- Load CSS asynchronously to avoid render blocking -->
-    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Load CSS with optimized strategy to avoid render blocking -->
+    <link rel="stylesheet" href="/src/index.css" media="print" onload="this.media='all'; this.onload=null;">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
     <!-- ✅ CLEAN PIXEL IMPLEMENTATION -->
@@ -189,6 +189,7 @@
       // Performance mark for critical rendering
       if ('performance' in window && 'mark' in performance) {
         performance.mark('critical-css-loaded');
+        console.log('✅ Performance Optimizations Step 3 Complete - Font and CSS loading optimized');
       }
     </script>
     
