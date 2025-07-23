@@ -129,59 +129,62 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- 🔍 DETECTIVE MODE: Track down the mystery pixel source -->
+    <!-- 🎯 FINAL SOLUTION: Work with Lovable's system, not against it -->
     <script>
-      console.log('🕵️ DETECTIVE: Starting pixel investigation...');
+      console.log('🎯 FINAL: Implementing coexistence with Lovable tracking...');
       
-      // Monitor ALL script additions to the page
-      const originalAppendChild = Node.prototype.appendChild;
-      const originalInsertBefore = Node.prototype.insertBefore;
+      // Allow Lovable's pixel to exist but ensure ours works properly
+      const OUR_PIXEL_ID = '1423013825182147';
+      const LOVABLE_PIXEL_ID = '9151671744940732'; // Lovable's platform pixel
       
-      Node.prototype.appendChild = function(child) {
-        if (child.tagName === 'SCRIPT' && child.src && child.src.includes('facebook')) {
-          console.log('🚨 DETECTIVE: Caught Facebook script being added!', {
-            src: child.src,
-            stack: new Error().stack
-          });
-        }
-        return originalAppendChild.call(this, child);
-      };
+      // Track our pixel state
+      let ourPixelInitialized = false;
+      let ourPageViewTracked = false;
       
-      Node.prototype.insertBefore = function(newNode, referenceNode) {
-        if (newNode.tagName === 'SCRIPT' && newNode.src && newNode.src.includes('facebook')) {
-          console.log('🚨 DETECTIVE: Caught Facebook script being inserted!', {
-            src: newNode.src,
-            stack: new Error().stack
-          });
-        }
-        return originalInsertBefore.call(this, newNode, referenceNode);
-      };
-      
-      // Monitor window.fbq calls
-      let fbqCallCount = 0;
+      // Override fbq to coordinate both pixels
       const originalFbq = window.fbq;
-      
       window.fbq = function() {
-        fbqCallCount++;
-        console.log(`🕵️ FBQ CALL #${fbqCallCount}:`, Array.from(arguments), {
-          stack: new Error().stack.split('\n').slice(1, 4)
-        });
+        const args = Array.from(arguments);
+        const command = args[0];
+        const pixelId = args[1];
         
-        // Block the mystery pixel ID
-        if (arguments[0] === 'init' && arguments[1] === '9151671744940732') {
-          console.log('🚫 BLOCKED MYSTERY PIXEL: 9151671744940732');
-          return;
+        // Handle init commands
+        if (command === 'init') {
+          if (pixelId === OUR_PIXEL_ID) {
+            if (ourPixelInitialized) {
+              console.log('✅ Our pixel already initialized, skipping duplicate');
+              return;
+            }
+            ourPixelInitialized = true;
+            console.log('🚀 FINAL: Our pixel initialization allowed:', pixelId);
+          } else if (pixelId === LOVABLE_PIXEL_ID) {
+            console.log('🔄 FINAL: Lovable pixel detected, allowing:', pixelId);
+          } else {
+            console.log('⚠️ FINAL: Unknown pixel:', pixelId);
+          }
         }
         
-        if (originalFbq) {
-          return originalFbq.apply(this, arguments);
+        // Handle PageView tracking
+        if (command === 'track' && args[1] === 'PageView') {
+          if (!ourPageViewTracked && ourPixelInitialized) {
+            ourPageViewTracked = true;
+            console.log('✅ FINAL: Our PageView tracked');
+          }
+        }
+        
+        // Log all tracking calls for transparency
+        console.log('📊 FINAL: fbq call:', args);
+        
+        // Execute the call
+        if (window._realFbq) {
+          return window._realFbq.apply(this, arguments);
         } else {
           window._fbqQueue = window._fbqQueue || [];
           window._fbqQueue.push(arguments);
         }
       };
       
-      // Initialize OUR pixel cleanly
+      // Load Facebook SDK
       !function(f,b,e,v,n,t,s)
       {if(f._realFbq)return;n=f._realFbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -191,34 +194,25 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // When loaded, initialize properly
+      // Initialize our pixel after a brief delay
       setTimeout(() => {
-        console.log('🚀 INITIALIZING: Our pixel 1423013825182147');
-        window._realFbq('init', '1423013825182147');
-        window._realFbq('track', 'PageView');
-        console.log('✅ SUCCESS: Our pixel initialized and PageView tracked');
+        console.log('🚀 FINAL: Initializing our pixel:', OUR_PIXEL_ID);
         
-        // Process any queued calls
+        // Process any queued calls first
         if (window._fbqQueue) {
-          console.log('🔄 PROCESSING: Queued fbq calls:', window._fbqQueue.length);
           window._fbqQueue.forEach(args => {
-            if (args[0] === 'init' && args[1] === '9151671744940732') {
-              console.log('🚫 SKIPPED: Mystery pixel in queue');
-              return;
-            }
             window._realFbq.apply(null, args);
           });
-          delete window._fbqQueue;
+          window._fbqQueue = [];
         }
-      }, 200);
-      
-      // Monitor for any dynamic script injections
-      setInterval(() => {
-        const scripts = document.querySelectorAll('script[src*="facebook"], script[src*="meta"]');
-        if (scripts.length > 1) {
-          console.log('🚨 ALERT: Multiple Facebook scripts detected!', scripts);
-        }
-      }, 1000);
+        
+        // Initialize our pixel
+        window._realFbq('init', OUR_PIXEL_ID);
+        window._realFbq('track', 'PageView');
+        
+        console.log('✅ FINAL: Our pixel setup complete - should show as single clean pixel in Meta Helper');
+        
+      }, 300);
     </script>
     
   </head>
