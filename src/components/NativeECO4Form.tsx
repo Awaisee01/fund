@@ -202,11 +202,11 @@ const NativeECO4Form = () => {
                   <FormLabel className="text-white text-xs">Full Name</FormLabel>
                   <FormControl>
                     <Input 
-                      {...field} 
                       name="fullName"
                       autoComplete="name"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your full name"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -223,11 +223,11 @@ const NativeECO4Form = () => {
                   <FormLabel className="text-white text-xs">Address</FormLabel>
                   <FormControl>
                     <Input 
-                      {...field} 
                       name="address"
                       autoComplete="street-address"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="Enter your address"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -244,11 +244,11 @@ const NativeECO4Form = () => {
                   <FormLabel className="text-white text-xs">Post Code</FormLabel>
                   <FormControl>
                     <Input 
-                      {...field} 
                       name="postCode"
                       autoComplete="postal-code"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="G1 1AA"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -271,12 +271,12 @@ const NativeECO4Form = () => {
                   <FormLabel className="text-white text-xs">Email</FormLabel>
                   <FormControl>
                     <Input 
-                      {...field} 
                       name="email"
                       type="email"
                       autoComplete="email"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="your.email@example.com"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
@@ -299,12 +299,12 @@ const NativeECO4Form = () => {
                   <FormLabel className="text-white text-xs">Phone</FormLabel>
                   <FormControl>
                     <Input 
-                      {...field} 
                       name="phone"
                       type="tel"
                       autoComplete="tel"
                       className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
                       placeholder="07xxx xxx xxx"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-red-300 text-xs" />
