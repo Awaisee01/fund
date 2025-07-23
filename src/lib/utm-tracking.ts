@@ -110,7 +110,13 @@ export const trackPixelEventWithUTM = (
   }
   
   if (!(window as any).fbq) {
-    console.error('❌ PIXEL: Facebook Pixel (fbq) not available');
+    console.error('❌ PIXEL: Facebook Pixel (fbq) not available - initialization may have failed');
+    return;
+  }
+  
+  // Check if pixel is locked (prevents duplicate initializations)
+  if ((window as any)._PIXEL_LOCKED && (window as any)._PIXEL_ID !== '1423013825182147') {
+    console.error('❌ PIXEL: Pixel is locked with wrong ID - refusing to track');
     return;
   }
 

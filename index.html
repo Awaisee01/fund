@@ -129,34 +129,41 @@
     <link rel="preload" as="style" href="/src/styles/critical-eco4.css" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/styles/critical-eco4.css"></noscript>
 
-    <!-- Clean Facebook Pixel Implementation - Prevent Duplicates -->
+    <!-- SINGLE Facebook Pixel Implementation - NO DUPLICATES ALLOWED -->
     <script>
-      // 🚨 CRITICAL: Prevent multiple pixel initialization that causes Pixel Helper warnings
-      if (!window.fbq && !window._fbq) {
-        console.log('🔥 PIXEL: Initializing Facebook Pixel for first time');
-        
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        
-        // Initialize pixel only once with correct ID
-        fbq('init', '1423013825182147');
-        console.log('✅ PIXEL: Initialized with ID 1423013825182147');
-        
-        // Track initial PageView only once
-        fbq('track', 'PageView');
-        console.log('✅ PIXEL: Initial PageView tracked');
-        
-        // Mark as initialized to prevent duplicates
-        window._pixelInitialized = true;
-      } else {
-        console.log('🚨 PIXEL: Already initialized, skipping duplicate initialization');
-      }
+      // 🚨 NUCLEAR OPTION: Complete pixel cleanup to prevent ALL duplicates
+      console.log('🧹 CLEANING: Starting pixel cleanup...');
+      
+      // Clear any existing pixel state
+      delete window.fbq;
+      delete window._fbq;
+      delete window._pixelInitialized;
+      delete window.pixelInitCount;
+      
+      // SINGLE PIXEL ID - ONLY USE THIS ONE
+      const CORRECT_PIXEL_ID = '1423013825182147';
+      
+      // Initialize Facebook Pixel SDK ONCE
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      
+      // Initialize pixel with SINGLE ID
+      fbq('init', CORRECT_PIXEL_ID);
+      console.log('✅ PIXEL: SINGLE initialization complete with ID:', CORRECT_PIXEL_ID);
+      
+      // Track initial PageView ONCE
+      fbq('track', 'PageView');
+      console.log('✅ PIXEL: Initial PageView tracked ONCE');
+      
+      // Lock down to prevent ANY future initializations
+      window._PIXEL_LOCKED = true;
+      window._PIXEL_ID = CORRECT_PIXEL_ID;
     </script>
     
   </head>
