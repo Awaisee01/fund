@@ -232,7 +232,22 @@
       });
       
       console.log('🚨 ULTIMATE: Conflict protection system active');
+      
+      // Add debugging to check if Meta Pixel Helper can detect our pixel
+      setTimeout(() => {
+        console.log('🔍 PIXEL DEBUG: window.fbq exists:', !!window.fbq);
+        console.log('🔍 PIXEL DEBUG: fbq queue length:', window.fbq ? window.fbq.queue?.length : 'N/A');
+        console.log('🔍 PIXEL DEBUG: _fbq exists:', !!window._fbq);
+        console.log('🔍 PIXEL DEBUG: Facebook scripts:', document.querySelectorAll('script[src*="facebook"]').length);
+        console.log('🔍 PIXEL DEBUG: Current fbq version:', window.fbq?.version);
+      }, 1000);
     </script>
+    
+    <!-- Facebook Pixel noscript fallback - Required for Meta Pixel Helper detection -->
+    <noscript>
+      <img height="1" width="1" style="display:none" 
+           src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"/>
+    </noscript>
   </head>
 
   <body class="loading">
@@ -304,10 +319,6 @@
       }
     </script>
     
-    <!-- Meta Pixel Noscript - DISABLED to prevent conflicts -->
-    <!-- noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"
-    /></noscript -->
     
     <div id="root"></div>
     
