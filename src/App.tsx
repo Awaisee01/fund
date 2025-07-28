@@ -12,7 +12,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
 const Footer = lazy(() => import("./components/Footer"));
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
-const SEOStructuredData = lazy(() => import("./components/SEOStructuredData"));
+const StructuredData = lazy(() => import("./components/StructuredData"));
 // Removed FacebookPixelPageView - PageView tracking handled in index.html
 
 // Code-split all pages for better performance
@@ -63,8 +63,7 @@ const App = () => {
               <Suspense fallback={<ComponentSkeleton />}>
                 <AnalyticsTracker />
                 <ScrollToTop />
-                <SEOStructuredData />
-                {/* Removed FacebookPixelPageView to prevent duplicate tracking */}
+                <StructuredData />
               </Suspense>
               
               <main className="flex-1">

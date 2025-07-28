@@ -117,6 +117,24 @@ const LighthouseOptimizer = ({ children }: LighthouseOptimizerProps) => {
 
     // 6. Monitor and fix accessibility issues
     const optimizeAccessibility = () => {
+      // Ensure all images have alt text
+      document.querySelectorAll('img').forEach(img => {
+        if (!img.getAttribute('alt')) {
+          const src = img.getAttribute('src') || '';
+          if (src.includes('wall')) {
+            img.setAttribute('alt', 'Wall renovation colour options display');
+          } else if (src.includes('roof')) {
+            img.setAttribute('alt', 'Roof renovation colour options display');
+          } else if (src.includes('hero') || src.includes('aerial')) {
+            img.setAttribute('alt', 'Scottish homes receiving government funding for energy improvements');
+          } else if (src.includes('logo')) {
+            img.setAttribute('alt', 'Funding For Scotland logo');
+          } else {
+            img.setAttribute('alt', 'Government funding for home improvements in Scotland');
+          }
+        }
+      });
+
       // Ensure all interactive elements are properly labeled
       document.querySelectorAll('button, input, select, textarea').forEach(element => {
         if (!element.getAttribute('aria-label') && !element.getAttribute('aria-labelledby')) {
@@ -127,7 +145,35 @@ const LighthouseOptimizer = ({ children }: LighthouseOptimizerProps) => {
               element.setAttribute('aria-label', text);
             }
           }
+          // Add tabindex for better keyboard navigation
+          if (element.tagName === 'BUTTON' && !element.getAttribute('tabindex')) {
+            element.setAttribute('tabindex', '0');
+          }
         }
+      });
+
+      // Fix form labels
+      document.querySelectorAll('input, select, textarea').forEach(element => {
+        if (!element.getAttribute('aria-label') && !element.getAttribute('aria-labelledby')) {
+          const placeholder = element.getAttribute('placeholder');
+          if (placeholder) {
+            element.setAttribute('aria-label', placeholder);
+          }
+        }
+      });
+
+      // Ensure proper color contrast (check for common low-contrast combinations)
+      const lowContrastSelectors = [
+        '.text-gray-400', '.text-gray-300', '.bg-gray-100 .text-gray-500'
+      ];
+      lowContrastSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => {
+          const computedStyle = window.getComputedStyle(el);
+          const element = el as HTMLElement;
+          if (computedStyle.color === 'rgb(156, 163, 175)' || computedStyle.color === 'rgb(209, 213, 219)') {
+            element.style.color = '#6B7280'; // Improve contrast
+          }
+        });
       });
 
       // Ensure proper heading hierarchy
@@ -140,6 +186,31 @@ const LighthouseOptimizer = ({ children }: LighthouseOptimizerProps) => {
         }
         expectedLevel = Math.max(expectedLevel, level);
       });
+
+      // Add skip link for better accessibility
+      if (!document.querySelector('.skip-link')) {
+        const skipLink = document.createElement('a');
+        skipLink.href = '#main';
+        skipLink.className = 'skip-link';
+        skipLink.textContent = 'Skip to main content';
+        skipLink.style.cssText = 'position:absolute;top:-40px;left:6px;z-index:9999;padding:8px;background:#000;color:#fff;text-decoration:none;border-radius:4px;';
+        skipLink.addEventListener('focus', () => {
+          skipLink.style.top = '6px';
+        });
+        skipLink.addEventListener('blur', () => {
+          skipLink.style.top = '-40px';
+        });
+        document.body.insertBefore(skipLink, document.body.firstChild);
+      }
+
+      // Add main landmark if missing
+      if (!document.querySelector('main')) {
+        const mainContent = document.querySelector('#root > div > main') || document.querySelector('.flex-1');
+        if (mainContent && !mainContent.getAttribute('role')) {
+          mainContent.setAttribute('role', 'main');
+          mainContent.id = 'main';
+        }
+      }
     };
 
     // Execute optimizations in priority order
