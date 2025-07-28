@@ -53,8 +53,6 @@ const ComponentSkeleton = () => (
 );
 
 const App = () => {
-  console.log('🎯 App component starting...');
-  console.log('🎯 App component rendering...');
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
@@ -101,5 +99,4 @@ const App = () => {
   );
 };
 
-console.log('✅ App component defined');
 export default App;

@@ -1,20 +1,13 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx,js,jsx,html}",
-  ],
-  safelist: [
-    // Keep essential utility classes
-    'grid-cols-1', 'grid-cols-2', 'lg:grid-cols-2',
-    'text-white', 'text-blue-100', 'text-blue-50',
-    'bg-white/10', 'bg-white/20', 'border-white/20',
-    'hover:bg-white/20', 'hover:scale-105'
-  ],
+	darkMode: ["class"],
+	content: [
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}",
+	],
 	prefix: "",
 	theme: {
 		container: {

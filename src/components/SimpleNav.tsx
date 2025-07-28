@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const SimpleNav = () => {
-  console.log('🧭 SimpleNav component rendering...');
   const [isOpen, setIsOpen] = useState(false);
   const [showMobile, setShowMobile] = useState(false);
   const location = useLocation();

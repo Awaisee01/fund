@@ -1,7 +1,7 @@
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import TestApp from "./TestApp";
+import App from "./App";
 import UltimatePerformanceOptimizer from "./components/UltimatePerformanceOptimizer";
 import "./lib/console-override";
 import "./index.css";
@@ -19,14 +19,12 @@ if (!rootElement) {
 const root = createRoot(rootElement);
 
 
-console.log('🚀 Starting app render...');
-
 root.render(
   <StrictMode>
-    <TestApp />
+    <UltimatePerformanceOptimizer>
+      <App />
+    </UltimatePerformanceOptimizer>
   </StrictMode>
 );
-
-console.log('✅ App render initiated');
 
 
