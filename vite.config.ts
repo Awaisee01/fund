@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => ({
     // Enhanced build config for optimal performance
     sourcemap: false,
     minify: 'esbuild',
-    target: ['es2020'],
+    target: ['es2022', 'edge88', 'firefox88', 'chrome88', 'safari14'], // Modern browsers only
     chunkSizeWarningLimit: 1500,
     cssCodeSplit: true,
     assetsInlineLimit: 4096, // Inline small assets
@@ -63,6 +63,11 @@ export default defineConfig(({ mode }) => ({
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js'
       }
+    },
+    // Remove polyfills and legacy transformations
+    polyfillModulePreload: false,
+    modulePreload: {
+      polyfill: false
     }
   },
   // Enhanced dependency optimization
