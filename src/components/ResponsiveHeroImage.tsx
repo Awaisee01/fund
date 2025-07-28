@@ -4,9 +4,11 @@ interface ResponsiveHeroImageProps {
 }
 
 const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
+  console.log('🖼️ ResponsiveHeroImage rendering...');
+  console.log('🖼️ About to render picture element...');
   return (
     <picture className={className}>
-      {/* Desktop WebP */}
+      {/* WebP - Modern format */}
       <source 
         media="(min-width: 1200px)" 
         srcSet="/lovable-uploads/hero-desktop.webp" 
@@ -14,8 +16,6 @@ const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
         width={1920}
         height={1080}
       />
-      
-      {/* Tablet WebP */}
       <source 
         media="(min-width: 768px)" 
         srcSet="/lovable-uploads/hero-tablet.webp" 
@@ -23,8 +23,6 @@ const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
         width={1024}
         height={768}
       />
-      
-      {/* Mobile WebP */}
       <source 
         media="(max-width: 767px)" 
         srcSet="/lovable-uploads/hero-mobile.webp" 
@@ -43,6 +41,8 @@ const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
         decoding="async"
         width={1920}
         height={1080}
+        sizes="(min-width: 1200px) 1920px, (min-width: 768px) 1024px, 100vw"
+        srcSet="/lovable-uploads/hero-desktop.webp 1920w, /lovable-uploads/hero-tablet.webp 1024w, /lovable-uploads/hero-mobile.webp 768w"
       />
     </picture>
   );

@@ -22,6 +22,8 @@ const OptimizedHero = ({
   ctaLink = "/contact",
   backgroundImage 
 }: OptimizedHeroProps) => {
+  console.log('🦸 OptimizedHero component rendering...', { title, benefits: benefits.length });
+  console.log('🖼️ About to render OptimizedHero JSX...');
   return (
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>

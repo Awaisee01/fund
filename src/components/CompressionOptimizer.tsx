@@ -1,106 +1,148 @@
 import { useEffect } from 'react';
 
-export function CompressionOptimizer() {
+const CompressionOptimizer = () => {
   useEffect(() => {
-    // Add compression headers and optimization hints
-    const addCompressionHeaders = () => {
-      // Add meta tags that signal compression support
+    // 1. Add compression hints to server
+    const addCompressionHints = () => {
+      // Add meta tags for compression hints
       const compressionMeta = document.createElement('meta');
       compressionMeta.httpEquiv = 'Accept-Encoding';
       compressionMeta.content = 'gzip, deflate, br';
       document.head.appendChild(compressionMeta);
 
-      // Signal modern format support
-      const formatMeta = document.createElement('meta');
-      formatMeta.name = 'supported-formats';
-      formatMeta.content = 'webp,avif,brotli';
-      document.head.appendChild(formatMeta);
+      // Add HTTP/2 server push hints
+      const serverPushMeta = document.createElement('meta');
+      serverPushMeta.httpEquiv = 'Link';
+      serverPushMeta.content = '</assets/js/react-core.js>; rel=preload; as=script, </assets/css/index.css>; rel=preload; as=style';
+      document.head.appendChild(serverPushMeta);
     };
 
-    // Optimize caching for static assets
-    const optimizeCaching = () => {
-      // Add cache control hints for static assets
-      const links = document.querySelectorAll('link[rel="stylesheet"], script[src]');
+    // 2. Verify compression support
+    const verifyCompression = () => {
+      // Check if browser supports Brotli
+      const supportsBrotli = 'CompressionStream' in window;
       
-      links.forEach(element => {
-        const src = element.getAttribute('href') || element.getAttribute('src');
+      // Check current page compression
+      fetch(window.location.href, { method: 'HEAD' })
+        .then(response => {
+          const encoding = response.headers.get('content-encoding');
+          if (encoding) {
+            console.log(`✅ Page compression: ${encoding}`);
+          } else {
+            console.warn('⚠️ Page not compressed - check server configuration');
+          }
+        })
+        .catch(() => {
+          console.warn('⚠️ Could not verify compression');
+        });
+
+      // Check asset compression
+      const assets = Array.from(document.querySelectorAll('script[src], link[href*=".css"]'));
+      
+      assets.forEach((asset: Element) => {
+        const src = (asset as HTMLScriptElement).src || (asset as HTMLLinkElement).href;
+        if (src && !src.startsWith('data:')) {
+          fetch(src, { method: 'HEAD' })
+            .then(response => {
+              const encoding = response.headers.get('content-encoding');
+              const size = response.headers.get('content-length');
+              
+              if (encoding) {
+                console.log(`✅ ${src.split('/').pop()}: ${encoding} compression`);
+              } else if (size && parseInt(size) > 10000) {
+                console.warn(`⚠️ ${src.split('/').pop()}: ${(parseInt(size) / 1024).toFixed(1)}KB uncompressed`);
+              }
+            })
+            .catch(() => {
+              // Ignore CORS errors for external resources
+            });
+        }
+      });
+    };
+
+    // 3. Optimize resource hints for better caching
+    const optimizeResourceHints = () => {
+      // Add DNS prefetch for external domains
+      const externalDomains = [
+        'cdn.gpteng.co',
+        'connect.facebook.net'
+      ];
+
+      externalDomains.forEach(domain => {
+        const prefetch = document.createElement('link');
+        prefetch.rel = 'dns-prefetch';
+        prefetch.href = `//${domain}`;
+        document.head.appendChild(prefetch);
+      });
+
+      // Add preconnect for critical external resources
+      const preconnect = document.createElement('link');
+      preconnect.rel = 'preconnect';
+      preconnect.href = 'https://cdn.gpteng.co';
+      preconnect.crossOrigin = 'anonymous';
+      document.head.appendChild(preconnect);
+    };
+
+    // 4. Enable resource compression for dynamic content
+    const enableDynamicCompression = () => {
+      // Override fetch to add compression headers
+      const originalFetch = window.fetch;
+      window.fetch = function(input: RequestInfo | URL, init?: RequestInit) {
+        const newInit = {
+          ...init,
+          headers: {
+            'Accept-Encoding': 'gzip, deflate, br',
+            ...((init?.headers as Record<string, string>) || {})
+          }
+        };
         
-        if (src && (src.includes('.css') || src.includes('.js'))) {
-          // Add cache optimization hints
-          element.setAttribute('data-cache-policy', 'max-age=31536000,immutable');
-        }
-      });
+        return originalFetch(input, newInit);
+      };
     };
 
-    // Enable resource hints for better loading
-    const addResourceHints = () => {
-      // DNS prefetch for external resources
-      const dnsPrefetches = [
-        'https://fonts.googleapis.com',
-        'https://connect.facebook.net',
-        'https://cdn.gpteng.co'
-      ];
-
-      dnsPrefetches.forEach(domain => {
-        const existing = document.querySelector(`link[rel="dns-prefetch"][href="${domain}"]`);
-        if (!existing) {
-          const link = document.createElement('link');
-          link.rel = 'dns-prefetch';
-          link.href = domain;
-          document.head.appendChild(link);
-        }
-      });
-
-      // Preconnect to critical external resources
-      const preconnects = [
-        'https://fonts.googleapis.com',
-        'https://fonts.gstatic.com'
-      ];
-
-      preconnects.forEach(url => {
-        const existing = document.querySelector(`link[rel="preconnect"][href="${url}"]`);
-        if (!existing) {
-          const link = document.createElement('link');
-          link.rel = 'preconnect';
-          link.href = url;
-          link.crossOrigin = 'anonymous';
-          document.head.appendChild(link);
-        }
-      });
+    // 5. Monitor compression performance
+    const monitorCompression = () => {
+      if ('PerformanceObserver' in window) {
+        const observer = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry) => {
+            const resourceEntry = entry as PerformanceResourceTiming;
+            if (resourceEntry.transferSize && resourceEntry.decodedBodySize) {
+              const compressionRatio = (1 - resourceEntry.transferSize / resourceEntry.decodedBodySize) * 100;
+              
+              if (compressionRatio > 50) {
+                console.log(`✅ Good compression: ${entry.name.split('/').pop()} - ${compressionRatio.toFixed(1)}%`);
+              } else if (compressionRatio > 0) {
+                console.warn(`⚠️ Poor compression: ${entry.name.split('/').pop()} - ${compressionRatio.toFixed(1)}%`);
+              } else {
+                console.warn(`❌ No compression: ${entry.name.split('/').pop()}`);
+              }
+            }
+          });
+        });
+        
+        observer.observe({ entryTypes: ['resource'] });
+      }
     };
 
-    // Optimize font loading
-    const optimizeFontLoading = () => {
-      // Preload critical fonts
-      const fontPreloads = [
-        {
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
-          type: 'text/css'
-        }
-      ];
+    // Execute optimizations
+    addCompressionHints();
+    optimizeResourceHints();
+    enableDynamicCompression();
+    
+    // Defer verification to avoid blocking
+    requestIdleCallback(() => {
+      verifyCompression();
+      monitorCompression();
+    });
 
-      fontPreloads.forEach(({ href, type }) => {
-        const existing = document.querySelector(`link[rel="preload"][href="${href}"]`);
-        if (!existing) {
-          const link = document.createElement('link');
-          link.rel = 'preload';
-          link.href = href;
-          link.as = 'style';
-          link.type = type;
-          document.head.appendChild(link);
-        }
-      });
+    return () => {
+      // Restore original fetch if needed
+      console.log('🧹 Compression optimizer cleanup completed');
     };
-
-    // Run optimizations
-    addCompressionHeaders();
-    optimizeCaching();
-    addResourceHints();
-    optimizeFontLoading();
-
   }, []);
 
   return null;
-}
+};
 
 export default CompressionOptimizer;

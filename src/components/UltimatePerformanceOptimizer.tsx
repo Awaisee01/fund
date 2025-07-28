@@ -1,200 +1,178 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+import CriticalCSSOptimizer from './CriticalCSSOptimizer';
+import ComprehensiveScriptOptimizer from './ComprehensiveScriptOptimizer';
+import AdvancedImageOptimizer from './AdvancedImageOptimizer';
+import LinkAccessibilityOptimizer from './LinkAccessibilityOptimizer';
+import CompressionOptimizer from './CompressionOptimizer';
+import ModernBrowserOptimizer from './ModernBrowserOptimizer';
 
 interface UltimatePerformanceOptimizerProps {
   children: React.ReactNode;
 }
 
-export function UltimatePerformanceOptimizer({ children }: UltimatePerformanceOptimizerProps) {
-  const optimized = useRef(false);
-
+const UltimatePerformanceOptimizer = ({ children }: UltimatePerformanceOptimizerProps) => {
   useEffect(() => {
-    if (optimized.current) return;
-    optimized.current = true;
+    // Performance monitoring
+    const monitorPagePerformance = () => {
+      if ('PerformanceObserver' in window) {
+        // Monitor LCP (Largest Contentful Paint)
+        const lcpObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const lastEntry = entries[entries.length - 1];
+          const lcp = lastEntry.startTime;
+          
+          if (lcp > 2500) {
+            console.warn(`⚠️ LCP is slow: ${lcp.toFixed(2)}ms (target: <2500ms)`);
+          } else {
+            console.log(`✅ LCP is good: ${lcp.toFixed(2)}ms`);
+          }
+        });
+        
+        // Monitor FID (First Input Delay)
+        const fidObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry) => {
+            const eventEntry = entry as PerformanceEventTiming;
+            const fid = eventEntry.processingStart - eventEntry.startTime;
+            if (fid > 100) {
+              console.warn(`⚠️ FID is slow: ${fid.toFixed(2)}ms (target: <100ms)`);
+            } else {
+              console.log(`✅ FID is good: ${fid.toFixed(2)}ms`);
+            }
+          });
+        });
+        
+        // Monitor CLS (Cumulative Layout Shift)
+        const clsObserver = new PerformanceObserver((list) => {
+          let clsValue = 0;
+          const entries = list.getEntries();
+          
+          entries.forEach((entry) => {
+            if (!(entry as any).hadRecentInput) {
+              clsValue += (entry as any).value;
+            }
+          });
+          
+          if (clsValue > 0.1) {
+            console.warn(`⚠️ CLS is high: ${clsValue.toFixed(3)} (target: <0.1)`);
+          } else {
+            console.log(`✅ CLS is good: ${clsValue.toFixed(3)}`);
+          }
+        });
+        
+        try {
+          lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+          fidObserver.observe({ entryTypes: ['first-input'] });
+          clsObserver.observe({ entryTypes: ['layout-shift'] });
+        } catch (error) {
+          console.warn('Performance monitoring not fully supported:', error);
+        }
+      }
+    };
 
-    // 1. Critical CSS Inlining & Preloading
-    const optimizeCriticalCSS = () => {
-      // Preload critical images
-      const criticalImages = [
-        '/lovable-uploads/hero-desktop.webp',
-        '/assets/logo-optimized.webp',
-        '/assets/footer-logo-optimized.webp'
+    // Optimize font loading
+    const optimizeFontLoading = () => {
+      // Preload critical fonts
+      const fontPreloads = [
+        { family: 'Inter', weight: '400', display: 'swap' },
+        { family: 'Inter', weight: '500', display: 'swap' },
+        { family: 'Inter', weight: '600', display: 'swap' }
       ];
-
-      criticalImages.forEach(src => {
+      
+      fontPreloads.forEach(font => {
         const link = document.createElement('link');
         link.rel = 'preload';
-        link.as = 'image';
-        link.href = src;
-        link.fetchPriority = 'high';
+        link.as = 'font';
+        link.type = 'font/woff2';
+        link.crossOrigin = 'anonymous';
+        link.href = `https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2`;
         document.head.appendChild(link);
       });
-
-      // Preload critical routes
-      const criticalRoutes = ['/eco4', '/solar', '/gas-boilers', '/home-improvements'];
-      criticalRoutes.forEach(route => {
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.href = route;
-        document.head.appendChild(link);
-      });
-    };
-
-    // 2. Lazy Load Non-Critical Scripts
-    const optimizeScriptLoading = () => {
-      // Defer Facebook Pixel
-      const existingFB = document.querySelector('script[src*="fbevents.js"]');
-      if (existingFB) {
-        existingFB.setAttribute('async', '');
-        existingFB.setAttribute('defer', '');
-      }
-
-      // Lazy load Lovable script
-      setTimeout(() => {
-        const lovableScript = document.createElement('script');
-        lovableScript.src = 'https://cdn.gpteng.co/lovable.js';
-        lovableScript.async = true;
-        lovableScript.setAttribute('cache-control', 'public, max-age=31536000, immutable');
-        document.head.appendChild(lovableScript);
-      }, 2000);
-    };
-
-    // 3. Image Optimization
-    const optimizeImages = () => {
-      // Convert all images to use modern formats with fallbacks
-      const images = document.querySelectorAll('img[src*=".png"], img[src*=".jpg"], img[src*=".jpeg"]');
-      images.forEach((img: HTMLImageElement) => {
-        const originalSrc = img.src;
-        const webpSrc = originalSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
-        const avifSrc = originalSrc.replace(/\.(png|jpg|jpeg)$/i, '.avif');
-
-        // Create picture element for modern format support
-        const picture = document.createElement('picture');
+      
+      // Use Font Loading API if available
+      if ('fonts' in document) {
+        const fontLoadPromises = fontPreloads.map(font => 
+          (document as any).fonts.load(`${font.weight} 1em ${font.family}`)
+        );
         
-        // AVIF source
-        const avifSource = document.createElement('source');
-        avifSource.srcset = avifSrc;
-        avifSource.type = 'image/avif';
-        picture.appendChild(avifSource);
+        Promise.all(fontLoadPromises).then(() => {
+          document.documentElement.classList.add('fonts-loaded');
+          console.log('✅ Fonts loaded successfully');
+        }).catch((error) => {
+          console.warn('⚠️ Font loading failed:', error);
+        });
+      }
+    };
 
-        // WebP source
-        const webpSource = document.createElement('source');
-        webpSource.srcset = webpSrc;
-        webpSource.type = 'image/webp';
-        picture.appendChild(webpSource);
-
-        // Fallback img
-        const fallbackImg = img.cloneNode(true) as HTMLImageElement;
-        picture.appendChild(fallbackImg);
-
-        // Replace original img with picture
-        img.parentNode?.replaceChild(picture, img);
-      });
-
-      // Add loading attributes
-      document.querySelectorAll('img').forEach((img: HTMLImageElement) => {
-        if (!img.loading) {
-          const rect = img.getBoundingClientRect();
-          if (rect.top > window.innerHeight) {
-            img.loading = 'lazy';
-            img.decoding = 'async';
-          } else {
-            img.fetchPriority = 'high';
-            img.loading = 'eager';
-          }
+    // Remove unused CSS
+    const removeUnusedCSS = () => {
+      const unusedSelectors = [
+        '.unused-class',
+        '.debug-mode',
+        '.development-only'
+      ];
+      
+      const stylesheets = Array.from(document.styleSheets);
+      stylesheets.forEach(stylesheet => {
+        try {
+          const rules = Array.from(stylesheet.cssRules || []);
+          rules.forEach((rule, index) => {
+            if (rule.type === CSSRule.STYLE_RULE) {
+              const styleRule = rule as CSSStyleRule;
+              unusedSelectors.forEach(selector => {
+                if (styleRule.selectorText && styleRule.selectorText.includes(selector)) {
+                  stylesheet.deleteRule(index);
+                }
+              });
+            }
+          });
+        } catch (error) {
+          // Ignore CORS errors for external stylesheets
         }
       });
     };
 
-    // 4. Compression Headers (Client-side optimization signals)
-    const enableCompression = () => {
-      // Add meta tags for server hints
-      const compressionMeta = document.createElement('meta');
-      compressionMeta.httpEquiv = 'Accept-Encoding';
-      compressionMeta.content = 'gzip, deflate, br';
-      document.head.appendChild(compressionMeta);
-
-      // Signal modern browser capabilities
-      const modernMeta = document.createElement('meta');
-      modernMeta.name = 'supports';
-      modernMeta.content = 'webp avif brotli gzip es2020';
-      document.head.appendChild(modernMeta);
-    };
-
-    // 5. Service Worker for Caching
-    const registerServiceWorker = () => {
+    // Enable service worker for better caching
+    const enableServiceWorker = () => {
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js', {
-          scope: '/',
-          updateViaCache: 'imports'
-        }).catch(() => {
-          // Silent fail for service worker registration
-        });
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('✅ Service Worker registered:', registration);
+          })
+          .catch(error => {
+            console.warn('⚠️ Service Worker registration failed:', error);
+          });
       }
     };
 
-    // 6. Remove Unused CSS (Runtime Purging)
-    const purgeUnusedCSS = () => {
-      // Get all used classes in the DOM
-      const usedClasses = new Set<string>();
-      document.querySelectorAll('*').forEach(el => {
-        el.classList.forEach(cls => usedClasses.add(cls));
-      });
-
-      // This would be better handled at build time, but we can optimize runtime
-      // by removing unused CSS rules (simplified version)
-      try {
-        const stylesheets = Array.from(document.styleSheets);
-        stylesheets.forEach(sheet => {
-          if (sheet.href && sheet.href.includes('tailwind')) {
-            // Mark for potential optimization
-            const ownerNode = sheet.ownerNode as HTMLElement;
-            if (ownerNode && 'setAttribute' in ownerNode) {
-              ownerNode.setAttribute('data-optimizable', 'true');
-            }
-          }
-        });
-      } catch (e) {
-        // Security restrictions prevent modifying cross-origin stylesheets
-      }
-    };
-
-    // 7. Font Loading Optimization
-    const optimizeFonts = () => {
-      if ('fonts' in document) {
-        const fontPromises = [
-          (document as any).fonts.load('400 16px Inter'),
-          (document as any).fonts.load('600 16px Inter'),
-          (document as any).fonts.load('700 16px Inter')
-        ];
-
-        Promise.all(fontPromises).then(() => {
-          document.documentElement.classList.add('fonts-loaded');
-        });
-      }
-    };
-
-    // Execute optimizations with proper timing
-    optimizeCriticalCSS();
-    
-    // Defer non-critical optimizations
+    // Execute optimizations
     requestIdleCallback(() => {
-      optimizeScriptLoading();
-      enableCompression();
-      registerServiceWorker();
-      purgeUnusedCSS();
-      optimizeFonts();
+      monitorPagePerformance();
+      optimizeFontLoading();
+      removeUnusedCSS();
+      enableServiceWorker();
     });
 
-    // Defer image optimization until after LCP
-    setTimeout(() => {
-      requestIdleCallback(() => {
-        optimizeImages();
-      });
-    }, 1000);
+    // Log optimization completion
+    console.log('🚀 Ultimate Performance Optimizer activated');
 
+    return () => {
+      console.log('🧹 Ultimate Performance Optimizer cleanup completed');
+    };
   }, []);
 
-  return <>{children}</>;
-}
+  return (
+    <>
+      <CriticalCSSOptimizer />
+      <ModernBrowserOptimizer />
+      <AdvancedImageOptimizer />
+      <LinkAccessibilityOptimizer />
+      <CompressionOptimizer />
+      <ComprehensiveScriptOptimizer>
+        {children}
+      </ComprehensiveScriptOptimizer>
+    </>
+  );
+};
 
 export default UltimatePerformanceOptimizer;
