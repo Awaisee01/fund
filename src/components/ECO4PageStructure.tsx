@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { Home, Thermometer, Heart, Shield } from 'lucide-react';
 
 // Lazy load heavy components
@@ -101,6 +101,3 @@ export const ProcessInstallationSection = () => (
     </div>
   </section>
 );
-
-// Import at the top
-import { lazy } from 'react';
