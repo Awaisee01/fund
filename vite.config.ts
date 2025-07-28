@@ -9,7 +9,6 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    // Fix MIME type issues for TypeScript modules
     middlewareMode: false,
     headers: {
       'Cache-Control': 'no-store'
@@ -20,7 +19,6 @@ export default defineConfig(({ mode }) => ({
       'Content-Type': 'application/javascript; charset=utf-8'
     }
   },
-  // Ensure proper MIME types for TypeScript/JSX files
   assetsInclude: [],
   plugins: [
     react(),
@@ -32,22 +30,43 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimized build config for performance
-    sourcemap: false,
-    minify: 'esbuild',
+    // Optimize for modern browsers and aggressive minification
     target: ['es2020'],
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        unused: true,
+        dead_code: true
+      },
+      mangle: {
+        properties: {
+          regex: /^_/
+        }
+      }
+    },
+    sourcemap: false,
     chunkSizeWarningLimit: 2000,
     cssCodeSplit: true,
     rollupOptions: {
       output: {
+        // More aggressive chunk splitting for better caching
         manualChunks: {
           'react-core': ['react', 'react-dom'],
-          'supabase': ['@supabase/supabase-js'],
-          'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
           'routing': ['react-router-dom'],
-          'forms': ['react-hook-form', '@hookform/resolvers', 'zod']
+          'ui-components': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-select',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-dropdown-menu'
+          ],
+          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'utils': ['lodash', 'date-fns', 'clsx'],
+          'supabase': ['@supabase/supabase-js'],
+          'admin': ['papaparse', 'qrcode', 'recharts']
         },
-        // Optimize asset naming for better caching
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return `assets/[name]-[hash][extname]`;
           const info = assetInfo.name.split('.');
@@ -62,8 +81,14 @@ export default defineConfig(({ mode }) => ({
       }
     }
   },
-  // Basic dependency optimization
+  // Optimize dependencies for faster loading
   optimizeDeps: {
     include: ['react', 'react-dom'],
+    exclude: [
+      '@radix-ui/react-icons',
+      'papaparse',
+      'qrcode',
+      'recharts'
+    ]
   },
 }));

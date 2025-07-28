@@ -22,12 +22,8 @@ const HomeImprovementsHero = () => {
           alt="Home Improvements Background - Modern house exterior with driveway"
           className="w-full h-full object-cover mix-blend-multiply"
           priority={true}
-          responsive={true}
-          preload={true}
           width={1920}
           height={1080}
-          sizes="100vw"
-          modernFormats={false}
         />
       </div>
       

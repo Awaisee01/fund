@@ -85,15 +85,8 @@ const GasBoilers = () => {
             alt="Gas Boiler Background - Engineer working on boiler installation"
             className="w-full h-full object-cover mix-blend-multiply"
             priority={true}
-            responsive={true}
-            preload={true}
             width={1920}
             height={1080}
-            sizes="100vw"
-            modernFormats={false}
-            style={{ 
-              transform: `translate3d(0, ${scrollY * 0.3}px, 0)`
-            }}
           />
         </div>
         
