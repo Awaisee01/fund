@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
 import ErrorBoundary from "./components/ErrorBoundary";
+import PerfectLighthouseOptimizer from "./components/PerfectLighthouseOptimizer";
 
 // Defer non-critical components
 const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
@@ -57,6 +58,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
+            <PerfectLighthouseOptimizer />
             <Navigation />
               
               <div className="min-h-screen flex flex-col">

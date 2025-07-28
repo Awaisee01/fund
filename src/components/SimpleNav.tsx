@@ -36,73 +36,45 @@ const SimpleNav = () => {
   };
 
   return (
-    <nav style={{
-      backgroundColor: '#ffffff',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50,
-      width: '100%'
-    }}>
-      <div style={{ 
-        maxWidth: '1200px', 
-        margin: '0 auto', 
-        padding: '0 1rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: '64px'
-      }}>
-        {/* Logo - Always Visible */}
-        <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-          <img 
-            src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
-            alt="Funding For Scotland - Home Energy Efficiency Grants"
-            width="160"
-            height="40"
-            className="h-10 w-auto max-w-[160px] object-contain"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
-        </Link>
+    <nav 
+      className="bg-white shadow-lg sticky top-0 z-50"
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          {/* Logo - Always Visible */}
+          <Link to="/" className="flex items-center hover:opacity-90 transition-all duration-200">
+            <img 
+              src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
+              alt="Funding For Scotland - Government grants for energy efficiency"
+              width="180"
+              height="48"
+              className="h-10 sm:h-12 lg:h-12 w-auto max-w-[180px] object-contain"
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
+            />
+          </Link>
 
         {/* DESKTOP MENU - Only show if NOT mobile */}
         {!showMobile && (
-          <div style={{ 
-            display: 'flex',
-            gap: '1rem',
-            alignItems: 'center'
-          }}>
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  textDecoration: 'none',
-                  fontWeight: '500',
-                  fontSize: '14px',
-                  backgroundColor: isActive(item.path) ? '#2563eb !important' : 'transparent',
-                  color: isActive(item.path) ? '#ffffff !important' : '#374151',
-                  transition: 'all 0.2s',
-                  border: isActive(item.path) ? '2px solid #2563eb' : 'none'
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive(item.path)) {
-                    e.currentTarget.style.backgroundColor = '#f3f4f6';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive(item.path)) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }
-                }}
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div className="hidden lg:block ml-10">
+            <div className="flex items-baseline space-x-2 xl:space-x-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`px-2 py-2 rounded-md text-sm font-medium text-center transition-colors ${
+                    isActive(item.path)
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
           </div>
         )}
 
@@ -110,83 +82,46 @@ const SimpleNav = () => {
         {showMobile && (
           <button
             onClick={() => setIsOpen(!isOpen)}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '8px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '32px',
-              height: '32px'
-            }}
-            aria-label="Toggle menu"
+            className="lg:hidden inline-flex items-center justify-center p-3 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 touch-manipulation"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
-            {/* Hamburger Lines */}
-            <div style={{
-              width: '20px',
-              height: '2px',
-              backgroundColor: '#374151',
-              margin: '2px 0',
-              transition: '0.3s'
-            }} />
-            <div style={{
-              width: '20px',
-              height: '2px',
-              backgroundColor: '#374151',
-              margin: '2px 0',
-              transition: '0.3s'
-            }} />
-            <div style={{
-              width: '20px',
-              height: '2px',
-              backgroundColor: '#374151',
-              margin: '2px 0',
-              transition: '0.3s'
-            }} />
+            <div className="w-6 h-6 flex flex-col justify-center items-center">
+              <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'}`} />
+              <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${isOpen ? 'opacity-0' : 'opacity-100'}`} />
+              <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'}`} />
+            </div>
           </button>
         )}
+        </div>
       </div>
 
       {/* MOBILE DROPDOWN MENU - Only show if mobile AND open */}
       {showMobile && isOpen && (
-        <div style={{
-          backgroundColor: '#ffffff',
-          borderTop: '1px solid #e5e7eb',
-          padding: '1rem',
-          position: 'absolute',
-          top: '64px',
-          left: 0,
-          right: 0,
-          zIndex: 49,
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%'
-        }}>
-          {navItems.map((item, index) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              style={{
-                display: 'block',
-                padding: '16px 8px',
-                textDecoration: 'none',
-                fontWeight: '500',
-                fontSize: '16px',
-                color: isActive(item.path) ? '#2563eb' : '#374151',
-                borderBottom: index !== navItems.length - 1 ? '1px solid #e5e7eb' : 'none',
-                textAlign: 'left',
-                width: '100%',
-                boxSizing: 'border-box'
-              }}
-            >
-              {item.name}
-            </Link>
-          ))}
+        <div 
+          id="mobile-menu"
+          className="lg:hidden border-t bg-white shadow-lg"
+          role="menu"
+          aria-orientation="vertical"
+        >
+          <div className="px-3 pt-2 pb-3 space-y-1">
+            {navItems.map((item, index) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => setIsOpen(false)}
+                className={`block px-3 py-4 text-base font-medium transition-colors ${
+                  isActive(item.path)
+                    ? 'text-blue-600 bg-blue-50 border-l-4 border-blue-600'
+                    : 'text-gray-700 hover:bg-gray-50'
+                } ${index !== navItems.length - 1 ? 'border-b border-gray-100' : ''}`}
+                role="menuitem"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </nav>
