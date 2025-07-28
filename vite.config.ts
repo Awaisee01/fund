@@ -43,12 +43,7 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'prompt',
       workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-        globIgnores: [
-          '**/lovable-uploads/**/*.{png,jpg,jpeg}', // Exclude large images
-          '**/node_modules/**/*'
-        ],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -58,17 +53,6 @@ export default defineConfig(({ mode }) => ({
               expiration: {
                 maxEntries: 10,
                 maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              }
-            }
-          },
-          {
-            urlPattern: /\/lovable-uploads\/.*\.(webp|png|jpg|jpeg)$/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'images-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
               }
             }
           }
@@ -83,9 +67,9 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Enhanced build config for optimal performance
-    target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
     sourcemap: false,
     minify: 'esbuild',
+    target: ['es2020'],
     chunkSizeWarningLimit: 1500,
     cssCodeSplit: true,
     assetsInlineLimit: 4096, // Inline small assets

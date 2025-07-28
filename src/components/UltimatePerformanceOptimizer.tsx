@@ -4,7 +4,6 @@ import ComprehensiveScriptOptimizer from './ComprehensiveScriptOptimizer';
 import AdvancedImageOptimizer from './AdvancedImageOptimizer';
 import LinkAccessibilityOptimizer from './LinkAccessibilityOptimizer';
 import CompressionOptimizer from './CompressionOptimizer';
-import ModernBrowserOptimizer from './ModernBrowserOptimizer';
 
 interface UltimatePerformanceOptimizerProps {
   children: React.ReactNode;
@@ -164,7 +163,6 @@ const UltimatePerformanceOptimizer = ({ children }: UltimatePerformanceOptimizer
   return (
     <>
       <CriticalCSSOptimizer />
-      <ModernBrowserOptimizer />
       <AdvancedImageOptimizer />
       <LinkAccessibilityOptimizer />
       <CompressionOptimizer />

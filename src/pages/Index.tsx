@@ -1,5 +1,4 @@
 
-console.log('📄 Index page module loading...');
 import React, { useEffect } from 'react';
 import OptimizedHero from '@/components/OptimizedHero';
 import ServicesGrid from '@/components/ServicesGrid';
@@ -7,7 +6,6 @@ import TrustBadges from '@/components/TrustBadges';
 import CallToActionSection from '@/components/CallToActionSection';
 
 const Index = () => {
-  console.log('🏠 Index page component rendering...');
 
   useEffect(() => {
     console.log('Index page loaded');
