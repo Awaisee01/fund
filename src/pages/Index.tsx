@@ -1,15 +1,13 @@
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Hero from '@/components/Hero';
 import ServicesGrid from '@/components/ServicesGrid';
 import TrustBadges from '@/components/TrustBadges';
 import CallToActionSection from '@/components/CallToActionSection';
 
 const Index = () => {
-
   useEffect(() => {
-    console.log('Index page loaded');
-    document.title = 'Scottish Grants & Funding';
+    document.title = 'Scottish Grants & Funding - Government Funding For Scotland';
   }, []);
 
   return (

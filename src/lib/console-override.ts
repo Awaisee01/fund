@@ -1,18 +1,16 @@
 // Production console override to remove console.log in production
 if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-  const originalConsole = {
-    log: console.log,
-    warn: console.warn,
-    error: console.error
-  };
-
-  // Keep errors and warnings but remove logs in production
+  // Completely disable all console methods in production for maximum performance
   console.log = () => {};
+  console.warn = () => {};
+  console.info = () => {};
+  console.debug = () => {};
   
-  // Only show critical errors
+  // Keep only critical errors
+  const originalError = console.error;
   console.error = (...args) => {
-    if (args[0]?.toString().includes('💥') || args[0]?.toString().includes('Error')) {
-      originalConsole.error(...args);
+    if (args[0]?.toString().includes('💥') || args[0]?.toString().includes('Critical')) {
+      originalError(...args);
     }
   };
 }

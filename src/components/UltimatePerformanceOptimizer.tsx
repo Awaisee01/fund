@@ -12,26 +12,28 @@ export function UltimatePerformanceOptimizer({ children }: UltimatePerformanceOp
   useEffect(() => {
     // ===== CRITICAL: LCP OPTIMIZATION (Most Important for 100% Score) =====
     const optimizeLCP = () => {
-      // 1. Mark hero image as high priority
-      const heroImage = document.querySelector('img[src*="1932c2a7"]') as HTMLImageElement;
-      if (heroImage) {
-        heroImage.setAttribute('fetchpriority', 'high');
-        heroImage.setAttribute('loading', 'eager');
-        heroImage.setAttribute('decoding', 'sync');
-        heroImage.style.contentVisibility = 'visible';
-      }
+      // 1. Mark any existing hero images as high priority
+      const heroImages = document.querySelectorAll('img[src*="1932c2a7"], img[src*="AerialTown"]') as NodeListOf<HTMLImageElement>;
+      heroImages.forEach(heroImage => {
+        if (heroImage) {
+          heroImage.setAttribute('fetchpriority', 'high');
+          heroImage.setAttribute('loading', 'eager');
+          heroImage.setAttribute('decoding', 'async');
+          heroImage.style.contentVisibility = 'visible';
+        }
+      });
 
-      // 2. Ensure critical fonts load immediately
+      // 2. Optimize font loading
       const criticalFonts = document.querySelectorAll('link[href*="fonts.googleapis.com"]');
       criticalFonts.forEach(font => {
-        if (font.getAttribute('rel') !== 'preconnect') {
-          font.setAttribute('rel', 'preconnect');
-          font.setAttribute('crossorigin', '');
+        const element = font as HTMLLinkElement;
+        if (element.rel === 'preload') {
+          element.rel = 'stylesheet';
         }
       });
 
       // 3. Mark critical resources
-      if ('performance' in window && 'mark' in performance) {
+      if (typeof window !== 'undefined' && 'performance' in window && 'mark' in performance) {
         performance.mark('lcp-optimization-complete');
       }
     };

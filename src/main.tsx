@@ -6,18 +6,12 @@ import UltimatePerformanceOptimizer from "./components/UltimatePerformanceOptimi
 import "./lib/console-override";
 import "./index.css";
 
-
-
-
 const rootElement = document.getElementById("root");
 if (!rootElement) {
-  console.error('Root element not found!');
   throw new Error("Root element not found");
 }
 
-
 const root = createRoot(rootElement);
-
 
 root.render(
   <StrictMode>
@@ -26,5 +20,3 @@ root.render(
     </UltimatePerformanceOptimizer>
   </StrictMode>
 );
-
-
