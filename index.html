@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <!-- SEO Meta Tags -->
     <title>Free Government Grants Scotland - ECO4, Solar Panels & Home Improvements | Funding For Scotland</title>
-    <meta name="description" content="Get 100% free government funding for ECO4 insulation, solar panels, gas boilers and home improvements in Scotland. Professional installation, no upfront costs. Check eligibility and apply today for energy efficiency grants." />
+    <meta name="description" content="Get 100% free government funding for ECO4 insulation, solar panels, gas boilers and home improvements in Scotland. Professional installation, no upfront costs. Apply today!" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="keywords" content="ECO4 Scotland, free insulation, solar panels grants, gas boiler replacement, home improvements funding, government grants Scotland, energy efficiency upgrades" />
     <meta name="author" content="Funding For Scotland" />
@@ -59,9 +59,8 @@
     <link rel="preconnect" href="https://connect.facebook.net">
     <link rel="preconnect" href="https://www.facebook.com">
     
-    <!-- Critical LCP image preloads for performance -->
-    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high">
-    <link rel="preload" as="image" href="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" fetchpriority="high">
+    <!-- Critical LCP image preload -->
+    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp" fetchpriority="high">
     
     <!-- DNS prefetch for critical third-party domains -->
     <link rel="dns-prefetch" href="//connect.facebook.net">
@@ -180,37 +179,23 @@
     <!-- Load main CSS immediately since it's preloaded -->
     <link rel="stylesheet" href="/src/index.css">
 
-    <!-- ✅ ULTRA-OPTIMIZED PIXEL IMPLEMENTATION -->
+    <!-- ✅ OPTIMIZED PIXEL IMPLEMENTATION -->
     <script>
-      // Facebook Pixel with maximum performance optimization
+      // Facebook Pixel with proper IIFE syntax and deferred loading
       !function(f,b,e,v,n,t,s) {
         if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
         if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
         n.queue=[];
-        
-        // Ultra-deferred loading - only after critical path complete
-        let pixelLoaded = false;
-        const loadPixel = () => {
-          if (pixelLoaded) return;
-          pixelLoaded = true;
-          
-          window.requestIdleCallback(() => {
-            t=b.createElement(e);t.async=!0;t.defer=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s);
-          }, { timeout: 5000 });
-        };
-        
-        // Load only on user interaction or after 3 seconds
-        ['scroll', 'click', 'touchstart', 'keydown'].forEach(event => {
-          document.addEventListener(event, loadPixel, { once: true, passive: true });
+        // Defer script loading until after critical path
+        window.addEventListener('load', function() {
+          t=b.createElement(e);t.async=!0;t.defer=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s);
         });
-        setTimeout(loadPixel, 3000);
-        
       }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize pixel tracking (deferred)
+      // Initialize pixel tracking
       fbq('init', '1423013825182147');
       fbq('track', 'PageView');
     </script>
@@ -218,7 +203,8 @@
   </head>
 
   <body>
-    <!-- Skip to main content removed as requested -->
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main" class="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded">Skip to main content</a>
     
     <!-- Facebook Pixel noscript fallback -->
     <noscript>
