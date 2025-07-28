@@ -117,37 +117,6 @@ const PerfectLighthouseOptimizer = () => {
         }
       });
 
-      // Add skip link if missing
-      if (!document.querySelector('.skip-link')) {
-        const skipLink = document.createElement('a');
-        skipLink.href = '#main';
-        skipLink.className = 'skip-link';
-        skipLink.textContent = 'Skip to main content';
-        skipLink.style.cssText = `
-          position: absolute;
-          top: -40px;
-          left: 6px;
-          z-index: 9999;
-          padding: 8px 16px;
-          background: #1f2937;
-          color: #ffffff;
-          text-decoration: none;
-          border-radius: 4px;
-          font-weight: 500;
-          transition: all 0.2s;
-        `;
-        
-        skipLink.addEventListener('focus', () => {
-          skipLink.style.top = '6px';
-        });
-        
-        skipLink.addEventListener('blur', () => {
-          skipLink.style.top = '-40px';
-        });
-        
-        document.body.insertBefore(skipLink, document.body.firstChild);
-      }
-
       // Ensure main landmark exists
       const main = document.querySelector('main');
       if (main && !main.id) {
