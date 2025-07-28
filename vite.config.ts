@@ -3,8 +3,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import compression from "vite-plugin-compression";
-import { VitePWA } from "vite-plugin-pwa";
 
 // Simplified config to avoid build timeouts
 export default defineConfig(({ mode }) => ({
@@ -28,37 +26,6 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
-    // Enable Brotli and GZIP compression
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      deleteOriginFile: false,
-    }),
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz',
-      deleteOriginFile: false,
-    }),
-    // PWA for better caching
-    VitePWA({
-      registerType: 'prompt',
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              }
-            }
-          }
-        ]
-      }
-    })
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -69,47 +36,55 @@ export default defineConfig(({ mode }) => ({
     // Enhanced build config for optimal performance
     sourcemap: false,
     minify: 'esbuild',
-    target: ['es2020'],
+    target: ['es2022', 'edge88', 'firefox88', 'chrome88', 'safari14'], // Modern browsers only
     chunkSizeWarningLimit: 1500,
     cssCodeSplit: true,
     assetsInlineLimit: 4096, // Inline small assets
-    // Enable tree-shaking
     rollupOptions: {
       treeshake: {
         moduleSideEffects: false,
-        unknownGlobalSideEffects: false,
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false
       },
       output: {
         manualChunks: (id) => {
-          // Dynamic chunking based on file patterns
+          // More granular chunking for better tree shaking
           if (id.includes('node_modules')) {
             if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-core';
+              return 'react-vendor';
             }
             if (id.includes('@supabase')) {
-              return 'supabase';
+              return 'supabase-vendor';
             }
             if (id.includes('@radix-ui')) {
-              return 'ui-components';
+              return 'ui-vendor';
             }
             if (id.includes('react-router')) {
-              return 'routing';
+              return 'router-vendor';
             }
             if (id.includes('react-hook-form') || id.includes('zod')) {
-              return 'forms';
+              return 'forms-vendor';
             }
-            if (id.includes('clsx') || id.includes('tailwind')) {
-              return 'utils';
+            if (id.includes('lucide-react')) {
+              return 'icons-vendor';
             }
             return 'vendor';
           }
           
-          // Split by page components
-          if (id.includes('/pages/')) {
-            return 'pages';
+          // Split by pages for better caching
+          if (id.includes('src/pages/')) {
+            const pageName = id.split('/').pop()?.replace('.tsx', '');
+            return `page-${pageName}`;
           }
-          if (id.includes('/components/admin/')) {
-            return 'admin';
+          
+          // Split large components
+          if (id.includes('src/components/')) {
+            if (id.includes('admin/')) {
+              return 'admin-components';
+            }
+            if (id.includes('ui/')) {
+              return 'ui-components';
+            }
           }
         },
         // Optimize asset naming for better caching
@@ -125,6 +100,11 @@ export default defineConfig(({ mode }) => ({
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js'
       }
+    },
+    // Remove polyfills and legacy transformations
+    polyfillModulePreload: false,
+    modulePreload: {
+      polyfill: false
     }
   },
   // Enhanced dependency optimization

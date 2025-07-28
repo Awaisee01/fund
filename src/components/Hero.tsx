@@ -25,20 +25,12 @@ const Hero = ({
   return (
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>
-      
-      {/* Hero background image */}
-      <div className="absolute inset-0 opacity-30">
-        <img
-          src="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png"
-          alt="Scottish Grant Scheme Background - Modern homes with renewable energy"
-          className="w-full h-full object-cover mix-blend-multiply"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-          width={1920}
-          height={1080}
-        />
-      </div>
+      {backgroundImage && (
+        <div 
+          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+        ></div>
+      )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 xl:py-32">
         {/* Mobile: Form first, Desktop: Content first */}

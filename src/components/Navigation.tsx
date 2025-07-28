@@ -48,7 +48,7 @@ const Navigation = () => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
               <img 
-                src="/src/assets/logo-optimized.webp" 
+                src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                 alt="ECO4, Solar Panels, Gas Boilers & Home Improvements Funding Scotland" 
                 style={{ height: '2rem', width: 'auto', objectFit: 'contain' }}
                 loading="eager"

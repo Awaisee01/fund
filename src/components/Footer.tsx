@@ -10,10 +10,9 @@ const Footer = () => {
           <div className="col-span-1 sm:col-span-2 lg:col-span-2">
             <div className="flex items-center mb-4">
               <img 
-                src="/lovable-uploads/37194ab7-973a-40fd-88f1-80936afde467.png" 
+                src="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png" 
                 alt="Funding For Scotland Logo" 
                 className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
-                loading="lazy"
               />
             </div>
             <p className="text-gray-300 mb-4 sm:mb-6 max-w-md text-sm sm:text-base leading-relaxed">

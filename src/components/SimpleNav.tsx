@@ -73,7 +73,6 @@ const SimpleNav = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                aria-label={`Navigate to ${item.name} page - ${item.name === 'ECO4' ? 'Government funding for insulation and heating' : item.name === 'Solar' ? 'Solar panel installation and funding' : item.name === 'Gas Boilers' ? 'Gas boiler replacement funding' : item.name === 'Home Improvements' ? 'Home improvement grants and funding' : item.name === 'Contact Us' ? 'Get in touch for free assessment' : 'Home page'}`}
                 style={{
                   padding: '8px 16px',
                   borderRadius: '6px',
@@ -167,7 +166,6 @@ const SimpleNav = () => {
               key={item.name}
               to={item.path}
               onClick={() => setIsOpen(false)}
-              aria-label={`Navigate to ${item.name} page - ${item.name === 'ECO4' ? 'Government funding for insulation and heating' : item.name === 'Solar' ? 'Solar panel installation and funding' : item.name === 'Gas Boilers' ? 'Gas boiler replacement funding' : item.name === 'Home Improvements' ? 'Home improvement grants and funding' : item.name === 'Contact Us' ? 'Get in touch for free assessment' : 'Home page'}`}
               style={{
                 display: 'block',
                 padding: '16px 8px',

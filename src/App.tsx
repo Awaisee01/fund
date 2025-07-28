@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
 import ErrorBoundary from "./components/ErrorBoundary";
-import EnhancedCriticalCSS from "./components/EnhancedCriticalCSS";
 
 // Defer non-critical components
 const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
@@ -61,7 +60,6 @@ const App = () => {
             <Navigation />
               
               <div className="min-h-screen flex flex-col">
-              <EnhancedCriticalCSS />
               <Suspense fallback={<ComponentSkeleton />}>
                 <AnalyticsTracker />
                 <ScrollToTop />

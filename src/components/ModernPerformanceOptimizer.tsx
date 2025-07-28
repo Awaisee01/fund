@@ -8,14 +8,19 @@ const ModernPerformanceOptimizer = ({ children }: ModernPerformanceOptimizerProp
   useEffect(() => {
     // 1. Document request latency optimization
     const optimizeDocumentRequests = () => {
-      // Preload critical routes after initial load
-      const criticalRoutes = ['/eco4', '/solar', '/gas-boilers'];
-      criticalRoutes.forEach(route => {
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.href = route;
-        document.head.appendChild(link);
-      });
+      // Only prefetch after LCP and user interaction
+      if (window.requestIdleCallback) {
+        window.requestIdleCallback(() => {
+          const criticalRoutes = ['/eco4', '/solar', '/gas-boilers'];
+          criticalRoutes.forEach(route => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = route;
+            link.fetchPriority = 'low';
+            document.head.appendChild(link);
+          });
+        }, { timeout: 5000 });
+      }
     };
 
     // 2. Cache lifetime optimization

@@ -1,19 +1,19 @@
-// Enhanced Service Worker for performance optimization
-const CACHE_NAME = 'funding-scotland-v2';
-const STATIC_CACHE = 'static-v2';
-const DYNAMIC_CACHE = 'dynamic-v2';
+// High-Performance Service Worker v3.0
+const CACHE_NAME = 'funding-scotland-v3';
+const STATIC_CACHE = 'static-v3';
+const DYNAMIC_CACHE = 'dynamic-v3';
+const IMAGE_CACHE = 'images-v3';
 
-// Enhanced static assets caching with LCP images
+// Critical assets for immediate caching (1 week TTL)
 const STATIC_ASSETS = [
   '/',
-  '/manifest.json',
-  '/lovable-uploads/hero-desktop.webp',
-  '/lovable-uploads/eco4-hero-desktop.webp',
-  '/lovable-uploads/hero-tablet.webp',
-  '/lovable-uploads/eco4-hero-tablet.webp',
-  '/lovable-uploads/hero-mobile.webp',
-  '/lovable-uploads/eco4-hero-mobile.webp',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&subset=latin'
+  '/manifest.json'
+];
+
+// Long-term cacheable resources (1 month TTL)
+const LONG_TERM_ASSETS = [
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin',
+  'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2'
 ];
 
 // Install event - cache critical assets
