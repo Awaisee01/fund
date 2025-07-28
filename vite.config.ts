@@ -65,13 +65,16 @@ export default defineConfig(({ mode }) => ({
     modulePreload: false,
     reportCompressedSize: false
   },
-  // Minimal dependency optimization
+  // Minimal dependency optimization - exclude Supabase entirely
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
-    exclude: ['@tanstack/react-query', '@supabase/supabase-js']
+    exclude: ['@supabase/supabase-js', '@supabase/postgrest-js', '@tanstack/react-query']
   },
   esbuild: {
     drop: ['console', 'debugger'],
     treeShaking: true
+  },
+  define: {
+    'process.env.NODE_ENV': '"production"'
   },
 }));

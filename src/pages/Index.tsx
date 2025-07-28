@@ -1,43 +1,52 @@
 
-import { useEffect, Suspense, lazy } from 'react';
-import Hero from '@/components/Hero';
-
-// Lazy load non-critical sections
-const ServicesGrid = lazy(() => import('@/components/ServicesGrid'));
-const TrustBadges = lazy(() => import('@/components/TrustBadges'));
-const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
-
 const Index = () => {
-  useEffect(() => {
-    document.title = 'Scottish Grants & Funding - Government Funding For Scotland';
-  }, []);
-
   return (
-    <div className="min-h-screen">
-      <Hero 
-        title="Unlock Scottish Grants & Funding"
-        subtitle=""
-        description="From heating upgrades, to free solar panels, to improving the look of Scotland's homes. Funding for Scotland are here to help people unlock the funding and grant schemes they are entitled to."
-        benefits={[
-          "Free Solar Panels",
-          "Free Heating Upgrades", 
-          "Free Insulation",
-          "Free Gas Boilers",
-          "Grants for Home Improvements"
-        ]}
-      />
-      
-      <Suspense fallback={<div className="h-64 bg-gray-100 animate-pulse rounded-lg"></div>}>
-        <ServicesGrid />
-      </Suspense>
-      
-      <Suspense fallback={<div className="h-32 bg-gray-100 animate-pulse"></div>}>
-        <TrustBadges />
-      </Suspense>
-      
-      <Suspense fallback={<div className="h-40 bg-gray-100 animate-pulse rounded-lg"></div>}>
-        <CallToActionSection />
-      </Suspense>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      gap: '2rem',
+      padding: '2rem',
+      textAlign: 'center',
+      background: 'linear-gradient(135deg, #3b82f6, #10b981)'
+    }}>
+      <h1 style={{fontSize: '3rem', fontWeight: '700', color: 'white'}}>
+        Funding For Scotland
+      </h1>
+      <p style={{fontSize: '1.25rem', color: 'rgba(255,255,255,0.9)', maxWidth: '600px'}}>
+        Free government grants for ECO4, solar panels, gas boilers and home improvements in Scotland.
+      </p>
+      <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center'}}>
+        <a 
+          href="/eco4" 
+          style={{
+            background: 'white',
+            color: '#1f2937',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '0.375rem',
+            textDecoration: 'none',
+            fontWeight: '500'
+          }}
+        >
+          ECO4 Grants
+        </a>
+        <a 
+          href="/solar" 
+          style={{
+            background: 'rgba(255,255,255,0.2)',
+            color: 'white',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '0.375rem',
+            textDecoration: 'none',
+            fontWeight: '500',
+            border: '1px solid rgba(255,255,255,0.3)'
+          }}
+        >
+          Solar Panels
+        </a>
+      </div>
     </div>
   );
 };
