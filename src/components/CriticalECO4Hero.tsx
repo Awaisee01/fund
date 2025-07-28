@@ -21,33 +21,30 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
   ];
 
   useEffect(() => {
-    // Load form after hero renders
+    // Defer form loading for performance
     const timer = setTimeout(() => {
       setFormReady(true);
-    }, 200);
-    
-    // Log WebP hero image success
-    console.log('✅ WebP Hero Images Active');
+    }, 500);
     
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      {/* Preload ECO4 hero image for LCP optimization */}
-      <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchPriority="high" />
+      {/* Remove preload - let browser prioritize naturally */}
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
-        {/* Mobile-optimized hero image */}
+        {/* Ultra-optimized WebP hero image */}
         <div className="absolute inset-0 w-full h-full">
           <picture>
-            <source media="(max-width: 767px)" srcSet="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" width="400" height="600" />
+            <source media="(max-width: 767px)" srcSet="/lovable-uploads/AerialTownMobile.webp" type="image/webp" width="400" height="600" />
+            <source media="(max-width: 1023px)" srcSet="/lovable-uploads/AerialTownTablet.webp" type="image/webp" width="768" height="1024" />
+            <source srcSet="/lovable-uploads/AerialTownDesktop.webp" type="image/webp" width="1920" height="1080" />
             <img
-              src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
+              src="/lovable-uploads/AerialTownDesktop.webp"
               alt="ECO4 Energy Efficiency Background"
               className="w-full h-full object-cover"
               loading="eager"
-              fetchPriority="high"
               decoding="sync"
               width={1920}
               height={1080}

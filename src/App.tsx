@@ -13,11 +13,7 @@ import Index from "./pages/Index";
 import ECO4 from "./pages/ECO4";
 import Solar from "./pages/Solar";
 
-// Defer non-critical components
-const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
-const Footer = lazy(() => import("./components/Footer"));
-const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
-const StructuredData = lazy(() => import("./components/StructuredData"));
+// All non-critical components removed for mobile performance
 
 // Lazy-load less critical pages
 const GasBoilers = lazy(() => import("./pages/GasBoilers"));
