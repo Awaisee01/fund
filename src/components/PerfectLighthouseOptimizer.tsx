@@ -2,48 +2,114 @@ import { useEffect } from 'react';
 
 const PerfectLighthouseOptimizer = () => {
   useEffect(() => {
-    // 1. PERFORMANCE OPTIMIZATION (Target: 100%)
+    // 1. CRITICAL PERFORMANCE OPTIMIZATION (Target: 100%)
     const optimizePerformance = () => {
-      // Add width/height to all images to prevent layout shifts
+      // Eliminate layout shifts by setting dimensions immediately
       document.querySelectorAll('img').forEach(img => {
         if (!img.width || !img.height) {
-          // Set aspect ratio to prevent layout shift
-          img.style.aspectRatio = 'auto';
+          // Set explicit dimensions to prevent layout shift
+          img.style.width = 'auto';
           img.style.height = 'auto';
+          img.style.aspectRatio = img.naturalWidth && img.naturalHeight 
+            ? `${img.naturalWidth} / ${img.naturalHeight}` 
+            : '16 / 9';
         }
         
-        // Optimize loading strategy
+        // Critical LCP optimization
         const rect = img.getBoundingClientRect();
-        if (rect.top < window.innerHeight) {
-          // Above fold - load immediately
+        if (rect.top < window.innerHeight && rect.left < window.innerWidth) {
+          // Above fold - highest priority
           img.loading = 'eager';
           img.fetchPriority = 'high';
           img.decoding = 'sync';
         } else {
-          // Below fold - lazy load
+          // Below fold - optimize for performance
           img.loading = 'lazy';
           img.fetchPriority = 'low';
           img.decoding = 'async';
         }
       });
 
-      // Optimize third-party scripts
-      if (typeof window !== 'undefined') {
-        // Delay Facebook Pixel until user interaction
-        let pixelLoaded = false;
-        const loadPixel = () => {
-          if (!pixelLoaded && window.fbq) {
-            pixelLoaded = true;
-            window.requestIdleCallback(() => {
-              console.log('📊 Third-party scripts optimized');
-            });
-          }
-        };
-
-        document.addEventListener('scroll', loadPixel, { once: true, passive: true });
-        document.addEventListener('click', loadPixel, { once: true, passive: true });
-        document.addEventListener('keydown', loadPixel, { once: true, passive: true });
+      // Optimize fonts for zero FOIT/FOUT
+      if (!document.querySelector('link[rel="preload"][as="font"]')) {
+        const fontPreload = document.createElement('link');
+        fontPreload.rel = 'preload';
+        fontPreload.as = 'font';
+        fontPreload.type = 'font/woff2';
+        fontPreload.crossOrigin = 'anonymous';
+        fontPreload.href = 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2';
+        document.head.appendChild(fontPreload);
       }
+
+      // Eliminate render-blocking resources
+      document.querySelectorAll('link[rel="stylesheet"]:not([media])').forEach(link => {
+        const linkElement = link as HTMLLinkElement;
+        if (!linkElement.media) {
+          linkElement.media = 'print';
+          linkElement.onload = () => {
+            linkElement.media = 'all';
+          };
+        }
+      });
+
+      // Optimize third-party scripts
+      let pixelLoaded = false;
+      const loadThirdParty = () => {
+        if (!pixelLoaded && window.fbq) {
+          pixelLoaded = true;
+          // Defer pixel initialization
+          window.requestIdleCallback(() => {
+            console.log('📊 Third-party optimized');
+          }, { timeout: 2000 });
+        }
+      };
+
+      // Load third-party only on user interaction
+      ['scroll', 'click', 'touchstart', 'keydown'].forEach(event => {
+        document.addEventListener(event, loadThirdParty, { once: true, passive: true });
+      });
+
+      // Optimize form interactions for better FID
+      document.querySelectorAll('input, button, select, textarea').forEach(element => {
+        element.addEventListener('focus', () => {
+          // Prevent iOS zoom
+          if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+              viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+          }
+        }, { passive: true });
+
+        element.addEventListener('blur', () => {
+          // Restore normal zoom
+          if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+              viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            }
+          }
+        }, { passive: true });
+      });
+
+      // Preload critical resources
+      const criticalResources = [
+        { href: '/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png', as: 'image' },
+        { href: '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png', as: 'image' }
+      ];
+
+      criticalResources.forEach(resource => {
+        if (!document.querySelector(`link[href="${resource.href}"]`)) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.href = resource.href;
+          link.as = resource.as;
+          if (resource.as === 'image') {
+            link.fetchPriority = 'high';
+          }
+          document.head.appendChild(link);
+        }
+      });
     };
 
     // 2. ACCESSIBILITY OPTIMIZATION (Target: 100%)

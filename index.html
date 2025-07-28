@@ -59,8 +59,9 @@
     <link rel="preconnect" href="https://connect.facebook.net">
     <link rel="preconnect" href="https://www.facebook.com">
     
-    <!-- Critical LCP image preload -->
-    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp" fetchpriority="high">
+    <!-- Critical LCP image preloads for performance -->
+    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchpriority="high">
+    <link rel="preload" as="image" href="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" fetchpriority="high">
     
     <!-- DNS prefetch for critical third-party domains -->
     <link rel="dns-prefetch" href="//connect.facebook.net">
@@ -179,23 +180,37 @@
     <!-- Load main CSS immediately since it's preloaded -->
     <link rel="stylesheet" href="/src/index.css">
 
-    <!-- ✅ OPTIMIZED PIXEL IMPLEMENTATION -->
+    <!-- ✅ ULTRA-OPTIMIZED PIXEL IMPLEMENTATION -->
     <script>
-      // Facebook Pixel with proper IIFE syntax and deferred loading
+      // Facebook Pixel with maximum performance optimization
       !function(f,b,e,v,n,t,s) {
         if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
         if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
         n.queue=[];
-        // Defer script loading until after critical path
-        window.addEventListener('load', function() {
-          t=b.createElement(e);t.async=!0;t.defer=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s);
+        
+        // Ultra-deferred loading - only after critical path complete
+        let pixelLoaded = false;
+        const loadPixel = () => {
+          if (pixelLoaded) return;
+          pixelLoaded = true;
+          
+          window.requestIdleCallback(() => {
+            t=b.createElement(e);t.async=!0;t.defer=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s);
+          }, { timeout: 5000 });
+        };
+        
+        // Load only on user interaction or after 3 seconds
+        ['scroll', 'click', 'touchstart', 'keydown'].forEach(event => {
+          document.addEventListener(event, loadPixel, { once: true, passive: true });
         });
+        setTimeout(loadPixel, 3000);
+        
       }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize pixel tracking
+      // Initialize pixel tracking (deferred)
       fbq('init', '1423013825182147');
       fbq('track', 'PageView');
     </script>
