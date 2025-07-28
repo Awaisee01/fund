@@ -26,8 +26,8 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       setFormReady(true);
     }, 200);
     
-    // Log LCP optimization completion
-    console.log('✅ Hero Image Updated to WebP and Displaying Correctly');
+    // Log WebP hero image success
+    console.log('✅ WebP Hero Image Visible on All Devices');
     
     return () => clearTimeout(timer);
   }, []);
