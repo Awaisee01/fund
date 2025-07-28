@@ -41,7 +41,7 @@ const HomeImprovementsHero = () => {
           
           {/* Content Section - Second on mobile, first on desktop */}
           <div className="order-2 lg:order-1">{/* ... keep existing code */}
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight" style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)' }}>
               Wall and Roof Renovations
             </h1>
             <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
