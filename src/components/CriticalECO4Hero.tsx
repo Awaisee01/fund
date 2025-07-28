@@ -61,9 +61,9 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
           />
         </picture>
         
-        {/* Gradient overlay to maintain visual appearance */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-blue-700/30 to-green-600/30"></div>
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Light gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-blue-700/15 to-green-600/20"></div>
+        <div className="absolute inset-0 bg-black/5"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
