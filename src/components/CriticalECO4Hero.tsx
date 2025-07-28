@@ -21,10 +21,10 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
   ];
 
   useEffect(() => {
-    // Defer form loading for performance
+    // Faster form loading for better UX
     const timer = setTimeout(() => {
       setFormReady(true);
-    }, 500);
+    }, 200);
     
     return () => clearTimeout(timer);
   }, []);
