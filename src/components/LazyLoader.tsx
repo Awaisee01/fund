@@ -1,27 +1,42 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy, ComponentType } from 'react';
 
-// Lazy load non-critical components for better performance
-const AdminDashboard = lazy(() => import('../pages/Admin'));
-const Contact = lazy(() => import('../pages/Contact'));
-const GasBoilers = lazy(() => import('../pages/GasBoilers'));
-const Solar = lazy(() => import('../pages/Solar'));
-const HomeImprovements = lazy(() => import('../pages/HomeImprovements'));
-
-// Note: UI components removed from lazy loading to avoid TypeScript issues
-
-export function LazyLoader({ children }: { children: React.ReactNode }) {
-  return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center h-32">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    }>
-      {children}
-    </Suspense>
-  );
+interface LazyLoaderProps {
+  factory: () => Promise<{ default: ComponentType<any> }>;
+  fallback?: React.ReactNode;
+  children?: React.ReactNode;
+  delay?: number;
 }
 
-// Export lazy components for better bundle splitting
-export { AdminDashboard, Contact, GasBoilers, Solar, HomeImprovements };
+// Enhanced lazy loader with optional delay for better performance
+export const LazyLoader = ({ 
+  factory, 
+  fallback = <div className="h-16 bg-gray-100 animate-pulse rounded"></div>,
+  delay = 0
+}: LazyLoaderProps) => {
+  const LazyComponent = lazy(() => {
+    if (delay > 0) {
+      return new Promise<{ default: ComponentType<any> }>(resolve => {
+        setTimeout(() => {
+          factory().then(resolve);
+        }, delay);
+      });
+    }
+    return factory();
+  });
+
+  return (
+    <Suspense fallback={fallback}>
+      <LazyComponent />
+    </Suspense>
+  );
+};
+
+// Preload function for critical resources
+export const preloadComponent = (factory: () => Promise<{ default: ComponentType<any> }>) => {
+  // Start loading the component in the background without blocking
+  factory().catch(() => {
+    // Silently handle preload failures
+  });
+};
 
 export default LazyLoader;

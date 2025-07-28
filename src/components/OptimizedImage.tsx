@@ -3,51 +3,90 @@ import React from 'react';
 interface OptimizedImageProps {
   src: string;
   alt: string;
+  className?: string;
   width?: number;
   height?: number;
-  className?: string;
   priority?: boolean;
+  responsive?: boolean;
+  sizes?: string;
+  preload?: boolean;
+  style?: React.CSSProperties;
+  fetchPriority?: 'high' | 'low' | 'auto';
+  decoding?: 'async' | 'sync' | 'auto';
+  srcSet?: string;
+  modernFormats?: boolean;
 }
 
-export function OptimizedImage({ 
+const OptimizedImage = ({ 
   src, 
-  alt, 
-  width, 
-  height, 
-  className, 
-  priority = false 
-}: OptimizedImageProps) {
-  // Generate responsive image sizes for PageSpeed optimization
-  const generateSrcSet = (originalSrc: string) => {
-    const sizes = [192, 384, 576, 768, 960, 1152, 1344, 1536];
-    return sizes
-      .map(size => `${originalSrc}?w=${size} ${size}w`)
-      .join(', ');
+  alt,
+  className = '',
+  width,
+  height,
+  priority = false,
+  sizes,
+  fetchPriority = 'auto',
+  decoding = 'async',
+  style,
+  srcSet,
+  modernFormats = true
+}: OptimizedImageProps) => {
+  const getModernSrc = (originalSrc: string) => {
+    if (!modernFormats) return originalSrc;
+    
+    // Convert to WebP if it's a PNG/JPG and we want modern formats
+    if (originalSrc.includes('.png') || originalSrc.includes('.jpg') || originalSrc.includes('.jpeg')) {
+      return originalSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+    }
+    return originalSrc;
   };
 
-  // Use WebP format when supported for better compression
-  const webpSrc = src.replace(/\.(png|jpg|jpeg)$/i, '.webp');
-  
+  const generateSrcSet = (originalSrc: string) => {
+    if (srcSet) return srcSet;
+    
+    // Generate responsive srcSet for different viewport sizes
+    const baseSrc = getModernSrc(originalSrc);
+    if (width && width > 768) {
+      return [
+        `${baseSrc} ${width}w`,
+        `${baseSrc.replace('.webp', '-medium.webp')} ${Math.round(width * 0.75)}w`,
+        `${baseSrc.replace('.webp', '-small.webp')} ${Math.round(width * 0.5)}w`
+      ].join(', ');
+    }
+    return undefined;
+  };
+
   return (
     <picture>
-      <source srcSet={generateSrcSet(webpSrc)} type="image/webp" />
+      {modernFormats && (
+        <>
+          <source 
+            srcSet={generateSrcSet(src)} 
+            type="image/webp" 
+            sizes={sizes}
+          />
+          <source 
+            srcSet={generateSrcSet(src.replace('.webp', '.avif'))} 
+            type="image/avif" 
+            sizes={sizes}
+          />
+        </>
+      )}
       <img
-        src={src}
+        src={getModernSrc(src)}
         alt={alt}
         width={width}
         height={height}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : fetchPriority}
+        decoding={decoding}
+        sizes={sizes}
         className={className}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding={priority ? 'sync' : 'async'}
-        fetchPriority={priority ? 'high' : 'auto'}
-        style={{
-          width: width ? `${width}px` : 'auto',
-          height: height ? `${height}px` : 'auto',
-          maxWidth: '100%'
-        }}
+        style={style}
+        srcSet={generateSrcSet(src)}
       />
     </picture>
   );
-}
+};
 
 export default OptimizedImage;
