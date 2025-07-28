@@ -20,18 +20,18 @@ const UltimatePixelManager: React.FC<PixelManagerProps> = ({
   useEffect(() => {
     const initializeTracking = async () => {
       try {
-        console.log('🚀 ULTIMATE PIXEL MANAGER: Initializing comprehensive tracking system');
+        console.log('🚀 ULTIMATE PIXEL MANAGER: Minimal tracking mode - API calls disabled');
 
-        // Initialize performance optimizer first
-        const performanceOptimizer = initializePerformanceOptimizer();
+        // DO NOT initialize performance optimizer to prevent excessive API calls
+        // const performanceOptimizer = initializePerformanceOptimizer();
         
-        // Initialize advanced tracking with appropriate settings
+        // Initialize advanced tracking with ALL server-side features disabled
         const trackingOptions = {
-          enableServerSide: true,
+          enableServerSide: false, // Disabled - causing too many API calls
           enableDeduplication: true,
-          enableBehaviorTracking: performanceMode !== 'minimal',
-          enablePerformanceTracking: performanceMode === 'high',
-          enableErrorTracking: true
+          enableBehaviorTracking: false, // Disabled - causing API calls
+          enablePerformanceTracking: false, // Disabled - causing API calls  
+          enableErrorTracking: false // Disabled - causing API calls
         };
 
         const advancedTracker = initializeAdvancedTracking(trackingOptions);
