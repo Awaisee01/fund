@@ -109,30 +109,78 @@ export const trackPixelEventWithUTM = (
     return;
   }
   
-  // Use our detective-monitored pixel system
-  const pixelFn = (window as any)._realFbq || (window as any).fbq;
-  
-  if (!pixelFn) {
-    console.error('❌ PIXEL: No pixel function available');
-    return;
-  }
-
-  console.log(`🔍 DETECTIVE TRACKING: ${eventName} via monitored channel`);
+  console.log(`🔥 ENHANCED PIXEL: ${eventName} tracking initiated`);
+  console.log('🔥 ENHANCED PIXEL: Event data:', JSON.stringify(eventData, null, 2));
+  console.log('🔥 ENHANCED PIXEL: Event ID:', eventId);
 
   try {
     const utmData = getUTMData();
+    const fbc = getFacebookClickId();
+    const fbp = getFacebookBrowserId();
     
-    // Import enhanced location and page type functions
-    const { trackEvent } = require('./facebook-pixel');
+    // Generate unique event ID if not provided
+    const finalEventId = eventId || `${eventName}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
-    // Use enhanced tracking that includes location and page type
-    trackEvent(eventName, {
+    // Get location data from URL or localStorage
+    const getLocationData = () => {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const stored = localStorage.getItem('user_location');
+        const storedData = stored ? JSON.parse(stored) : {};
+        
+        return {
+          postcode: urlParams.get('postcode') || storedData.postcode,
+          county: urlParams.get('county') || storedData.county,
+          page_type: getPageType()
+        };
+      } catch {
+        return { page_type: getPageType() };
+      }
+    };
+    
+    const getPageType = () => {
+      const pathname = window.location.pathname.toLowerCase();
+      if (pathname === '/' || pathname === '/index') return 'homepage';
+      if (pathname.includes('/eco4')) return 'eco4_landing';
+      if (pathname.includes('/solar')) return 'solar_landing';
+      if (pathname.includes('/gas-boilers')) return 'gas_boilers_landing';
+      if (pathname.includes('/home-improvements')) return 'home_improvements_landing';
+      return 'other_page';
+    };
+    
+    const locationData = getLocationData();
+    
+    // Enhanced parameters with all tracking data
+    const enhancedParameters = {
       ...eventData,
+      ...locationData,
       ...utmData,
-      eventID: eventId ? String(eventId) : undefined
+      event_id: finalEventId,
+      currency: eventData.currency || 'GBP',
+      value: typeof eventData.value === 'number' ? eventData.value : 1,
+      ...(fbc && { fbc }),
+      ...(fbp && { fbp })
+    };
+
+    // Clean up undefined values
+    Object.keys(enhancedParameters).forEach(key => {
+      if (enhancedParameters[key] === undefined || enhancedParameters[key] === '') {
+        delete enhancedParameters[key];
+      }
     });
-    
-    console.log(`✅ PIXEL ${eventName} event sent successfully with enhanced data`);
+
+    console.log(`🎯 ENHANCED PIXEL: ${eventName} with full tracking data:`, enhancedParameters);
+
+    // Send to browser pixel
+    if ((window as any).fbq) {
+      (window as any).fbq('track', eventName, enhancedParameters);
+      console.log('✅ BROWSER PIXEL: Event sent successfully');
+    }
+
+    // Send to Conversions API for server-side tracking
+    import('./conversions-api').then(({ sendToConversionsAPI }) => {
+      sendToConversionsAPI(eventName, enhancedParameters, finalEventId);
+    }).catch(console.error);
     
   } catch (error) {
     console.error(`❌ PIXEL: ${eventName} tracking failed:`, error);

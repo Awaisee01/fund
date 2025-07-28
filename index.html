@@ -242,8 +242,20 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1259805478714816');
-      fbq('track', 'PageView');
+      fbq('init', '1259805478714816', {
+        external_id: 'funding_scotland_' + Date.now()
+      });
+      
+      // Track initial PageView with enhanced data
+      fbq('track', 'PageView', {
+        content_name: 'Website Visit',
+        content_category: 'page_view',
+        page_type: window.location.pathname.includes('/eco4') ? 'eco4_landing' : 
+                   window.location.pathname.includes('/solar') ? 'solar_landing' : 'homepage',
+        value: 1,
+        currency: 'GBP',
+        event_id: 'pageview_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+      });
     </script>
     <!-- End Meta Pixel Code -->
     
