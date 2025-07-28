@@ -1,12 +1,15 @@
 {
-  "name": "Funding For Scotland",
-  "short_name": "FundingScotland", 
-  "description": "Scotland's leading consultancy for homeowner grants and funding",
+  "name": "Funding Scotland",
+  "short_name": "Funding Scotland",
+  "description": "ECO4, Solar Panels, Gas Boilers & Home Improvements - Government Funding",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2563eb",
   "orientation": "portrait-primary",
+  "categories": ["government", "energy", "utilities"],
+  "lang": "en-GB",
+  "scope": "/",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -15,13 +18,10 @@
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
-      "sizes": "512x512", 
+      "src": "/icon-512.png", 
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable"
     }
-  ],
-  "categories": ["business", "finance", "utilities"],
-  "lang": "en-GB",
-  "dir": "ltr"
+  ]
 }

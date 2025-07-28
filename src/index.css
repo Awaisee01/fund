@@ -113,9 +113,18 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Smooth transitions for better perceived performance */
+  /* Optimized CSS for performance */
   section, div {
-    will-change: transform;
+    contain: layout style;
+  }
+  
+  /* Critical font loading optimization */
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Inter Regular'), local('Inter-Regular');
   }
 
   /* CONSOLIDATED MOBILE OPTIMIZATIONS - Prevents 404 errors for separate CSS files */

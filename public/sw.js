@@ -1,13 +1,14 @@
-// Service Worker for enhanced caching strategy
-const CACHE_NAME = 'funding-scotland-v1';
-const STATIC_CACHE = 'static-v1';
-const DYNAMIC_CACHE = 'dynamic-v1';
+// Enhanced Service Worker for performance optimization
+const CACHE_NAME = 'funding-scotland-v2';
+const STATIC_CACHE = 'static-v2';
+const DYNAMIC_CACHE = 'dynamic-v2';
 
-// Assets to cache immediately
+// Enhanced static assets caching
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  // Critical CSS and JS will be added automatically by Vite
+  '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin'
 ];
 
 // Install event - cache critical assets

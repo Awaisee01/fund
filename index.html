@@ -20,13 +20,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Single critical preload for hero image -->
-    <link rel="preload" as="image" href="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png" fetchpriority="high">
+    <!-- Critical LCP image preload -->
+    <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp" fetchpriority="high">
     
-    <!-- Optimized Inter font loading with proper weights -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
+    <!-- DNS prefetch for critical third-party domains -->
+    <link rel="dns-prefetch" href="//connect.facebook.net">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    
+    <!-- Optimized font loading strategy -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin">
     </noscript>
     
     
@@ -125,28 +129,29 @@
       @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
     </style>
     
-    <!-- Load CSS with optimized strategy to avoid render blocking -->
-    <link rel="stylesheet" href="/src/index.css" media="print" onload="this.media='all'; this.onload=null;">
+    <!-- Critical CSS inlined above, defer main CSS -->
+    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
-    <!-- ✅ FIXED PIXEL IMPLEMENTATION -->
+    <!-- ✅ OPTIMIZED PIXEL IMPLEMENTATION -->
     <script>
-      // Fixed Facebook Pixel setup with proper IIFE
-      (function(f,b,e,v,n,t,s) {
+      // Facebook Pixel with proper IIFE syntax and deferred loading
+      !function(f,b,e,v,n,t,s) {
         if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
         if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s);
-      })(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
+        n.queue=[];
+        // Defer script loading until after critical path
+        window.addEventListener('load', function() {
+          t=b.createElement(e);t.async=!0;t.defer=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s);
+        });
+      }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize our pixel immediately
+      // Initialize pixel tracking
       fbq('init', '1423013825182147');
       fbq('track', 'PageView');
-      
-      console.log('✅ FIXED: Pixel 1423013825182147 initialized and PageView tracked');
     </script>
     
   </head>

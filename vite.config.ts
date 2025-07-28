@@ -17,7 +17,8 @@ export default defineConfig(({ mode }) => ({
   },
   preview: {
     headers: {
-      'Content-Type': 'application/javascript; charset=utf-8'
+      'Content-Type': 'application/javascript; charset=utf-8',
+      'Cache-Control': 'public, max-age=31536000, immutable'
     }
   },
   // Ensure proper MIME types for TypeScript/JSX files
