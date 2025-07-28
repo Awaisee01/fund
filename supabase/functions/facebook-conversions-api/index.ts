@@ -42,6 +42,8 @@ interface ConversionData {
 }
 
 serve(async (req) => {
+  console.log('🚀 Facebook Conversions API function called')
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -50,6 +52,7 @@ serve(async (req) => {
   let requestData: any
   try {
     requestData = await req.json()
+    console.log('📊 Received conversion data:', requestData)
   } catch (error) {
     console.error('Error parsing request:', error)
     return new Response(
@@ -67,14 +70,18 @@ serve(async (req) => {
   // Background processing function
   async function processConversion(data: ConversionData) {
     try {
+      console.log('🔄 Processing conversion:', data.eventName)
+      
       // Get Facebook access token from secrets
       const accessToken = Deno.env.get('FACEBOOK_CONVERSIONS_API_ACCESS_TOKEN')
       const pixelId = Deno.env.get('FACEBOOK_PIXEL_ID')
       
       if (!accessToken || !pixelId) {
-        console.error('Facebook Conversions API credentials not configured')
+        console.error('❌ Facebook Conversions API credentials not configured')
         return
       }
+
+      console.log('✅ Facebook credentials found, proceeding with API call')
 
       // Prepare the conversion event
       const eventTime = Math.floor(Date.now() / 1000)
@@ -211,7 +218,7 @@ serve(async (req) => {
       }
 
     } catch (error) {
-      console.error('Background conversion processing error:', error)
+      console.error('❌ Background conversion processing error:', error)
     }
   }
 
