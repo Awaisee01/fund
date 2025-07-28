@@ -48,12 +48,18 @@ class PerformanceOptimizer {
       this.trackCLSOptimization(cls);
     });
 
-    // Track resource loading performance
+    // Track resource loading performance (rate limited)
     this.observePerformanceEntry('resource', (entries) => {
       entries.forEach(entry => {
-        if (entry.name.includes('facebook') || entry.name.includes('fbevents')) {
+        if ((entry.name.includes('facebook') || entry.name.includes('fbevents')) && !this.isTracking) {
+          this.isTracking = true; // Prevent duplicate tracking
           this.metrics.pixelLoadTime = entry.responseEnd - entry.startTime;
           this.trackPixelLoadPerformance();
+          
+          // Reset tracking flag after 30 seconds
+          setTimeout(() => {
+            this.isTracking = false;
+          }, 30000);
         }
       });
     });
