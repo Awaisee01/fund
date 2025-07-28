@@ -8,7 +8,7 @@ import CallToActionSection from '@/components/CallToActionSection';
 const Index = () => {
 
   useEffect(() => {
-    // No console logging for maximum performance
+    console.log('Index page loaded');
     document.title = 'Scottish Grants & Funding';
   }, []);
 

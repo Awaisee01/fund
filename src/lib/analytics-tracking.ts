@@ -113,17 +113,13 @@ class AnalyticsTracker {
 
   private setupPageUnloadTracking(): void {
     if (typeof window !== 'undefined') {
-      // Completely disable page unload tracking for maximum performance
-      // Only track on deliberate page close, not every visibility change
       window.addEventListener('beforeunload', () => {
-        // Only update session end, no network requests
-        try {
-          navigator.sendBeacon?.('/api/session-end', JSON.stringify({
-            sessionId: this.sessionId,
-            timestamp: Date.now()
-          }));
-        } catch (error) {
-          // Silent fail
+        this.updateSessionEnd();
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          this.updateSessionEnd();
         }
       });
     }
@@ -199,9 +195,9 @@ class AnalyticsTracker {
     this.ensureInitialized();
     if (!this.initialized) return;
     
-    // Ultra-aggressive throttling for 100% performance score
+    // Throttle page view tracking for better performance
     const now = Date.now();
-    if (now - this.lastActivity < 10000) return; // Minimum 10s between requests
+    if (now - this.lastActivity < 2000) return; // Minimum 2s between requests
     this.lastActivity = now;
     
     try {
@@ -211,12 +207,9 @@ class AnalyticsTracker {
       this.pagesVisited++;
       localStorage.setItem('pages_visited', this.pagesVisited.toString());
       
-      // Maximum delay for tracking to avoid blocking performance
+      // Use requestIdleCallback to minimize performance impact
       const trackRequest = async () => {
         try {
-          // Only track if page is still visible (user hasn't navigated away)
-          if (document.visibilityState !== 'visible') return;
-          
           await supabase.from('page_visits').insert({
             visitor_id: this.visitorId,
             session_id: this.sessionId,
@@ -239,11 +232,10 @@ class AnalyticsTracker {
         }
       };
 
-      // Defer tracking by 5+ seconds using requestIdleCallback
       if ('requestIdleCallback' in window) {
-        requestIdleCallback(trackRequest, { timeout: 10000 });
+        requestIdleCallback(trackRequest, { timeout: 5000 });
       } else {
-        setTimeout(trackRequest, 5000);
+        setTimeout(trackRequest, 1000);
       }
     } catch (error) {
       // Silent fail to avoid console pollution

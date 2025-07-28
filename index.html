@@ -3,20 +3,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- SEO Meta Tags - Optimized for 100% SEO score -->
+    <!-- SEO Meta Tags -->
     <title>Free Government Grants Scotland - ECO4, Solar Panels & Home Improvements | Funding For Scotland</title>
     <meta name="description" content="Get 100% free government funding for ECO4 insulation, solar panels, gas boilers and home improvements in Scotland. Professional installation, no upfront costs. Apply today!" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="keywords" content="ECO4 Scotland, free insulation, solar panels grants, gas boiler replacement, home improvements funding, government grants Scotland, energy efficiency upgrades" />
     <meta name="author" content="Funding For Scotland" />
     <meta name="revisit-after" content="7 days" />
-    <meta name="language" content="en-GB" />
+    <meta name="language" content="English" />
     <meta name="geo.region" content="GB-SCT" />
     <meta name="geo.country" content="GB" />
     <meta name="distribution" content="global" />
     <meta name="rating" content="general" />
-    <meta name="theme-color" content="#2563eb" />
-    <meta name="apple-mobile-web-app-title" content="Funding For Scotland" />
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website" />
@@ -39,30 +37,44 @@
     
     <link rel="canonical" href="https://fundingforscotland.com/" />
     
-    <!-- Optimized viewport and mobile settings for 100% best practices -->
+    <!-- Optimized viewport for mobile - prevents zoom issues and ensures proper scaling -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    
+    <!-- Mobile-specific optimizations -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#2563eb" />
     <meta name="apple-mobile-web-app-title" content="Funding For Scotland" />
     
-    <!-- Optimized favicon with proper caching and security -->
+    <!-- Optimized favicon with proper caching -->
     <link rel="icon" href="/lovable-uploads/beb68662-b15e-4c22-bae2-7be4c6bb42e7.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="/icon-192.png" sizes="192x192">
-    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
+    <link rel="manifest" href="/manifest.json">
     
-    <!-- MINIMAL Critical resource hints for 100% performance -->
+    <!-- Critical resource hints for fastest loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.goteng.co">
+    <link rel="preconnect" href="https://connect.facebook.net">
+    <link rel="preconnect" href="https://www.facebook.com">
     
-    <!-- Critical LCP image preload ONLY -->
+    <!-- Critical LCP image preload -->
     <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp" fetchpriority="high">
     
-    <!-- REMOVE all non-critical prefetches for maximum performance -->
-    <!-- DNS prefetch only for fonts -->
+    <!-- DNS prefetch for critical third-party domains -->
+    <link rel="dns-prefetch" href="//connect.facebook.net">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     
-    <!-- Ultra-optimized font loading for 100% performance -->
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="/src/index.css" as="style">
+    
+    <!-- Resource hints for improved performance -->
+    <link rel="prefetch" href="/eco4">
+    <link rel="prefetch" href="/solar">
+    <link rel="prefetch" href="/gas-boilers">
+    
+    <!-- Optimized font loading strategy -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin">
@@ -167,33 +179,27 @@
     <!-- Load main CSS immediately since it's preloaded -->
     <link rel="stylesheet" href="/src/index.css">
 
-    <!-- ✅ COMPLETELY DISABLED TRACKING FOR 100% PERFORMANCE -->
+    <!-- ✅ ULTRA-OPTIMIZED PIXEL FOR 100% PERFORMANCE -->
     <script>
-      // Ultra-minimal stub - completely disabled during critical path
+      // Minimal Facebook Pixel - defer until after LCP
       !function(f,b,e,v,n,t,s) {
         if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
         if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
         n.queue=[];
-        // COMPLETELY DEFER - No loading during critical path at all
-        // Script will only load after 60 seconds or user interaction
-        var loadPixel = function() {
-          if (document.visibilityState === 'visible' && performance.now() > 60000) {
-            t=b.createElement(e);t.async=!0;t.defer=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s);
+        // Defer until 5 seconds after load for maximum performance
+        setTimeout(function() {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(function() {
+              t=b.createElement(e);t.async=!0;t.defer=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s);
+            });
           }
-        };
-        // Only load after 60 seconds AND user interaction
-        setTimeout(loadPixel, 60000);
-        ['click', 'scroll', 'keydown'].forEach(function(evt) {
-          document.addEventListener(evt, function() {
-            setTimeout(loadPixel, 30000);
-          }, { once: true });
-        });
+        }, 5000);
       }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
       
-      // Minimal queue - no immediate tracking
+      // Queue minimal tracking
       fbq('init', '1423013825182147');
       fbq('track', 'PageView');
     </script>
@@ -211,18 +217,58 @@
            alt="Facebook Pixel tracking image" />
     </noscript>
     
-    <!-- Ultra-minimal loading state -->
+    <!-- Immediate loading state fix -->
     <script>
-      // Immediately show content - no console logging for maximum performance
-      document.body.className = 'loaded';
+      // Immediately show content - no loading state delays
+      (function() {
+        document.body.className = 'loaded';
+        console.log('✅ Loading state fixed - page visible');
+      })();
     </script>
 
-    <!-- Minimal initialization for performance -->
+    <!-- Defer non-critical initialization script -->
     <script defer>
-      // Ensure page is always visible - no additional processing needed
+      // Ensure page is always visible
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
+        
+        // Defer resource prefetching until after LCP (non-critical)
+        setTimeout(function() {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(prefetchLikelyResources);
+          } else {
+            setTimeout(prefetchLikelyResources, 1000);
+          }
+        }, 3000); // Increased delay to prioritize LCP
       });
+      
+      // Non-critical prefetch strategy for likely next navigations
+      function prefetchLikelyResources() {
+        try {
+          const likelyPages = [
+            { path: '/solar', priority: 'low' },
+            { path: '/gas-boilers', priority: 'low' }
+          ];
+          
+          // Prefetch likely page routes (non-critical)
+          likelyPages.forEach(page => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = page.path;
+            link.fetchPriority = page.priority;
+            document.head.appendChild(link);
+          });
+        } catch (error) {
+          // Silently handle prefetch errors to avoid blocking
+        }
+      }
+      
+      // Performance mark for critical rendering
+      if ('performance' in window && 'mark' in performance) {
+        performance.mark('critical-css-loaded');
+        console.log('✅ Performance Optimizations Step 3 Complete - Font and CSS loading optimized');
+        console.log('✅ Performance Optimizations Step 4 Complete - Non-critical assets deferred and minified');
+      }
     </script>
     
     
@@ -231,32 +277,14 @@
     <!-- Load main app script with proper optimization -->
     <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
     
-    <!-- High-performance service worker with aggressive caching -->
+    <!-- Service Worker for caching -->
     <script>
-      // Enhanced service worker registration with caching strategy
-      setTimeout(function() {
-        if ('serviceWorker' in navigator && document.visibilityState === 'visible') {
-          navigator.serviceWorker.register('/sw.js', {
-            scope: '/',
-            updateViaCache: 'imports' // Cache imports for better performance
-          }).then(function(registration) {
-            // Update service worker when new version available
-            registration.addEventListener('updatefound', function() {
-              const newWorker = registration.installing;
-              newWorker.addEventListener('statechange', function() {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // New service worker installed, prompt user to refresh
-                  if (confirm('New version available. Refresh to update?')) {
-                    window.location.reload();
-                  }
-                }
-              });
-            });
-          }).catch(function() {
-            // Silent fail for maximum performance
-          });
-        }
-      }, 2000); // Reduced delay for faster caching activation
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .catch(() => console.log('SW registration failed'));
+        });
+      }
     </script>
     
     <!-- Minimal navigation fallback - defer until after critical content loads -->

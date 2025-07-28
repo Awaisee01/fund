@@ -3,13 +3,13 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import viteCompression from 'vite-plugin-compression';
 
-// Ultra-optimized config for 100% Lighthouse score
+// Simplified config to avoid build timeouts
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // Fix MIME type issues for TypeScript modules
     middlewareMode: false,
     headers: {
       'Cache-Control': 'no-store'
@@ -18,27 +18,14 @@ export default defineConfig(({ mode }) => ({
   preview: {
     headers: {
       'Content-Type': 'application/javascript; charset=utf-8',
-      // Aggressive caching for static assets
-      'Cache-Control': 'public, max-age=31536000, immutable',
-      'Content-Encoding': 'gzip',
-      // Additional performance headers
-      'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'DENY',
-      'X-XSS-Protection': '1; mode=block',
-      // Enable compression
-      'Vary': 'Accept-Encoding'
+      'Cache-Control': 'public, max-age=31536000, immutable'
     }
   },
+  // Ensure proper MIME types for TypeScript/JSX files
+  assetsInclude: [],
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
-    // Only use compression in production to avoid preview issues
-    mode === 'production' && viteCompression({
-      algorithm: 'gzip',
-      ext: '.gz',
-      threshold: 1024,
-      deleteOriginFile: false
-    }),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -46,77 +33,50 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Ultra-optimized build for 100% Lighthouse score
+    // Optimized build config for 100% Lighthouse score
     sourcemap: false,
     minify: 'esbuild',
     target: ['es2022', 'edge88', 'firefox88', 'chrome88', 'safari14'],
-    chunkSizeWarningLimit: 300, // Ultra-small chunks for maximum performance
+    chunkSizeWarningLimit: 500, // Even smaller chunks for faster loading
     cssCodeSplit: true,
-    assetsInlineLimit: 512, // Tiny inline limit to reduce bundle size
+    assetsInlineLimit: 1024, // Smaller inline limit to reduce bundle size
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Optimized chunk splitting for better caching
-          if (id.includes('node_modules')) {
-            // Separate vendor chunks for better cache invalidation
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (id.includes('react-router')) {
-              return 'router-vendor';
-            }
-            if (id.includes('@radix-ui')) {
-              return 'ui-vendor';
-            }
-            if (id.includes('supabase')) {
-              return 'supabase-vendor';
-            }
-            if (id.includes('lucide')) {
-              return 'icons-vendor';
-            }
-            return 'vendor';
-          }
-          // App chunks for better cache invalidation
-          if (id.includes('src/components')) {
-            return 'components';
-          }
-          if (id.includes('src/pages')) {
-            return 'pages';
-          }
-          if (id.includes('src/lib')) {
-            return 'utils';
-          }
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-select'],
+          'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'vendor-utils': ['clsx', 'class-variance-authority', 'tailwind-merge'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-query': ['@tanstack/react-query']
         },
-        // Optimized file naming for maximum caching
+        // Optimize for caching and performance
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return `assets/[name].[hash][extname]`;
           const info = assetInfo.name.split('.');
           const ext = info[info.length - 1];
           if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(ext)) {
-            return `img/[name].[hash][extname]`;
+            return `assets/images/[name].[hash][extname]`;
           }
           if (/css/i.test(ext)) {
-            return `css/[name].[hash][extname]`;
-          }
-          if (/woff2?|eot|ttf|otf/i.test(ext)) {
-            return `fonts/[name].[hash][extname]`;
+            return `assets/css/[name].[hash][extname]`;
           }
           return `assets/[name].[hash][extname]`;
         },
-        chunkFileNames: 'js/[name].[hash].js',
-        entryFileNames: 'js/[name].[hash].js'
+        chunkFileNames: 'assets/js/[name].[hash].js',
+        entryFileNames: 'assets/js/[name].[hash].js'
       }
     },
-    // Maximum optimization for modern browsers
+    // Optimize for modern browsers
     polyfillModulePreload: false,
     modulePreload: {
       polyfill: false
     },
-    reportCompressedSize: false
+    reportCompressedSize: false // Faster builds
   },
-  // Enhanced dependency optimization for 100% score
+  // Enhanced dependency optimization
   optimizeDeps: {
-    include: ['react', 'react-dom', '@supabase/supabase-js'],
-    // Removed exclusion that was causing module errors
+    include: ['react', 'react-dom', '@radix-ui/react-dialog'],
   },
 }));

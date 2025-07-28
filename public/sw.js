@@ -1,166 +1,121 @@
-// High-Performance Service Worker with Aggressive Caching v4.0
-const CACHE_NAME = 'funding-scotland-v4.0';
-const STATIC_CACHE = 'static-assets-v4.0';
-const DYNAMIC_CACHE = 'dynamic-content-v4.0';
-const IMAGE_CACHE = 'images-v4.0';
+// High-Performance Service Worker v3.0
+const CACHE_NAME = 'funding-scotland-v3';
+const STATIC_CACHE = 'static-v3';
+const DYNAMIC_CACHE = 'dynamic-v3';
+const IMAGE_CACHE = 'images-v3';
 
-// Define cache strategies for different resource types
-const CACHE_STRATEGIES = {
-  // Static assets - cache first, very long TTL
-  static: {
-    cacheName: STATIC_CACHE,
-    maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
-    maxEntries: 100
-  },
-  // Images - cache first with compression
-  images: {
-    cacheName: IMAGE_CACHE,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    maxEntries: 200
-  },
-  // API responses - network first with stale-while-revalidate
-  api: {
-    cacheName: DYNAMIC_CACHE,
-    maxAge: 5 * 60 * 1000, // 5 minutes
-    maxEntries: 50
-  },
-  // Pages - network first with cache fallback
-  pages: {
-    cacheName: DYNAMIC_CACHE,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    maxEntries: 30
-  }
-};
-
-// Resources to cache on install
-const PRECACHE_URLS = [
+// Critical assets for immediate caching (1 week TTL)
+const STATIC_ASSETS = [
   '/',
-  '/eco4',
-  '/solar',
-  '/gas-boilers',
-  '/home-improvements',
-  '/contact'
+  '/manifest.json'
 ];
 
-// Install event - precache critical resources
+// Long-term cacheable resources (1 month TTL)
+const LONG_TERM_ASSETS = [
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin',
+  'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2'
+];
+
+// Install event - cache critical assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    Promise.all([
-      caches.open(STATIC_CACHE),
-      caches.open(DYNAMIC_CACHE),
-      caches.open(IMAGE_CACHE)
-    ]).then(([staticCache, dynamicCache, imageCache]) => {
-      return staticCache.addAll(PRECACHE_URLS);
-    }).then(() => {
-      return self.skipWaiting();
-    })
+    caches.open(STATIC_CACHE)
+      .then((cache) => {
+        console.log('Service Worker: Caching static assets');
+        return cache.addAll(STATIC_ASSETS);
+      })
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activate event - cleanup old caches
+// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (!Object.values(CACHE_STRATEGIES).some(strategy => strategy.cacheName === cacheName) && 
-              cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      return self.clients.claim();
-    })
+    caches.keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames
+            .filter((cacheName) => cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE)
+            .map((cacheName) => caches.delete(cacheName))
+        );
+      })
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch event - implement caching strategies
+// Fetch event - serve from cache with network fallback
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests and chrome-extension
-  if (request.method !== 'GET' || url.protocol === 'chrome-extension:') {
-    return;
-  }
+  // Skip non-GET requests
+  if (request.method !== 'GET') return;
 
-  // Determine cache strategy based on request type
-  if (isStaticAsset(url)) {
-    event.respondWith(cacheFirst(request, CACHE_STRATEGIES.static));
-  } else if (isImage(url)) {
-    event.respondWith(cacheFirst(request, CACHE_STRATEGIES.images));
-  } else if (isApiRequest(url)) {
-    event.respondWith(networkFirst(request, CACHE_STRATEGIES.api));
-  } else if (isPageRequest(url)) {
-    event.respondWith(staleWhileRevalidate(request, CACHE_STRATEGIES.pages));
+  // Skip external requests
+  if (url.origin !== location.origin) return;
+
+  // Cache strategy based on asset type
+  if (request.destination === 'image') {
+    // Images: Cache first, network fallback
+    event.respondWith(
+      caches.match(request)
+        .then((response) => {
+          if (response) return response;
+          
+          return fetch(request)
+            .then((fetchResponse) => {
+              const responseClone = fetchResponse.clone();
+              caches.open(DYNAMIC_CACHE)
+                .then((cache) => cache.put(request, responseClone));
+              return fetchResponse;
+            });
+        })
+    );
+  } else if (request.destination === 'script' || request.destination === 'style') {
+    // JS/CSS: Network first, cache fallback
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(STATIC_CACHE)
+            .then((cache) => cache.put(request, responseClone));
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+  } else {
+    // HTML/Documents: Network first, cache fallback
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(DYNAMIC_CACHE)
+            .then((cache) => cache.put(request, responseClone));
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
   }
 });
 
-// Cache-first strategy for static assets
-async function cacheFirst(request, strategy) {
-  try {
-    const cache = await caches.open(strategy.cacheName);
-    const cached = await cache.match(request);
-    
-    if (cached) {
-      return cached;
-    }
-    
-    const response = await fetch(request);
-    if (response.status === 200) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (error) {
-    return new Response('Offline', { status: 503 });
+// Background sync for offline form submissions
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'background-sync') {
+    event.waitUntil(
+      // Handle offline form submissions here
+      console.log('Background sync triggered')
+    );
   }
-}
+});
 
-// Network-first strategy for API requests
-async function networkFirst(request, strategy) {
-  try {
-    const response = await fetch(request);
-    if (response.status === 200) {
-      const cache = await caches.open(strategy.cacheName);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (error) {
-    const cache = await caches.open(strategy.cacheName);
-    const cached = await cache.match(request);
-    return cached || new Response('Offline', { status: 503 });
+// Push notifications (if needed in future)
+self.addEventListener('push', (event) => {
+  if (event.data) {
+    const data = event.data.json();
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: '/favicon.ico',
+      badge: '/favicon.ico'
+    });
   }
-}
-
-// Stale-while-revalidate strategy for pages
-async function staleWhileRevalidate(request, strategy) {
-  const cache = await caches.open(strategy.cacheName);
-  const cached = await cache.match(request);
-  
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.status === 200) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch(() => cached);
-  
-  return cached || fetchPromise;
-}
-
-// Helper functions to determine resource types
-function isStaticAsset(url) {
-  return /\.(js|css|woff2?|ttf|eot)(\?.*)?$/.test(url.pathname);
-}
-
-function isImage(url) {
-  return /\.(png|jpg|jpeg|gif|webp|svg|ico)(\?.*)?$/.test(url.pathname);
-}
-
-function isApiRequest(url) {
-  return url.hostname.includes('supabase') || url.pathname.startsWith('/api/');
-}
-
-function isPageRequest(url) {
-  return url.origin === self.location.origin && !isStaticAsset(url) && !isImage(url);
-}
+});
