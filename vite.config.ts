@@ -83,9 +83,9 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Enhanced build config for optimal performance
+    target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
     sourcemap: false,
     minify: 'esbuild',
-    target: ['es2020'],
     chunkSizeWarningLimit: 1500,
     cssCodeSplit: true,
     assetsInlineLimit: 4096, // Inline small assets

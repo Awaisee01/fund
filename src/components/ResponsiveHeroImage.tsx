@@ -6,7 +6,30 @@ interface ResponsiveHeroImageProps {
 const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
   return (
     <picture className={className}>
-      {/* Desktop WebP */}
+      {/* AVIF - Most modern and efficient */}
+      <source 
+        media="(min-width: 1200px)" 
+        srcSet="/lovable-uploads/hero-desktop.avif" 
+        type="image/avif"
+        width={1920}
+        height={1080}
+      />
+      <source 
+        media="(min-width: 768px)" 
+        srcSet="/lovable-uploads/hero-tablet.avif" 
+        type="image/avif"
+        width={1024}
+        height={768}
+      />
+      <source 
+        media="(max-width: 767px)" 
+        srcSet="/lovable-uploads/hero-mobile.avif" 
+        type="image/avif"
+        width={768}
+        height={1024}
+      />
+      
+      {/* WebP - Fallback for browsers without AVIF */}
       <source 
         media="(min-width: 1200px)" 
         srcSet="/lovable-uploads/hero-desktop.webp" 
@@ -14,8 +37,6 @@ const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
         width={1920}
         height={1080}
       />
-      
-      {/* Tablet WebP */}
       <source 
         media="(min-width: 768px)" 
         srcSet="/lovable-uploads/hero-tablet.webp" 
@@ -23,8 +44,6 @@ const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
         width={1024}
         height={768}
       />
-      
-      {/* Mobile WebP */}
       <source 
         media="(max-width: 767px)" 
         srcSet="/lovable-uploads/hero-mobile.webp" 
