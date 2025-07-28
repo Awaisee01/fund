@@ -4,32 +4,11 @@ interface ResponsiveHeroImageProps {
 }
 
 const ResponsiveHeroImage = ({ alt, className }: ResponsiveHeroImageProps) => {
+  console.log('🖼️ ResponsiveHeroImage rendering...');
+  console.log('🖼️ About to render picture element...');
   return (
     <picture className={className}>
-      {/* AVIF - Most modern and efficient */}
-      <source 
-        media="(min-width: 1200px)" 
-        srcSet="/lovable-uploads/hero-desktop.avif" 
-        type="image/avif"
-        width={1920}
-        height={1080}
-      />
-      <source 
-        media="(min-width: 768px)" 
-        srcSet="/lovable-uploads/hero-tablet.avif" 
-        type="image/avif"
-        width={1024}
-        height={768}
-      />
-      <source 
-        media="(max-width: 767px)" 
-        srcSet="/lovable-uploads/hero-mobile.avif" 
-        type="image/avif"
-        width={768}
-        height={1024}
-      />
-      
-      {/* WebP - Fallback for browsers without AVIF */}
+      {/* WebP - Modern format */}
       <source 
         media="(min-width: 1200px)" 
         srcSet="/lovable-uploads/hero-desktop.webp" 
