@@ -6,6 +6,10 @@
         {
           "key": "Cache-Control",
           "value": "max-age=0, must-revalidate"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
         }
       ]
     },
