@@ -1,28 +1,18 @@
 
-import { useEffect, useState } from 'react';
-import PageHeroSkeleton from '@/components/PageHeroSkeleton';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, Clock, CheckCircle, Headphones } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Contact = () => {
-  const [heroLoaded, setHeroLoaded] = useState(false);
-
   useEffect(() => {
     document.title = "Contact Funding For Scotland - Free Consultation & Eligibility Assessment";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Get your free consultation for Scottish grants and funding. Expert advisors help assess eligibility for ECO4, solar panels, boiler replacements, and home improvements.');
     }
-
-    // Mark hero as loaded immediately for faster perceived performance
-    setHeroLoaded(true);
   }, []);
-
-  if (!heroLoaded) {
-    return <PageHeroSkeleton hasForm={false} />;
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
