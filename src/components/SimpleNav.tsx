@@ -54,11 +54,16 @@ const SimpleNav = () => {
         height: '64px'
       }}>
         {/* Logo - Always Visible */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+        <Link to="/" className="flex items-center">
           <img 
             src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
-            alt="Funding For Scotland Logo" 
-            style={{ height: '32px', width: 'auto' }}
+            alt="Funding For Scotland - Home Energy Efficiency Grants"
+            width="120"
+            height="32"
+            className="h-8 w-auto"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
         </Link>
 
