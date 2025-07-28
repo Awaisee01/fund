@@ -35,36 +35,36 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       <link rel="preload" as="image" href="/lovable-uploads/add2d2b3-7eb5-4a31-aaf7-00c3bc2c2341.png" media="(max-width: 1280px) and (min-width: 769px)" />
       <link rel="preload" as="image" href="/lovable-uploads/efa76ce0-f28c-4307-93cc-12337acd5a34.png" media="(max-width: 768px)" />
       
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen lg:min-h-screen">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="absolute inset-0 opacity-30">
-          <div className="hero-image-container w-full h-full">
-            {/* Responsive hero image with optimized loading */}
-            <picture>
-              <source 
-                media="(max-width: 768px)" 
-                srcSet="/lovable-uploads/efa76ce0-f28c-4307-93cc-12337acd5a34.png"
-                width={768}
-                height={500}
-              />
-              <source 
-                media="(max-width: 1280px)" 
-                srcSet="/lovable-uploads/add2d2b3-7eb5-4a31-aaf7-00c3bc2c2341.png"
-                width={1280}
-                height={600}
-              />
-              <img
-                src="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png"
-                alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
-                className="w-full h-full object-cover mix-blend-multiply"
-                loading="eager"
-                fetchPriority="high"
-                width={1920}
-                height={900}
-              />
-            </picture>
-          </div>
-        </div>
+      <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
+        {/* Hero background image as proper img element for LCP optimization */}
+        <picture className="absolute inset-0 w-full h-full">
+          <source 
+            media="(max-width: 768px)" 
+            srcSet="/lovable-uploads/efa76ce0-f28c-4307-93cc-12337acd5a34.png"
+            width={768}
+            height={500}
+          />
+          <source 
+            media="(max-width: 1280px)" 
+            srcSet="/lovable-uploads/add2d2b3-7eb5-4a31-aaf7-00c3bc2c2341.png"
+            width={1280}
+            height={600}
+          />
+          <img
+            src="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png"
+            alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
+            className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width={1920}
+            height={900}
+          />
+        </picture>
+        
+        {/* Gradient overlay to maintain visual appearance */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-blue-700/80 to-green-600/80"></div>
+        <div className="absolute inset-0 bg-black/20"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
