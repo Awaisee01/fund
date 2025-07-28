@@ -24,34 +24,33 @@ const Hero = ({
 }: HeroProps) => {
   return (
     <section className="relative text-white overflow-hidden min-h-screen lg:min-h-[80vh]">
-      {/* Background image with responsive loading */}
+      {/* Background image with clear visibility */}
+      <div className="absolute inset-0 bg-black opacity-20"></div>
       {backgroundImage && (
-        <picture className="absolute inset-0 w-full h-full">
-          <source media="(min-width: 1200px)" srcSet="/lovable-uploads/AerialTownDesktop.webp" />
-          <source media="(min-width: 768px)" srcSet="/lovable-uploads/AerialTownTablet.webp" />
-          <source media="(max-width: 767px)" srcSet="/lovable-uploads/AerialTownMobile.webp" />
-          <img
-            src="/lovable-uploads/AerialTownDesktop.webp"
-            alt="Scottish Grants and Funding - Aerial view of houses with energy improvements"
-            className="w-full h-full object-cover filter-none"
-            loading="eager"
-            fetchPriority="high"
-            decoding="sync"
-            width={1920}
-            height={1080}
-            onLoad={() => console.log('✅ Home hero image loaded')}
-            onError={(e) => {
-              console.error('❌ Home hero image failed to load:', e);
-              // Fallback to PNG if WebP fails
-              e.currentTarget.src = '/lovable-uploads/e6d7f9f8-3fec-4e65-915a-0292e7eaf42a.png';
-            }}
-          />
-        </picture>
+        <div className="absolute inset-0 opacity-30">
+          <picture className="w-full h-full">
+            <source media="(min-width: 1200px)" srcSet="/lovable-uploads/AerialTownDesktop.webp" />
+            <source media="(min-width: 768px)" srcSet="/lovable-uploads/AerialTownTablet.webp" />
+            <source media="(max-width: 767px)" srcSet="/lovable-uploads/AerialTownMobile.webp" />
+            <img
+              src="/lovable-uploads/AerialTownDesktop.webp"
+              alt="Scottish Grants and Funding - Aerial view of houses with energy improvements"
+              className="w-full h-full object-cover mix-blend-multiply filter-none"
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
+              width={1920}
+              height={1080}
+              onLoad={() => console.log('✅ Home hero image loaded')}
+              onError={(e) => {
+                console.error('❌ Home hero image failed to load:', e);
+                // Fallback to PNG if WebP fails
+                e.currentTarget.src = '/lovable-uploads/e6d7f9f8-3fec-4e65-915a-0292e7eaf42a.png';
+              }}
+            />
+          </picture>
+        </div>
       )}
-      
-      {/* Light gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-blue-700/15 to-green-600/20"></div>
-      <div className="absolute inset-0 bg-black/5"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 xl:py-32">
         {/* Mobile: Form first, Desktop: Content first */}
