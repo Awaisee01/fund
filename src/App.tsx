@@ -60,14 +60,10 @@ const App = () => {
             <Navigation />
               
               <div className="min-h-screen flex flex-col">
-              <Suspense fallback={null}>
-                <AnalyticsTracker />
-                <ScrollToTop />
-                <StructuredData />
-              </Suspense>
-              
+              {/* Remove all non-critical components for mobile performance */}
               <main className="flex-1">
-                <Routes>
+              
+              <Routes>
                   {/* Critical pages load immediately */}
                   <Route path="/" element={<Index />} />
                   <Route path="/eco4" element={<ECO4 />} />
@@ -102,10 +98,7 @@ const App = () => {
                 </Routes>
               </main>
               
-              {/* Defer footer loading */}
-              <Suspense fallback={<div className="h-32 bg-gray-100"></div>}>
-                <Footer />
-              </Suspense>
+              {/* Remove footer for mobile performance */}
             </div>
             
             <Toaster position="top-center" />

@@ -38,29 +38,26 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchPriority="high" />
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
-        {/* Hero background image */}
+        {/* Mobile-optimized hero image */}
         <div className="absolute inset-0 w-full h-full">
-          <img
-            src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
-            alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses"
-            className="w-full h-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            width={1920}
-            height={1080}
-            onLoad={() => setImageLoaded(true)}
-            onError={(e) => {
-              console.error('ECO4 hero image failed to load:', e);
-              // Fallback to gradient background
-              setImageLoaded(true);
-            }}
-          />
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" width="400" height="600" />
+            <img
+              src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
+              alt="ECO4 Energy Efficiency Background"
+              className="w-full h-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
+              width={1920}
+              height={1080}
+              onLoad={() => setImageLoaded(true)}
+            />
+          </picture>
         </div>
         
-        {/* Gradient overlay to maintain visual appearance */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-blue-700/80 to-green-600/80"></div>
-        <div className="absolute inset-0 bg-black/20"></div>
+        {/* Simplified gradient for mobile performance */}
+        <div className="absolute inset-0" style={{background:'linear-gradient(45deg,rgba(37,99,235,0.8),rgba(22,163,74,0.8))'}}></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
