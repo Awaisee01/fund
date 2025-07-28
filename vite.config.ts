@@ -3,6 +3,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import compression from "vite-plugin-compression";
+import { VitePWA } from "vite-plugin-pwa";
 
 // Simplified config to avoid build timeouts
 export default defineConfig(({ mode }) => ({
@@ -26,6 +28,37 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
+    // Enable Brotli and GZIP compression
+    compression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      deleteOriginFile: false,
+    }),
+    compression({
+      algorithm: 'gzip',
+      ext: '.gz',
+      deleteOriginFile: false,
+    }),
+    // PWA for better caching
+    VitePWA({
+      registerType: 'prompt',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+              }
+            }
+          }
+        ]
+      }
+    })
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -40,15 +73,44 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1500,
     cssCodeSplit: true,
     assetsInlineLimit: 4096, // Inline small assets
+    // Enable tree-shaking
     rollupOptions: {
+      treeshake: {
+        moduleSideEffects: false,
+        unknownGlobalSideEffects: false,
+      },
       output: {
-        manualChunks: {
-          'react-core': ['react', 'react-dom'],
-          'supabase': ['@supabase/supabase-js'],
-          'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
-          'routing': ['react-router-dom'],
-          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'utils': ['clsx', 'class-variance-authority', 'tailwind-merge']
+        manualChunks: (id) => {
+          // Dynamic chunking based on file patterns
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-core';
+            }
+            if (id.includes('@supabase')) {
+              return 'supabase';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'ui-components';
+            }
+            if (id.includes('react-router')) {
+              return 'routing';
+            }
+            if (id.includes('react-hook-form') || id.includes('zod')) {
+              return 'forms';
+            }
+            if (id.includes('clsx') || id.includes('tailwind')) {
+              return 'utils';
+            }
+            return 'vendor';
+          }
+          
+          // Split by page components
+          if (id.includes('/pages/')) {
+            return 'pages';
+          }
+          if (id.includes('/components/admin/')) {
+            return 'admin';
+          }
         },
         // Optimize asset naming for better caching
         assetFileNames: (assetInfo) => {
