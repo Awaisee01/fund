@@ -3,7 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./lib/console-override";
-// Remove index.css completely for mobile performance
+import "./index.css"; // Empty file - keeps build happy
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {

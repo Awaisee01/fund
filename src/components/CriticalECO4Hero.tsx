@@ -34,15 +34,22 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       {/* Keep hero image but optimize loading strategy */}
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
-        {/* Ultra-optimized WebP hero image - massive size reduction */}
+        {/* CRITICAL: Use existing WebP images from uploads */}
         <div className="absolute inset-0 w-full h-full">
           <picture>
             <source media="(max-width: 767px)" 
-                    srcSet="/src/assets/eco4-hero-optimized.webp" 
+                    srcSet="/lovable-uploads/AerialTownMobile.webp" 
                     type="image/webp"
                     width="767" height="1024" />
+            <source media="(max-width: 1023px)" 
+                    srcSet="/lovable-uploads/AerialTownTablet.webp" 
+                    type="image/webp"
+                    width="1023" height="768" />
+            <source srcSet="/lovable-uploads/AerialTownDesktop.webp" 
+                    type="image/webp"
+                    width="1920" height="1080" />
             <img
-              src="/src/assets/eco4-hero-optimized.webp"
+              src="/lovable-uploads/AerialTownDesktop.webp"
               alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses"
               className="w-full h-full object-cover"
               loading="eager"
