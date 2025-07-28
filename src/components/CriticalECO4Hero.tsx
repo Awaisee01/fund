@@ -35,16 +35,16 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
   return (
     <>
       {/* Preload desktop WebP hero image for LCP optimization */}
-      <link rel="preload" as="image" href="/lovable-uploads/2e7d06df-0dc3-4438-8958-7636fc188aa1.png" fetchPriority="high" />
+      <link rel="preload" as="image" href="/lovable-uploads/AerialTownDesktop.webp" fetchPriority="high" />
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
         {/* Responsive hero background image using your uploaded aerial images */}
         <picture className="absolute inset-0 w-full h-full">
-          <source media="(min-width: 1200px)" srcSet="/lovable-uploads/2e7d06df-0dc3-4438-8958-7636fc188aa1.png" />
-          <source media="(min-width: 768px)" srcSet="/lovable-uploads/a32192cd-ba44-4b5b-8199-362f35a8edbe.png" />
-          <source media="(max-width: 767px)" srcSet="/lovable-uploads/32ee953d-0409-4550-aacb-417642d6af5a.png" />
+          <source media="(min-width: 1200px)" srcSet="/lovable-uploads/AerialTownDesktop.webp" />
+          <source media="(min-width: 768px)" srcSet="/lovable-uploads/AerialTownTablet.webp" />
+          <source media="(max-width: 767px)" srcSet="/lovable-uploads/AerialTownMobile.webp" />
           <img
-            src="/lovable-uploads/2e7d06df-0dc3-4438-8958-7636fc188aa1.png"
+            src="/lovable-uploads/AerialTownDesktop.webp"
             alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
             className="w-full h-full object-cover"
             loading="eager"
