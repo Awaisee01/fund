@@ -7,23 +7,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
 import ErrorBoundary from "./components/ErrorBoundary";
+import CriticalResourcePreloader from "./components/CriticalResourcePreloader";
+
+// Load critical pages immediately for faster initial loads
+import Index from "./pages/Index";
+import ECO4 from "./pages/ECO4";
 
 // Defer non-critical components
 const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
 const Footer = lazy(() => import("./components/Footer"));
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
 const StructuredData = lazy(() => import("./components/StructuredData"));
-// Removed FacebookPixelPageView - PageView tracking handled in index.html
 
-// Code-split all pages for better performance
-const Index = lazy(() => import("./pages/Index"));
-const ECO4 = lazy(() => import("./pages/ECO4"));
+// Lazy-load less critical pages
 const Solar = lazy(() => import("./pages/Solar"));
 const GasBoilers = lazy(() => import("./pages/GasBoilers"));
 const HomeImprovements = lazy(() => import("./pages/HomeImprovements"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Admin = lazy(() => import("./pages/Admin"));
-
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Create query client with optimized defaults
@@ -60,6 +61,7 @@ const App = () => {
             <Navigation />
               
               <div className="min-h-screen flex flex-col">
+              <CriticalResourcePreloader />
               <Suspense fallback={<ComponentSkeleton />}>
                 <AnalyticsTracker />
                 <ScrollToTop />
@@ -67,19 +69,43 @@ const App = () => {
               </Suspense>
               
               <main className="flex-1">
-                <Suspense fallback={<PageLoadingSkeleton />}>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/eco4" element={<ECO4 />} />
-                    <Route path="/solar" element={<Solar />} />
-                    <Route path="/gas-boilers" element={<GasBoilers />} />
-                    <Route path="/home-improvements" element={<HomeImprovements />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/admin" element={<Admin />} />
-                    
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
+                <Routes>
+                  {/* Critical pages load immediately */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/eco4" element={<ECO4 />} />
+                  
+                  {/* Less critical pages with suspense */}
+                  <Route path="/solar" element={
+                    <Suspense fallback={<PageLoadingSkeleton />}>
+                      <Solar />
+                    </Suspense>
+                  } />
+                  <Route path="/gas-boilers" element={
+                    <Suspense fallback={<PageLoadingSkeleton />}>
+                      <GasBoilers />
+                    </Suspense>
+                  } />
+                  <Route path="/home-improvements" element={
+                    <Suspense fallback={<PageLoadingSkeleton />}>
+                      <HomeImprovements />
+                    </Suspense>
+                  } />
+                  <Route path="/contact" element={
+                    <Suspense fallback={<PageLoadingSkeleton />}>
+                      <Contact />
+                    </Suspense>
+                  } />
+                  <Route path="/admin" element={
+                    <Suspense fallback={<PageLoadingSkeleton />}>
+                      <Admin />
+                    </Suspense>
+                  } />
+                  <Route path="*" element={
+                    <Suspense fallback={<PageLoadingSkeleton />}>
+                      <NotFound />
+                    </Suspense>
+                  } />
+                </Routes>
               </main>
               
               {/* Defer footer loading */}

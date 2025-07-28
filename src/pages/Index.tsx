@@ -1,9 +1,11 @@
 
-import { useEffect } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import Hero from '@/components/Hero';
-import ServicesGrid from '@/components/ServicesGrid';
-import TrustBadges from '@/components/TrustBadges';
-import CallToActionSection from '@/components/CallToActionSection';
+
+// Lazy load non-critical sections
+const ServicesGrid = lazy(() => import('@/components/ServicesGrid'));
+const TrustBadges = lazy(() => import('@/components/TrustBadges'));
+const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
 
 const Index = () => {
   useEffect(() => {
@@ -25,9 +27,17 @@ const Index = () => {
         ]}
       />
       
-      <ServicesGrid />
-      <TrustBadges />
-      <CallToActionSection />
+      <Suspense fallback={<div className="h-64 bg-gray-100 animate-pulse rounded-lg"></div>}>
+        <ServicesGrid />
+      </Suspense>
+      
+      <Suspense fallback={<div className="h-32 bg-gray-100 animate-pulse"></div>}>
+        <TrustBadges />
+      </Suspense>
+      
+      <Suspense fallback={<div className="h-40 bg-gray-100 animate-pulse rounded-lg"></div>}>
+        <CallToActionSection />
+      </Suspense>
     </div>
   );
 };
