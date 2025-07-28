@@ -9,7 +9,7 @@ const CriticalCSS = () => {
       link.href = '/assets/index-CI90YalX.css';
       link.media = 'print';
       link.onload = function() {
-        this.media = 'all';
+        link.media = 'all';
       };
       document.head.appendChild(link);
     };
