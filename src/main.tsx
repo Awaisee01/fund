@@ -2,7 +2,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import UltimatePerformanceOptimizer from "./components/UltimatePerformanceOptimizer";
 import "./lib/console-override";
 import "./index.css";
 
@@ -13,10 +12,13 @@ if (!rootElement) {
 
 const root = createRoot(rootElement);
 
+// Mark critical rendering start
+if ('performance' in window && 'mark' in performance) {
+  performance.mark('react-start');
+}
+
 root.render(
   <StrictMode>
-    <UltimatePerformanceOptimizer>
-      <App />
-    </UltimatePerformanceOptimizer>
+    <App />
   </StrictMode>
 );

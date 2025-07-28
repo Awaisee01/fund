@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
 import ErrorBoundary from "./components/ErrorBoundary";
-import CriticalResourcePreloader from "./components/CriticalResourcePreloader";
 
 // Load critical pages immediately for faster initial loads
 import Index from "./pages/Index";
@@ -61,8 +60,7 @@ const App = () => {
             <Navigation />
               
               <div className="min-h-screen flex flex-col">
-              <CriticalResourcePreloader />
-              <Suspense fallback={<ComponentSkeleton />}>
+              <Suspense fallback={null}>
                 <AnalyticsTracker />
                 <ScrollToTop />
                 <StructuredData />
