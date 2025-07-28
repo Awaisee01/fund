@@ -43,11 +43,11 @@ class AdvancedPixelTracker {
 
   constructor(options: AdvancedTrackingOptions = {}) {
     this.options = {
-      enableServerSide: true,
+      enableServerSide: false, // Disabled due to missing credentials
       enableDeduplication: true,
-      enableBehaviorTracking: true,
-      enablePerformanceTracking: true,
-      enableErrorTracking: true,
+      enableBehaviorTracking: false, // Disabled to reduce API calls
+      enablePerformanceTracking: false, // Disabled to reduce API calls
+      enableErrorTracking: false, // Disabled to reduce API calls
       ...options
     };
 
