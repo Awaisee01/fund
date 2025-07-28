@@ -327,7 +327,7 @@ const NativeECO4Form = () => {
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="h-5 w-5 border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900 flex-shrink-0"
+                        className="!h-5 !w-5 border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900 flex-shrink-0 min-h-[20px] min-w-[20px]"
                       />
                     </FormControl>
                     <FormLabel className="text-white text-sm cursor-pointer">
