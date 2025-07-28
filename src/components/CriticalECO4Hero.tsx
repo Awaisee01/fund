@@ -26,8 +26,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       setFormReady(true);
     }, 200);
     
-    // Log WebP hero image success
-    console.log('✅ WebP Hero Images Active');
+    // Remove console logging for 100% performance score
     
     return () => clearTimeout(timer);
   }, []);

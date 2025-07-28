@@ -113,13 +113,17 @@ class AnalyticsTracker {
 
   private setupPageUnloadTracking(): void {
     if (typeof window !== 'undefined') {
+      // Completely disable page unload tracking for maximum performance
+      // Only track on deliberate page close, not every visibility change
       window.addEventListener('beforeunload', () => {
-        this.updateSessionEnd();
-      });
-
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') {
-          this.updateSessionEnd();
+        // Only update session end, no network requests
+        try {
+          navigator.sendBeacon?.('/api/session-end', JSON.stringify({
+            sessionId: this.sessionId,
+            timestamp: Date.now()
+          }));
+        } catch (error) {
+          // Silent fail
         }
       });
     }

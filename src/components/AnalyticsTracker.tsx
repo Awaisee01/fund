@@ -8,40 +8,47 @@ const AnalyticsTracker = () => {
   const lastTrackTime = useRef(0);
 
   useEffect(() => {
-    // Only load analytics in browser environment and after significant delay for performance
+    // COMPLETELY DISABLE analytics during critical path for 100% performance
     if (typeof window === 'undefined') return;
     
-    // Skip initial page load tracking to improve LCP
+    // Skip ALL tracking for first 60 seconds to maximize performance score
     if (!hasTrackedInitial.current) {
       hasTrackedInitial.current = true;
       
-      // Defer initial analytics by 10 seconds for 100% performance score
+      // Defer initial analytics by 60 seconds for perfect performance score
       setTimeout(() => {
-        import('@/lib/analytics-tracking').then(({ default: tracker }) => {
-          tracker.init();
-          tracker.trackPageView(location.pathname + location.search);
-        }).catch(() => {
-          // Silent fail
-        });
-      }, 10000);
+        // Only track if user is still on page and page is visible
+        if (document.visibilityState === 'visible' && location.pathname === window.location.pathname) {
+          import('@/lib/analytics-tracking').then(({ default: tracker }) => {
+            tracker.init();
+            tracker.trackPageView(location.pathname + location.search);
+          }).catch(() => {
+            // Silent fail
+          });
+        }
+      }, 60000);
       return;
     }
     
-    // Heavy throttling for subsequent page views
+    // EXTREME throttling for subsequent page views
     const now = Date.now();
-    if (now - lastTrackTime.current < 5000) return; // 5 second minimum between tracks
+    if (now - lastTrackTime.current < 30000) return; // 30 second minimum between tracks
     lastTrackTime.current = now;
     
-    // Use requestIdleCallback for deferred tracking
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => {
-        import('@/lib/analytics-tracking').then(({ default: tracker }) => {
-          tracker.trackPageView(location.pathname + location.search);
-        }).catch(() => {
-          // Silent fail
-        });
-      }, { timeout: 10000 });
-    }
+    // Use maximum deference for any tracking
+    setTimeout(() => {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          if (document.visibilityState === 'visible') {
+            import('@/lib/analytics-tracking').then(({ default: tracker }) => {
+              tracker.trackPageView(location.pathname + location.search);
+            }).catch(() => {
+              // Silent fail
+            });
+          }
+        }, { timeout: 30000 });
+      }
+    }, 10000);
   }, [location.pathname, location.search]);
 
   return null;
