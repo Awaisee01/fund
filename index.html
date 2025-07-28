@@ -17,20 +17,23 @@
     <link rel="icon" href="/lovable-uploads/beb68662-b15e-4c22-bae2-7be4c6bb42e7.png" type="image/png">
     
     <!-- Critical resource hints for fastest loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Optimized Inter font loading - streamlined for performance -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"></noscript>
+    <!-- Optimized Inter font loading with proper weights -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    </noscript>
     
     
     <!-- Inline ECO4 critical CSS for immediate hero rendering -->
     <style>
       /* COMPLETE Critical CSS - ALL navigation classes included */
       *{box-sizing:border-box;margin:0;padding:0}
-      html{font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-display:swap;scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+      html{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-display:swap;scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
       body{background:#ffffff;color:#1a1a1a;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.6;touch-action:manipulation}
+      .font-inter{font-family:Inter,system-ui,sans-serif}
       
       /* COMPLETE Navigation CSS */
       nav{background-color:#ffffff;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);position:sticky;top:0;z-index:50}
@@ -123,23 +126,24 @@
     <link rel="stylesheet" href="/src/index.css" media="print" onload="this.media='all'; this.onload=null;">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
-    <!-- ✅ CLEAN PIXEL IMPLEMENTATION -->
+    <!-- ✅ FIXED PIXEL IMPLEMENTATION -->
     <script>
-      // Simple, clean Facebook Pixel setup that actually works
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      // Fixed Facebook Pixel setup with proper IIFE
+      (function(f,b,e,v,n,t,s) {
+        if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s);
+      })(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
       // Initialize our pixel immediately
       fbq('init', '1423013825182147');
       fbq('track', 'PageView');
       
-      console.log('✅ CLEAN: Pixel 1423013825182147 initialized and PageView tracked');
+      console.log('✅ FIXED: Pixel 1423013825182147 initialized and PageView tracked');
     </script>
     
   </head>

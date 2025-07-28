@@ -2,7 +2,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import PerformanceOptimizer from "./components/PerformanceOptimizer";
+import { LCPOptimizer } from "./components/LCPOptimizer";
 import "./lib/console-override";
 import "./index.css";
 
@@ -21,9 +21,9 @@ const root = createRoot(rootElement);
 
 root.render(
   <StrictMode>
-    <PerformanceOptimizer>
+    <LCPOptimizer>
       <App />
-    </PerformanceOptimizer>
+    </LCPOptimizer>
   </StrictMode>
 );
 
