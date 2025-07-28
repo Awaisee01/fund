@@ -53,8 +53,23 @@ serve(async (req) => {
   try {
     requestData = await req.json()
     console.log('📊 Received conversion data:', requestData)
+    
+    // Validate request structure
+    if (!requestData || !requestData.data) {
+      console.error('❌ Invalid request structure - missing data field')
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request structure - missing data field',
+          success: false 
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400 
+        }
+      )
+    }
   } catch (error) {
-    console.error('Error parsing request:', error)
+    console.error('❌ Error parsing request:', error)
     return new Response(
       JSON.stringify({ 
         error: 'Invalid request format',
