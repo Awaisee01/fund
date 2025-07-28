@@ -61,10 +61,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Content-Encoding",
-          "value": "br"
         }
       ]
     },
@@ -78,10 +74,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Content-Encoding",
-          "value": "br"
         }
       ]
     },
@@ -139,19 +131,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=604800"
-        }
-      ]
-    },
-    {
-      "source": "/(lovable.js|gpteng.*\\.js)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Content-Encoding",
-          "value": "br"
         }
       ]
     }
