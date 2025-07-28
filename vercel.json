@@ -13,14 +13,6 @@
           "value": "public, max-age=0, must-revalidate"
         },
         {
-          "key": "Content-Encoding",
-          "value": "gzip"
-        },
-        {
-          "key": "Vary",
-          "value": "Accept-Encoding"
-        },
-        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
         },
@@ -40,10 +32,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Content-Encoding",
-          "value": "br"
         },
         {
           "key": "Vary",
@@ -83,10 +71,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Content-Encoding",
-          "value": "br"
         }
       ]
     },
@@ -96,10 +80,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Content-Encoding",
-          "value": "br"
         }
       ]
     },
@@ -127,16 +107,8 @@
         {
           "key": "Content-Type",
           "value": "application/javascript; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800"
         }
       ]
     }
-  ],
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm install",
-  "framework": "vite"
+  ]
 }
