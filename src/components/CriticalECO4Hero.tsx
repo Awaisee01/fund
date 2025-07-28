@@ -61,11 +61,6 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
                 fetchPriority="high"
                 width={1920}
                 height={900}
-                onLoad={() => setImageLoaded(true)}
-                style={{ 
-                  opacity: imageLoaded ? 1 : 0,
-                  transition: 'opacity 0.1s ease'
-                }}
               />
             </picture>
           </div>
