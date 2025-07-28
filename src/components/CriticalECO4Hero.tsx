@@ -30,24 +30,20 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
 
   return (
     <>
-      {/* Preload only desktop hero image for LCP optimization - largest viewport */}
-      <link rel="preload" as="image" href="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png" fetchPriority="high" />
+      {/* Preload only desktop hero image for LCP optimization - WebP format */}
+      <link rel="preload" as="image" href="/src/assets/eco4-hero-optimized.webp" fetchPriority="high" />
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
         {/* Hero background image as proper img element for LCP optimization */}
         <picture className="absolute inset-0 w-full h-full">
+          {/* WebP format for modern browsers */}
           <source 
-            media="(max-width: 768px)" 
-            srcSet="/lovable-uploads/efa76ce0-f28c-4307-93cc-12337acd5a34.png"
-            width={768}
-            height={500}
+            type="image/webp"
+            srcSet="/src/assets/eco4-hero-optimized.webp"
+            width={1920}
+            height={900}
           />
-          <source 
-            media="(max-width: 1280px)" 
-            srcSet="/lovable-uploads/add2d2b3-7eb5-4a31-aaf7-00c3bc2c2341.png"
-            width={1280}
-            height={600}
-          />
+          {/* PNG fallback for compatibility */}
           <img
             src="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png"
             alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
