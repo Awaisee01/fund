@@ -66,7 +66,8 @@ export class PerformanceBudget {
     // Monitor FID
     const fidObserver = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const fid = entry.processingStart - entry.startTime;
+        const fidEntry = entry as PerformanceEventTiming;
+        const fid = fidEntry.processingStart - fidEntry.startTime;
         
         if (fid > this.budgets.FID) {
           this.violations.push({
