@@ -51,8 +51,12 @@ self.addEventListener('fetch', (event) => {
   // Skip non-GET requests
   if (request.method !== 'GET') return;
 
-  // Skip external requests
-  if (url.origin !== location.origin) return;
+  // Skip external requests and API calls for performance
+  if (url.origin !== location.origin || 
+      url.pathname.includes('/api/') || 
+      url.pathname.includes('/functions/') ||
+      url.hostname.includes('facebook.com') ||
+      url.hostname.includes('analytics')) return;
 
   // Cache strategy based on asset type
   if (request.destination === 'image') {
