@@ -9,6 +9,8 @@ import { toast } from 'sonner';
 import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
 import { trackLeadWithUTM, trackInitiateCheckoutWithUTM, trackViewContentWithUTM } from '@/lib/utm-tracking';
 import { captureLocationData } from '@/lib/facebook-pixel';
+import { initializeAdvancedTracking, getAdvancedTracker } from '@/lib/advanced-pixel-tracking';
+import { useIntelligentFormTracking } from '@/lib/intelligent-form-tracking';
 
 interface ECO4FormData {
   fullName: string;
@@ -25,6 +27,27 @@ const NativeECO4Form = () => {
   const [submitAttempts, setSubmitAttempts] = useState(0);
   const [lastSubmissionTime, setLastSubmissionTime] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  
+  // Initialize advanced tracking
+  useEffect(() => {
+    initializeAdvancedTracking({
+      enableServerSide: true,
+      enableDeduplication: true,
+      enableBehaviorTracking: true,
+      enablePerformanceTracking: true,
+      enableErrorTracking: true
+    });
+  }, []);
+
+  // Initialize intelligent form tracking
+  const { tracker: formTracker, trackSubmission } = useIntelligentFormTracking(formRef, {
+    trackFieldLevel: true,
+    trackValidationErrors: true,
+    trackAbandonmentPrediction: true,
+    enableHeatmap: true,
+    enableAutoSave: true
+  });
   
   const form = useForm<ECO4FormData>({
     defaultValues: {
@@ -37,16 +60,17 @@ const NativeECO4Form = () => {
     }
   });
 
-  // Track ViewContent when form loads with rich data
+  // Track enhanced ViewContent when form loads
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log('📊 ECO4 Form: Tracking Enhanced ViewContent event with UTM data');
-      trackViewContentWithUTM({
-        content_name: 'ECO4 Form',
-        content_category: 'eco4_landing',
-        value: 50,
-        currency: 'GBP'
-      });
+      const tracker = getAdvancedTracker();
+      if (tracker) {
+        tracker.trackViewContent({
+          content_name: 'ECO4 Form Page',
+          content_category: 'eco4_landing',
+          value: 100
+        });
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -96,13 +120,15 @@ const NativeECO4Form = () => {
         county: data.address.split(',').pop()?.trim()
       });
 
-      // Track InitiateCheckout before submission
-      trackInitiateCheckoutWithUTM({
-        content_name: 'ECO4 Installation',
-        content_category: 'eco4_conversion',
-        value: 8500,
-        currency: 'GBP'
-      });
+      // Track with advanced pixel tracker
+      const advancedTracker = getAdvancedTracker();
+      if (advancedTracker) {
+        advancedTracker.trackInitiateCheckout({
+          content_name: 'ECO4 Installation',
+          content_category: 'eco4_conversion',
+          value: 8500
+        });
+      }
 
       console.log('🆘 URGENT DEBUG: Calling submitFormToDatabase with data:', {
         serviceType: 'eco4',
@@ -129,18 +155,23 @@ const NativeECO4Form = () => {
         formName: 'ECO4'
       });
 
-      // Track successful Lead conversion with rich data
-      trackLeadWithUTM({
-        content_name: 'ECO4 Installation',
-        content_category: 'eco4_conversion',
-        value: 8500,
-        currency: 'GBP',
-        em: data.email.toLowerCase(),
-        ph: data.phone.replace(/\D/g, ''),
-        fn: data.fullName.split(' ')[0]?.toLowerCase(),
-        ln: data.fullName.split(' ').slice(1).join(' ')?.toLowerCase(),
-        zp: data.postCode.replace(/\s/g, '').toLowerCase()
-      });
+      // Track successful Lead conversion with advanced tracking
+      const leadTracker = getAdvancedTracker();
+      if (leadTracker) {
+        leadTracker.trackLead({
+          content_name: 'ECO4 Installation',
+          content_category: 'eco4_conversion',
+          value: 8500,
+          email: data.email,
+          phone: data.phone,
+          firstName: data.fullName.split(' ')[0],
+          lastName: data.fullName.split(' ').slice(1).join(' '),
+          postcode: data.postCode
+        });
+      }
+
+      // Track with intelligent form tracker
+      trackSubmission?.(true, data);
 
       console.log('🎉 ECO4 form submission completed successfully');
       
@@ -163,6 +194,9 @@ const NativeECO4Form = () => {
       
     } catch (error) {
       console.error('💥 ECO4 form submission failed:', error);
+      
+      // Track failed submission
+      trackSubmission?.(false, data);
       
       // Provide more specific error messages
       if (error instanceof Error) {
@@ -214,6 +248,7 @@ const NativeECO4Form = () => {
       <CardContent className="p-4">
         <Form {...form}>
           <form 
+            ref={formRef}
             onSubmit={(e) => {
               console.log('🆘🆘🆘 FORM HTML SUBMIT EVENT TRIGGERED!');
               console.log('🆘🆘🆘 Form validation state:', form.formState);

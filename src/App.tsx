@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import UltimatePixelManager from "@/components/UltimatePixelManager";
 
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
@@ -12,8 +13,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import Index from "./pages/Index";
 import ECO4 from "./pages/ECO4";
 import Solar from "./pages/Solar";
-
-// All non-critical components removed for mobile performance
 
 // Lazy-load less critical pages
 const GasBoilers = lazy(() => import("./pages/GasBoilers"));
@@ -42,65 +41,58 @@ const PageLoadingSkeleton = () => (
   </div>
 );
 
-// Component loading skeleton  
-const ComponentSkeleton = () => (
-  <div className="h-16 bg-gray-100 animate-pulse"></div>
-);
-
 const App = () => {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <BrowserRouter>
-            <Navigation />
-              
+      <UltimatePixelManager enableAdvancedFeatures={true} performanceMode="high">
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <BrowserRouter>
+              <Navigation />
+                
               <div className="min-h-screen flex flex-col">
-              {/* Remove all non-critical components for mobile performance */}
-              <main className="flex-1">
+                <main className="flex-1">
+                  <Routes>
+                    {/* Critical pages load immediately */}
+                    <Route path="/" element={<Index />} />
+                    <Route path="/eco4" element={<ECO4 />} />
+                    <Route path="/solar" element={<Solar />} />
+                    
+                    {/* Less critical pages with suspense */}
+                    <Route path="/gas-boilers" element={
+                      <Suspense fallback={<PageLoadingSkeleton />}>
+                        <GasBoilers />
+                      </Suspense>
+                    } />
+                    <Route path="/home-improvements" element={
+                      <Suspense fallback={<PageLoadingSkeleton />}>
+                        <HomeImprovements />
+                      </Suspense>
+                    } />
+                    <Route path="/contact" element={
+                      <Suspense fallback={<PageLoadingSkeleton />}>
+                        <Contact />
+                      </Suspense>
+                    } />
+                    <Route path="/admin" element={
+                      <Suspense fallback={<PageLoadingSkeleton />}>
+                        <Admin />
+                      </Suspense>
+                    } />
+                    <Route path="*" element={
+                      <Suspense fallback={<PageLoadingSkeleton />}>
+                        <NotFound />
+                      </Suspense>
+                    } />
+                  </Routes>
+                </main>
+              </div>
               
-              <Routes>
-                  {/* Critical pages load immediately */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/eco4" element={<ECO4 />} />
-                  <Route path="/solar" element={<Solar />} />
-                  
-                  {/* Less critical pages with suspense */}
-                  <Route path="/gas-boilers" element={
-                    <Suspense fallback={<PageLoadingSkeleton />}>
-                      <GasBoilers />
-                    </Suspense>
-                  } />
-                  <Route path="/home-improvements" element={
-                    <Suspense fallback={<PageLoadingSkeleton />}>
-                      <HomeImprovements />
-                    </Suspense>
-                  } />
-                  <Route path="/contact" element={
-                    <Suspense fallback={<PageLoadingSkeleton />}>
-                      <Contact />
-                    </Suspense>
-                  } />
-                  <Route path="/admin" element={
-                    <Suspense fallback={<PageLoadingSkeleton />}>
-                      <Admin />
-                    </Suspense>
-                  } />
-                  <Route path="*" element={
-                    <Suspense fallback={<PageLoadingSkeleton />}>
-                      <NotFound />
-                    </Suspense>
-                  } />
-                </Routes>
-              </main>
-              
-              {/* Remove footer for mobile performance */}
-            </div>
-            
-            <Toaster position="top-center" />
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
+              <Toaster position="top-center" />
+            </BrowserRouter>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </UltimatePixelManager>
     </ErrorBoundary>
   );
 };
