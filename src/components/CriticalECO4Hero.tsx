@@ -33,7 +33,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
     <>
       {/* Keep hero image but optimize loading strategy */}
       
-      <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen lg:min-h-screen">
         {/* ORIGINAL hero image preserved - optimized for mobile performance */}
         <div className="absolute inset-0 w-full h-full">
           <picture>
@@ -58,8 +58,8 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
           </picture>
         </div>
         
-        {/* Simplified gradient for mobile performance */}
-        <div className="absolute inset-0" style={{background:'linear-gradient(45deg,rgba(37,99,235,0.8),rgba(22,163,74,0.8))'}}></div>
+        {/* Background overlay for better text contrast */}
+        <div className="absolute inset-0 bg-black opacity-20"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
