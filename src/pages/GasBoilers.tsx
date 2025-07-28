@@ -1,8 +1,7 @@
 
-import { useEffect, useState, Suspense, lazy } from 'react';
+import { useEffect, useState } from 'react';
 import NativeGasBoilersForm from '@/components/NativeGasBoilersForm';
 import OptimizedImage from '@/components/OptimizedImage';
-import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Home, Thermometer, Zap, Shield, Flame, Wrench, PoundSterling } from 'lucide-react';
 // Performance hooks removed
@@ -11,18 +10,13 @@ import EligibilitySection from '@/components/EligibilitySection';
 
 const GasBoilers = () => {
   const [scrollY, setScrollY] = useState(0);
-  const [heroLoaded, setHeroLoaded] = useState(false);
   
-  // Performance hooks removed
-
   useEffect(() => {
     document.title = "Free Gas Boiler Replacement & Repair Scotland - Government Grants | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Get free gas boiler replacement or repair in Scotland through government grants. Improve your home efficiency with modern boiler installations at no cost.');
     }
-
-    setHeroLoaded(true);
 
     let ticking = false;
     const updateScrollY = () => {
@@ -70,10 +64,6 @@ const GasBoilers = () => {
       description: "Receive state benefits or have household income below £31,000 per year"
     }
   ];
-
-  if (!heroLoaded) {
-    return <PageHeroSkeleton hasForm={true} />;
-  }
 
   return (
     <div>
