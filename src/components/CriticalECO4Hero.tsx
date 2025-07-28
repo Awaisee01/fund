@@ -34,26 +34,21 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
 
   return (
     <>
-      {/* Preload desktop WebP hero image for LCP optimization */}
-      <link rel="preload" as="image" href="/lovable-uploads/AerialTownDesktop.webp" fetchPriority="high" />
+      {/* Preload hero image for LCP optimization */}
+      <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchPriority="high" />
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
-        {/* Responsive hero background image using your uploaded aerial images */}
-        <picture className="absolute inset-0 w-full h-full">
-          <source media="(min-width: 1200px)" srcSet="/lovable-uploads/AerialTownDesktop.webp" />
-          <source media="(min-width: 768px)" srcSet="/lovable-uploads/AerialTownTablet.webp" />
-          <source media="(max-width: 767px)" srcSet="/lovable-uploads/AerialTownMobile.webp" />
-          <img
-            src="/lovable-uploads/AerialTownDesktop.webp"
-            alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
-            className="w-full h-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            width={1920}
-            height={1080}
-          />
-        </picture>
+        {/* Hero background image */}
+        <img
+          src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
+          alt="ECO4 Energy Efficiency Background - Scottish homes with solar panels and energy improvements"
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+          decoding="sync"
+          width="1200"
+          height="800"
+        />
         
         {/* Gradient overlay to maintain visual appearance */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-blue-700/80 to-green-600/80"></div>
