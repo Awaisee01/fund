@@ -7,6 +7,9 @@
     <meta name="description" content="Get government funding for ECO4, Solar Panels, Gas Boilers & Home Improvements in Scotland. Free assessments and professional installation services." />
     <meta name="robots" content="index, follow" />
     <meta name="keywords" content="ECO4, solar panels, gas boilers, home improvements, Scotland funding, government grants" />
+    <meta name="author" content="Funding For Scotland" />
+    <meta name="revisit-after" content="7 days" />
+    <link rel="canonical" href="https://fundingforscotland.com" />
     
     <!-- Optimized viewport for mobile - prevents zoom issues and ensures proper scaling -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
@@ -35,6 +38,14 @@
     <!-- DNS prefetch for critical third-party domains -->
     <link rel="dns-prefetch" href="//connect.facebook.net">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="/src/index.css" as="style">
+    
+    <!-- Resource hints for improved performance -->
+    <link rel="prefetch" href="/eco4">
+    <link rel="prefetch" href="/solar">
+    <link rel="prefetch" href="/gas-boilers">
     
     <!-- Optimized font loading strategy -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -138,9 +149,8 @@
       @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
     </style>
     
-    <!-- Critical CSS inlined above, defer main CSS -->
-    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
+    <!-- Load main CSS immediately since it's preloaded -->
+    <link rel="stylesheet" href="/src/index.css">
 
     <!-- ✅ OPTIMIZED PIXEL IMPLEMENTATION -->
     <script>
@@ -231,6 +241,16 @@
     
     <!-- Load main app script with proper optimization -->
     <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+    
+    <!-- Service Worker for caching -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .catch(() => console.log('SW registration failed'));
+        });
+      }
+    </script>
     
     <!-- Minimal navigation fallback - defer until after critical content loads -->
     <script async>

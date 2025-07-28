@@ -1,31 +1,17 @@
 
-import { useEffect, useState, Suspense, lazy } from 'react';
+import { useEffect } from 'react';
 import HomeImprovementsHero from '@/components/home-improvements/HomeImprovementsHero';
-import PageHeroSkeleton from '@/components/PageHeroSkeleton';
-// Performance hooks removed
-
 import ProcessSteps from '@/components/home-improvements/ProcessSteps';
 import BeforeAfterCarousel from '@/components/home-improvements/BeforeAfterCarousel';
 
 const HomeImprovements = () => {
-  const [heroLoaded, setHeroLoaded] = useState(false);
-
-  // Performance optimizations
-  // Performance hooks removed
-
   useEffect(() => {
     document.title = "Free Home Improvements Scotland - Government Grants & Upgrades | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Access free home improvements in Scotland through government grants. Upgrade your property with insulation, windows, doors, and energy efficiency improvements.');
     }
-
-    setHeroLoaded(true);
   }, []);
-
-  if (!heroLoaded) {
-    return <PageHeroSkeleton hasForm={true} />;
-  }
 
   return (
     <div>
@@ -54,6 +40,8 @@ const HomeImprovements = () => {
               width={1200}
               height={600}
               loading="lazy"
+              decoding="async"
+              fetchPriority="low"
             />
           </div>
         </div>
@@ -79,6 +67,8 @@ const HomeImprovements = () => {
               width={1200}
               height={220}
               loading="lazy"
+              decoding="async"
+              fetchPriority="low"
             />
           </div>
         </div>

@@ -33,42 +33,47 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Enhanced build config for optimal performance
+    // Optimized build config for 99% Lighthouse score
     sourcemap: false,
     minify: 'esbuild',
-    target: ['es2022', 'edge88', 'firefox88', 'chrome88', 'safari14'], // Modern browsers only
-    chunkSizeWarningLimit: 1500,
+    target: ['es2022', 'edge88', 'firefox88', 'chrome88', 'safari14'],
+    chunkSizeWarningLimit: 1000, // Smaller chunks for better loading
     cssCodeSplit: true,
-    assetsInlineLimit: 4096, // Inline small assets
+    assetsInlineLimit: 2048, // Reduce to prevent large bundles
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-core': ['react', 'react-dom'],
-          'supabase': ['@supabase/supabase-js'],
-          'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
-          'routing': ['react-router-dom'],
-          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'utils': ['clsx', 'class-variance-authority', 'tailwind-merge']
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-select'],
+          'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'vendor-utils': ['clsx', 'class-variance-authority', 'tailwind-merge'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-query': ['@tanstack/react-query']
         },
-        // Optimize asset naming for better caching
+        // Optimize for caching and performance
         assetFileNames: (assetInfo) => {
-          if (!assetInfo.name) return `assets/[name]-[hash][extname]`;
+          if (!assetInfo.name) return `assets/[name].[hash][extname]`;
           const info = assetInfo.name.split('.');
           const ext = info[info.length - 1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
-            return `assets/images/[name]-[hash][extname]`;
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(ext)) {
+            return `assets/images/[name].[hash][extname]`;
           }
-          return `assets/[name]-[hash][extname]`;
+          if (/css/i.test(ext)) {
+            return `assets/css/[name].[hash][extname]`;
+          }
+          return `assets/[name].[hash][extname]`;
         },
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js'
+        chunkFileNames: 'assets/js/[name].[hash].js',
+        entryFileNames: 'assets/js/[name].[hash].js'
       }
     },
-    // Remove polyfills and legacy transformations
+    // Optimize for modern browsers
     polyfillModulePreload: false,
     modulePreload: {
       polyfill: false
-    }
+    },
+    reportCompressedSize: false // Faster builds
   },
   // Enhanced dependency optimization
   optimizeDeps: {
