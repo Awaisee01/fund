@@ -7,6 +7,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
 import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
+import { trackLeadWithUTM, trackInitiateCheckoutWithUTM, trackViewContentWithUTM } from '@/lib/utm-tracking';
+import { captureLocationData } from '@/lib/facebook-pixel';
 
 interface ECO4FormData {
   fullName: string;
@@ -35,12 +37,17 @@ const NativeECO4Form = () => {
     }
   });
 
-  // Track ViewContent when form loads
+  // Track ViewContent when form loads with rich data
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log('📊 ECO4 Form: Tracking ViewContent event');
-      trackViewContent('ECO4', 'eco4');
-    }, 1000); // Wait 1 second for form to be fully rendered
+      console.log('📊 ECO4 Form: Tracking Enhanced ViewContent event with UTM data');
+      trackViewContentWithUTM({
+        content_name: 'ECO4 Form',
+        content_category: 'eco4_landing',
+        value: 50,
+        currency: 'GBP'
+      });
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -83,6 +90,20 @@ const NativeECO4Form = () => {
     console.log('🆘 URGENT DEBUG: About to call submitFormToDatabase');
     
     try {
+      // Capture location data for pixel enhancement
+      captureLocationData({
+        postcode: data.postCode,
+        county: data.address.split(',').pop()?.trim()
+      });
+
+      // Track InitiateCheckout before submission
+      trackInitiateCheckoutWithUTM({
+        content_name: 'ECO4 Installation',
+        content_category: 'eco4_conversion',
+        value: 8500,
+        currency: 'GBP'
+      });
+
       console.log('🆘 URGENT DEBUG: Calling submitFormToDatabase with data:', {
         serviceType: 'eco4',
         name: data.fullName,
@@ -106,6 +127,19 @@ const NativeECO4Form = () => {
           source: 'eco4_new_page'
         },
         formName: 'ECO4'
+      });
+
+      // Track successful Lead conversion with rich data
+      trackLeadWithUTM({
+        content_name: 'ECO4 Installation',
+        content_category: 'eco4_conversion',
+        value: 8500,
+        currency: 'GBP',
+        em: data.email.toLowerCase(),
+        ph: data.phone.replace(/\D/g, ''),
+        fn: data.fullName.split(' ')[0]?.toLowerCase(),
+        ln: data.fullName.split(' ').slice(1).join(' ')?.toLowerCase(),
+        zp: data.postCode.replace(/\s/g, '').toLowerCase()
       });
 
       console.log('🎉 ECO4 form submission completed successfully');
