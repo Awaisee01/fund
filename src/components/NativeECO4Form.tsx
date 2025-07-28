@@ -11,6 +11,7 @@ import { trackLeadWithUTM, trackInitiateCheckoutWithUTM, trackViewContentWithUTM
 import { captureLocationData } from '@/lib/facebook-pixel';
 import { initializeAdvancedTracking, getAdvancedTracker } from '@/lib/advanced-pixel-tracking';
 import { useIntelligentFormTracking } from '@/lib/intelligent-form-tracking';
+import { sendFormCompletionToFacebook } from '@/lib/facebook-conversions-helper';
 
 interface ECO4FormData {
   fullName: string;
@@ -169,6 +170,26 @@ const NativeECO4Form = () => {
           postcode: data.postCode
         });
       }
+
+      // Send conversion to Facebook via Conversions API
+      await sendFormCompletionToFacebook({
+        eventName: 'Lead',
+        userData: {
+          email: data.email,
+          phone: data.phone,
+          firstName: data.fullName.split(' ')[0],
+          lastName: data.fullName.split(' ').slice(1).join(' '),
+          zipCode: data.postCode,
+          external_id: `eco4_${Date.now()}`
+        },
+        customData: {
+          content_name: 'ECO4 Installation Form',
+          content_category: 'eco4_conversion',
+          value: 8500,
+          currency: 'GBP',
+          postcode: data.postCode
+        }
+      });
 
       // Track with intelligent form tracker
       trackSubmission?.(true, data);

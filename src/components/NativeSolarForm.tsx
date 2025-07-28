@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
 import { trackLeadWithUTM, trackInitiateCheckoutWithUTM, trackViewContentWithUTM } from '@/lib/utm-tracking';
 import { captureLocationData } from '@/lib/facebook-pixel';
+import { sendFormCompletionToFacebook } from '@/lib/facebook-conversions-helper';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface SolarFormData {
@@ -127,6 +128,26 @@ const NativeSolarForm = () => {
         fn: data.fullName.split(' ')[0]?.toLowerCase(),
         ln: data.fullName.split(' ').slice(1).join(' ')?.toLowerCase(),
         zp: data.postCode.replace(/\s/g, '').toLowerCase()
+      });
+
+      // Send conversion to Facebook via Conversions API
+      await sendFormCompletionToFacebook({
+        eventName: 'Lead',
+        userData: {
+          email: data.email,
+          phone: data.phone,
+          firstName: data.fullName.split(' ')[0],
+          lastName: data.fullName.split(' ').slice(1).join(' '),
+          zipCode: data.postCode,
+          external_id: `solar_${Date.now()}`
+        },
+        customData: {
+          content_name: 'Solar Panel Installation Form',
+          content_category: 'solar_conversion',
+          value: 12000,
+          currency: 'GBP',
+          postcode: data.postCode
+        }
       });
 
       console.log('🎉 Solar form submission completed successfully');
