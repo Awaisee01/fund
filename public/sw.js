@@ -1,19 +1,14 @@
-// High-Performance Service Worker v3.0
-const CACHE_NAME = 'funding-scotland-v3';
-const STATIC_CACHE = 'static-v3';
-const DYNAMIC_CACHE = 'dynamic-v3';
-const IMAGE_CACHE = 'images-v3';
+// Enhanced Service Worker for performance optimization
+const CACHE_NAME = 'funding-scotland-v2';
+const STATIC_CACHE = 'static-v2';
+const DYNAMIC_CACHE = 'dynamic-v2';
 
-// Critical assets for immediate caching (1 week TTL)
+// Enhanced static assets caching
 const STATIC_ASSETS = [
   '/',
-  '/manifest.json'
-];
-
-// Long-term cacheable resources (1 month TTL)
-const LONG_TERM_ASSETS = [
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin',
-  'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2'
+  '/manifest.json',
+  '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin'
 ];
 
 // Install event - cache critical assets

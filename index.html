@@ -25,9 +25,6 @@
     <!-- Critical resource hints for fastest loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.goteng.co">
-    <link rel="preconnect" href="https://connect.facebook.net">
-    <link rel="preconnect" href="https://www.facebook.com">
     
     <!-- Critical LCP image preload -->
     <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp" fetchpriority="high">
@@ -142,46 +139,23 @@
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
 
-    <!-- ✅ MODERN PIXEL IMPLEMENTATION - No Polyfills -->
+    <!-- ✅ OPTIMIZED PIXEL IMPLEMENTATION -->
     <script>
-      // Modern Facebook Pixel - ES2022+ only (no legacy support)
-      (() => {
-        'use strict';
-        
-        if (window.fbq) return;
-        
-        const fbq = window.fbq = function(...args) {
-          fbq.callMethod ? fbq.callMethod(...args) : fbq.queue.push(args);
-        };
-        
-        if (!window._fbq) window._fbq = fbq;
-        
-        Object.assign(fbq, {
-          push: fbq,
-          loaded: true,
-          version: '2.0',
-          queue: []
+      // Facebook Pixel with proper IIFE syntax and deferred loading
+      !function(f,b,e,v,n,t,s) {
+        if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];
+        // Defer script loading until after critical path
+        window.addEventListener('load', function() {
+          t=b.createElement(e);t.async=!0;t.defer=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s);
         });
-        
-        // Load script after critical resources
-        const loadPixelScript = () => {
-          const script = document.createElement('script');
-          script.async = true;
-          script.defer = true;
-          script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-          script.crossOrigin = 'anonymous';
-          document.head.appendChild(script);
-        };
-        
-        // Defer until after LCP
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(loadPixelScript, { timeout: 2000 });
-        } else {
-          setTimeout(loadPixelScript, 1500);
-        }
-      })();
+      }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
       
-      // Initialize tracking
+      // Initialize pixel tracking
       fbq('init', '1423013825182147');
       fbq('track', 'PageView');
     </script>
