@@ -18,7 +18,10 @@ export const CriticalResourcePreloader = () => {
         imagesToPreload.push('/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png');
       } else if (currentPath === '/eco4') {
         // ECO4 hero image
-        imagesToPreload.push('/lovable-uploads/AerialTownDesktop.webp');
+        imagesToPreload.push('/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png');
+      } else if (currentPath === '/solar') {
+        // Solar hero image
+        imagesToPreload.push('/lovable-uploads/602ec2e7-cda6-46d7-9da5-0dbdb581a74b.png');
       }
       
       // Preload only critical images

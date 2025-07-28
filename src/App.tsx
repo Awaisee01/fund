@@ -12,6 +12,7 @@ import CriticalResourcePreloader from "./components/CriticalResourcePreloader";
 // Load critical pages immediately for faster initial loads
 import Index from "./pages/Index";
 import ECO4 from "./pages/ECO4";
+import Solar from "./pages/Solar";
 
 // Defer non-critical components
 const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
@@ -20,7 +21,6 @@ const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
 const StructuredData = lazy(() => import("./components/StructuredData"));
 
 // Lazy-load less critical pages
-const Solar = lazy(() => import("./pages/Solar"));
 const GasBoilers = lazy(() => import("./pages/GasBoilers"));
 const HomeImprovements = lazy(() => import("./pages/HomeImprovements"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -73,13 +73,9 @@ const App = () => {
                   {/* Critical pages load immediately */}
                   <Route path="/" element={<Index />} />
                   <Route path="/eco4" element={<ECO4 />} />
+                  <Route path="/solar" element={<Solar />} />
                   
                   {/* Less critical pages with suspense */}
-                  <Route path="/solar" element={
-                    <Suspense fallback={<PageLoadingSkeleton />}>
-                      <Solar />
-                    </Suspense>
-                  } />
                   <Route path="/gas-boilers" element={
                     <Suspense fallback={<PageLoadingSkeleton />}>
                       <GasBoilers />
