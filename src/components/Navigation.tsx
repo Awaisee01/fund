@@ -29,14 +29,18 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav style={{
-      backgroundColor: '#ffffff',
-      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50,
-      width: '100%'
-    }}>
+    <nav 
+      style={{
+        backgroundColor: '#ffffff',
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+        width: '100%'
+      }}
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '0 1rem' }}>
         <div style={{ 
           display: 'flex', 
@@ -46,7 +50,11 @@ const Navigation = () => {
         }}>
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <Link 
+              to="/" 
+              style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
+              aria-label="Funding For Scotland - Home"
+            >
               <img 
                 src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
                 alt="Funding For Scotland Logo" 
@@ -75,6 +83,7 @@ const Navigation = () => {
                   backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
                   color: isActive(item.path) ? '#ffffff' : '#374151'
                 }}
+                aria-current={isActive(item.path) ? 'page' : undefined}
               >
                 {item.name}
               </Link>
@@ -107,12 +116,16 @@ const Navigation = () => {
 
         {/* Mobile dropdown menu */}
         {isOpen && (
-          <div style={{
-            borderTop: '1px solid #e5e7eb',
-            backgroundColor: '#ffffff',
-            paddingTop: '0.5rem',
-            paddingBottom: '0.75rem'
-          }}>
+          <div 
+            style={{
+              borderTop: '1px solid #e5e7eb',
+              backgroundColor: '#ffffff',
+              paddingTop: '0.5rem',
+              paddingBottom: '0.75rem'
+            }}
+            role="menu"
+            aria-label="Mobile navigation menu"
+          >
             <div style={{ padding: '0 0.5rem' }}>
               {navItems.map((item) => (
                 <Link
@@ -131,6 +144,8 @@ const Navigation = () => {
                     backgroundColor: isActive(item.path) ? '#2563eb' : 'transparent',
                     color: isActive(item.path) ? '#ffffff' : '#374151'
                   }}
+                  role="menuitem"
+                  aria-current={isActive(item.path) ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>

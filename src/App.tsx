@@ -8,6 +8,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/SimpleNav";
 import ErrorBoundary from "./components/ErrorBoundary";
 
+// Accessibility components (loaded immediately for better experience)
+import KeyboardNavigation from "./components/KeyboardNavigation";
+import AccessibilityEnhancements from "./components/AccessibilityEnhancements";
+
 // Defer non-critical components
 const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
 const Footer = lazy(() => import("./components/Footer"));
@@ -60,6 +64,10 @@ const App = () => {
             <Navigation />
               
               <div className="min-h-screen flex flex-col">
+              {/* Accessibility Features */}
+              <KeyboardNavigation />
+              <AccessibilityEnhancements />
+              
               <Suspense fallback={<ComponentSkeleton />}>
                 <AnalyticsTracker />
                 <ScrollToTop />
@@ -67,7 +75,13 @@ const App = () => {
                 {/* Removed FacebookPixelPageView to prevent duplicate tracking */}
               </Suspense>
               
-              <main className="flex-1">
+              <main 
+                id="main-content"
+                className="flex-1"
+                role="main"
+                tabIndex={-1}
+                aria-label="Main content"
+              >
                 <Suspense fallback={<PageLoadingSkeleton />}>
                   <Routes>
                     <Route path="/" element={<Index />} />
