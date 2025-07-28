@@ -1,8 +1,8 @@
 import { useEffect, useState, Suspense, lazy, startTransition } from 'react';
 import { Home, Thermometer, Heart, Shield } from 'lucide-react';
 
-// Mobile-optimized critical above-the-fold component
-import MobileOptimizedECO4Hero from '@/components/MobileOptimizedECO4Hero';
+// Critical above-the-fold components loaded immediately
+import CriticalECO4Hero from '@/components/CriticalECO4Hero';
 
 // Non-critical components lazy loaded after above-the-fold renders
 const EligibilitySection = lazy(() => 
@@ -153,8 +153,8 @@ const ECO4 = () => {
 
   return (
     <div>
-      {/* Mobile-optimized critical above-the-fold content */}
-      <MobileOptimizedECO4Hero scrollY={scrollY} />
+      {/* Critical above-the-fold content - loads immediately */}
+      <CriticalECO4Hero scrollY={scrollY} />
       
       {/* Non-critical resource prefetcher - deferred */}
       {nonCriticalReady && (
