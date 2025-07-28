@@ -12,8 +12,7 @@ export const criticalResourceHints = {
   // Only preload resources that are immediately visible
   preload: {
     fonts: [
-      // Only preload the exact font file used for above-the-fold content
-      'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2'
+      // Font preloads removed - using Google Fonts CSS instead for better compatibility
     ],
     images: [
       // Only preload ECO4 hero image that affects LCP
