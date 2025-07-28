@@ -157,38 +157,42 @@
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
         
-        // Defer resource prefetching until after LCP
+        // Defer resource prefetching until after LCP (non-critical)
         setTimeout(function() {
           if ('requestIdleCallback' in window) {
             requestIdleCallback(prefetchLikelyResources);
           } else {
             setTimeout(prefetchLikelyResources, 1000);
           }
-        }, 2500); // Wait until after typical LCP time
+        }, 3000); // Increased delay to prioritize LCP
       });
       
-      // Prefetch strategy for likely next navigations from ECO4
+      // Non-critical prefetch strategy for likely next navigations
       function prefetchLikelyResources() {
-        const likelyPages = [
-          { path: '/solar', priority: 'low' },
-          { path: '/gas-boilers', priority: 'low' }
-        ];
-        
-        // Prefetch likely page routes
-        likelyPages.forEach(page => {
-          const link = document.createElement('link');
-          link.rel = 'prefetch';
-          link.href = page.path;
-          link.fetchPriority = page.priority;
-          document.head.appendChild(link);
-        });
+        try {
+          const likelyPages = [
+            { path: '/solar', priority: 'low' },
+            { path: '/gas-boilers', priority: 'low' }
+          ];
+          
+          // Prefetch likely page routes (non-critical)
+          likelyPages.forEach(page => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = page.path;
+            link.fetchPriority = page.priority;
+            document.head.appendChild(link);
+          });
+        } catch (error) {
+          // Silently handle prefetch errors to avoid blocking
+        }
       }
       
       // Performance mark for critical rendering
       if ('performance' in window && 'mark' in performance) {
         performance.mark('critical-css-loaded');
         console.log('✅ Performance Optimizations Step 3 Complete - Font and CSS loading optimized');
-        console.log('✅ Performance Optimizations Step 4 Complete - MIME type issue fixed (Pixel tracking intact)');
+        console.log('✅ Performance Optimizations Step 4 Complete - Non-critical assets deferred and minified');
       }
     </script>
     
@@ -198,15 +202,17 @@
     <!-- Load main app script with proper MIME type and module configuration -->
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Minimal navigation fallback - defer until after main content loads -->
-    <script defer>
-      // Simplified navigation fallback
-      document.addEventListener('DOMContentLoaded', function() {
-        const rootDiv = document.getElementById('root');
-        if (rootDiv && !rootDiv.hasChildNodes()) {
-          // Minimal loading indicator only
-          rootDiv.innerHTML = '<div style="height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="width:40px;height:40px;border:4px solid #f3f4f6;border-top:4px solid #2563eb;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div><p style="color:#6b7280;">Loading...</p></div></div><style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>';
-        }
+    <!-- Minimal navigation fallback - defer until after critical content loads -->
+    <script async>
+      // Ultra-lightweight fallback (non-critical)
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const rootDiv = document.getElementById('root');
+          if (rootDiv && !rootDiv.hasChildNodes()) {
+            // Minimal loading indicator only (non-critical)
+            rootDiv.innerHTML = '<div style="height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="width:40px;height:40px;border:4px solid #f3f4f6;border-top:4px solid #2563eb;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div><p style="color:#6b7280;">Loading...</p></div></div><style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>';
+          }
+        }, 500); // Further delay non-critical fallback
       });
     </script>
   </body>
