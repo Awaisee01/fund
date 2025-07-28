@@ -41,14 +41,51 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true,
     assetsInlineLimit: 4096, // Inline small assets
     rollupOptions: {
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false
+      },
       output: {
-        manualChunks: {
-          'react-core': ['react', 'react-dom'],
-          'supabase': ['@supabase/supabase-js'],
-          'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
-          'routing': ['react-router-dom'],
-          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'utils': ['clsx', 'class-variance-authority', 'tailwind-merge']
+        manualChunks: (id) => {
+          // More granular chunking for better tree shaking
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            if (id.includes('@supabase')) {
+              return 'supabase-vendor';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'ui-vendor';
+            }
+            if (id.includes('react-router')) {
+              return 'router-vendor';
+            }
+            if (id.includes('react-hook-form') || id.includes('zod')) {
+              return 'forms-vendor';
+            }
+            if (id.includes('lucide-react')) {
+              return 'icons-vendor';
+            }
+            return 'vendor';
+          }
+          
+          // Split by pages for better caching
+          if (id.includes('src/pages/')) {
+            const pageName = id.split('/').pop()?.replace('.tsx', '');
+            return `page-${pageName}`;
+          }
+          
+          // Split large components
+          if (id.includes('src/components/')) {
+            if (id.includes('admin/')) {
+              return 'admin-components';
+            }
+            if (id.includes('ui/')) {
+              return 'ui-components';
+            }
+          }
         },
         // Optimize asset naming for better caching
         assetFileNames: (assetInfo) => {
