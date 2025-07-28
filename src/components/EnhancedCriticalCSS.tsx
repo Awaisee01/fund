@@ -63,6 +63,15 @@ const EnhancedCriticalCSS = () => {
       style.textContent = criticalCSS;
       document.head.appendChild(style);
 
+      // Load modern critical CSS for supported browsers
+      if ('noModule' in HTMLScriptElement.prototype) {
+        const modernCSS = document.createElement('link');
+        modernCSS.rel = 'stylesheet';
+        modernCSS.href = '/src/styles/modern-critical.css';
+        modernCSS.media = 'all';
+        document.head.appendChild(modernCSS);
+      }
+
       // Defer non-critical CSS
       setTimeout(() => {
         // Load the main CSS file with error handling
