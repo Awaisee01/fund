@@ -7,12 +7,16 @@ import ProcessSteps from '@/components/home-improvements/ProcessSteps';
 import BeforeAfterCarousel from '@/components/home-improvements/BeforeAfterCarousel';
 
 const HomeImprovements = () => {
+  console.log('🏠 HomeImprovements page rendering...');
+  
   useEffect(() => {
+    console.log('🏠 HomeImprovements useEffect running...');
     document.title = "Free Home Improvements Scotland - Government Grants & Upgrades | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Access free home improvements in Scotland through government grants. Upgrade your property with insulation, windows, doors, and energy efficiency improvements.');
     }
+    console.log('🏠 HomeImprovements page setup complete');
   }, []);
 
   return (

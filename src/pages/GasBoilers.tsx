@@ -9,14 +9,17 @@ import { CheckCircle, Home, Thermometer, Zap, Shield, Flame, Wrench, PoundSterli
 import EligibilitySection from '@/components/EligibilitySection';
 
 const GasBoilers = () => {
+  console.log('🔧 GasBoilers page rendering...');
   const [scrollY, setScrollY] = useState(0);
   
   useEffect(() => {
+    console.log('🔧 GasBoilers useEffect running...');
     document.title = "Free Gas Boiler Replacement & Repair Scotland - Government Grants | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Get free gas boiler replacement or repair in Scotland through government grants. Improve your home efficiency with modern boiler installations at no cost.');
     }
+    console.log('🔧 GasBoilers page setup complete');
 
     let ticking = false;
     const updateScrollY = () => {

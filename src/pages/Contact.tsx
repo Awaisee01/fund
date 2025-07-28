@@ -6,12 +6,16 @@ import { MapPin, Clock, CheckCircle, Headphones } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Contact = () => {
+  console.log('📞 Contact page rendering...');
+  
   useEffect(() => {
+    console.log('📞 Contact useEffect running...');
     document.title = "Contact Funding For Scotland - Free Consultation & Eligibility Assessment";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Get your free consultation for Scottish grants and funding. Expert advisors help assess eligibility for ECO4, solar panels, boiler replacements, and home improvements.');
     }
+    console.log('📞 Contact page setup complete');
   }, []);
 
   return (
