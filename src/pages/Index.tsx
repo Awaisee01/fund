@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import Hero from '@/components/Hero';
+import OptimizedHero from '@/components/OptimizedHero';
 import ServicesGrid from '@/components/ServicesGrid';
 import TrustBadges from '@/components/TrustBadges';
 import CallToActionSection from '@/components/CallToActionSection';
@@ -14,7 +14,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <Hero 
+      <OptimizedHero 
         title="Unlock Scottish Grants & Funding"
         subtitle=""
         description="From heating upgrades, to free solar panels, to improving the look of Scotland's homes. Funding for Scotland are here to help people unlock the funding and grant schemes they are entitled to."

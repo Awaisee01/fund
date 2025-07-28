@@ -1,9 +1,8 @@
-
 import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
-interface HeroProps {
+interface OptimizedHeroProps {
   title: string;
   subtitle: string;
   description: string;
@@ -13,7 +12,7 @@ interface HeroProps {
   backgroundImage?: string;
 }
 
-const Hero = ({ 
+const OptimizedHero = ({ 
   title, 
   subtitle, 
   description, 
@@ -21,23 +20,27 @@ const Hero = ({
   ctaText = "Get Free Consultation",
   ctaLink = "/contact",
   backgroundImage 
-}: HeroProps) => {
+}: OptimizedHeroProps) => {
   return (
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>
       
       {/* Hero background image */}
       <div className="absolute inset-0 opacity-30">
-        <img
-          src="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png"
-          alt="Scottish Grant Scheme Background - Modern homes with renewable energy"
-          className="w-full h-full object-cover mix-blend-multiply"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-          width={1920}
-          height={1080}
-        />
+        <picture>
+          <source media="(min-width: 1200px)" srcSet="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png" />
+          <source media="(min-width: 768px)" srcSet="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png" />
+          <img
+            src="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png"
+            alt="Scottish Grant Scheme Background - Modern homes with renewable energy"
+            className="w-full h-full object-cover mix-blend-multiply"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width={1920}
+            height={1080}
+          />
+        </picture>
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 xl:py-32">
@@ -88,7 +91,6 @@ const Hero = ({
             </div>
           </div>
           
-          
           {/* TEXT CONTENT - ALWAYS SECOND ON MOBILE */}
           <div className="order-2 lg:order-1">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
@@ -120,4 +122,4 @@ const Hero = ({
   );
 };
 
-export default Hero;
+export default OptimizedHero;
