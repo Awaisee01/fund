@@ -25,7 +25,6 @@ const Index = () => {
           "Free Gas Boilers",
           "Grants for Home Improvements"
         ]}
-        backgroundImage="/lovable-uploads/AerialTownDesktop.webp"
       />
       
       <ServicesGrid />
