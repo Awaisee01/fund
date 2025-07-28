@@ -25,20 +25,13 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
-    // Gzip compression for all assets
-    viteCompression({
+    // Only use compression in production to avoid preview issues
+    mode === 'production' && viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
       threshold: 1024,
       deleteOriginFile: false
     }),
-    // Brotli compression for maximum compression
-    viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      threshold: 1024,
-      deleteOriginFile: false
-    })
   ].filter(Boolean),
   resolve: {
     alias: {
