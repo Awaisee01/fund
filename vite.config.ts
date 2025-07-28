@@ -18,8 +18,15 @@ export default defineConfig(({ mode }) => ({
   preview: {
     headers: {
       'Content-Type': 'application/javascript; charset=utf-8',
+      // Aggressive caching for static assets
       'Cache-Control': 'public, max-age=31536000, immutable',
-      'Content-Encoding': 'gzip'
+      'Content-Encoding': 'gzip',
+      // Additional performance headers
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'X-XSS-Protection': '1; mode=block',
+      // Enable compression
+      'Vary': 'Accept-Encoding'
     }
   },
   plugins: [
@@ -49,30 +56,38 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Ultra-aggressive chunk splitting for better caching
+          // Optimized chunk splitting for better caching
           if (id.includes('node_modules')) {
+            // Separate vendor chunks for better cache invalidation
             if (id.includes('react') || id.includes('react-dom')) {
-              return 'react';
+              return 'react-vendor';
             }
             if (id.includes('react-router')) {
-              return 'router';
+              return 'router-vendor';
             }
             if (id.includes('@radix-ui')) {
-              return 'ui';
+              return 'ui-vendor';
             }
             if (id.includes('supabase')) {
-              return 'supabase';
+              return 'supabase-vendor';
+            }
+            if (id.includes('lucide')) {
+              return 'icons-vendor';
             }
             return 'vendor';
           }
+          // App chunks for better cache invalidation
           if (id.includes('src/components')) {
             return 'components';
           }
           if (id.includes('src/pages')) {
             return 'pages';
           }
+          if (id.includes('src/lib')) {
+            return 'utils';
+          }
         },
-        // Ultra-optimized for caching and performance
+        // Optimized file naming for maximum caching
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return `assets/[name].[hash][extname]`;
           const info = assetInfo.name.split('.');
@@ -82,6 +97,9 @@ export default defineConfig(({ mode }) => ({
           }
           if (/css/i.test(ext)) {
             return `css/[name].[hash][extname]`;
+          }
+          if (/woff2?|eot|ttf|otf/i.test(ext)) {
+            return `fonts/[name].[hash][extname]`;
           }
           return `assets/[name].[hash][extname]`;
         },

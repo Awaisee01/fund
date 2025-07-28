@@ -231,14 +231,32 @@
     <!-- Load main app script with proper optimization -->
     <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
     
-    <!-- Service Worker registration deferred for maximum performance -->
+    <!-- High-performance service worker with aggressive caching -->
     <script>
-      // Defer service worker registration by 20 seconds for perfect Lighthouse score
+      // Enhanced service worker registration with caching strategy
       setTimeout(function() {
         if ('serviceWorker' in navigator && document.visibilityState === 'visible') {
-          navigator.serviceWorker.register('/sw.js').catch(() => {});
+          navigator.serviceWorker.register('/sw.js', {
+            scope: '/',
+            updateViaCache: 'imports' // Cache imports for better performance
+          }).then(function(registration) {
+            // Update service worker when new version available
+            registration.addEventListener('updatefound', function() {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', function() {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New service worker installed, prompt user to refresh
+                  if (confirm('New version available. Refresh to update?')) {
+                    window.location.reload();
+                  }
+                }
+              });
+            });
+          }).catch(function() {
+            // Silent fail for maximum performance
+          });
         }
-      }, 20000);
+      }, 2000); // Reduced delay for faster caching activation
     </script>
     
     <!-- Minimal navigation fallback - defer until after critical content loads -->
