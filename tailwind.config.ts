@@ -1,14 +1,27 @@
 import type { Config } from "tailwindcss";
 
 export default {
-	darkMode: ["class"],
-	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
-	],
-	prefix: "",
+  darkMode: ["class"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "./index.html"
+  ],
+  prefix: "",
+  safelist: [
+    // Keep critical classes that might be dynamically generated
+    'animate-pulse',
+    'bg-gray-200',
+    'bg-gray-300',
+    'rounded',
+    'h-4',
+    'w-3/4',
+    'w-1/2',
+    'mb-2',
+    'mb-4'
+  ],
 	theme: {
 		container: {
 			center: true,
