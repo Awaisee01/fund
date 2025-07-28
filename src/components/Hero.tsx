@@ -26,10 +26,19 @@ const Hero = ({
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>
       {backgroundImage && (
-        <div 
-          className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-30"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
-        ></div>
+        <>
+          <link rel="preload" as="image" href={backgroundImage} fetchPriority="high" />
+          <img 
+            src={backgroundImage}
+            alt="Scottish homes receiving government funding for energy efficiency improvements"
+            className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-30"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+            width="1200"
+            height="800"
+          />
+        </>
       )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 xl:py-32">
