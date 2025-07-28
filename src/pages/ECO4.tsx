@@ -1,252 +1,175 @@
-import { useEffect, useState, Suspense, lazy, startTransition } from 'react';
-import { Home, Thermometer, Heart, Shield } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-// Critical above-the-fold components loaded immediately
-import CriticalECO4Hero from '@/components/CriticalECO4Hero';
-
-// Non-critical components lazy loaded after above-the-fold renders
-const EligibilitySection = lazy(() => 
-  import('@/components/EligibilitySection').then(module => ({ 
-    default: module.default 
-  }))
-);
-
-const ProcessSection = lazy(() => 
-  import('@/components/ProcessSection').then(module => ({ 
-    default: module.default 
-  }))
-);
-
-// Defer resource prefetcher until after critical rendering
-const ResourcePrefetcher = lazy(() => 
-  import('@/components/ResourcePrefetcher').then(module => ({ 
-    default: module.default 
-  }))
-);
-
+// Minimal ECO4 page for maximum mobile performance
 const ECO4 = () => {
   const [scrollY, setScrollY] = useState(0);
-  const [criticalLoaded, setCriticalLoaded] = useState(false);
-  const [nonCriticalReady, setNonCriticalReady] = useState(false);
-  const [userBehavior, setUserBehavior] = useState({
-    scrollDepth: 0,
-    timeOnPage: 0,
-    interactions: 0
-  });
 
-  // Critical initialization - runs immediately
   useEffect(() => {
-    // Set page metadata immediately
+    // Set page metadata
     document.title = "Free ECO4 Grants Scotland - Government Energy Efficiency Scheme | Funding For Scotland";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Get free ECO4 grants in Scotland for energy efficiency improvements. Free insulation, boilers, and home upgrades through government schemes.');
     }
 
-    // Mark critical content as loaded
-    setCriticalLoaded(true);
-
-    // Defer non-critical initialization
-    startTransition(() => {
-      setTimeout(() => {
-        setNonCriticalReady(true);
-      }, 100);
-    });
+    // Minimal scroll tracking
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Non-critical behavior tracking - deferred
-  useEffect(() => {
-    if (!nonCriticalReady) return;
-
-    const startTime = Date.now();
-    let maxScrollDepth = 0;
-    let interactionCount = 0;
-    let ticking = false;
-
-    const updateScrollY = () => {
-      const currentScroll = window.scrollY;
-      const scrollPercent = Math.round((currentScroll / (document.body.scrollHeight - window.innerHeight)) * 100);
-      maxScrollDepth = Math.max(maxScrollDepth, scrollPercent);
-      
-      setScrollY(currentScroll);
-      setUserBehavior(prev => ({ ...prev, scrollDepth: maxScrollDepth }));
-      ticking = false;
-    };
-
-    const handleSmoothScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(updateScrollY);
-        ticking = true;
-      }
-    };
-
-    const trackInteraction = () => {
-      interactionCount++;
-      setUserBehavior(prev => ({ ...prev, interactions: interactionCount }));
-    };
-
-    // Track time on page every 5 seconds
-    const timeTracker = setInterval(() => {
-      const timeOnPage = Math.round((Date.now() - startTime) / 1000);
-      setUserBehavior(prev => ({ ...prev, timeOnPage }));
-    }, 5000);
-
-    // Add event listeners with passive flags for performance
-    window.addEventListener('scroll', handleSmoothScroll, { passive: true });
-    ['click', 'touchstart', 'keydown'].forEach(event => {
-      document.addEventListener(event, trackInteraction, { passive: true });
-    });
-
-    return () => {
-      window.removeEventListener('scroll', handleSmoothScroll);
-      ['click', 'touchstart', 'keydown'].forEach(event => {
-        document.removeEventListener(event, trackInteraction);
-      });
-      clearInterval(timeTracker);
-    };
-  }, [nonCriticalReady]);
-
-  const eligibilityRequirements = [
-    {
-      icon: Home,
-      title: "Property Type",
-      description: "Open to homeowners, private tenants, and landlords"
-    },
-    {
-      icon: Thermometer,
-      title: "Energy Rating", 
-      description: "Property has EPC rating of D, E, F, or G"
-    },
-    {
-      icon: Heart,
-      title: "Health Conditions",
-      description: "Including respiratory conditions, cardiovascular conditions and many more. See full list below"
-    },
-    {
-      icon: Shield,
-      title: "Qualifiers",
-      description: "Please review the list of qualifiers below. You only need to tick one box and these apply to anyone living at the property."
-    }
-  ];
-
-  // Critical loading skeleton with immediate render
-  if (!criticalLoaded) {
-    return (
-      <div className="min-h-screen" style={{background:'linear-gradient(45deg,rgba(37,99,235,0.8),rgba(22,163,74,0.8))'}}>
-        <div className="relative max-w-7xl mx-auto px-4 py-20">
-          <div className="grid gap-8 lg:grid-cols-2 items-center">
-            <div className="order-2 lg:order-1">
-              <div className="animate-pulse space-y-4">
-                <div style={{height:'4rem',background:'rgba(255,255,255,0.2)',borderRadius:'0.5rem',width:'75%',marginBottom:'1rem'}}></div>
-                <div style={{height:'2rem',background:'rgba(255,255,255,0.15)',borderRadius:'0.5rem',width:'50%',marginBottom:'1rem'}}></div>
-                <div style={{height:'1.5rem',background:'rgba(255,255,255,0.1)',borderRadius:'0.5rem',width:'80%'}}></div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2">
-              <div style={{height:'24rem',background:'rgba(255,255,255,0.1)',borderRadius:'0.5rem'}} className="animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>
-      {/* Critical above-the-fold content - loads immediately */}
-      <CriticalECO4Hero scrollY={scrollY} />
-      
-      {/* Non-critical resource prefetcher - deferred */}
-      {nonCriticalReady && (
-        <Suspense fallback={null}>
-          <ResourcePrefetcher currentPage="eco4" userBehavior={userBehavior} />
-        </Suspense>
-      )}
-      
-      {/* Below-the-fold content - lazy loaded */}
-      {nonCriticalReady && (
-        <>
-          <Suspense fallback={
-            <div className="py-20 bg-gray-100">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="animate-pulse space-y-8">
-                  <div style={{height:'2rem',background:'#d1d5db',borderRadius:'0.25rem',width:'50%',margin:'0 auto'}}></div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} style={{height:'12rem',background:'#d1d5db',borderRadius:'0.25rem'}}></div>
-                    ))}
-                  </div>
-                </div>
+      {/* Hero Section */}
+      <section className="relative min-h-screen overflow-hidden" style={{background:'linear-gradient(45deg,rgba(37,99,235,0.8),rgba(22,163,74,0.8))'}}>
+        <div className="absolute inset-0">
+          <img 
+            src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
+            alt="Scottish homes aerial view"
+            className="w-full h-full object-cover"
+            style={{transform:`translateY(${scrollY * 0.5}px)`}}
+          />
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 py-20 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-2 items-center">
+            <div className="lg:order-1 text-white">
+              <h1 className="text-3xl lg:text-6xl font-bold mb-6">
+                Free ECO4 Grants in Scotland
+              </h1>
+              <p className="text-lg mb-8">
+                Get 100% government funding for energy efficiency improvements. Free insulation, 
+                boiler upgrades, and home improvements with no upfront costs.
+              </p>
+              <div style={{background:'rgba(255,255,255,0.1)',borderRadius:'0.5rem',padding:'2rem',backdropFilter:'blur(4px)'}}>
+                <h3 className="text-xl font-bold mb-4">Check Your Eligibility</h3>
+                <form style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
+                  <input type="text" placeholder="Full Name" style={{padding:'0.75rem',borderRadius:'0.25rem',border:'none'}} />
+                  <input type="email" placeholder="Email Address" style={{padding:'0.75rem',borderRadius:'0.25rem',border:'none'}} />
+                  <input type="tel" placeholder="Phone Number" style={{padding:'0.75rem',borderRadius:'0.25rem',border:'none'}} />
+                  <select style={{padding:'0.75rem',borderRadius:'0.25rem',border:'none'}}>
+                    <option>What are you interested in?</option>
+                    <option>ECO4 Insulation</option>
+                    <option>Boiler Replacement</option>
+                    <option>Solar Panels</option>
+                    <option>Home Improvements</option>
+                  </select>
+                  <button type="submit" style={{background:'#10b981',color:'white',padding:'0.75rem',borderRadius:'0.25rem',border:'none',fontWeight:'600'}}>
+                    Get Free Assessment
+                  </button>
+                </form>
               </div>
             </div>
-          }>
-            <section className="py-20 bg-gray-100">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                  <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                    ECO4 Qualifying Criteria
-                  </h2>
-                  <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                    If you are unsure if you qualify, please feel free to complete the enquiry form at the top of the page and chat to one of our advisors
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {eligibilityRequirements.map((requirement, index) => {
-                    const Icon = requirement.icon;
-                    return (
-                      <div key={index} className="text-center">
-                        <div className="w-16 h-16 mx-auto mb-4 bg-green-500 rounded-full flex items-center justify-center">
-                          <Icon className="w-8 h-8 text-white" />
-                        </div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                          {requirement.title}
-                        </h3>
-                        <p className="text-gray-600">
-                          {requirement.description}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                <EligibilitySection />
-              </div>
-            </section>
-          </Suspense>
+          </div>
+        </div>
+      </section>
+
+      {/* Eligibility Section */}
+      <section style={{padding:'5rem 0',background:'#f9fafb'}}>
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center" style={{marginBottom:'4rem'}}>
+            <h2 style={{fontSize:'2.25rem',fontWeight:'700',color:'#1f2937',marginBottom:'1rem'}}>
+              ECO4 Qualifying Criteria
+            </h2>
+            <p style={{fontSize:'1.125rem',color:'#6b7280'}}>
+              Check if you qualify for free energy efficiency improvements
+            </p>
+          </div>
           
-          <Suspense fallback={
-            <div className="py-20 bg-gray-50">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="animate-pulse space-y-8">
-                  <div style={{height:'2rem',background:'#d1d5db',borderRadius:'0.25rem',width:'50%',margin:'0 auto'}}></div>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} style={{height:'8rem',background:'#d1d5db',borderRadius:'0.25rem'}}></div>
-                    ))}
-                  </div>
-                </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))',gap:'2rem'}}>
+            <div className="text-center">
+              <div style={{width:'4rem',height:'4rem',margin:'0 auto 1rem',background:'#10b981',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
               </div>
+              <h3 style={{fontSize:'1.25rem',fontWeight:'600',color:'#1f2937',marginBottom:'0.5rem'}}>
+                Property Type
+              </h3>
+              <p style={{color:'#6b7280'}}>
+                Open to homeowners, private tenants, and landlords
+              </p>
             </div>
-          }>
-            <section className="py-20 bg-gray-50">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                  <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                    ECO4 Installation Process
-                  </h2>
-                  <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Our streamlined process makes getting ECO4 improvements as easy as possible. From initial assessment 
-                    to final installation, we handle everything for you.
-                  </p>
-                </div>
-                
-                <ProcessSection />
+            
+            <div className="text-center">
+              <div style={{width:'4rem',height:'4rem',margin:'0 auto 1rem',background:'#10b981',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
               </div>
-            </section>
-          </Suspense>
-        </>
-      )}
+              <h3 style={{fontSize:'1.25rem',fontWeight:'600',color:'#1f2937',marginBottom:'0.5rem'}}>
+                Energy Rating
+              </h3>
+              <p style={{color:'#6b7280'}}>
+                Property has EPC rating of D, E, F, or G
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div style={{width:'4rem',height:'4rem',margin:'0 auto 1rem',background:'#10b981',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </div>
+              <h3 style={{fontSize:'1.25rem',fontWeight:'600',color:'#1f2937',marginBottom:'0.5rem'}}>
+                Health Conditions
+              </h3>
+              <p style={{color:'#6b7280'}}>
+                Including respiratory conditions, cardiovascular conditions and many more
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div style={{width:'4rem',height:'4rem',margin:'0 auto 1rem',background:'#10b981',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 1l3 6h6l-5 4 2 7-6-4-6 4 2-7-5-4h6z"/>
+                </svg>
+              </div>
+              <h3 style={{fontSize:'1.25rem',fontWeight:'600',color:'#1f2937',marginBottom:'0.5rem'}}>
+                Qualifiers
+              </h3>
+              <p style={{color:'#6b7280'}}>
+                You only need to tick one box - applies to anyone living at the property
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section style={{padding:'5rem 0',background:'#ffffff'}}>
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center" style={{marginBottom:'4rem'}}>
+            <h2 style={{fontSize:'2.25rem',fontWeight:'700',color:'#1f2937',marginBottom:'1rem'}}>
+              Simple 4-Step Process
+            </h2>
+            <p style={{fontSize:'1.125rem',color:'#6b7280'}}>
+              Get your free ECO4 improvements in just 4 easy steps
+            </p>
+          </div>
+          
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit, minmax(250px, 1fr))',gap:'2rem'}}>
+            {[
+              {step: "1", title: "Apply Online", desc: "Complete our simple online form"},
+              {step: "2", title: "Free Assessment", desc: "We'll assess your property for free"},
+              {step: "3", title: "Installation", desc: "Professional installation at no cost"},
+              {step: "4", title: "Enjoy Savings", desc: "Start saving on your energy bills"}
+            ].map((item, i) => (
+              <div key={i} className="text-center">
+                <div style={{width:'3rem',height:'3rem',margin:'0 auto 1rem',background:'#2563eb',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:'700'}}>
+                  {item.step}
+                </div>
+                <h3 style={{fontSize:'1.25rem',fontWeight:'600',color:'#1f2937',marginBottom:'0.5rem'}}>
+                  {item.title}
+                </h3>
+                <p style={{color:'#6b7280'}}>
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

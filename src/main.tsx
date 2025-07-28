@@ -2,8 +2,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import "./lib/console-override";
-import "./index.css"; // Empty file - keeps build happy
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
