@@ -105,7 +105,7 @@ export default defineConfig(({ mode }) => ({
   },
   // Enhanced dependency optimization for 100% score
   optimizeDeps: {
-    include: ['react', 'react-dom'],
-    exclude: ['@supabase/supabase-js'] // Lazy load Supabase to improve initial load
+    include: ['react', 'react-dom', '@supabase/supabase-js'],
+    // Removed exclusion that was causing module errors
   },
 }));
