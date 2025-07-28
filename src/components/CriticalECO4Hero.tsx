@@ -34,14 +34,15 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
       {/* Keep hero image but optimize loading strategy */}
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
-        {/* Optimized hero image - keep original but optimize loading */}
+        {/* Ultra-optimized WebP hero image - massive size reduction */}
         <div className="absolute inset-0 w-full h-full">
           <picture>
             <source media="(max-width: 767px)" 
-                    srcSet="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" 
+                    srcSet="/src/assets/eco4-hero-optimized.webp" 
+                    type="image/webp"
                     width="767" height="1024" />
             <img
-              src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
+              src="/src/assets/eco4-hero-optimized.webp"
               alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses"
               className="w-full h-full object-cover"
               loading="eager"
@@ -51,7 +52,8 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
               onLoad={() => setImageLoaded(true)}
               style={{
                 willChange: 'auto',
-                transform: 'translateZ(0)'
+                transform: 'translateZ(0)',
+                backfaceVisibility: 'hidden'
               }}
             />
           </picture>
