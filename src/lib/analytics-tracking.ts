@@ -17,24 +17,14 @@ class AnalyticsTracker {
 
   constructor() {
     // No initialization in constructor to prevent build-time execution
-    console.log('Analytics tracker created (no initialization)');
   }
 
   public init() {
     // Only initialize in browser environment
-    if (typeof window === 'undefined') {
-      console.log('Analytics init skipped: not in browser');
-      return;
-    }
-    
-    if (this.initialized) {
-      console.log('Analytics already initialized');
-      return;
-    }
+    if (typeof window === 'undefined') return;
+    if (this.initialized) return;
 
     try {
-      console.log('Initializing analytics tracker...');
-      
       this.visitorId = this.getOrCreateVisitorId();
       this.sessionId = this.getOrCreateSessionId();
       this.sessionStart = this.getSessionStart();
@@ -44,9 +34,8 @@ class AnalyticsTracker {
       this.setupPageUnloadTracking();
       
       this.initialized = true;
-      console.log('Analytics tracker initialized successfully');
     } catch (error) {
-      console.error('Analytics initialization failed:', error);
+      // Silent fail to avoid console pollution
     }
   }
 
@@ -115,9 +104,10 @@ class AnalyticsTracker {
 
   private setupSessionTimeout(): void {
     if (typeof window !== 'undefined') {
+      // Reduce frequency for better performance
       setInterval(() => {
         localStorage.setItem('last_activity', Date.now().toString());
-      }, 30000);
+      }, 60000); // Changed from 30s to 60s
     }
   }
 
@@ -140,11 +130,6 @@ class AnalyticsTracker {
     
     // Ensure we have valid session data before attempting database insert
     if (!this.sessionId || !this.visitorId || !this.sessionStart) {
-      console.warn('Cannot create visitor session: missing required data', {
-        sessionId: this.sessionId,
-        visitorId: this.visitorId,
-        sessionStart: this.sessionStart
-      });
       return;
     }
     
@@ -162,7 +147,7 @@ class AnalyticsTracker {
         utm_campaign: utmParams.utm_campaign,
       });
     } catch (error) {
-      console.error('Error creating visitor session:', error);
+      // Silent fail to avoid console pollution
     }
   }
 
@@ -179,7 +164,7 @@ class AnalyticsTracker {
         })
         .eq('id', this.sessionId);
     } catch (error) {
-      console.error('Error updating session end:', error);
+      // Silent fail to avoid console pollution
     }
   }
 
@@ -205,49 +190,55 @@ class AnalyticsTracker {
   }
 
   async trackPageView(pagePath?: string): Promise<void> {
-    if (typeof window === 'undefined') {
-      console.log('Page view tracking skipped: not in browser');
-      return;
-    }
+    if (typeof window === 'undefined') return;
     
     this.ensureInitialized();
-    if (!this.initialized) {
-      console.log('Page view tracking skipped: not initialized');
-      return;
-    }
+    if (!this.initialized) return;
+    
+    // Throttle page view tracking for better performance
+    const now = Date.now();
+    if (now - this.lastActivity < 2000) return; // Minimum 2s between requests
+    this.lastActivity = now;
     
     try {
       const currentPath = pagePath || window.location.pathname;
-      console.log('Tracking page view:', currentPath);
-      
       const utmParams = this.getUTMParameters();
       
       this.pagesVisited++;
       localStorage.setItem('pages_visited', this.pagesVisited.toString());
       
-      await supabase.from('page_visits').insert({
-        visitor_id: this.visitorId,
-        session_id: this.sessionId,
-        page_path: currentPath,
-        referrer: document.referrer || null,
-        utm_source: utmParams.utm_source,
-        utm_medium: utmParams.utm_medium,
-        utm_campaign: utmParams.utm_campaign,
-        utm_content: utmParams.utm_content,
-        utm_term: utmParams.utm_term,
-        user_agent: navigator.userAgent,
-      });
+      // Use requestIdleCallback to minimize performance impact
+      const trackRequest = async () => {
+        try {
+          await supabase.from('page_visits').insert({
+            visitor_id: this.visitorId,
+            session_id: this.sessionId,
+            page_path: currentPath,
+            referrer: document.referrer || null,
+            utm_source: utmParams.utm_source,
+            utm_medium: utmParams.utm_medium,
+            utm_campaign: utmParams.utm_campaign,
+            utm_content: utmParams.utm_content,
+            utm_term: utmParams.utm_term,
+            user_agent: navigator.userAgent,
+          });
+          
+          await supabase
+            .from('visitor_sessions')
+            .update({ pages_visited: this.pagesVisited })
+            .eq('id', this.sessionId);
+        } catch (error) {
+          // Silent fail to avoid console pollution
+        }
+      };
 
-      await supabase
-        .from('visitor_sessions')
-        .update({
-          pages_visited: this.pagesVisited,
-        })
-        .eq('id', this.sessionId);
-
-      console.log('Page view tracked successfully');
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(trackRequest, { timeout: 5000 });
+      } else {
+        setTimeout(trackRequest, 1000);
+      }
     } catch (error) {
-      console.error('Error tracking page view:', error);
+      // Silent fail to avoid console pollution
     }
   }
 
@@ -265,9 +256,8 @@ class AnalyticsTracker {
         })
         .eq('id', this.sessionId);
       
-      console.log('Conversion tracked for session:', this.sessionId);
     } catch (error) {
-      console.error('Error tracking conversion:', error);
+      // Silent fail to avoid console pollution
     }
   }
 

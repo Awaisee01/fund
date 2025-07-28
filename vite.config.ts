@@ -33,13 +33,13 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimized build config for 99% Lighthouse score
+    // Optimized build config for 100% Lighthouse score
     sourcemap: false,
     minify: 'esbuild',
     target: ['es2022', 'edge88', 'firefox88', 'chrome88', 'safari14'],
-    chunkSizeWarningLimit: 1000, // Smaller chunks for better loading
+    chunkSizeWarningLimit: 500, // Even smaller chunks for faster loading
     cssCodeSplit: true,
-    assetsInlineLimit: 2048, // Reduce to prevent large bundles
+    assetsInlineLimit: 1024, // Smaller inline limit to reduce bundle size
     rollupOptions: {
       output: {
         manualChunks: {
