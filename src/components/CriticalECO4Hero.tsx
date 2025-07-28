@@ -27,7 +27,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
     }, 200);
     
     // Log LCP optimization completion
-    console.log('✅ Hero LCP Fix Complete - Using WebP sources');
+    console.log('✅ Hero LCP Fix Complete - Using WebP sources (Desktop, Tablet, Mobile)');
     
     return () => clearTimeout(timer);
   }, []);
