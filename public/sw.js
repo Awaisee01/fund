@@ -3,17 +3,12 @@ const CACHE_NAME = 'funding-scotland-v2';
 const STATIC_CACHE = 'static-v2';
 const DYNAMIC_CACHE = 'dynamic-v2';
 
-// Enhanced static assets caching with LCP images
+// Enhanced static assets caching
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/lovable-uploads/hero-desktop.webp',
-  '/lovable-uploads/eco4-hero-desktop.webp',
-  '/lovable-uploads/hero-tablet.webp',
-  '/lovable-uploads/eco4-hero-tablet.webp',
-  '/lovable-uploads/hero-mobile.webp',
-  '/lovable-uploads/eco4-hero-mobile.webp',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&subset=latin'
+  '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.webp',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=latin'
 ];
 
 // Install event - cache critical assets

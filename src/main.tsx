@@ -2,7 +2,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import UltimatePerformanceOptimizer from "./components/UltimatePerformanceOptimizer";
+import { LCPOptimizer } from "./components/LCPOptimizer";
+import ModernPerformanceOptimizer from "./components/ModernPerformanceOptimizer";
+import OptimizedScriptLoader from "./components/OptimizedScriptLoader";
+import ModernBuildOptimizer from "./components/ModernBuildOptimizer";
+import PerformanceMonitor from "./components/PerformanceMonitor";
 import "./lib/console-override";
 import "./index.css";
 
@@ -21,9 +25,16 @@ const root = createRoot(rootElement);
 
 root.render(
   <StrictMode>
-    <UltimatePerformanceOptimizer>
-      <App />
-    </UltimatePerformanceOptimizer>
+    <LCPOptimizer>
+      <PerformanceMonitor>
+        <OptimizedScriptLoader>
+          <ModernBuildOptimizer />
+          <ModernPerformanceOptimizer>
+            <App />
+          </ModernPerformanceOptimizer>
+        </OptimizedScriptLoader>
+      </PerformanceMonitor>
+    </LCPOptimizer>
   </StrictMode>
 );
 

@@ -43,8 +43,6 @@ const ResponsiveECO4Image = ({ alt, className }: ResponsiveECO4ImageProps) => {
         decoding="async"
         width={1920}
         height={1080}
-        sizes="(min-width: 1200px) 1920px, (min-width: 768px) 1024px, 100vw"
-        srcSet="/lovable-uploads/eco4-hero-desktop.webp 1920w, /lovable-uploads/eco4-hero-tablet.webp 1024w, /lovable-uploads/eco4-hero-mobile.webp 768w"
       />
     </picture>
   );
