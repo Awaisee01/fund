@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
 import ErrorBoundary from "./components/ErrorBoundary";
+import DeferredScriptLoader from "./components/DeferredScriptLoader";
 
 // Defer non-critical components
 const AnalyticsTracker = lazy(() => import("./components/AnalyticsTracker"));
@@ -53,7 +54,8 @@ const ComponentSkeleton = () => (
 
 const App = () => {
   return (
-    <ErrorBoundary>
+    <DeferredScriptLoader>
+      <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
@@ -94,6 +96,7 @@ const App = () => {
         </TooltipProvider>
       </QueryClientProvider>
     </ErrorBoundary>
+    </DeferredScriptLoader>
   );
 };
 
