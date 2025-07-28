@@ -1,5 +1,6 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { CheckCircle } from 'lucide-react';
+import ResponsiveECO4Image from '@/components/ResponsiveECO4Image';
 
 // Lazy load the native ECO4 form for optimal performance
 const NativeECO4Form = lazy(() => import('@/components/NativeECO4Form'));
@@ -34,26 +35,15 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
 
   return (
     <>
-      {/* Preload desktop WebP hero image for LCP optimization */}
-      <link rel="preload" as="image" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" fetchPriority="high" />
+      {/* Preload optimized WebP hero image for LCP optimization */}
+      <link rel="preload" as="image" href="/lovable-uploads/eco4-hero-desktop.webp" fetchPriority="high" type="image/webp" />
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
-        {/* Responsive hero background image using available images */}
-        <picture className="absolute inset-0 w-full h-full">
-          <source media="(min-width: 1200px)" srcSet="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" />
-          <source media="(min-width: 768px)" srcSet="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" />
-          <source media="(max-width: 767px)" srcSet="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" />
-          <img
-            src="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png"
-            alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
-            className="w-full h-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            width={1920}
-            height={1080}
-          />
-        </picture>
+        {/* Optimized responsive hero background image */}
+        <ResponsiveECO4Image 
+          alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
+          className="absolute inset-0 w-full h-full"
+        />
         
         {/* Gradient overlay to maintain visual appearance */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-blue-700/80 to-green-600/80"></div>
