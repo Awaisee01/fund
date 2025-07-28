@@ -1,4 +1,7 @@
 {
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
   "headers": [
     {
       "source": "/(.*)",
@@ -13,7 +16,7 @@
         },
         {
           "key": "Content-Encoding",
-          "value": "gzip"
+          "value": "br"
         },
         {
           "key": "Vary",

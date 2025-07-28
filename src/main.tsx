@@ -2,11 +2,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import { LCPOptimizer } from "./components/LCPOptimizer";
-import ModernPerformanceOptimizer from "./components/ModernPerformanceOptimizer";
-import OptimizedScriptLoader from "./components/OptimizedScriptLoader";
-import ModernBuildOptimizer from "./components/ModernBuildOptimizer";
+import UltimatePerformanceOptimizer from "./components/UltimatePerformanceOptimizer";
+import AccessibilityOptimizer from "./components/AccessibilityOptimizer";
+import CompressionOptimizer from "./components/CompressionOptimizer";
 import PerformanceMonitor from "./components/PerformanceMonitor";
+import { preloadRouteComponents } from "./components/LazyComponentLoader";
 import "./lib/console-override";
 import "./index.css";
 
@@ -23,18 +23,18 @@ if (!rootElement) {
 const root = createRoot(rootElement);
 
 
+// Preload critical route components
+preloadRouteComponents();
+
 root.render(
   <StrictMode>
-    <LCPOptimizer>
+    <UltimatePerformanceOptimizer>
+      <AccessibilityOptimizer />
+      <CompressionOptimizer />
       <PerformanceMonitor>
-        <OptimizedScriptLoader>
-          <ModernBuildOptimizer />
-          <ModernPerformanceOptimizer>
-            <App />
-          </ModernPerformanceOptimizer>
-        </OptimizedScriptLoader>
+        <App />
       </PerformanceMonitor>
-    </LCPOptimizer>
+    </UltimatePerformanceOptimizer>
   </StrictMode>
 );
 
