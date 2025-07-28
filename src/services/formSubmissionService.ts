@@ -102,6 +102,27 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     console.log('✅ TRACKING: Service type:', data.serviceType);
     console.log('✅ TRACKING: Full form data received:', JSON.stringify(data, null, 2));
     
+    // Capture location data for enhanced tracking
+    const { captureLocationData } = await import('@/lib/facebook-pixel');
+    if (data.postcode || data.address) {
+      captureLocationData({
+        postcode: data.postcode || undefined,
+        county: data.address ? extractCountyFromAddress(data.address) : undefined,
+        city: data.address ? extractCityFromAddress(data.address) : undefined
+      });
+    }
+    
+    // Helper functions for address parsing
+    function extractCountyFromAddress(address: string): string | undefined {
+      const addressParts = address.split(',').map(part => part.trim());
+      return addressParts.length >= 2 ? addressParts[addressParts.length - 1] : undefined;
+    }
+    
+    function extractCityFromAddress(address: string): string | undefined {
+      const addressParts = address.split(',').map(part => part.trim());
+      return addressParts.length >= 2 ? addressParts[addressParts.length - 2] : undefined;
+    }
+    
     // CRITICAL LEAD TRACKING: Send rich Lead event with full deduplication
     console.log('🔥 PIXEL: Starting Lead tracking with eventId:', eventId);
     console.log('🔥 PIXEL: Window.fbq available?', typeof window !== 'undefined' && typeof (window as any).fbq === 'function');
@@ -275,6 +296,9 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
             customData: {
               content_name: `${data.formName || data.serviceType} Form Submission`,
               content_category: data.serviceType,
+              page_type: getPageTypeForLead(),
+              postcode: data.postcode,
+              county: county || undefined,
               value: 1, // CRITICAL: Number for Events Manager
               currency: "GBP", // CRITICAL: 3-letter ISO for Events Manager
               event_value_id: eventId
@@ -286,6 +310,16 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
           }
         };
         
+        // Helper function for lead page type
+        function getPageTypeForLead(): string {
+          const pathname = window.location.pathname.toLowerCase();
+          if (pathname === '/' || pathname === '/index') return 'homepage';
+          if (pathname.includes('/eco4')) return 'eco4_landing';
+          if (pathname.includes('/solar')) return 'solar_landing';
+          if (pathname.includes('/gas-boilers')) return 'gas_boilers_landing';
+          if (pathname.includes('/home-improvements')) return 'home_improvements_landing';
+          return 'other_page';
+        }
         console.log('🚀 CAPI Lead event sent to Facebook Conversions API');
         console.log('🚀 CAPI Event ID for deduplication:', String(eventId));
         console.log('🚀 CAPI Value type:', typeof fbPayload.data.customData.value, '(must be number)');
@@ -448,6 +482,9 @@ export const trackViewContent = async (formName: string, serviceType: string) =>
             customData: {
               content_name: `${formName} Form View`,
               content_category: serviceType,
+              page_type: getPageType(),
+              postcode: getLocationData().postcode,
+              county: getLocationData().county,
               value: 1, // CRITICAL: ALWAYS number for Facebook Events Manager
               currency: "GBP" // CRITICAL: ALWAYS 3-letter ISO code
             },
@@ -457,6 +494,26 @@ export const trackViewContent = async (formName: string, serviceType: string) =>
           }
         };
         
+        // Helper functions for location and page type
+        function getPageType(): string {
+          const pathname = window.location.pathname.toLowerCase();
+          if (pathname === '/' || pathname === '/index') return 'homepage';
+          if (pathname.includes('/eco4')) return 'eco4_landing';
+          if (pathname.includes('/solar')) return 'solar_landing';
+          if (pathname.includes('/gas-boilers')) return 'gas_boilers_landing';
+          if (pathname.includes('/home-improvements')) return 'home_improvements_landing';
+          return 'other_page';
+        }
+        
+        function getLocationData() {
+          try {
+            const stored = localStorage.getItem('user_location');
+            return stored ? JSON.parse(stored) : {};
+          } catch {
+            return {};
+          }
+        }
+
         console.log('🔥 DEBUG: ViewContent CAPI payload:', JSON.stringify(fbPayload, null, 2));
         
         const { data: fbResponse, error: fbError } = await supabase.functions.invoke('facebook-conversions-api', {
@@ -533,6 +590,9 @@ export const trackInitiateCheckout = async (formName: string, serviceType: strin
             customData: {
               content_name: `${formName} Form Interaction`,
               content_category: serviceType,
+              page_type: getPageTypeForCheckout(),
+              postcode: getLocationDataForCheckout().postcode,
+              county: getLocationDataForCheckout().county,
               value: 1, // CRITICAL: ALWAYS number for Facebook Events Manager
               currency: "GBP" // CRITICAL: ALWAYS 3-letter ISO code
             },
@@ -541,6 +601,26 @@ export const trackInitiateCheckout = async (formName: string, serviceType: strin
             userAgent: navigator.userAgent
           }
         };
+        
+        // Helper functions for InitiateCheckout
+        function getPageTypeForCheckout(): string {
+          const pathname = window.location.pathname.toLowerCase();
+          if (pathname === '/' || pathname === '/index') return 'homepage';
+          if (pathname.includes('/eco4')) return 'eco4_landing';
+          if (pathname.includes('/solar')) return 'solar_landing';
+          if (pathname.includes('/gas-boilers')) return 'gas_boilers_landing';
+          if (pathname.includes('/home-improvements')) return 'home_improvements_landing';
+          return 'other_page';
+        }
+        
+        function getLocationDataForCheckout() {
+          try {
+            const stored = localStorage.getItem('user_location');
+            return stored ? JSON.parse(stored) : {};
+          } catch {
+            return {};
+          }
+        }
         
         console.log('🔥 DEBUG: InitiateCheckout CAPI payload:', JSON.stringify(fbPayload, null, 2));
         

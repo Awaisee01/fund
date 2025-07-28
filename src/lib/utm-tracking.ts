@@ -94,7 +94,7 @@ export const getUTMData = (): UTMData => {
 };
 
 /**
- * Enhanced Facebook Pixel tracking with UTM data
+ * Enhanced Facebook Pixel tracking with UTM data, location, and page type
  * @param eventName - The Facebook Pixel event name (e.g., 'Lead', 'Purchase')
  * @param eventData - Additional event parameters
  * @param eventId - Optional event ID for deduplication with Conversions API
@@ -121,36 +121,18 @@ export const trackPixelEventWithUTM = (
 
   try {
     const utmData = getUTMData();
-    const enhancedEventData: Record<string, any> = {
+    
+    // Import enhanced location and page type functions
+    const { trackEvent } = require('./facebook-pixel');
+    
+    // Use enhanced tracking that includes location and page type
+    trackEvent(eventName, {
       ...eventData,
-      ...utmData
-    };
-
-    // CRITICAL: Filter out empty/invalid email addresses to prevent Facebook Pixel warnings
-    if (enhancedEventData.em === '' || enhancedEventData.em === null || enhancedEventData.em === undefined) {
-      delete enhancedEventData.em;
-    }
-    
-    // Filter out other empty user data fields
-    ['ph', 'fn', 'ln', 'zp'].forEach(field => {
-      if (enhancedEventData[field] === '' || enhancedEventData[field] === null || enhancedEventData[field] === undefined) {
-        delete enhancedEventData[field];
-      }
+      ...utmData,
+      eventID: eventId ? String(eventId) : undefined
     });
-
-    // Add event ID for deduplication (must match CAPI format)
-    if (eventId) {
-      enhancedEventData.eventID = String(eventId); // camelCase for Pixel
-    }
     
-    console.log(`🔥 PIXEL ${eventName} event payload:`, JSON.stringify(enhancedEventData, null, 2));
-    console.log(`🔥 PIXEL Event ID for deduplication:`, String(eventId));
-    console.log(`🔥 PIXEL Value type:`, typeof enhancedEventData.value, '(must be number)');
-    console.log(`🔥 PIXEL Currency:`, enhancedEventData.currency, '(must be GBP)');
-
-     // Fire the event using detective-monitored channel
-     pixelFn('track', eventName, enhancedEventData);
-    console.log(`✅ PIXEL ${eventName} event sent successfully with eventID: ${String(eventId)}`);
+    console.log(`✅ PIXEL ${eventName} event sent successfully with enhanced data`);
     
   } catch (error) {
     console.error(`❌ PIXEL: ${eventName} tracking failed:`, error);

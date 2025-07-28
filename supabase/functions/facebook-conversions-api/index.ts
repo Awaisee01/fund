@@ -23,6 +23,9 @@ interface ConversionData {
   customData: {
     content_name: string
     content_category: string
+    page_type?: string // New: Page type parameter
+    postcode?: string // New: Postcode parameter
+    county?: string // New: County parameter
     value?: number
     currency?: string
   }
