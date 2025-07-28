@@ -33,7 +33,7 @@ const Hero = ({
           <img
             src="/lovable-uploads/AerialTownDesktop.webp"
             alt="Scottish Grants and Funding - Aerial view of houses with energy improvements"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover filter-none"
             loading="eager"
             fetchPriority="high"
             decoding="sync"

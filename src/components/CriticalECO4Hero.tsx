@@ -46,7 +46,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
           <img
             src="/lovable-uploads/AerialTownDesktop.webp"
             alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover filter-none"
             loading="eager"
             fetchPriority="high"
             decoding="sync"
