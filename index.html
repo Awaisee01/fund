@@ -151,9 +151,18 @@
            src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1"/>
     </noscript>
     
+    <!-- Immediate loading state fix -->
+    <script>
+      // Immediately show content - no loading state delays
+      (function() {
+        document.body.className = 'loaded';
+        console.log('✅ Loading state fixed - page visible');
+      })();
+    </script>
+
     <!-- Defer non-critical initialization script -->
     <script defer>
-      // Mark DOM ready and start paint immediately
+      // Ensure page is always visible
       document.addEventListener('DOMContentLoaded', function() {
         document.body.className = 'loaded';
         
