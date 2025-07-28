@@ -25,19 +25,26 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
     const timer = setTimeout(() => {
       setFormReady(true);
     }, 200);
+    
+    // Log LCP optimization completion
+    console.log('✅ Hero LCP Fix Complete - Using WebP sources');
+    
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      {/* Preload only desktop hero image for LCP optimization */}
-      <link rel="preload" as="image" href="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png" fetchPriority="high" />
+      {/* Preload only desktop WebP hero image for LCP optimization */}
+      <link rel="preload" as="image" href="/AerialTownDesktop.webp" fetchPriority="high" />
       
       <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen">
-        {/* Hero background image as proper img element for LCP optimization */}
+        {/* Responsive hero background image as LCP element */}
         <picture className="absolute inset-0 w-full h-full">
+          <source media="(min-width: 1024px)" srcSet="/AerialTownDesktop.webp" />
+          <source media="(min-width: 768px)" srcSet="/AerialTownTablet.webp" />
+          <source media="(max-width: 767px)" srcSet="/AerialTownMobile.webp" />
           <img
-            src="/lovable-uploads/56f9f560-3316-4b75-b809-162fde3c8bbf.png"
+            src="/AerialTownDesktop.webp"
             alt="ECO4 Energy Efficiency Background - Aerial view of modern Scottish houses with solar panels"
             className="w-full h-full object-cover"
             loading="eager"
