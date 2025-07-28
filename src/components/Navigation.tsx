@@ -49,8 +49,10 @@ const Navigation = () => {
             <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
               <img 
                 src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
-                alt="Funding For Scotland Logo" 
+                alt="ECO4, Solar Panels, Gas Boilers & Home Improvements Funding Scotland" 
                 style={{ height: '2rem', width: 'auto', objectFit: 'contain' }}
+                loading="eager"
+                fetchPriority="high"
               />
             </Link>
           </div>
@@ -65,6 +67,7 @@ const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.path}
+                aria-label={`Navigate to ${item.name} page - ${item.name === 'ECO4' ? 'Government funding for insulation and heating' : item.name === 'Solar' ? 'Solar panel installation and funding' : item.name === 'Gas Boilers' ? 'Gas boiler replacement funding' : item.name === 'Home Improvements' ? 'Home improvement grants and funding' : item.name === 'Contact Us' ? 'Get in touch for free assessment' : 'Home page'}`}
                 style={{
                   padding: '0.5rem 0.75rem',
                   borderRadius: '0.375rem',
@@ -119,6 +122,7 @@ const Navigation = () => {
                   key={item.name}
                   to={item.path}
                   onClick={() => setIsOpen(false)}
+                  aria-label={`Navigate to ${item.name} page - ${item.name === 'ECO4' ? 'Government funding for insulation and heating' : item.name === 'Solar' ? 'Solar panel installation and funding' : item.name === 'Gas Boilers' ? 'Gas boiler replacement funding' : item.name === 'Home Improvements' ? 'Home improvement grants and funding' : item.name === 'Contact Us' ? 'Get in touch for free assessment' : 'Home page'}`}
                   style={{
                     display: 'block',
                     padding: '0.75rem',

@@ -3,6 +3,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Get government funding for ECO4, Solar Panels, Gas Boilers & Home Improvements in Scotland. Free assessments and professional installation services." />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="ECO4, solar panels, gas boilers, home improvements, Scotland funding, government grants" />
+    
     <!-- Optimized viewport for mobile - prevents zoom issues and ensures proper scaling -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     
@@ -13,8 +18,9 @@
     <meta name="theme-color" content="#2563eb" />
     <meta name="apple-mobile-web-app-title" content="Funding For Scotland" />
     
-    <!-- Favicon -->
-    <link rel="icon" href="/lovable-uploads/beb68662-b15e-4c22-bae2-7be4c6bb42e7.png" type="image/png">
+    <!-- Optimized favicon with proper caching -->
+    <link rel="icon" href="/lovable-uploads/beb68662-b15e-4c22-bae2-7be4c6bb42e7.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/icon-192.png" sizes="192x192">
     
     <!-- Critical resource hints for fastest loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -220,8 +226,8 @@
     
     <div id="root"></div>
     
-    <!-- Load main app script with proper MIME type and module configuration -->
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Load main app script with proper optimization -->
+    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
     
     <!-- Minimal navigation fallback - defer until after critical content loads -->
     <script async>

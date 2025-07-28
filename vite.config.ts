@@ -33,12 +33,13 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimized build config for performance
+    // Enhanced build config for optimal performance
     sourcemap: false,
     minify: 'esbuild',
     target: ['es2020'],
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 1500,
     cssCodeSplit: true,
+    assetsInlineLimit: 4096, // Inline small assets
     rollupOptions: {
       output: {
         manualChunks: {
@@ -46,7 +47,8 @@ export default defineConfig(({ mode }) => ({
           'supabase': ['@supabase/supabase-js'],
           'ui-components': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
           'routing': ['react-router-dom'],
-          'forms': ['react-hook-form', '@hookform/resolvers', 'zod']
+          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'utils': ['clsx', 'class-variance-authority', 'tailwind-merge']
         },
         // Optimize asset naming for better caching
         assetFileNames: (assetInfo) => {
@@ -63,8 +65,8 @@ export default defineConfig(({ mode }) => ({
       }
     }
   },
-  // Basic dependency optimization
+  // Enhanced dependency optimization
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', '@radix-ui/react-dialog'],
   },
 }));

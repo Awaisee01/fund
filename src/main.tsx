@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import { LCPOptimizer } from "./components/LCPOptimizer";
 import ModernPerformanceOptimizer from "./components/ModernPerformanceOptimizer";
+import PerformanceMonitor from "./components/PerformanceMonitor";
 import "./lib/console-override";
 import "./index.css";
 
@@ -23,9 +24,11 @@ const root = createRoot(rootElement);
 root.render(
   <StrictMode>
     <LCPOptimizer>
-      <ModernPerformanceOptimizer>
-        <App />
-      </ModernPerformanceOptimizer>
+      <PerformanceMonitor>
+        <ModernPerformanceOptimizer>
+          <App />
+        </ModernPerformanceOptimizer>
+      </PerformanceMonitor>
     </LCPOptimizer>
   </StrictMode>
 );
