@@ -3,12 +3,10 @@ const CACHE_NAME = 'funding-scotland-v1';
 const STATIC_CACHE = 'static-v1';
 const DYNAMIC_CACHE = 'dynamic-v1';
 
-// Assets to cache immediately for LCP optimization
+// Assets to cache immediately
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png', // ECO4 hero image
-  '/lovable-uploads/beb68662-b15e-4c22-bae2-7be4c6bb42e7.png', // Favicon
   // Critical CSS and JS will be added automatically by Vite
 ];
 

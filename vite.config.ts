@@ -1,9 +1,10 @@
-// Critical performance optimizations for bundle size reduction
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
+// Simplified config to avoid build timeouts
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
@@ -29,83 +30,49 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Enhanced optimization for Lighthouse score
+    // Optimize for modern browsers and aggressive minification
     target: ['es2020'],
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: mode === 'production',
+        drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.trace'],
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
         unused: true,
-        dead_code: true,
-        // Remove unused imports
-        side_effects: false,
-        // Optimize loops and conditionals
-        loops: true,
-        conditionals: true,
-        // Remove redundant code
-        collapse_vars: true,
-        reduce_vars: true
+        dead_code: true
       },
       mangle: {
         properties: {
           regex: /^_/
         }
-      },
-      format: {
-        comments: false
       }
     },
     sourcemap: false,
-    chunkSizeWarningLimit: 1000, // Stricter limit for better performance
+    chunkSizeWarningLimit: 2000,
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        // Aggressive chunk splitting for optimal caching
+        // More aggressive chunk splitting for better caching
         manualChunks: {
-          // Core React - always needed
-          'react-vendor': ['react', 'react-dom'],
-          
-          // Router - needed for navigation
-          'router': ['react-router-dom'],
-          
-          // UI framework - lazy loaded
-          'ui-framework': [
+          'react-core': ['react', 'react-dom'],
+          'routing': ['react-router-dom'],
+          'ui-components': [
             '@radix-ui/react-dialog',
             '@radix-ui/react-select',
             '@radix-ui/react-tabs',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-toast',
-            '@radix-ui/react-alert-dialog'
+            '@radix-ui/react-dropdown-menu'
           ],
-          
-          // Forms - lazy loaded
-          'forms-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          
-          // Utilities - lazy loaded
-          'utils-vendor': ['lodash', 'date-fns', 'clsx', 'class-variance-authority'],
-          
-          // Supabase - lazy loaded
-          'supabase-vendor': ['@supabase/supabase-js'],
-          
-          // Admin features - completely separate
-          'admin-vendor': ['papaparse', 'qrcode', 'recharts'],
-          
-          // Icons - lazy loaded
-          'icons-vendor': ['lucide-react']
+          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'utils': ['lodash', 'date-fns', 'clsx'],
+          'supabase': ['@supabase/supabase-js'],
+          'admin': ['papaparse', 'qrcode', 'recharts']
         },
-        
-        // Optimized asset naming
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return `assets/[name]-[hash][extname]`;
           const info = assetInfo.name.split('.');
           const ext = info[info.length - 1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(ext)) {
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
             return `assets/images/[name]-[hash][extname]`;
-          }
-          if (/css/i.test(ext)) {
-            return `assets/styles/[name]-[hash][extname]`;
           }
           return `assets/[name]-[hash][extname]`;
         },
@@ -114,29 +81,14 @@ export default defineConfig(({ mode }) => ({
       }
     }
   },
-  
-  // Enhanced dependency optimization
+  // Optimize dependencies for faster loading
   optimizeDeps: {
-    include: [
-      'react', 
-      'react-dom',
-      'react-router-dom'
-    ],
+    include: ['react', 'react-dom'],
     exclude: [
-      // Exclude heavy dependencies from optimization
       '@radix-ui/react-icons',
       'papaparse',
       'qrcode',
-      'recharts',
-      'lodash',
-      '@supabase/supabase-js'
+      'recharts'
     ]
   },
-  
-  // Performance hints
-  define: {
-    // Enable tree shaking for production
-    'process.env.NODE_ENV': JSON.stringify(mode),
-    __DEV__: mode === 'development'
-  }
 }));

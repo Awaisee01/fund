@@ -91,14 +91,7 @@ const ContactForm = () => {
   }
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
-      className="space-y-3 sm:space-y-4 pb-4"
-      role="form"
-      aria-labelledby="contact-form-title"
-      noValidate
-    >
-      <h2 id="contact-form-title" className="sr-only">Contact Form</h2>
+    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 pb-4">
       <div>
         <Label htmlFor="fullName" className="text-white text-sm sm:text-xs font-medium">
           Full Name
@@ -112,8 +105,6 @@ const ContactForm = () => {
           className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-10 sm:h-8 text-base sm:text-sm touch-manipulation"
           placeholder="Enter your full name"
           required
-          aria-describedby="fullName-error"
-          autoComplete="name"
         />
       </div>
       
@@ -130,8 +121,6 @@ const ContactForm = () => {
           className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-white/40 h-10 sm:h-8 text-base sm:text-sm touch-manipulation"
           placeholder="Enter your phone number"
           required
-          aria-describedby="phone-error"
-          autoComplete="tel"
         />
       </div>
       
@@ -189,13 +178,9 @@ const ContactForm = () => {
           className="w-full bg-white/20 hover:bg-white/30 text-white border-white/20 border h-12 sm:h-8 text-base sm:text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-[1.02] touch-manipulation"
           variant="outline"
           disabled={isSubmitting}
-          aria-describedby="submit-status"
         >
           {isSubmitting ? 'Sending...' : 'Submit'}
         </Button>
-        <div id="submit-status" className="sr-only">
-          {isSubmitting ? 'Form is being submitted' : 'Ready to submit form'}
-        </div>
       </div>
     </form>
   );
