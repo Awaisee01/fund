@@ -13,27 +13,7 @@ export const OptimizedHeroLoader = ({ children }: OptimizedHeroLoaderProps) => {
   useEffect(() => {
     // Critical path optimization for hero section
     const optimizeHeroLoading = () => {
-      // 1. Preload only critical above-the-fold images
-      const currentPath = window.location.pathname;
-      let criticalImage = '';
-      
-      // Only preload images that will actually be displayed
-      if (currentPath === '/eco4') {
-        criticalImage = '/lovable-uploads/AerialTownDesktop.webp';
-      } else if (currentPath === '/solar') {
-        criticalImage = '/src/assets/solar-hero-houses.webp';
-      }
-      
-      if (criticalImage) {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = criticalImage;
-        link.setAttribute('fetchpriority', 'high');
-        document.head.appendChild(link);
-      }
-      
-      // 2. Mark hero content as critical for rendering
+      // Mark hero content as critical for rendering (no duplicate preloads)
       const heroSections = document.querySelectorAll('section, .hero-section, [data-hero]');
       heroSections.forEach((section: Element) => {
         const element = section as HTMLElement;
