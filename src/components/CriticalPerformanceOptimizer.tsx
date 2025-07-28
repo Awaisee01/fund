@@ -26,13 +26,20 @@ const CriticalPerformanceOptimizer = ({ children }: CriticalPerformanceOptimizer
         }
       });
       
-      // Preload critical hero image for LCP
-      const heroImagePreload = document.createElement('link');
-      heroImagePreload.rel = 'preload';
-      heroImagePreload.as = 'image';
-      heroImagePreload.href = '/lovable-uploads/AerialTownDesktop.webp';
-      heroImagePreload.fetchPriority = 'high';
-      head.appendChild(heroImagePreload);
+      // Preload critical hero images for LCP
+      const heroImages = [
+        '/lovable-uploads/AerialTownDesktop.webp',
+        '/lovable-uploads/e6d7f9f8-3fec-4e65-915a-0292e7eaf42a.png'
+      ];
+      
+      heroImages.forEach(imageSrc => {
+        const heroImagePreload = document.createElement('link');
+        heroImagePreload.rel = 'preload';
+        heroImagePreload.as = 'image';
+        heroImagePreload.href = imageSrc;
+        heroImagePreload.fetchPriority = 'high';
+        head.appendChild(heroImagePreload);
+      });
     };
 
     // 2. Optimize images immediately

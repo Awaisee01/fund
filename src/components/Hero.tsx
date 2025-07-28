@@ -23,13 +23,30 @@ const Hero = ({
   backgroundImage 
 }: HeroProps) => {
   return (
-    <section className="relative text-white overflow-hidden">
-      {/* Background image with proper visibility */}
+    <section className="relative text-white overflow-hidden min-h-screen lg:min-h-[80vh]">
+      {/* Background image with responsive loading */}
       {backgroundImage && (
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
-        ></div>
+        <picture className="absolute inset-0 w-full h-full">
+          <source media="(min-width: 1200px)" srcSet="/lovable-uploads/AerialTownDesktop.webp" />
+          <source media="(min-width: 768px)" srcSet="/lovable-uploads/AerialTownTablet.webp" />
+          <source media="(max-width: 767px)" srcSet="/lovable-uploads/AerialTownMobile.webp" />
+          <img
+            src="/lovable-uploads/AerialTownDesktop.webp"
+            alt="Scottish Grants and Funding - Aerial view of houses with energy improvements"
+            className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+            width={1920}
+            height={1080}
+            onLoad={() => console.log('✅ Home hero image loaded')}
+            onError={(e) => {
+              console.error('❌ Home hero image failed to load:', e);
+              // Fallback to PNG if WebP fails
+              e.currentTarget.src = '/lovable-uploads/e6d7f9f8-3fec-4e65-915a-0292e7eaf42a.png';
+            }}
+          />
+        </picture>
       )}
       
       {/* Gradient overlay for text readability */}

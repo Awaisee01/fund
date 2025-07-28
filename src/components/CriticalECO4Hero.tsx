@@ -49,9 +49,15 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
             className="w-full h-full object-cover"
             loading="eager"
             fetchPriority="high"
-            decoding="async"
+            decoding="sync"
             width={1920}
             height={1080}
+            onLoad={() => console.log('✅ ECO4 hero image loaded')}
+            onError={(e) => {
+              console.error('❌ ECO4 hero image failed to load:', e);
+              // Fallback to PNG if WebP fails
+              e.currentTarget.src = '/lovable-uploads/e6d7f9f8-3fec-4e65-915a-0292e7eaf42a.png';
+            }}
           />
         </picture>
         
