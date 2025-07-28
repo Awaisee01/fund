@@ -191,41 +191,6 @@ const ECO4 = () => {
                   </p>
                 </div>
                 
-                {/* ECO4 Benefits Gallery */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-                  <div className="space-y-6">
-                    <img 
-                      src="/lovable-uploads/2aa49ae8-73b1-423e-a150-6873ec2f9cf6.png"
-                      alt="ECO4 insulation and heating improvements in Scottish homes"
-                      width="500"
-                      height="300"
-                      className="w-full rounded-lg shadow-lg"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="text-center">
-                      <h3 className="text-2xl font-semibold text-gray-900 mb-2">Free Insulation & Heating</h3>
-                      <p className="text-gray-600">Professional installation of energy-saving measures at no cost to qualifying households.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <img 
-                      src="/lovable-uploads/36cc3bdf-84b2-410c-9c9f-11faa27ac900.png"
-                      alt="ECO4 energy efficiency upgrades reducing bills for Scottish families"
-                      width="500"
-                      height="300"
-                      className="w-full rounded-lg shadow-lg"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="text-center">
-                      <h3 className="text-2xl font-semibold text-gray-900 mb-2">Lower Energy Bills</h3>
-                      <p className="text-gray-600">Reduce your heating costs by up to £400 per year with government-funded improvements.</p>
-                    </div>
-                  </div>
-                </div>
-                
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                   {eligibilityRequirements.map((requirement, index) => {
                     const Icon = requirement.icon;
@@ -274,37 +239,6 @@ const ECO4 = () => {
                     Our streamlined process makes getting ECO4 improvements as easy as possible. From initial assessment 
                     to final installation, we handle everything for you.
                   </p>
-                </div>
-                
-                {/* Before/After Showcase */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-                  <div className="text-center">
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-6">Before ECO4 Improvements</h3>
-                    <img 
-                      src="/lovable-uploads/597dfb86-407d-45a4-8ed9-bab0b1657c04.png"
-                      alt="Scottish home before ECO4 energy efficiency improvements"
-                      width="600"
-                      height="400"
-                      className="w-full rounded-lg shadow-lg mb-4"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <p className="text-gray-600">High energy bills, poor insulation, outdated heating systems</p>
-                  </div>
-                  
-                  <div className="text-center">
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-6">After ECO4 Improvements</h3>
-                    <img 
-                      src="/lovable-uploads/8ea43231-f712-44ea-83b5-02c17dde707b.png"
-                      alt="Scottish home after ECO4 energy efficiency improvements showing reduced costs"
-                      width="600"
-                      height="400"
-                      className="w-full rounded-lg shadow-lg mb-4"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <p className="text-gray-600">Lower energy bills, better insulation, efficient heating, warmer home</p>
-                  </div>
                 </div>
                 
                 <ProcessSection />
