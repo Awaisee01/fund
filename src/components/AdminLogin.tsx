@@ -23,20 +23,37 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
   const [totpSecret, setTotpSecret] = useState('');
   const { toast } = useToast();
 
-  const ADMIN_PASSWORD = 'FundingScotland2024!';
-
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    if (password !== ADMIN_PASSWORD) {
-      setError('Invalid password. Access denied.');
-      setIsLoading(false);
-      return;
-    }
-
     try {
+      // Authenticate admin using secure edge function
+      const { data: authData, error: authError } = await supabase.functions.invoke('authenticate-admin', {
+        body: { 
+          email: adminEmail,
+          password: password
+        }
+      });
+
+      if (authError) {
+        throw authError;
+      }
+
+      if (!authData?.success) {
+        setError(authData?.error || 'Invalid credentials. Access denied.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Store admin session info securely
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('adminSessionToken', authData.session_token);
+        localStorage.setItem('adminId', authData.admin_id);
+        localStorage.setItem('adminEmail', authData.email);
+      }
+
       // Check if TOTP is set up for this admin
       const { data, error } = await supabase.functions.invoke('setup-admin-totp', {
         body: { email: adminEmail }
@@ -66,7 +83,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
         }
       }
     } catch (err) {
-      console.error('Error checking TOTP setup:', err);
+      console.error('Error verifying admin credentials:', err);
       setError('Failed to verify admin credentials. Please try again.');
     }
     

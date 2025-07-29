@@ -14,6 +14,14 @@ export const useAdminDashboard = () => {
 
   const fetchSubmissions = async () => {
     try {
+      // Check if admin is authenticated
+      const adminAuth = localStorage.getItem('adminAuthenticated');
+      const adminId = localStorage.getItem('adminId');
+      
+      if (!adminAuth || !adminId) {
+        throw new Error('Admin authentication required');
+      }
+
       const { data, error } = await supabase
         .from('form_submissions')
         .select('*')
@@ -25,7 +33,7 @@ export const useAdminDashboard = () => {
       console.error('Error fetching submissions:', error);
       toast({
         title: "Error",
-        description: "Failed to fetch form submissions",
+        description: "Failed to fetch form submissions. Please check your authentication.",
         variant: "destructive",
       });
     } finally {
