@@ -42,44 +42,8 @@ export default defineConfig(({ mode }) => ({
     assetsInlineLimit: 1024, // Smaller inline limit to reduce bundle size
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Keep React together and load it first
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'react-vendor';
-          }
-          
-          // Core libraries that depend on React
-          if (id.includes('node_modules/react-router')) {
-            return 'react-vendor';
-          }
-          
-          // Admin components - separate chunk
-          if (id.includes('/pages/Admin.') || id.includes('/components/admin/')) {
-            return 'admin';
-          }
-          
-          // All other UI libraries
-          if (id.includes('node_modules/@radix-ui') || 
-              id.includes('node_modules/react-hook-form') || 
-              id.includes('node_modules/@hookform') || 
-              id.includes('node_modules/zod') ||
-              id.includes('node_modules/clsx') || 
-              id.includes('node_modules/class-variance-authority') || 
-              id.includes('node_modules/tailwind-merge')) {
-            return 'ui-vendor';
-          }
-          
-          // Backend and utilities
-          if (id.includes('node_modules/@supabase') ||
-              id.includes('node_modules/@tanstack/react-query')) {
-            return 'backend-vendor';
-          }
-          
-          // Everything else
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        },
+        // Disable code splitting completely for now to fix loading issues
+        manualChunks: undefined,
         // Optimize for caching and performance
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return `assets/[name].[hash][extname]`;
