@@ -20,11 +20,13 @@ const SimpleSolarForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Solar form submitting:', formData);
+    console.log('🚀 Solar form submitting:', formData);
+    console.log('🌐 Current pathname:', window.location.pathname);
     
     setIsSubmitting(true);
     
     try {
+      console.log('📡 Calling secure-form-submission function...');
       // Submit using secure form submission service (with notifications)
       const { data, error } = await supabase.functions.invoke('secure-form-submission', {
         body: {

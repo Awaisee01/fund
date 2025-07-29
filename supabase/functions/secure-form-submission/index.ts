@@ -106,6 +106,7 @@ serve(async (req) => {
     }
 
     const formData = await req.json()
+    console.log('🔍 Received form data:', JSON.stringify(formData, null, 2));
 
     // Validate form data
     const validation = validateFormData(formData);
