@@ -33,14 +33,8 @@ Deno.serve(async (req) => {
     const { data: sessionData, error: sessionError } = await supabase
       .from('admin_sessions')
       .select(`
-        admin_user_id,
-        expires_at,
-        admin_users (
-          id,
-          email,
-          is_active,
-          totp_verified
-        )
+        admin_id,
+        expires_at
       `)
       .eq('session_token', session_token)
       .gt('expires_at', new Date().toISOString())
@@ -57,8 +51,14 @@ Deno.serve(async (req) => {
       )
     }
 
-    const adminUser = sessionData.admin_users
-    if (!adminUser || !adminUser.is_active || !adminUser.totp_verified) {
+    // Get admin user details
+    const { data: adminUser, error: adminError } = await supabase
+      .from('admin_users')
+      .select('id, email, is_active, totp_verified')
+      .eq('id', sessionData.admin_id)
+      .single()
+
+    if (adminError || !adminUser || !adminUser.is_active || !adminUser.totp_verified) {
       return new Response(
         JSON.stringify({ error: 'Admin access denied' }),
         { 
