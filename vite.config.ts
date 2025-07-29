@@ -43,43 +43,41 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Separate admin components into their own chunk
+          // Keep React together and load it first
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-vendor';
+          }
+          
+          // Core libraries that depend on React
+          if (id.includes('node_modules/react-router')) {
+            return 'react-vendor';
+          }
+          
+          // Admin components - separate chunk
           if (id.includes('/pages/Admin.') || id.includes('/components/admin/')) {
             return 'admin';
           }
           
-          // Core vendor chunks
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'vendor-react';
-          }
-          if (id.includes('node_modules/react-router')) {
-            return 'vendor-router';
-          }
-          if (id.includes('node_modules/@radix-ui')) {
-            return 'vendor-ui';
-          }
-          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform') || id.includes('node_modules/zod')) {
-            return 'vendor-forms';
-          }
-          if (id.includes('node_modules/clsx') || id.includes('node_modules/class-variance-authority') || id.includes('node_modules/tailwind-merge')) {
-            return 'vendor-utils';
-          }
-          if (id.includes('node_modules/@supabase')) {
-            return 'vendor-supabase';
-          }
-          if (id.includes('node_modules/@tanstack/react-query')) {
-            return 'vendor-query';
-          }
-          if (id.includes('node_modules/recharts')) {
-            return 'vendor-charts';
-          }
-          if (id.includes('node_modules/lodash') || id.includes('node_modules/date-fns')) {
-            return 'vendor-utils-extra';
+          // All other UI libraries
+          if (id.includes('node_modules/@radix-ui') || 
+              id.includes('node_modules/react-hook-form') || 
+              id.includes('node_modules/@hookform') || 
+              id.includes('node_modules/zod') ||
+              id.includes('node_modules/clsx') || 
+              id.includes('node_modules/class-variance-authority') || 
+              id.includes('node_modules/tailwind-merge')) {
+            return 'ui-vendor';
           }
           
-          // Group all other node_modules
+          // Backend and utilities
+          if (id.includes('node_modules/@supabase') ||
+              id.includes('node_modules/@tanstack/react-query')) {
+            return 'backend-vendor';
+          }
+          
+          // Everything else
           if (id.includes('node_modules')) {
-            return 'vendor-misc';
+            return 'vendor';
           }
         },
         // Optimize for caching and performance
@@ -105,8 +103,9 @@ export default defineConfig(({ mode }) => ({
     },
     reportCompressedSize: false // Faster builds
   },
-  // Enhanced dependency optimization
+  // Enhanced dependency optimization - ensure React loads properly
   optimizeDeps: {
-    include: ['react', 'react-dom', '@radix-ui/react-dialog'],
+    include: ['react', 'react-dom', 'react-dom/client', '@radix-ui/react-dialog'],
+    force: true
   },
 }));
