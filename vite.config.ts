@@ -42,7 +42,6 @@ export default defineConfig(({ mode }) => ({
     assetsInlineLimit: 1024, // Smaller inline limit to reduce bundle size
     rollupOptions: {
       output: {
-<<<<<<< HEAD
         manualChunks: (id) => {
           // Separate admin components into their own chunk
           if (id.includes('/pages/Admin.') || id.includes('/components/admin/')) {
@@ -82,16 +81,6 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules')) {
             return 'vendor-misc';
           }
-=======
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-router': ['react-router-dom'],
-          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-select'],
-          'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'vendor-utils': ['clsx', 'class-variance-authority', 'tailwind-merge'],
-          'vendor-supabase': ['@supabase/supabase-js'],
-          'vendor-query': ['@tanstack/react-query']
->>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
         },
         // Optimize for caching and performance
         assetFileNames: (assetInfo) => {
@@ -111,7 +100,6 @@ export default defineConfig(({ mode }) => ({
       }
     },
     // Optimize for modern browsers
-    polyfillModulePreload: false,
     modulePreload: {
       polyfill: false
     },

@@ -88,8 +88,8 @@ serve(async (req) => {
       console.log('🔄 Processing conversion:', data.eventName)
       
       // Get Facebook access token from secrets
-      const accessToken = Deno.env.get('FACEBOOK_CONVERSIONS_API_ACCESS_TOKEN')
-      const pixelId = Deno.env.get('FACEBOOK_PIXEL_ID')
+      const accessToken = Deno.env.get('FACEBOOK_CONVERSIONS_API_ACCESS_TOKEN') || 'EAAIj9ZCZC5Wc4BPGmaSz5CZBnctDkYO9JTlzxYMIbDXqVZBmQLuBRF1GOXFXnNjGKpR6lfNSUtqktkXj0oBMTBZBzhKRFyPu2v3XinbYDM0nuGyNjtuXOL60lsUQd5q1ooKIUCZBehzyzwqAO5RmvQZA5yuyCYFD1H5BpBSAeXcHlSc0XgcDXthYmRkvz0icgZDZD'
+      const pixelId = Deno.env.get('FACEBOOK_PIXEL_ID') || '1423013825182147'
       
       if (!accessToken || !pixelId) {
         console.error('❌ Facebook Conversions API credentials not configured')
@@ -227,7 +227,6 @@ serve(async (req) => {
 
       console.log('✅ Facebook Conversions API success:', result)
       
-<<<<<<< HEAD
       // Enhanced response logging
       if (result.events_received !== undefined) {
         console.log(`📊 Events received by Facebook: ${result.events_received}`)
@@ -242,11 +241,6 @@ serve(async (req) => {
         console.warn('⚠️ Facebook API warnings:', result.messages)
       } else {
         console.log('✅ No Facebook API warnings - clean event submission')
-=======
-      // Check for warnings in the response
-      if (result.messages && result.messages.length > 0) {
-        console.warn('⚠️ Facebook API warnings:', result.messages)
->>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
       }
 
     } catch (error) {

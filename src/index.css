@@ -118,17 +118,12 @@
     contain: layout style;
   }
   
-<<<<<<< HEAD
-  /* Optimized font loading with system fallbacks */
-=======
   /* Critical font loading optimization */
->>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
   @font-face {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-<<<<<<< HEAD
     src: local('Inter Regular'), local('Inter-Regular'), 
          local('system-ui'), local('-apple-system'), local('BlinkMacSystemFont');
   }
@@ -158,9 +153,6 @@
     font-display: swap;
     src: local('Inter Bold'), local('Inter-Bold'),
          local('system-ui'), local('-apple-system'), local('BlinkMacSystemFont');
-=======
-    src: local('Inter Regular'), local('Inter-Regular');
->>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
   }
 
   /* CONSOLIDATED MOBILE OPTIMIZATIONS - Prevents 404 errors for separate CSS files */
