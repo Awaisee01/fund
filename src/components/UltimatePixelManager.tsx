@@ -21,8 +21,8 @@ const UltimatePixelManager: React.FC<PixelManagerProps> = ({
       try {
         console.log('🚀 ULTIMATE PIXEL MANAGER: Initializing robust tracking system');
 
-        // Initialize Facebook Pixel with robust tracking (already loaded in HTML)
-        // The pixel is already initialized in the HTML head for fastest loading
+        // Initialize Facebook Pixel with ID: 1423013825182147
+        await initializeFacebookPixel('1423013825182147');
         
         // Capture UTM parameters for enhanced tracking
         captureUTMData();

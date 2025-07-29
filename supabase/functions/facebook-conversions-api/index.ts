@@ -87,9 +87,9 @@ serve(async (req) => {
     try {
       console.log('🔄 Processing conversion:', data.eventName)
       
-      // Get Facebook access token from secrets
+      // Get Facebook access token from secrets and hardcoded Pixel ID
       const accessToken = Deno.env.get('FACEBOOK_CONVERSIONS_API_ACCESS_TOKEN')
-      const pixelId = Deno.env.get('FACEBOOK_PIXEL_ID')
+      const pixelId = '1423013825182147' // Facebook Pixel ID
       
       if (!accessToken || !pixelId) {
         console.error('❌ Facebook Conversions API credentials not configured')
