@@ -35,8 +35,9 @@ const validateEmail = (email: string): boolean => {
 };
 
 const validatePhone = (phone: string): boolean => {
-  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  return phoneRegex.test(phone.replace(/\s/g, ''));
+  // Very lenient phone validation - just check it's not empty and has numbers
+  const cleaned = phone.replace(/\s/g, '');
+  return cleaned.length >= 7 && /\d/.test(cleaned);
 };
 
 const validatePostcode = (postcode: string): boolean => {
@@ -63,7 +64,7 @@ const validateFormData = (data: any): { isValid: boolean; errors: string[] } => 
     errors.push('Name must be between 1 and 100 characters');
   }
   
-  if (data.email && !validateEmail(data.email)) {
+  if (data.email && data.email.trim().length > 0 && !validateEmail(data.email)) {
     errors.push('Invalid email format');
   }
   
