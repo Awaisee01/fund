@@ -1,8 +1,8 @@
 
-import NativeGasBoilersForm from '@/components/NativeGasBoilersForm';
+import SimpleGasBoilersForm from '@/components/SimpleGasBoilersForm';
 
 const GasBoilersForm = () => {
-  return <NativeGasBoilersForm />;
+  return <SimpleGasBoilersForm />;
 };
 
 export default GasBoilersForm;

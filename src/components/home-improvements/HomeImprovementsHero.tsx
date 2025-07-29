@@ -1,6 +1,6 @@
 
 import { CheckCircle } from 'lucide-react';
-import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
+import SimpleHomeImprovementsForm from '@/components/SimpleHomeImprovementsForm';
 import OptimizedImage from '@/components/OptimizedImage';
 
 const HomeImprovementsHero = () => {
@@ -36,7 +36,7 @@ const HomeImprovementsHero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Form Section - First on mobile, second on desktop */}
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-            <NativeHomeImprovementsForm />
+            <SimpleHomeImprovementsForm />
           </div>
           
           {/* Content Section - Second on mobile, first on desktop */}

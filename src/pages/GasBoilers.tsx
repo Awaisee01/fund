@@ -1,6 +1,6 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
-import NativeGasBoilersForm from '@/components/NativeGasBoilersForm';
+import SimpleGasBoilersForm from '@/components/SimpleGasBoilersForm';
 import OptimizedImage from '@/components/OptimizedImage';
 import PageHeroSkeleton from '@/components/PageHeroSkeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -100,7 +100,7 @@ const GasBoilers = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-              <NativeGasBoilersForm />
+              <SimpleGasBoilersForm />
             </div>
             
             <div className="order-2 lg:order-1">

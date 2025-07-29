@@ -1,8 +1,8 @@
 
-import NativeSolarForm from '@/components/NativeSolarForm';
+import SimpleSolarForm from '@/components/SimpleSolarForm';
 
 const SolarForm = () => {
-  return <NativeSolarForm />;
+  return <SimpleSolarForm />;
 };
 
 export default SolarForm;

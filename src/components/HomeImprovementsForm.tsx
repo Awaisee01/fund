@@ -1,8 +1,8 @@
 
-import NativeHomeImprovementsForm from '@/components/NativeHomeImprovementsForm';
+import SimpleHomeImprovementsForm from '@/components/SimpleHomeImprovementsForm';
 
 const HomeImprovementsForm = () => {
-  return <NativeHomeImprovementsForm />;
+  return <SimpleHomeImprovementsForm />;
 };
 
 export default HomeImprovementsForm;

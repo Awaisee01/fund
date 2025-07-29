@@ -1,7 +1,7 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
 import { trackPageView } from '@/lib/unified-tracking-manager';
-import NativeSolarForm from '@/components/NativeSolarForm';
+import SimpleSolarForm from '@/components/SimpleSolarForm';
 import SimplifiedHero from '@/components/SimplifiedHero';
 import HeroSkeleton from '@/components/HeroSkeleton';
 import { CheckCircle, Home, Thermometer, Heart, Shield } from 'lucide-react';
@@ -94,7 +94,7 @@ const Solar = () => {
         heroImage="/lovable-uploads/602ec2e7-cda6-46d7-9da5-0dbdb581a74b.png"
         altText="Row of modern houses with solar panels on roofs under blue sky"
       >
-        <NativeSolarForm />
+        <SimpleSolarForm />
       </SimplifiedHero>
       
       <Suspense fallback={

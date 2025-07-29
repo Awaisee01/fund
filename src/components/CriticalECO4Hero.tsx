@@ -1,8 +1,8 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { CheckCircle } from 'lucide-react';
 
-// Lazy load the native ECO4 form for optimal performance
-const NativeECO4Form = lazy(() => import('@/components/NativeECO4Form'));
+// Lazy load the simple ECO4 form for optimal performance
+const SimpleECO4Form = lazy(() => import('@/components/SimpleECO4Form'));
 
 interface CriticalECO4HeroProps {
   scrollY: number;
@@ -94,7 +94,7 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
                     </div>
                   </div>
                 }>
-                  <NativeECO4Form />
+                  <SimpleECO4Form />
                 </Suspense>
               ) : (
                 <div className="form-card">
