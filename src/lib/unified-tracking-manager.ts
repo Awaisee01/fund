@@ -62,7 +62,7 @@ class UnifiedTrackingManager {
         noscript.innerHTML = `<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${this.pixelId}&ev=PageView&noscript=1" />`;
         document.head.appendChild(noscript);
 
-        console.log('✅ Facebook Pixel initialized successfully');
+        
       }
 
       this.isInitialized = true;
@@ -150,7 +150,6 @@ class UnifiedTrackingManager {
         };
         
         (window as any).fbq('track', data.eventName, pixelData);
-        console.log(`✅ Facebook Pixel event sent: ${data.eventName}`);
       }
 
       // Send to Conversions API (server-side) with deduplication
@@ -206,7 +205,7 @@ class UnifiedTrackingManager {
         return;
       }
 
-      console.log('✅ Conversions API call successful');
+      
     } catch (error) {
       console.error('❌ Conversions API network error:', error);
       

@@ -26,7 +26,6 @@ const SafePixelManager: React.FC<SafePixelManagerProps> = ({ children }) => {
           fbq('track', 'PageView');
         `;
         document.head.appendChild(script);
-        console.log('✅ Safe Facebook Pixel initialized');
       }
     } catch (error) {
       console.warn('Facebook Pixel initialization failed:', error);

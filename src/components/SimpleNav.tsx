@@ -30,9 +30,7 @@ const SimpleNav = () => {
   ];
 
   const isActive = (path: string) => {
-    const active = location.pathname === path;
-    console.log(`Checking ${path} against ${location.pathname}: ${active}`);
-    return active;
+    return location.pathname === path;
   };
 
   return (
