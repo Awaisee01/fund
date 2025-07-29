@@ -382,9 +382,23 @@ export type Database = {
         Args: { user_email: string; user_password: string }
         Returns: Json
       }
+      cleanup_expired_sessions: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       is_authenticated_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      log_admin_action: {
+        Args: {
+          p_admin_id: string
+          p_action: string
+          p_details?: Json
+          p_ip_address?: unknown
+          p_user_agent?: string
+        }
+        Returns: undefined
       }
       update_admin_password: {
         Args: { admin_user_id: string; new_password: string }
