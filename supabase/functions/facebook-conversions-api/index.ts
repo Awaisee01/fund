@@ -227,7 +227,6 @@ serve(async (req) => {
 
       console.log('✅ Facebook Conversions API success:', result)
       
-<<<<<<< HEAD
       // Enhanced response logging
       if (result.events_received !== undefined) {
         console.log(`📊 Events received by Facebook: ${result.events_received}`)
@@ -242,11 +241,6 @@ serve(async (req) => {
         console.warn('⚠️ Facebook API warnings:', result.messages)
       } else {
         console.log('✅ No Facebook API warnings - clean event submission')
-=======
-      // Check for warnings in the response
-      if (result.messages && result.messages.length > 0) {
-        console.warn('⚠️ Facebook API warnings:', result.messages)
->>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
       }
 
     } catch (error) {
