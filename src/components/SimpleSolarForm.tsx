@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
+import { supabase } from '@/integrations/supabase/client';
 
 const SimpleSolarForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,20 +25,26 @@ const SimpleSolarForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Submit to database (this will trigger notifications)
-      await submitFormToDatabase({
-        serviceType: 'solar',
-        name: formData.fullName || 'Solar User',
-        email: formData.email || 'solar@example.com',
-        phone: formData.phone || '07000000000',
-        postcode: formData.postCode || 'G1 1AA',
-        address: formData.address || 'Solar Address',
-        formData: {
-          understand_roof_requirement: formData.understand || false,
-          source: 'solar_form'
-        },
-        formName: 'Solar'
+      // Submit using secure form submission service (with notifications)
+      const { data, error } = await supabase.functions.invoke('secure-form-submission', {
+        body: {
+          name: formData.fullName || 'Solar User',
+          email: formData.email || 'solar@example.com',
+          phone: formData.phone || '07000000000',
+          postcode: formData.postCode || 'G1 1AA',
+          service_type: 'solar',
+          form_data: {
+            address: formData.address || 'Solar Address',
+            understand_roof_requirement: formData.understand || false,
+            source: 'solar_form'
+          },
+          page_path: window.location.pathname
+        }
       });
+
+      if (error) {
+        throw new Error(`Submission failed: ${error.message}`);
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);

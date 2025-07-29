@@ -33,7 +33,45 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('Request body is required');
     }
 
-    const enquiryData: EnquiryNotificationRequest = await req.json();
+    const requestData = await req.json();
+    console.log('Request data received:', requestData);
+    
+    let enquiryData: EnquiryNotificationRequest;
+    
+    // Check if this is a submissionId format (from secure-form-submission)
+    if (requestData.submissionId) {
+      console.log('Getting submission data from database for ID:', requestData.submissionId);
+      
+      // Fetch submission data from database
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      );
+      
+      const { data: submission, error } = await supabase
+        .from('form_submissions')
+        .select('*')
+        .eq('id', requestData.submissionId)
+        .single();
+        
+      if (error || !submission) {
+        throw new Error(`Failed to fetch submission: ${error?.message}`);
+      }
+      
+      enquiryData = {
+        name: submission.name,
+        email: submission.email,
+        phone: submission.phone,
+        postcode: submission.postcode,
+        service_type: submission.service_type,
+        address: submission.form_data?.address || '',
+        created_at: submission.created_at
+      };
+    } else {
+      // Direct format (from formSubmissionService)
+      enquiryData = requestData as EnquiryNotificationRequest;
+    }
     
     if (!enquiryData.name || !enquiryData.service_type) {
       throw new Error('Name and service_type are required');

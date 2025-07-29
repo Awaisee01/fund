@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
+import { supabase } from '@/integrations/supabase/client';
 
 const SimpleContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,19 +23,25 @@ const SimpleContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Submit to database (this will trigger notifications)
-      await submitFormToDatabase({
-        serviceType: 'eco4', // Contact form maps to eco4 for notifications
-        name: formData.fullName || 'Contact User',
-        email: formData.email || 'contact@example.com',
-        phone: formData.phone || '07000000000',
-        postcode: formData.postCode || 'G1 1AA',
-        address: formData.address || 'Contact Address',
-        formData: {
-          source: 'contact_form'
-        },
-        formName: 'Contact'
+      // Submit using secure form submission service (with notifications)
+      const { data, error } = await supabase.functions.invoke('secure-form-submission', {
+        body: {
+          name: formData.fullName || 'Contact User',
+          email: formData.email || 'contact@example.com',
+          phone: formData.phone || '07000000000',
+          postcode: formData.postCode || 'G1 1AA',
+          service_type: 'eco4', // Contact form maps to eco4 for notifications
+          form_data: {
+            address: formData.address || 'Contact Address',
+            source: 'contact_form'
+          },
+          page_path: window.location.pathname
+        }
       });
+
+      if (error) {
+        throw new Error(`Submission failed: ${error.message}`);
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
+import { supabase } from '@/integrations/supabase/client';
 
 const SimpleHomeImprovementsForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,19 +23,25 @@ const SimpleHomeImprovementsForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Submit to database (this will trigger notifications)
-      await submitFormToDatabase({
-        serviceType: 'home_improvements',
-        name: formData.fullName || 'Home Improvement User',
-        email: formData.email || 'homeimprovement@example.com',
-        phone: formData.phone || '07000000000',
-        postcode: formData.postCode || 'G1 1AA',
-        address: formData.address || 'Home Improvement Address',
-        formData: {
-          source: 'home_improvements_form'
-        },
-        formName: 'Home Improvements'
+      // Submit using secure form submission service (with notifications)
+      const { data, error } = await supabase.functions.invoke('secure-form-submission', {
+        body: {
+          name: formData.fullName || 'Home Improvements User',
+          email: formData.email || 'homeimprovements@example.com',
+          phone: formData.phone || '07000000000',
+          postcode: formData.postCode || 'G1 1AA',
+          service_type: 'home_improvements',
+          form_data: {
+            address: formData.address || 'Home Improvements Address',
+            source: 'home_improvements_form'
+          },
+          page_path: window.location.pathname
+        }
       });
+
+      if (error) {
+        throw new Error(`Submission failed: ${error.message}`);
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);

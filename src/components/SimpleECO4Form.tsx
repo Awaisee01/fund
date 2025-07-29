@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
-import { trackFormSubmission } from '@/lib/unified-tracking-manager';
+import { supabase } from '@/integrations/supabase/client';
+
 
 const SimpleECO4Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,29 +26,26 @@ const SimpleECO4Form = () => {
     setIsSubmitting(true);
     
     try {
-      // Track form submission with unified tracking
-      await trackFormSubmission('eco4', {
-        email: formData.email || 'test@example.com',
-        phone: formData.phone || '07000000000',
-        firstName: formData.fullName ? formData.fullName.split(' ')[0] : 'Test',
-        lastName: formData.fullName ? formData.fullName.split(' ').slice(1).join(' ') : 'User',
-        postcode: formData.postCode || 'G1 1AA'
+      // Submit using secure form submission service (with notifications)
+      const { data, error } = await supabase.functions.invoke('secure-form-submission', {
+        body: {
+          name: formData.fullName || 'ECO4 User',
+          email: formData.email || 'eco4@example.com',
+          phone: formData.phone || '07000000000',
+          postcode: formData.postCode || 'G1 1AA',
+          service_type: 'eco4',
+          form_data: {
+            address: formData.address || 'ECO4 Address',
+            understand_mains_gas_restriction: formData.understand || false,
+            source: 'eco4_simple_form'
+          },
+          page_path: window.location.pathname
+        }
       });
 
-      // Submit to database (this will trigger notifications)
-      await submitFormToDatabase({
-        serviceType: 'eco4',
-        name: formData.fullName || 'Test User',
-        email: formData.email || 'test@example.com',
-        phone: formData.phone || '07000000000',
-        postcode: formData.postCode || 'G1 1AA',
-        address: formData.address || 'Test Address',
-        formData: {
-          understand_mains_gas_restriction: formData.understand || false,
-          source: 'eco4_simple_form'
-        },
-        formName: 'ECO4'
-      });
+      if (error) {
+        throw new Error(`Submission failed: ${error.message}`);
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);
