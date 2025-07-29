@@ -13,27 +13,43 @@ export const TestEmailButton = () => {
     setIsLoading(true);
     
     try {
-      console.log('Triggering test email notification...');
+      console.log('Testing form submission notification...');
       
-      const { data, error } = await supabase.functions.invoke('test-email-notification');
+      // Test by inserting a test form submission which will trigger the notification
+      const { data, error } = await supabase
+        .from('form_submissions')
+        .insert({
+          service_type: 'eco4',
+          name: 'TEST NOTIFICATION',
+          email: 'test@example.com',
+          phone: '07777777777',
+          postcode: 'TEST123',
+          page_path: '/admin-test',
+          form_data: {
+            source: 'admin_test_notification',
+            note: 'This is a test notification from admin dashboard'
+          }
+        })
+        .select()
+        .single();
       
       if (error) {
-        console.error('Test email error:', error);
+        console.error('Test submission error:', error);
         throw error;
       }
       
-      console.log('Test email response:', data);
+      console.log('Test submission created:', data);
       
       toast({
-        title: "Test Email Sent!",
-        description: "Check your inbox at info@fundingforscotland.co.uk for the test notification.",
+        title: "Test Notification Triggered!",
+        description: "A test form submission was created. Check your inbox at info@fundingforscotland.co.uk for the notification.",
       });
       
     } catch (error) {
-      console.error('Failed to send test email:', error);
+      console.error('Failed to send test notification:', error);
       toast({
-        title: "Test Email Failed",
-        description: "There was an error sending the test email. Check the console for details.",
+        title: "Test Failed",
+        description: "There was an error creating the test submission. Check the console for details.",
         variant: "destructive",
       });
     } finally {
@@ -54,7 +70,7 @@ export const TestEmailButton = () => {
       ) : (
         <Mail className="h-4 w-4" />
       )}
-      {isLoading ? 'Sending...' : 'Test Email Notification'}
+      {isLoading ? 'Testing...' : 'Test Form Notification'}
     </Button>
   );
 };
