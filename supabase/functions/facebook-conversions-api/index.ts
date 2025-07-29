@@ -248,12 +248,13 @@ serve(async (req) => {
     }
   }
 
-  // Start background processing without blocking response
-  if (globalThis.EdgeRuntime) {
-    EdgeRuntime.waitUntil(processConversion(requestData.data))
-  } else {
-    // Fallback for environments without EdgeRuntime
-    processConversion(requestData.data).catch(console.error)
+  // Start background processing
+  try {
+    processConversion(requestData.data).catch(error => {
+      console.error('❌ Background processing failed:', error)
+    })
+  } catch (error) {
+    console.error('❌ Failed to start background processing:', error)
   }
   
   // Return immediate response
