@@ -1,43 +1,37 @@
-
-console.log('🚀 MAIN DEBUG: Main.tsx file loading started - immediate execution');
+console.log('🔥 MINIMAL DEBUG: Starting super basic React test');
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
-import "./index.css"; // Load styles first
-console.log('🚀 MAIN DEBUG: All imports loaded successfully');
 
-const rootElement = document.getElementById("root");
-if (!rootElement) {
-  console.error('💥 CRITICAL: Root element not found!');
-  document.body.innerHTML = '<div style="padding: 40px; text-align: center; font-family: Arial;"><h1>Error: App container not found</h1><p>The root element is missing from the HTML.</p></div>';
-  throw new Error("Root element not found");
-}
-console.log('✅ MAIN DEBUG: Root element found:', rootElement);
-
-const root = createRoot(rootElement);
-
-// Mark critical rendering start
-if ('performance' in window && 'mark' in performance) {
-  performance.mark('react-start');
-}
-
-console.log('🚀 Main.tsx: Starting React app render');
-console.log('🚀 MAIN DEBUG: About to render with App component:', App);
+// Test if React can even render a simple div
+const testDiv = document.createElement('div');
+testDiv.innerHTML = '<h1>BASIC TEST WORKING</h1>';
+testDiv.style.cssText = 'position: fixed; top: 0; left: 0; background: red; color: white; padding: 20px; z-index: 9999;';
+document.body.appendChild(testDiv);
 
 try {
+  console.log('🔥 MINIMAL DEBUG: React imports successful');
+  
+  const rootElement = document.getElementById("root");
+  if (!rootElement) {
+    console.error('💥 CRITICAL: Root element not found!');
+    throw new Error("Root element not found");
+  }
+  console.log('🔥 MINIMAL DEBUG: Root element found');
+
+  const root = createRoot(rootElement);
+  console.log('🔥 MINIMAL DEBUG: Root created');
+  
+  // Try to render the simplest possible React component
   root.render(
     <StrictMode>
-      <App />
+      <div style={{padding: '20px', background: 'green', color: 'white'}}>
+        <h1>REACT IS WORKING!</h1>
+      </div>
     </StrictMode>
   );
-  console.log('✅ Main.tsx: React app render completed successfully');
+  console.log('🔥 MINIMAL DEBUG: Simple React render successful');
+  
 } catch (error) {
-  console.error('💥 CRITICAL: React render failed:', error);
-  rootElement.innerHTML = `
-    <div style="padding: 40px; font-family: Arial; background: #fee; border: 2px solid #f00; margin: 20px;">
-      <h1 style="color: #c00;">React App Failed to Render</h1>
-      <p><strong>Error:</strong> ${error instanceof Error ? error.message : String(error)}</p>
-      <p>Check the console for more details.</p>
-    </div>
-  `;
+  console.error('💥 CRITICAL: Basic React test failed:', error);
+  document.body.innerHTML = `<div style="padding: 40px; background: blue; color: white;"><h1>React Failed</h1><p>${error}</p></div>`;
 }
