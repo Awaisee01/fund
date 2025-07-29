@@ -86,9 +86,19 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const clientIP = req.headers.get('x-forwarded-for') || 
-                    req.headers.get('x-real-ip') || 
-                    'unknown';
+    // Extract the first IP address from potentially comma-separated list
+    const getClientIP = (req: Request): string => {
+      const forwardedFor = req.headers.get('x-forwarded-for');
+      if (forwardedFor) {
+        // Take the first IP from comma-separated list and clean it
+        const firstIP = forwardedFor.split(',')[0].trim();
+        return firstIP || 'unknown';
+      }
+      const realIP = req.headers.get('x-real-ip');
+      return realIP || 'unknown';
+    };
+
+    const clientIP = getClientIP(req);
 
     // Rate limiting check
     if (isRateLimited(clientIP)) {
@@ -159,20 +169,59 @@ serve(async (req) => {
 
     // Send email notification
     console.log('📧 Attempting to send email notification for submission:', submission.id);
+    console.log('📧 Submission data for email:', JSON.stringify(submission, null, 2));
+    
     try {
+      // First try with submission ID
+      console.log('📧 Calling send-enquiry-notification with submissionId...');
       const emailResult = await supabase.functions.invoke('send-enquiry-notification', {
         body: { submissionId: submission.id }
       });
-      console.log('📧 Email notification result:', emailResult);
+      
+      console.log('📧 Email result status:', emailResult.error ? 'ERROR' : 'SUCCESS');
+      console.log('📧 Email result data:', JSON.stringify(emailResult.data, null, 2));
+      console.log('📧 Email result error:', JSON.stringify(emailResult.error, null, 2));
       
       if (emailResult.error) {
-        console.error('📧 Email notification failed:', emailResult.error);
+        console.error('📧 Email notification failed, trying direct approach:', emailResult.error);
+        
+        // Try direct approach as fallback
+        const directEmailResult = await supabase.functions.invoke('send-enquiry-notification', {
+          body: {
+            name: submission.name,
+            email: submission.email,
+            phone: submission.phone,
+            postcode: submission.postcode,
+            service_type: submission.service_type,
+            address: sanitizedData.form_data?.address,
+            created_at: submission.created_at
+          }
+        });
+        
+        console.log('📧 Direct email attempt result:', directEmailResult);
       } else {
-        console.log('📧 Email notification sent successfully');
+        console.log('✅ Email notification sent successfully via submissionId');
       }
     } catch (emailError) {
-      console.error('📧 Email notification exception:', emailError);
-      // Don't fail the submission if email fails
+      console.error('💥 Email notification exception:', emailError);
+      // Try one more time with direct data
+      try {
+        console.log('🔄 Retrying email notification with direct data...');
+        const retryResult = await supabase.functions.invoke('send-enquiry-notification', {
+          body: {
+            name: submission.name || 'Customer',
+            email: submission.email,
+            phone: submission.phone,
+            postcode: submission.postcode,
+            service_type: submission.service_type,
+            address: sanitizedData.form_data?.address,
+            created_at: new Date().toISOString()
+          }
+        });
+        console.log('🔄 Retry email result:', retryResult);
+      } catch (retryError) {
+        console.error('💥 Final email retry failed:', retryError);
+      }
     }
 
     return Response.json({

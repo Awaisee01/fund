@@ -25,3 +25,9 @@ policy = "per_worker"
 
 [functions.facebook-conversions-api]
 import_map = "./supabase/functions/import_map.json"
+
+[functions.send-enquiry-notification]
+verify_jwt = false
+
+[functions.secure-form-submission]
+verify_jwt = false
