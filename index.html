@@ -287,12 +287,13 @@
     <!-- Zero loading delays -->
     <script>
       document.body.className = 'loaded';
+      console.log('✅ HTML: Body loaded, setting up root');
     </script>
 
     <div id="root"></div>
     
-    <!-- Load main app script with defer to avoid render blocking -->
-    <script type="module" src="/src/main.tsx" defer></script>
+    <!-- Load main app script without defer -->
+    <script type="module" src="/src/main.tsx"></script>
     
     <!-- Minimal service worker - deferred for performance -->
     <script defer>

@@ -1,4 +1,5 @@
 
+console.log('🚀 Main.tsx: File loading started');
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
