@@ -285,20 +285,6 @@
     <!-- Skip to main content link for accessibility -->
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded">Skip to main content</a>
     
-    <!-- Emergency fallback script -->
-    <script>
-      console.log('🔥 EMERGENCY: Basic script execution test');
-      
-      // Set a timeout to show fallback content if React doesn't load
-      setTimeout(function() {
-        const root = document.getElementById('root');
-        if (!root || root.innerHTML.trim() === '') {
-          console.error('💥 EMERGENCY: React failed to mount after 3 seconds');
-          document.body.innerHTML = '<div style="padding: 40px; background: red; color: white; font-family: Arial;"><h1>DIAGNOSTIC: React App Failed to Load</h1><p>Check browser console for errors. This is a fallback message.</p><p>Current URL: ' + window.location.href + '</p></div>';
-        }
-      }, 3000);
-    </script>
-    
     <!-- Zero loading delays -->
     <script>
       document.body.className = 'loaded';
