@@ -1,4 +1,6 @@
 // Production console override to remove console.log in production
+// TEMPORARILY DISABLED FOR DEBUGGING
+/*
 if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
   // Completely disable all console methods in production for maximum performance
   console.log = () => {};
@@ -14,5 +16,6 @@ if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
     }
   };
 }
+*/
 
 export default {};
