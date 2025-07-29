@@ -52,6 +52,10 @@ serve(async (req) => {
     const sessionToken = crypto.randomUUID()
     const expiresAt = new Date(Date.now() + 4 * 60 * 60 * 1000) // 4 hours
 
+    // Extract first IP from forwarded header (handles comma-separated IPs)
+    const forwardedIp = req.headers.get('x-forwarded-for');
+    const clientIp = forwardedIp ? forwardedIp.split(',')[0].trim() : req.headers.get('x-real-ip');
+
     // Store session in admin_sessions table
     const { error: sessionError } = await supabase
       .from('admin_sessions')
@@ -59,7 +63,7 @@ serve(async (req) => {
         admin_id: authResult.admin_id,
         session_token: sessionToken,
         expires_at: expiresAt.toISOString(),
-        ip_address: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip'),
+        ip_address: clientIp,
         user_agent: req.headers.get('user-agent')
       })
 
