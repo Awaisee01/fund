@@ -57,8 +57,10 @@ const sanitizeInput = (input: string): string => {
 const validateFormData = (data: any): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
   
-  if (!data.name || data.name.length < 2 || data.name.length > 100) {
-    errors.push('Name must be between 2 and 100 characters');
+  console.log('🔍 Validating form data:', JSON.stringify(data, null, 2));
+  
+  if (!data.name || data.name.length < 1 || data.name.length > 100) {
+    errors.push('Name must be between 1 and 100 characters');
   }
   
   if (data.email && !validateEmail(data.email)) {
@@ -77,6 +79,7 @@ const validateFormData = (data: any): { isValid: boolean; errors: string[] } => 
     errors.push('Invalid service type');
   }
   
+  console.log('🔍 Validation result:', { isValid: errors.length === 0, errors });
   return { isValid: errors.length === 0, errors };
 };
 
@@ -162,13 +165,21 @@ serve(async (req) => {
       )
     }
 
-    // Send email notification (existing functionality)
+    // Send email notification
+    console.log('📧 Attempting to send email notification for submission:', submission.id);
     try {
-      await supabase.functions.invoke('send-enquiry-notification', {
+      const emailResult = await supabase.functions.invoke('send-enquiry-notification', {
         body: { submissionId: submission.id }
-      })
+      });
+      console.log('📧 Email notification result:', emailResult);
+      
+      if (emailResult.error) {
+        console.error('📧 Email notification failed:', emailResult.error);
+      } else {
+        console.log('📧 Email notification sent successfully');
+      }
     } catch (emailError) {
-      console.error('Email notification error:', emailError)
+      console.error('📧 Email notification exception:', emailError);
       // Don't fail the submission if email fails
     }
 
