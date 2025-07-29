@@ -51,6 +51,7 @@ const NativeECO4Form = () => {
   const onSubmit = async (data: ECO4FormData) => {
     console.log('🆘 URGENT DEBUG: Form onSubmit function called!');
     console.log('🆘 URGENT DEBUG: Form data received:', JSON.stringify(data, null, 2));
+    
     // Prevent rapid successive submissions
     const now = Date.now();
     if (isSubmitting) {
@@ -59,18 +60,7 @@ const NativeECO4Form = () => {
       return;
     }
 
-    // Prevent submissions within 5 seconds of last attempt
-    if (now - lastSubmissionTime < 5000) {
-      toast.warning("Please wait a moment before submitting again.");
-      return;
-    }
-
-    // Limit submission attempts
-    if (submitAttempts >= 3) {
-      toast.error("Too many submission attempts. Please refresh the page and try again.");
-      return;
-    }
-
+    // Remove submission attempt limits and timing restrictions for testing
     console.log('🆘 URGENT DEBUG: About to start form submission process');
     console.log('🚀 ECO4 form submission started:', data);
     setIsSubmitting(true);
@@ -209,7 +199,7 @@ const NativeECO4Form = () => {
             <FormField
               control={form.control}
               name="fullName"
-              rules={{ required: "Full name is required" }}
+              rules={{ required: false }} // Allow any input
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white text-xs">Full Name</FormLabel>
@@ -230,7 +220,7 @@ const NativeECO4Form = () => {
             <FormField
               control={form.control}
               name="address"
-              rules={{ required: "Address is required" }}
+              rules={{ required: false }} // Allow any input
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white text-xs">Address</FormLabel>
@@ -251,7 +241,7 @@ const NativeECO4Form = () => {
             <FormField
               control={form.control}
               name="postCode"
-              rules={{ required: "Post code is required" }}
+              rules={{ required: false }} // Allow any input
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white text-xs">Post Code</FormLabel>
@@ -272,13 +262,7 @@ const NativeECO4Form = () => {
             <FormField
               control={form.control}
               name="email"
-              rules={{ 
-                required: "Email is required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Please enter a valid email"
-                }
-              }}
+              rules={{ required: false }} // Allow any input
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white text-xs">Email</FormLabel>
@@ -300,13 +284,7 @@ const NativeECO4Form = () => {
             <FormField
               control={form.control}
               name="phone"
-              rules={{ 
-                required: "Phone number is required",
-                pattern: {
-                  value: /^[0-9\s\-\+\(\)]+$/,
-                  message: "Please enter a valid phone number"
-                }
-              }}
+              rules={{ required: false }} // Allow any input
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white text-xs">Phone</FormLabel>
@@ -333,7 +311,7 @@ const NativeECO4Form = () => {
               <FormField
                 control={form.control}
                 name="understand"
-                rules={{ required: "You must confirm you understand" }}
+                rules={{ required: false }} // Allow unchecked
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                     <FormControl>
@@ -355,22 +333,16 @@ const NativeECO4Form = () => {
             <Button 
               type="submit" 
               className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold h-12 mt-6"
-              disabled={isSubmitting || submitAttempts >= 3}
+              disabled={isSubmitting} // Remove attempt limit
               onClick={(e) => {
                 console.log('🆘🆘🆘 SUBMIT BUTTON CLICKED!');
-                console.log('🆘🆘🆘 Button disabled?', isSubmitting || submitAttempts >= 3);
+                console.log('🆘🆘🆘 Button disabled?', isSubmitting);
                 console.log('🆘🆘🆘 isSubmitting:', isSubmitting);
                 console.log('🆘🆘🆘 submitAttempts:', submitAttempts);
               }}
             >
-              {isSubmitting ? 'Sending...' : submitAttempts >= 3 ? 'Please refresh page' : 'Submit'}
+              {isSubmitting ? 'Sending...' : 'Submit'}
             </Button>
-            
-            {submitAttempts >= 3 && (
-              <p className="text-yellow-300 text-xs text-center mt-2">
-                Too many attempts. Please refresh the page to try again.
-              </p>
-            )}
             
             {isSubmitting && (
               <div className="flex items-center justify-center mt-2">
