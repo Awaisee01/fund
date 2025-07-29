@@ -21,18 +21,6 @@ if ('performance' in window && 'mark' in performance) {
 }
 
 console.log('🚀 Main.tsx: Starting React app render');
-console.log('🚀 MAIN DEBUG: About to render with App component:', App);
-
-// Add observer to detect when content changes
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.type === 'childList') {
-      console.log('🔍 DOM CHANGE DETECTED:', mutation.target, 'added:', mutation.addedNodes, 'removed:', mutation.removedNodes);
-    }
-  });
-});
-
-observer.observe(rootElement, { childList: true, subtree: true });
 
 try {
   root.render(
@@ -41,16 +29,6 @@ try {
     </StrictMode>
   );
   console.log('✅ Main.tsx: React app render completed successfully');
-  
-  // Check content after a short delay
-  setTimeout(() => {
-    console.log('🔍 CONTENT CHECK: Root innerHTML length:', rootElement.innerHTML.length);
-    console.log('🔍 CONTENT CHECK: Root children:', rootElement.children.length);
-    if (rootElement.innerHTML.length === 0) {
-      console.error('💥 CRITICAL: Content was cleared after render!');
-    }
-  }, 100);
-  
 } catch (error) {
   console.error('💥 CRITICAL: React render failed:', error);
   rootElement.innerHTML = `
