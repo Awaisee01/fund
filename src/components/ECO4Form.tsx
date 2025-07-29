@@ -1,8 +1,8 @@
 
-import NativeECO4Form from '@/components/NativeECO4Form';
+import SimpleECO4Form from '@/components/SimpleECO4Form';
 
 const ECO4Form = () => {
-  return <NativeECO4Form />;
+  return <SimpleECO4Form />;
 };
 
 export default ECO4Form;
