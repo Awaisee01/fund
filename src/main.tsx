@@ -22,6 +22,7 @@ if ('performance' in window && 'mark' in performance) {
 }
 
 console.log('🚀 Main.tsx: Starting React app render');
+console.log('🚀 MAIN DEBUG: About to render with App component:', App);
 
 try {
   root.render(
