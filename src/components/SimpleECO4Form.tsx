@@ -34,12 +34,12 @@ const SimpleECO4Form = () => {
           phone: formData.phone || '07000000000',
           postcode: formData.postCode || 'G1 1AA',
           service_type: 'eco4',
+          page_path: window.location.pathname,
           form_data: {
             address: formData.address || 'ECO4 Address',
             understand_mains_gas_restriction: formData.understand || false,
             source: 'eco4_simple_form'
-          },
-          page_path: window.location.pathname
+          }
         }
       });
 
