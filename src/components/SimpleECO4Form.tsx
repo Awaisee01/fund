@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { trackFormSubmission } from '@/lib/unified-tracking-manager';
 
 
 const SimpleECO4Form = () => {
@@ -46,6 +47,16 @@ const SimpleECO4Form = () => {
       if (error) {
         throw new Error(`Submission failed: ${error.message}`);
       }
+
+      // Track Facebook Lead event with user data
+      await trackFormSubmission('ECO4', {
+        email: formData.email,
+        phone: formData.phone,
+        firstName: formData.fullName?.split(' ')[0],
+        lastName: formData.fullName?.split(' ').slice(1).join(' '),
+        postcode: formData.postCode,
+        address: formData.address
+      });
 
       setIsSubmitting(false);
       setShowSuccess(true);
