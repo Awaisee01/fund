@@ -96,7 +96,17 @@ serve(async (req) => {
         return
       }
 
-      console.log('✅ Facebook credentials found, proceeding with API call')
+      // Validate token format
+      if (!accessToken.startsWith('EAA')) {
+        console.error('❌ Invalid Facebook access token format - should start with EAA');
+        return;
+      }
+
+      console.log('✅ Facebook credentials found and validated:', {
+        tokenPrefix: accessToken.substring(0, 10) + '...',
+        pixelId: pixelId,
+        tokenLength: accessToken.length
+      })
 
       // Prepare the conversion event
       const eventTime = Math.floor(Date.now() / 1000)
@@ -190,18 +200,35 @@ serve(async (req) => {
         console.log('📊 CAPI event ID (event_id):', String(data.eventId));
       }
 
+      // Validate required fields for Facebook CAPI
+      if (!eventPayload.event_name) {
+        console.error('❌ Missing required field: event_name');
+        return;
+      }
+      
+      if (!eventPayload.user_data || Object.keys(eventPayload.user_data).length === 0) {
+        console.warn('⚠️ No user data provided - adding minimal data');
+        eventPayload.user_data.client_ip_address = req.headers.get('x-forwarded-for')?.split(',')[0] || 
+                                                   req.headers.get('x-real-ip') || 
+                                                   req.headers.get('cf-connecting-ip') || 
+                                                   '127.0.0.1';
+      }
+
       const eventData = {
         data: [eventPayload]
+        // Remove test_event_code for production
       }
 
       console.log('📊 Complete CAPI payload being sent to Facebook:', JSON.stringify(eventData, null, 2));
 
-      // Send to Facebook Conversions API
-      const response = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events`, {
+      // Send to Facebook Conversions API with latest version
+      const apiUrl = `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`;
+      console.log('🔗 API URL:', apiUrl.replace(accessToken, 'TOKEN_HIDDEN'));
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(eventData)
       })
@@ -220,8 +247,20 @@ serve(async (req) => {
         console.error('❌ Facebook Conversions API HTTP error:', {
           status: response.status,
           statusText: response.statusText,
-          result: result
+          url: apiUrl.replace(accessToken, 'TOKEN_HIDDEN'),
+          result: result,
+          eventData: JSON.stringify(eventData, null, 2)
         });
+        
+        // Log specific error details
+        if (result.error) {
+          console.error('🔥 Facebook API Error Details:', {
+            code: result.error.code,
+            message: result.error.message,
+            type: result.error.type,
+            fbtrace_id: result.error.fbtrace_id
+          });
+        }
         return
       }
 
