@@ -45,7 +45,6 @@ const PageLoadingSkeleton = () => (
 // App wrapper with unified tracking
 const AppWithTracking = () => {
   useEffect(() => {
-    console.log('🚀 Initializing unified tracking system...');
     // Initialize tracking system on app start
     initializeTracking().catch(error => {
       console.error('❌ Failed to initialize tracking:', error);
@@ -105,7 +104,6 @@ const AppWithTracking = () => {
 };
 
 const App = () => {
-  console.log('🚀 App.tsx: App component rendering');
   return (
     <ErrorBoundary>
       <AppWithTracking />
