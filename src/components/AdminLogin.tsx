@@ -14,12 +14,12 @@ interface AdminLoginProps {
 }
 
 const AdminLogin = ({ onLogin }: AdminLoginProps) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [totpCode, setTotpCode] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState<'password' | 'totp' | 'setup'>('password');
-  const [adminEmail] = useState('info@fundingforscotland.co.uk');
   const [totpSecret, setTotpSecret] = useState('');
   const { toast } = useToast();
 
@@ -32,7 +32,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
       // Authenticate admin using secure edge function
       const { data: authData, error: authError } = await supabase.functions.invoke('authenticate-admin', {
         body: { 
-          email: adminEmail,
+          email: email,
           password: password
         }
       });
@@ -56,7 +56,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
 
       // Check if TOTP is set up for this admin
       const { data, error } = await supabase.functions.invoke('setup-admin-totp', {
-        body: { email: adminEmail }
+        body: { email: email }
       });
 
       if (error) {
@@ -97,7 +97,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     try {
       const { data, error } = await supabase.functions.invoke('verify-admin-totp', {
         body: { 
-          email: adminEmail, 
+          email: email, 
           code,
           isSetup: currentStep === 'setup'
         }
@@ -142,7 +142,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
   if (currentStep === 'setup') {
     return (
       <TOTPSetup
-        email={adminEmail}
+        email={email}
         secret={totpSecret}
         onComplete={handleTotpVerification}
         onBack={handleBackToPassword}
@@ -218,11 +218,23 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
           </div>
           <CardTitle className="text-2xl">Admin Access</CardTitle>
           <CardDescription>
-            Enter the admin password to continue with 2FA verification
+            Enter your admin email and password to continue with 2FA verification
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter admin email"
+                required
+                disabled={isLoading}
+              />
+            </div>
             <div>
               <Label htmlFor="password">Password</Label>
               <Input
@@ -241,7 +253,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
             <Button 
               type="submit" 
               className="w-full" 
-              disabled={isLoading || !password}
+              disabled={isLoading || !email || !password}
             >
               {isLoading ? 'Verifying...' : 'Continue to 2FA'}
             </Button>
