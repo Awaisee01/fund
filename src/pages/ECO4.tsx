@@ -24,18 +24,27 @@ const ECO4 = () => {
   // Critical loading skeleton with immediate render
   if (!criticalLoaded) {
     return (
-      <div className="min-h-screen" style={{background:'linear-gradient(45deg,rgba(37,99,235,0.8),rgba(22,163,74,0.8))'}}>
+      <div className="min-h-screen" style={{
+        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 25%, #1e40af 50%, #059669 75%, #16a34a 100%)',
+        position: 'relative'
+      }}>
+        {/* Additional gradient overlay for loading state */}
+        <div style={{
+          position: 'absolute',
+          inset: '0',
+          background: 'linear-gradient(45deg, rgba(37,99,235,0.8) 0%, rgba(59,130,246,0.7) 25%, rgba(30,64,175,0.6) 50%, rgba(5,150,105,0.7) 75%, rgba(22,163,74,0.8) 100%)'
+        }}></div>
         <div className="relative max-w-7xl mx-auto px-4 py-20">
           <div className="grid gap-8 lg:grid-cols-2 items-center">
             <div className="order-2 lg:order-1">
               <div className="animate-pulse space-y-4">
-                <div style={{height:'4rem',background:'rgba(255,255,255,0.2)',borderRadius:'0.5rem',width:'75%',marginBottom:'1rem'}}></div>
-                <div style={{height:'2rem',background:'rgba(255,255,255,0.15)',borderRadius:'0.5rem',width:'50%',marginBottom:'1rem'}}></div>
-                <div style={{height:'1.5rem',background:'rgba(255,255,255,0.1)',borderRadius:'0.5rem',width:'80%'}}></div>
+                <div style={{height:'4rem',background:'rgba(255,255,255,0.3)',borderRadius:'0.5rem',width:'75%',marginBottom:'1rem'}}></div>
+                <div style={{height:'2rem',background:'rgba(255,255,255,0.25)',borderRadius:'0.5rem',width:'50%',marginBottom:'1rem'}}></div>
+                <div style={{height:'1.5rem',background:'rgba(255,255,255,0.2)',borderRadius:'0.5rem',width:'80%'}}></div>
               </div>
             </div>
             <div className="order-1 lg:order-2">
-              <div style={{height:'24rem',background:'rgba(255,255,255,0.1)',borderRadius:'0.5rem'}} className="animate-pulse"></div>
+              <div style={{height:'24rem',background:'rgba(255,255,255,0.2)',borderRadius:'0.5rem'}} className="animate-pulse"></div>
             </div>
           </div>
         </div>

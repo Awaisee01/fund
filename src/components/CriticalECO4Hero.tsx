@@ -33,9 +33,11 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
     <>
       {/* Keep hero image but optimize loading strategy */}
       
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden min-h-screen lg:min-h-screen">
+      <section className="relative text-white overflow-hidden min-h-screen lg:min-h-screen" style={{
+        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 25%, #1e40af 50%, #059669 75%, #16a34a 100%)'
+      }}>
         {/* Optimized hero image for LCP - properly marked as above-the-fold content */}
-        <div className="absolute inset-0 w-full h-full" style={{ containIntrinsicSize: '100vw 100vh' }}>
+        <div className="absolute inset-0 w-full h-full" style={{ containIntrinsicSize: '100vw 100vh', opacity: 0.3 }}>
           <picture>
             <source 
               media="(max-width: 767px)" 
@@ -67,8 +69,10 @@ const CriticalECO4Hero = ({ scrollY }: CriticalECO4HeroProps) => {
           </picture>
         </div>
         
-        {/* Background overlay for better text contrast */}
-        <div className="absolute inset-0 bg-black opacity-20"></div>
+        {/* Additional gradient overlay for better visibility */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.6) 0%, rgba(29, 78, 216, 0.5) 25%, rgba(30, 64, 175, 0.4) 50%, rgba(5, 150, 105, 0.5) 75%, rgba(22, 163, 74, 0.6) 100%)'
+        }}></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-0">
