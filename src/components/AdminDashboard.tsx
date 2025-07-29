@@ -26,7 +26,14 @@ interface AdminDashboardProps {
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
 
 const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
-  const { submissions, loading, fetchSubmissions, updateSubmission } = useAdminDashboard();
+  const { 
+    submissions, 
+    loading, 
+    isAuthenticated,
+    fetchSubmissions, 
+    updateSubmission 
+  } = useAdminDashboard();
+  
   const {
     statusFilter,
     serviceFilter,  
@@ -52,6 +59,13 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const { toast } = useToast();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      onLogout();
+    }
+  }, [loading, isAuthenticated, onLogout]);
 
   const deleteSubmission = async (id: string) => {
     try {
@@ -87,8 +101,13 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
+      // Clear all admin session data
       localStorage.removeItem('adminAuthenticated');
       localStorage.removeItem('adminAuthTime');
+      localStorage.removeItem('adminSessionToken');
+      localStorage.removeItem('adminId');
+      localStorage.removeItem('adminEmail');
+      localStorage.removeItem('adminUser');
     }
     onLogout();
   };

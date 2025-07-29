@@ -7,18 +7,72 @@ import type { Database } from '@/integrations/supabase/types';
 type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
 type LeadStatus = Database['public']['Enums']['lead_status'];
 
+// Admin session validation hook
+const useAdminAuth = () => {
+  const [isValidating, setIsValidating] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { toast } = useToast();
+
+  const validateSession = async () => {
+    try {
+      const sessionToken = localStorage.getItem('adminSessionToken');
+      
+      if (!sessionToken) {
+        setIsAuthenticated(false);
+        setIsValidating(false);
+        return false;
+      }
+
+      const { data, error } = await supabase.functions.invoke('validate-admin-session', {
+        body: { session_token: sessionToken }
+      });
+
+      if (error || !data?.valid) {
+        // Clear invalid session
+        localStorage.removeItem('adminSessionToken');
+        localStorage.removeItem('adminId');
+        localStorage.removeItem('adminEmail');
+        localStorage.removeItem('adminAuthenticated');
+        localStorage.removeItem('adminAuthTime');
+        
+        setIsAuthenticated(false);
+        toast({
+          title: "Session Expired",
+          description: "Please log in again to continue.",
+          variant: "destructive",
+        });
+        return false;
+      }
+
+      setIsAuthenticated(true);
+      return true;
+    } catch (error) {
+      console.error('Session validation error:', error);
+      setIsAuthenticated(false);
+      return false;
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  useEffect(() => {
+    validateSession();
+  }, []);
+
+  return { isAuthenticated, isValidating, validateSession };
+};
+
 export const useAdminDashboard = () => {
   const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { isAuthenticated, isValidating, validateSession } = useAdminAuth();
 
   const fetchSubmissions = async () => {
     try {
-      // Check if admin is authenticated
-      const adminAuth = localStorage.getItem('adminAuthenticated');
-      const adminId = localStorage.getItem('adminId');
-      
-      if (!adminAuth || !adminId) {
+      // Validate session before any database operations
+      const sessionValid = await validateSession();
+      if (!sessionValid) {
         throw new Error('Admin authentication required');
       }
 
@@ -53,16 +107,31 @@ export const useAdminDashboard = () => {
     }
   ) => {
     try {
-      const updateData: any = { ...updates };
+      // Validate session before any database operations
+      const sessionValid = await validateSession();
+      if (!sessionValid) {
+        throw new Error('Admin authentication required');
+      }
+
+      // Input sanitization
+      const sanitizedUpdates: any = {};
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value !== undefined) {
+          // Basic sanitization - remove potential XSS
+          sanitizedUpdates[key] = typeof value === 'string' 
+            ? value.trim().replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            : value;
+        }
+      });
       
       // Update contacted_at for survey_booked status
-      if (updates.status === 'survey_booked') {
-        updateData.contacted_at = new Date().toISOString();
+      if (sanitizedUpdates.status === 'survey_booked') {
+        sanitizedUpdates.contacted_at = new Date().toISOString();
       }
 
       const { error } = await supabase
         .from('form_submissions')
-        .update(updateData)
+        .update(sanitizedUpdates)
         .eq('id', id);
 
       if (error) throw error;
@@ -84,12 +153,15 @@ export const useAdminDashboard = () => {
   };
 
   useEffect(() => {
-    fetchSubmissions();
-  }, []);
+    if (isAuthenticated && !isValidating) {
+      fetchSubmissions();
+    }
+  }, [isAuthenticated, isValidating]);
 
   return {
     submissions,
-    loading,
+    loading: loading || isValidating,
+    isAuthenticated,
     fetchSubmissions,
     updateSubmission
   };

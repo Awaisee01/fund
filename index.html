@@ -61,8 +61,15 @@
     <link rel="preload" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" as="image" fetchpriority="high" media="(max-width: 767px)" imagesrcset="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png 767w">
     <link rel="preload" href="/lovable-uploads/1932c2a7-9b3e-46a2-8e62-d0fabe9d2ade.png" as="image" fetchpriority="high" media="(min-width: 768px)">
     
-    <!-- Cache control meta tags for static assets -->
     <meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable">
+    
+    <!-- Enhanced Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://connect.facebook.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://nncpapnlnrtssbruzkla.supabase.co https://connect.facebook.net https://www.facebook.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; block-all-mixed-content" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
     
     <!-- Performance optimizations -->
     
