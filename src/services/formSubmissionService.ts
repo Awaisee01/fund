@@ -48,6 +48,26 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     }
 
     console.log('✅ Form submitted successfully');
+    
+    // Send email notification
+    try {
+      await supabase.functions.invoke('send-enquiry-notification', {
+        body: {
+          name: result.name,
+          email: result.email,
+          phone: result.phone,
+          postcode: result.postcode,
+          service_type: result.service_type,
+          address: data.address,
+          created_at: result.created_at
+        }
+      });
+      console.log('📧 Email notification sent');
+    } catch (emailError) {
+      console.error('⚠️ Email notification failed:', emailError);
+      // Don't throw error - form submission was successful
+    }
+    
     return result;
 
   } catch (error) {
