@@ -8,6 +8,7 @@ import { initializeTracking } from './lib/unified-tracking-manager';
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Footer from "./components/Footer";
 
 // Load critical pages immediately for faster initial loads
 import Index from "./pages/Index";
@@ -93,6 +94,7 @@ const AppWithTracking = () => {
                 } />
               </Routes>
             </main>
+            <Footer />
           </div>
           
           <Toaster position="top-center" />
