@@ -60,24 +60,15 @@ const validateFormData = (data: any): { isValid: boolean; errors: string[] } => 
   
   console.log('🔍 Validating form data:', JSON.stringify(data, null, 2));
   
-  if (!data.name || data.name.length < 1 || data.name.length > 100) {
-    errors.push('Name must be between 1 and 100 characters');
+  // Only require name and service_type - everything else is optional
+  if (!data.name || data.name.trim().length === 0) {
+    console.log('❌ Name is missing or empty');
+    errors.push('Name is required');
   }
   
-  if (data.email && data.email.trim().length > 0 && !validateEmail(data.email)) {
-    errors.push('Invalid email format');
-  }
-  
-  if (data.phone && !validatePhone(data.phone)) {
-    errors.push('Invalid phone number format');
-  }
-  
-  if (data.postcode && !validatePostcode(data.postcode)) {
-    errors.push('Invalid postcode format');
-  }
-  
-  if (!data.service_type || !['eco4', 'solar', 'gas_boilers', 'home_improvements'].includes(data.service_type)) {
-    errors.push('Invalid service type');
+  if (!data.service_type) {
+    console.log('❌ Service type is missing');
+    errors.push('Service type is required');
   }
   
   console.log('🔍 Validation result:', { isValid: errors.length === 0, errors });

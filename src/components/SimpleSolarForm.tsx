@@ -30,17 +30,17 @@ const SimpleSolarForm = () => {
       // Submit using secure form submission service (with notifications)
       const { data, error } = await supabase.functions.invoke('secure-form-submission', {
         body: {
-          name: formData.fullName || 'Solar User',
-          email: formData.email || 'solar@example.com',
-          phone: formData.phone || '07000000000',
-          postcode: formData.postCode || 'G1 1AA',
+          name: formData.fullName || 'Solar Customer',
+          email: formData.email || null,
+          phone: formData.phone || null,
+          postcode: formData.postCode || null,
           service_type: 'solar',
           form_data: {
-            address: formData.address || 'Solar Address',
+            address: formData.address || null,
             understand_roof_requirement: formData.understand || false,
             source: 'solar_form'
           },
-          page_path: window.location.pathname
+          page_path: window.location.pathname || '/solar'
         }
       });
 
