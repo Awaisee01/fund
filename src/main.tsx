@@ -17,8 +17,12 @@ if ('performance' in window && 'mark' in performance) {
   performance.mark('react-start');
 }
 
+console.log('🚀 Main.tsx: Starting React app render');
+
 root.render(
   <StrictMode>
     <App />
   </StrictMode>
 );
+
+console.log('✅ Main.tsx: React app render completed');

@@ -22,6 +22,7 @@ const Hero = ({
   ctaLink = "/contact",
   backgroundImage 
 }: HeroProps) => {
+  console.log('🚀 Hero.tsx: Hero component rendering with props:', { title, subtitle, description });
   return (
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>

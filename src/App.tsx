@@ -42,6 +42,7 @@ const PageLoadingSkeleton = () => (
 );
 
 const App = () => {
+  console.log('🚀 App.tsx: App component rendering');
   return (
     <ErrorBoundary>
       <UltimatePixelManager enableAdvancedFeatures={true} performanceMode="high">

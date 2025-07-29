@@ -8,6 +8,7 @@ const TrustBadges = lazy(() => import('@/components/TrustBadges'));
 const CallToActionSection = lazy(() => import('@/components/CallToActionSection'));
 
 const Index = () => {
+  console.log('🚀 Index.tsx: Index page component rendering');
   useEffect(() => {
     document.title = 'Scottish Grants & Funding - Government Funding For Scotland';
   }, []);
