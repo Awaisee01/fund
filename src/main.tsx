@@ -1,4 +1,5 @@
 
+console.log('🚀 Main.tsx: File loading started');
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
@@ -17,8 +18,12 @@ if ('performance' in window && 'mark' in performance) {
   performance.mark('react-start');
 }
 
+console.log('🚀 Main.tsx: Starting React app render');
+
 root.render(
   <StrictMode>
     <App />
   </StrictMode>
 );
+
+console.log('✅ Main.tsx: React app render completed');

@@ -47,14 +47,14 @@ export async function initializeFacebookPixel(pixelId: string): Promise<void> {
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      fbq('init', '${pixelId}');
-      fbq('track', 'PageView');
+       fbq('init', '1423013825182147');
+       fbq('track', 'PageView');
     `;
     document.head.appendChild(script);
 
     // Add noscript fallback
     const noscript = document.createElement('noscript');
-    noscript.innerHTML = `<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1" />`;
+    noscript.innerHTML = `<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1423013825182147&ev=PageView&noscript=1" />`;
     document.head.appendChild(noscript);
 
     console.log('✅ Facebook Pixel initialized:', pixelId);
