@@ -97,11 +97,7 @@ const NativeECO4Form = () => {
     console.log('🆘 URGENT DEBUG: About to call submitFormToDatabase');
     
     try {
-<<<<<<< HEAD
       // Capture location data for enhanced tracking
-=======
-      // Capture location data for pixel enhancement
->>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
       captureLocationData({
         postcode: data.postCode,
         county: data.address.split(',').pop()?.trim()
