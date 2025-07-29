@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
 import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
-import { trackRobustEvent, captureLocationData, captureUTMData } from '@/lib/facebook-pixel-robust';
+import { trackFormSubmission } from '@/lib/unified-tracking-manager';
 
 interface ECO4FormData {
   fullName: string;
@@ -26,13 +26,8 @@ const NativeECO4Form = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   
-  // Initialize Facebook Pixel and capture UTM data
-  useEffect(() => {
-    // Facebook Pixel is already initialized in HTML head for optimal performance
-    
-    // Capture UTM parameters for later use
-    captureUTMData();
-  }, []);
+  // Tracking is now handled by unified tracking manager
+  // Remove old pixel initialization code
   
   const form = useForm<ECO4FormData>({
     defaultValues: {
@@ -45,19 +40,7 @@ const NativeECO4Form = () => {
     }
   });
 
-  // Track ViewContent when form loads
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      trackRobustEvent('ViewContent', {
-        content_name: 'ECO4 Form Page',
-        content_category: 'eco4',
-        value: 1,
-        currency: 'GBP'
-      });
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  // ViewContent tracking is handled by unified page tracking
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
@@ -97,22 +80,13 @@ const NativeECO4Form = () => {
     console.log('🆘 URGENT DEBUG: About to call submitFormToDatabase');
     
     try {
-      // Capture location data for enhanced tracking
-      captureLocationData({
-        postcode: data.postCode,
-        county: data.address.split(',').pop()?.trim()
-      });
-
-      // Track InitiateCheckout event with robust tracking
-      await trackRobustEvent('InitiateCheckout', {
-        content_name: 'ECO4 Form Submission',
-        content_category: 'eco4',
-        value: 1,
-        currency: 'GBP',
-        em: data.email,
-        ph: data.phone,
-        fn: data.fullName.split(' ')[0],
-        ln: data.fullName.split(' ').slice(1).join(' ')
+      // Track form submission with unified tracking
+      await trackFormSubmission('eco4', {
+        email: data.email,
+        phone: data.phone,
+        firstName: data.fullName.split(' ')[0],
+        lastName: data.fullName.split(' ').slice(1).join(' '),
+        postcode: data.postCode
       });
 
       console.log('🆘 URGENT DEBUG: Calling submitFormToDatabase with data:', {
@@ -140,17 +114,7 @@ const NativeECO4Form = () => {
         formName: 'ECO4'
       });
 
-      // Track successful Lead event with robust dual tracking (Pixel + CAPI)
-      await trackRobustEvent('Lead', {
-        content_name: 'ECO4 Form Submission',
-        content_category: 'eco4',
-        value: 1,
-        currency: 'GBP',
-        em: data.email,
-        ph: data.phone,
-        fn: data.fullName.split(' ')[0],
-        ln: data.fullName.split(' ').slice(1).join(' ')
-      });
+      // Lead tracking is included in trackFormSubmission above
 
 
       console.log('🎉 ECO4 form submission completed successfully');

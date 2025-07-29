@@ -1,9 +1,9 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SafePixelManager from "@/components/SafePixelManager";
+import { initializeTracking } from './lib/unified-tracking-manager';
 
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
@@ -41,59 +41,72 @@ const PageLoadingSkeleton = () => (
   </div>
 );
 
+// App wrapper with unified tracking
+const AppWithTracking = () => {
+  useEffect(() => {
+    console.log('🚀 Initializing unified tracking system...');
+    // Initialize tracking system on app start
+    initializeTracking().catch(error => {
+      console.error('❌ Failed to initialize tracking:', error);
+    });
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Navigation />
+            
+          <div className="min-h-screen flex flex-col">
+            <main className="flex-1">
+              <Routes>
+                {/* Critical pages load immediately */}
+                <Route path="/" element={<Index />} />
+                <Route path="/eco4" element={<ECO4 />} />
+                <Route path="/solar" element={<Solar />} />
+                
+                {/* Less critical pages with suspense */}
+                <Route path="/gas-boilers" element={
+                  <Suspense fallback={<PageLoadingSkeleton />}>
+                    <GasBoilers />
+                  </Suspense>
+                } />
+                <Route path="/home-improvements" element={
+                  <Suspense fallback={<PageLoadingSkeleton />}>
+                    <HomeImprovements />
+                  </Suspense>
+                } />
+                <Route path="/contact" element={
+                  <Suspense fallback={<PageLoadingSkeleton />}>
+                    <Contact />
+                  </Suspense>
+                } />
+                <Route path="/admin" element={
+                  <Suspense fallback={<PageLoadingSkeleton />}>
+                    <Admin />
+                  </Suspense>
+                } />
+                <Route path="*" element={
+                  <Suspense fallback={<PageLoadingSkeleton />}>
+                    <NotFound />
+                  </Suspense>
+                } />
+              </Routes>
+            </main>
+          </div>
+          
+          <Toaster position="top-center" />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
+
 const App = () => {
   console.log('🚀 App.tsx: App component rendering');
   return (
     <ErrorBoundary>
-      <SafePixelManager>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <BrowserRouter>
-              <Navigation />
-                
-              <div className="min-h-screen flex flex-col">
-                <main className="flex-1">
-                  <Routes>
-                    {/* Critical pages load immediately */}
-                    <Route path="/" element={<Index />} />
-                    <Route path="/eco4" element={<ECO4 />} />
-                    <Route path="/solar" element={<Solar />} />
-                    
-                    {/* Less critical pages with suspense */}
-                    <Route path="/gas-boilers" element={
-                      <Suspense fallback={<PageLoadingSkeleton />}>
-                        <GasBoilers />
-                      </Suspense>
-                    } />
-                    <Route path="/home-improvements" element={
-                      <Suspense fallback={<PageLoadingSkeleton />}>
-                        <HomeImprovements />
-                      </Suspense>
-                    } />
-                    <Route path="/contact" element={
-                      <Suspense fallback={<PageLoadingSkeleton />}>
-                        <Contact />
-                      </Suspense>
-                    } />
-                    <Route path="/admin" element={
-                      <Suspense fallback={<PageLoadingSkeleton />}>
-                        <Admin />
-                      </Suspense>
-                    } />
-                    <Route path="*" element={
-                      <Suspense fallback={<PageLoadingSkeleton />}>
-                        <NotFound />
-                      </Suspense>
-                    } />
-                  </Routes>
-                </main>
-              </div>
-              
-              <Toaster position="top-center" />
-            </BrowserRouter>
-          </TooltipProvider>
-        </QueryClientProvider>
-      </SafePixelManager>
+      <AppWithTracking />
     </ErrorBoundary>
   );
 };

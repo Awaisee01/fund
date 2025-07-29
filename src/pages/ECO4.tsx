@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react';
-import { trackViewContentWithUTM } from '@/lib/utm-tracking';
+import { trackPageView } from '@/lib/unified-tracking-manager';
 
 // Critical above-the-fold components loaded immediately
 import CriticalECO4Hero from '@/components/CriticalECO4Hero';
@@ -12,14 +12,11 @@ const ResourcePrefetcher = lazy(() => import('@/components/ResourcePrefetcher'))
 const ECO4 = () => {
   const { scrollY, criticalLoaded, nonCriticalReady, userBehavior } = useECO4Page();
 
-  // Track page view with rich data
+  // Track page view with unified tracking
   useEffect(() => {
     if (criticalLoaded) {
-      trackViewContentWithUTM({
-        content_name: 'ECO4 Landing Page',
-        content_category: 'eco4_landing',
-        value: 100,
-        currency: 'GBP'
+      trackPageView().catch(error => {
+        console.warn('❌ Failed to track ECO4 page view:', error);
       });
     }
   }, [criticalLoaded]);

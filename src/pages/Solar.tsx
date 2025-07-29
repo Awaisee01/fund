@@ -1,6 +1,6 @@
 
 import { useEffect, useState, Suspense, lazy } from 'react';
-import { trackViewContentWithUTM } from '@/lib/utm-tracking';
+import { trackPageView } from '@/lib/unified-tracking-manager';
 import NativeSolarForm from '@/components/NativeSolarForm';
 import SimplifiedHero from '@/components/SimplifiedHero';
 import HeroSkeleton from '@/components/HeroSkeleton';
@@ -27,12 +27,9 @@ const Solar = () => {
     // Mark hero as loaded immediately for faster perceived performance
     setHeroLoaded(true);
 
-    // Track page view with rich data
-    trackViewContentWithUTM({
-      content_name: 'Solar Landing Page',
-      content_category: 'solar_landing',
-      value: 150,
-      currency: 'GBP'
+    // Track page view with unified tracking
+    trackPageView().catch(error => {
+      console.warn('❌ Failed to track Solar page view:', error);
     });
 
     // Use requestAnimationFrame for smoother scrolling

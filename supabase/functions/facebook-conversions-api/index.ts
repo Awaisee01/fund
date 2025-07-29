@@ -88,11 +88,11 @@ serve(async (req) => {
       console.log('🔄 Processing conversion:', data.eventName)
       
       // Get Facebook access token from secrets
-      const accessToken = Deno.env.get('FACEBOOK_CONVERSIONS_API_ACCESS_TOKEN') || 'EAAIj9ZCZC5Wc4BPGmaSz5CZBnctDkYO9JTlzxYMIbDXqVZBmQLuBRF1GOXFXnNjGKpR6lfNSUtqktkXj0oBMTBZBzhKRFyPu2v3XinbYDM0nuGyNjtuXOL60lsUQd5q1ooKIUCZBehzyzwqAO5RmvQZA5yuyCYFD1H5BpBSAeXcHlSc0XgcDXthYmRkvz0icgZDZD'
-      const pixelId = Deno.env.get('FACEBOOK_PIXEL_ID') || '1423013825182147'
+      const accessToken = Deno.env.get('FACEBOOK_CONVERSIONS_API_ACCESS_TOKEN')
+      const pixelId = Deno.env.get('FACEBOOK_PIXEL_ID')
       
       if (!accessToken || !pixelId) {
-        console.error('❌ Facebook Conversions API credentials not configured')
+        console.error('❌ Facebook Conversions API credentials not configured - please set FACEBOOK_CONVERSIONS_API_ACCESS_TOKEN and FACEBOOK_PIXEL_ID')
         return
       }
 
@@ -287,13 +287,17 @@ serve(async (req) => {
     }
   }
 
-  // Start background processing
+  // Use EdgeRuntime.waitUntil for proper background processing
   try {
-    processConversion(requestData.data).catch(error => {
-      console.error('❌ Background processing failed:', error)
-    })
+    // @ts-ignore - EdgeRuntime is available in Supabase Edge Functions
+    EdgeRuntime.waitUntil(processConversion(requestData.data))
+    console.log('✅ Background processing task queued successfully')
   } catch (error) {
-    console.error('❌ Failed to start background processing:', error)
+    console.error('❌ Failed to queue background processing:', error)
+    // Fallback to regular async processing
+    processConversion(requestData.data).catch(bgError => {
+      console.error('❌ Background processing failed:', bgError)
+    })
   }
   
   // Return immediate response

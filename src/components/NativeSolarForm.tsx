@@ -8,9 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
 import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
-import { trackLeadWithUTM, trackInitiateCheckoutWithUTM, trackViewContentWithUTM } from '@/lib/utm-tracking';
-import { captureLocationData } from '@/lib/facebook-pixel';
-import { sendFormCompletionToFacebook } from '@/lib/facebook-conversions-helper';
+import { trackFormSubmission } from '@/lib/unified-tracking-manager';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface SolarFormData {
@@ -40,20 +38,7 @@ const NativeSolarForm = () => {
     }
   });
 
-  // Track ViewContent when form loads with rich data
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      console.log('📊 Solar Form: Tracking Enhanced ViewContent event with UTM data');
-      trackViewContentWithUTM({
-        content_name: 'Solar Installation Form',
-        content_category: 'solar_landing',
-        value: 75,
-        currency: 'GBP'
-      });
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  // ViewContent tracking handled by unified page tracking
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
@@ -88,18 +73,13 @@ const NativeSolarForm = () => {
     setLastSubmissionTime(now);
     
     try {
-      // Capture location data for pixel enhancement
-      captureLocationData({
-        postcode: data.postCode,
-        county: data.address.split(',').pop()?.trim()
-      });
-
-      // Track InitiateCheckout before submission
-      trackInitiateCheckoutWithUTM({
-        content_name: 'Solar Panel Installation',
-        content_category: 'solar_conversion',
-        value: 12000,
-        currency: 'GBP'
+      // Track form submission with unified tracking
+      await trackFormSubmission('solar', {
+        email: data.email,
+        phone: data.phone,
+        firstName: data.fullName.split(' ')[0],
+        lastName: data.fullName.split(' ').slice(1).join(' '),
+        postcode: data.postCode
       });
 
       // Save to Supabase database using the enhanced service
@@ -117,38 +97,7 @@ const NativeSolarForm = () => {
         formName: 'Solar'
       });
 
-      // Track successful Lead conversion with rich data
-      trackLeadWithUTM({
-        content_name: 'Solar Panel Installation',
-        content_category: 'solar_conversion',
-        value: 12000,
-        currency: 'GBP',
-        em: data.email.toLowerCase(),
-        ph: data.phone.replace(/\D/g, ''),
-        fn: data.fullName.split(' ')[0]?.toLowerCase(),
-        ln: data.fullName.split(' ').slice(1).join(' ')?.toLowerCase(),
-        zp: data.postCode.replace(/\s/g, '').toLowerCase()
-      });
-
-      // Send conversion to Facebook via Conversions API
-      await sendFormCompletionToFacebook({
-        eventName: 'Lead',
-        userData: {
-          email: data.email,
-          phone: data.phone,
-          firstName: data.fullName.split(' ')[0],
-          lastName: data.fullName.split(' ').slice(1).join(' '),
-          zipCode: data.postCode,
-          external_id: `solar_${Date.now()}`
-        },
-        customData: {
-          content_name: 'Solar Panel Installation Form',
-          content_category: 'solar_conversion',
-          value: 12000,
-          currency: 'GBP',
-          postcode: data.postCode
-        }
-      });
+      // Lead tracking is included in trackFormSubmission above
 
       console.log('🎉 Solar form submission completed successfully');
       
