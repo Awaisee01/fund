@@ -174,6 +174,14 @@ class UnifiedTrackingManager {
         };
         
         console.log(`📊 Sending to browser pixel (${data.eventName}):`, pixelData);
+        console.log(`🔍 Advanced matching data for ${data.eventName}:`, {
+          hasEmail: !!data.userData?.email,
+          hasPhone: !!data.userData?.phone,
+          hasName: !!(data.userData?.firstName || data.userData?.lastName),
+          hasPostcode: !!data.userData?.postcode,
+          fbCookies: fbCookies,
+          utmData: utmData
+        });
         (window as any).fbq('track', data.eventName, pixelData);
         
         // Also send advanced matching separately for better results
