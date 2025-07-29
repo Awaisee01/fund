@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import UltimatePixelManager from "@/components/UltimatePixelManager";
+import SafePixelManager from "@/components/SafePixelManager";
 
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
@@ -45,7 +45,7 @@ const App = () => {
   console.log('🚀 App.tsx: App component rendering');
   return (
     <ErrorBoundary>
-      <UltimatePixelManager enableAdvancedFeatures={true} performanceMode="high">
+      <SafePixelManager>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
             <BrowserRouter>
@@ -93,7 +93,7 @@ const App = () => {
             </BrowserRouter>
           </TooltipProvider>
         </QueryClientProvider>
-      </UltimatePixelManager>
+      </SafePixelManager>
     </ErrorBoundary>
   );
 };

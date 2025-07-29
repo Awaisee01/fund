@@ -1,4 +1,7 @@
+// Console override disabled for debugging
 // Production console override to remove console.log in production
+// Temporarily disabled to debug white screen issue
+/*
 if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
   // Completely disable all console methods in production for maximum performance
   console.log = () => {};
@@ -14,5 +17,6 @@ if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
     }
   };
 }
+*/
 
 export default {};
