@@ -76,6 +76,16 @@ export const useAdminDashboard = () => {
         throw new Error('Admin authentication required');
       }
 
+      // Set the admin context for RLS policies
+      const adminId = localStorage.getItem('adminId');
+      if (adminId) {
+        await supabase.rpc('set_config', {
+          setting_name: 'app.current_admin_id',
+          setting_value: adminId,
+          is_local: true
+        });
+      }
+
       const { data, error } = await supabase
         .from('form_submissions')
         .select('*')
