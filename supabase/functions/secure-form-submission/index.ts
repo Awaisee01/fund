@@ -40,8 +40,9 @@ const validatePhone = (phone: string): boolean => {
 };
 
 const validatePostcode = (postcode: string): boolean => {
-  const postcodeRegex = /^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$/i;
-  return postcodeRegex.test(postcode.trim().toUpperCase());
+  // More flexible postcode validation - allow any reasonable format
+  const trimmed = postcode.trim();
+  return trimmed.length >= 3 && trimmed.length <= 10;
 };
 
 const sanitizeInput = (input: string): string => {
