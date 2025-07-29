@@ -135,6 +135,20 @@ class UnifiedTrackingManager {
     return `${eventName}_${timestamp}_${random}`;
   }
 
+  // Hash function for advanced matching
+  private async hashData(data: string): Promise<string> {
+    if (!data) return '';
+    try {
+      const encoder = new TextEncoder();
+      const dataBuffer = encoder.encode(data.toLowerCase().trim());
+      const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch {
+      return '';
+    }
+  }
+
   // Main tracking function
   async trackEvent(data: TrackingData): Promise<void> {
     try {
@@ -142,14 +156,37 @@ class UnifiedTrackingManager {
       const utmData = this.getUTMData();
       const fbCookies = this.getFacebookCookies();
 
-      // Track with Facebook Pixel (browser-side)
+      // Track with Facebook Pixel (browser-side) with enhanced data
       if ((window as any).fbq && this.isInitialized) {
         const pixelData = {
           ...data.customData,
-          eventID: eventId // For deduplication
+          eventID: eventId, // For deduplication
+          // Advanced matching parameters
+          ...(data.userData?.email && { em: await this.hashData(data.userData.email) }),
+          ...(data.userData?.phone && { ph: await this.hashData(data.userData.phone?.replace(/\D/g, '')) }),
+          ...(data.userData?.firstName && { fn: await this.hashData(data.userData.firstName) }),
+          ...(data.userData?.lastName && { ln: await this.hashData(data.userData.lastName) }),
+          ...(data.userData?.postcode && { zp: await this.hashData(data.userData.postcode) }),
+          // Facebook cookies for better matching
+          ...fbCookies,
+          // UTM data
+          ...utmData
         };
         
+        console.log(`📊 Sending to browser pixel (${data.eventName}):`, pixelData);
         (window as any).fbq('track', data.eventName, pixelData);
+        
+        // Also send advanced matching separately for better results
+        if (data.userData?.email || data.userData?.phone) {
+          const advancedMatchingData = {};
+          if (data.userData.email) (advancedMatchingData as any).em = await this.hashData(data.userData.email);
+          if (data.userData.phone) (advancedMatchingData as any).ph = await this.hashData(data.userData.phone.replace(/\D/g, ''));
+          if (data.userData.firstName) (advancedMatchingData as any).fn = await this.hashData(data.userData.firstName);
+          if (data.userData.lastName) (advancedMatchingData as any).ln = await this.hashData(data.userData.lastName);
+          if (data.userData.postcode) (advancedMatchingData as any).zp = await this.hashData(data.userData.postcode);
+          
+          (window as any).fbq('track', data.eventName, pixelData, { eventID: eventId, ...advancedMatchingData });
+        }
       }
 
       // Send to Conversions API (server-side) with deduplication
