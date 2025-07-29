@@ -89,7 +89,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Add timeout for email sending
     const emailPromise = resend.emails.send({
       from: "New Enquiry <noreply@fundingforscotland.co.uk>",
-      to: ["info@fundingforscotland.co.uk"],
+      to: ["admin@example.com"], // ⚠️ CHANGE THIS TO YOUR EMAIL ADDRESS!
       subject: `New ${serviceTypeFormatted} Enquiry - ${enquiryData.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
