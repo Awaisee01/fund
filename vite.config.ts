@@ -41,30 +41,14 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true,
     assetsInlineLimit: 1024, // Smaller inline limit to reduce bundle size
     rollupOptions: {
+      // Force everything into a single bundle to prevent loading order issues
       output: {
-        // Disable code splitting completely for now to fix loading issues
+        inlineDynamicImports: true,
         manualChunks: undefined,
-        // Optimize for caching and performance
-        assetFileNames: (assetInfo) => {
-          if (!assetInfo.name) return `assets/[name].[hash][extname]`;
-          const info = assetInfo.name.split('.');
-          const ext = info[info.length - 1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(ext)) {
-            return `assets/images/[name].[hash][extname]`;
-          }
-          if (/css/i.test(ext)) {
-            return `assets/css/[name].[hash][extname]`;
-          }
-          return `assets/[name].[hash][extname]`;
-        },
-        chunkFileNames: 'assets/js/[name].[hash].js',
-        entryFileNames: 'assets/js/[name].[hash].js'
       }
     },
-    // Optimize for modern browsers
-    modulePreload: {
-      polyfill: false
-    },
+    // Disable module preload that might cause loading issues
+    modulePreload: false,
     reportCompressedSize: false // Faster builds
   },
   // Enhanced dependency optimization - ensure React loads properly
