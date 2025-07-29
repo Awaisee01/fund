@@ -37,16 +37,26 @@ export interface ConversionData {
 }
 
 /**
+<<<<<<< HEAD
  * Send event to Facebook Conversions API via Supabase Edge Function with enhanced logging
+=======
+ * Send event to Facebook Conversions API via Supabase Edge Function
+>>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
  */
 export const sendToConversionsAPI = async (
   eventName: string,
   eventData: Record<string, any>,
   eventId: string
+<<<<<<< HEAD
 ): Promise<{ success: boolean; response?: any }> => {
   try {
     console.log('🚀 CONVERSIONS API: Preparing to send event:', eventName);
     console.log('🚀 CONVERSIONS API: Event ID for deduplication:', eventId);
+=======
+): Promise<void> => {
+  try {
+    console.log('🚀 CONVERSIONS API: Preparing to send event:', eventName);
+>>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
     
     // Extract user data for server-side hashing
     const userData: Record<string, any> = {};
@@ -66,6 +76,7 @@ export const sendToConversionsAPI = async (
     if (eventData.zp) userData.zipCode = eventData.zp;
     if (eventData.postcode) userData.zipCode = eventData.postcode;
     if (eventData.county) userData.county = eventData.county;
+<<<<<<< HEAD
     if (eventData.external_id) userData.external_id = eventData.external_id;
     
     // Prepare custom data (remove user data fields and ensure required fields)
@@ -79,18 +90,36 @@ export const sendToConversionsAPI = async (
     
     // Remove user data fields from custom data
     ['em', 'ph', 'fn', 'ln', 'zp', 'fbc', 'fbp', 'external_id'].forEach(field => delete customData[field]);
+=======
+    
+    // Prepare custom data (remove user data fields and ensure required fields)
+    const customData = { 
+      content_name: eventData.content_name || 'Unknown Content',
+      content_category: eventData.content_category || 'general',
+      ...eventData 
+    };
+    ['em', 'ph', 'fn', 'ln', 'zp'].forEach(field => delete customData[field]);
+>>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
     
     // Get UTM data from localStorage
     const utmData = getUTMDataFromStorage();
     
+<<<<<<< HEAD
     // Prepare conversion data with all required fields
     const conversionData: ConversionData = {
       eventName,
       eventId, // Critical for deduplication
+=======
+    // Prepare conversion data
+    const conversionData: ConversionData = {
+      eventName,
+      eventId,
+>>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
       userData,
       customData,
       eventSourceUrl: window.location.href,
       utmData,
+<<<<<<< HEAD
       userAgent: navigator.userAgent,
       ipAddress: undefined // Will be extracted server-side
     };
@@ -105,6 +134,12 @@ export const sendToConversionsAPI = async (
     console.log('  UTM Data:', utmData);
     console.log('  Location Data:', { postcode: eventData.postcode, county: eventData.county });
     console.log('  Full Payload:', JSON.stringify(conversionData, null, 2));
+=======
+      userAgent: navigator.userAgent
+    };
+    
+    console.log('🚀 CONVERSIONS API: Sending data:', JSON.stringify(conversionData, null, 2));
+>>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
     
     // Send to Supabase Edge Function
     const response = await fetch('https://pchynbefgbupbmkqfrqe.supabase.co/functions/v1/facebook-conversions-api', {
@@ -115,6 +150,7 @@ export const sendToConversionsAPI = async (
       body: JSON.stringify({ data: conversionData })
     });
     
+<<<<<<< HEAD
     const responseData = await response.json();
     
     console.log('📡 CAPI RESPONSE STATUS:', response.status, response.statusText);
@@ -134,6 +170,18 @@ export const sendToConversionsAPI = async (
   } catch (error) {
     console.error('❌ CONVERSIONS API: Network/Parsing Error:', error);
     return { success: false, response: null };
+=======
+    if (response.ok) {
+      const result = await response.json();
+      console.log('✅ CONVERSIONS API: Event sent successfully', result);
+    } else {
+      const errorText = await response.text();
+      console.error('❌ CONVERSIONS API: Failed to send event:', response.status, response.statusText, errorText);
+    }
+    
+  } catch (error) {
+    console.error('❌ CONVERSIONS API: Error sending event:', error);
+>>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
   }
 };
 

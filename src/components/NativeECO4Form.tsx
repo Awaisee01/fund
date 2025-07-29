@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
 import { submitFormToDatabase, trackViewContent } from '@/services/formSubmissionService';
-import { trackRobustEvent, captureLocationData, captureUTMData, initializeFacebookPixel } from '@/lib/facebook-pixel-robust';
+import { trackRobustEvent, captureLocationData, captureUTMData } from '@/lib/facebook-pixel-robust';
 
 interface ECO4FormData {
   fullName: string;
@@ -97,7 +97,11 @@ const NativeECO4Form = () => {
     console.log('🆘 URGENT DEBUG: About to call submitFormToDatabase');
     
     try {
+<<<<<<< HEAD
       // Capture location data for enhanced tracking
+=======
+      // Capture location data for pixel enhancement
+>>>>>>> b98b664298c7eb556958a7dc606cc42d9d3daa2b
       captureLocationData({
         postcode: data.postCode,
         county: data.address.split(',').pop()?.trim()
@@ -151,6 +155,7 @@ const NativeECO4Form = () => {
         fn: data.fullName.split(' ')[0],
         ln: data.fullName.split(' ').slice(1).join(' ')
       });
+
 
       console.log('🎉 ECO4 form submission completed successfully');
       
