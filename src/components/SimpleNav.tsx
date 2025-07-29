@@ -56,9 +56,9 @@ const SimpleNav = () => {
           <img 
             src="/lovable-uploads/530a44a7-5098-4326-9fc0-fb553bdd9052.png" 
             alt="Funding For Scotland - Home Energy Efficiency Grants"
-            width="200"
-            height="50"
-            className="h-12 w-auto max-w-[200px] object-contain"
+            width="240"
+            height="60"
+            className="h-14 w-auto max-w-[240px] object-contain"
             loading="eager"
             fetchPriority="high"
             decoding="async"
