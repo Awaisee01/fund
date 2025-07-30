@@ -200,7 +200,7 @@ const SimpleECO4Form = () => {
                 required
                 checked={formData.understand}
                 onCheckedChange={(checked) => setFormData({...formData, understand: !!checked})}
-                className="!h-5 !w-5 !min-h-[1.25rem] !min-w-[1.25rem] aspect-square border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900 flex-shrink-0"
+                className="!h-5 !w-5 !min-h-[20px] !min-w-[20px] !max-h-[20px] !max-w-[20px] !aspect-square !rounded-sm border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900 flex-shrink-0 sm:!h-5 sm:!w-5"
               />
               <label 
                 className="text-white text-sm cursor-pointer"
