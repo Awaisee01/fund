@@ -41,7 +41,7 @@ const SquareCheckbox = React.forwardRef<HTMLInputElement, SquareCheckboxProps>(
             maxHeight: '20px',
             aspectRatio: '1 / 1',
             borderRadius: '4px',
-            borderColor: checked ? 'white' : 'rgba(255, 255, 255, 0.5)',
+            borderColor: 'white',
             backgroundColor: checked ? 'white' : 'transparent',
           }}
         >
