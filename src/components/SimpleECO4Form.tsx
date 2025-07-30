@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
+import { SquareCheckbox } from '@/components/ui/square-checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/unified-tracking-manager';
@@ -196,11 +196,10 @@ const SimpleECO4Form = () => {
             </p>
             
             <div className="flex flex-row items-center space-x-3">
-              <Checkbox
+              <SquareCheckbox
                 required
                 checked={formData.understand}
                 onCheckedChange={(checked) => setFormData({...formData, understand: !!checked})}
-                className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900 flex-shrink-0"
               />
               <label 
                 className="text-white text-sm cursor-pointer"
