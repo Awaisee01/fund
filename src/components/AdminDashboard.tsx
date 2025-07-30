@@ -122,7 +122,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     updateSubmission(submissionId, { status: 'survey_booked' });
   };
 
-  const handleSaveSubmission = (updates: {
+  const handleSaveSubmission = async (updates: {
     status: string;
     admin_notes: string;
     property_type?: string;
@@ -131,7 +131,8 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     epc_score?: string;
   }) => {
     if (selectedSubmission) {
-      updateSubmission(selectedSubmission.id, updates);
+      console.log('💾 AdminDashboard handleSaveSubmission called with:', updates);
+      await updateSubmission(selectedSubmission.id, updates);
       setSelectedSubmission(null);
     }
   };
