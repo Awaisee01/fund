@@ -126,6 +126,7 @@ const SimpleECO4Form = () => {
           <div>
             <label className="text-white text-xs block mb-1">Full Name</label>
             <Input 
+              required
               value={formData.fullName}
               onChange={(e) => setFormData({...formData, fullName: e.target.value})}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
@@ -136,6 +137,7 @@ const SimpleECO4Form = () => {
           <div>
             <label className="text-white text-xs block mb-1">Address</label>
             <Input 
+              required
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
@@ -146,6 +148,7 @@ const SimpleECO4Form = () => {
           <div>
             <label className="text-white text-xs block mb-1">Post Code</label>
             <Input 
+              required
               value={formData.postCode}
               onChange={(e) => setFormData({...formData, postCode: e.target.value})}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
@@ -156,6 +159,7 @@ const SimpleECO4Form = () => {
           <div>
             <label className="text-white text-xs block mb-1">Email</label>
             <Input 
+              required
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -167,6 +171,7 @@ const SimpleECO4Form = () => {
           <div>
             <label className="text-white text-xs block mb-1">Phone</label>
             <Input 
+              required
               type="tel"
               value={formData.phone}
               onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -182,11 +187,15 @@ const SimpleECO4Form = () => {
             
             <div className="flex flex-row items-center space-x-3">
               <Checkbox
+                required
                 checked={formData.understand}
                 onCheckedChange={(checked) => setFormData({...formData, understand: !!checked})}
-                className="!h-5 !w-5 border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900"
+                className="!h-5 !w-5 !min-h-[1.25rem] !min-w-[1.25rem] aspect-square border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900 flex-shrink-0"
               />
-              <label className="text-white text-sm cursor-pointer">
+              <label 
+                className="text-white text-sm cursor-pointer"
+                onClick={() => setFormData({...formData, understand: !formData.understand})}
+              >
                 I understand
               </label>
             </div>
