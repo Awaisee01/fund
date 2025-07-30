@@ -108,6 +108,7 @@ export const useAdminDashboard = () => {
       epc_score?: string;
     }
   ) => {
+    console.log('📝 updateSubmission called with:', { id, updates });
     try {
       // Validate session before any database operations
       const sessionValid = await validateSession();
@@ -131,11 +132,15 @@ export const useAdminDashboard = () => {
         sanitizedUpdates.contacted_at = new Date().toISOString();
       }
 
+      console.log('📤 About to update submission with sanitized data:', sanitizedUpdates);
+      
       const { error } = await supabase
         .from('form_submissions')
         .update(sanitizedUpdates)
         .eq('id', id);
 
+      console.log('🔄 Supabase update result:', { error });
+      
       if (error) throw error;
 
       await fetchSubmissions();
