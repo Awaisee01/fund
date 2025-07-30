@@ -11,13 +11,30 @@ interface FormSubmissionData {
   formName?: string;
 }
 
-// Completely disable all tracking for mobile performance
+import { trackingManager } from '@/lib/unified-tracking-manager';
+
 export const trackViewContent = (contentName: string, contentCategory: string) => {
-  return Promise.resolve();
+  return trackingManager.trackPageView();
 };
 
-export const trackFormSubmission = () => {
-  return Promise.resolve();
+export const trackFormSubmission = (userData: {
+  email?: string;
+  phone?: string;
+  name?: string;
+  postcode?: string;
+}, serviceType: string) => {
+  // Parse first/last name if available
+  const nameParts = userData.name?.split(' ') || [];
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  return trackingManager.trackFormSubmission(serviceType, {
+    email: userData.email,
+    phone: userData.phone,
+    firstName,
+    lastName,
+    postcode: userData.postcode
+  });
 };
 
 export const submitFormToDatabase = async (data: FormSubmissionData) => {
@@ -48,6 +65,20 @@ export const submitFormToDatabase = async (data: FormSubmissionData) => {
     }
 
     console.log('✅ Form submitted successfully');
+    
+    // Track Lead event with rich customer data for better match quality
+    try {
+      await trackFormSubmission({
+        email: data.email,
+        phone: data.phone,
+        name: data.name,
+        postcode: data.postcode
+      }, data.serviceType);
+      console.log('📊 Lead event tracked with customer data');
+    } catch (trackingError) {
+      console.error('⚠️ Lead tracking failed:', trackingError);
+      // Don't throw error - form submission was successful
+    }
     
     // Send email notification
     try {

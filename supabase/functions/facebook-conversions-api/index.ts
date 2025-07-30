@@ -146,14 +146,18 @@ serve(async (req) => {
         userData.st = await hashData(data.userData.county) // Facebook uses 'st' field for regional data
       }
       
-      // Add Facebook-specific identifiers
+      // Add Facebook-specific identifiers (critical for match quality)
       if (data.userData.fbc) {
         userData.fbc = data.userData.fbc // Facebook Click ID (no hashing needed)
       }
       if (data.userData.fbp) {
         userData.fbp = data.userData.fbp // Facebook Browser ID (no hashing needed)
       }
-      if (data.userData.external_id) {
+      
+      // Generate external_id if email or phone is available (improves match quality)
+      if (data.userData.email && !data.userData.external_id) {
+        userData.external_id = await hashData(data.userData.email)
+      } else if (data.userData.external_id) {
         userData.external_id = await hashData(data.userData.external_id)
       }
       

@@ -203,6 +203,8 @@ class UnifiedTrackingManager {
         eventId: eventId,
         userData: {
           ...data.userData,
+          // Map postcode to zipCode for Facebook API consistency
+          zipCode: data.userData?.postcode,
           ...fbCookies
         },
         customData: {
