@@ -368,6 +368,7 @@ class AdvancedPixelTracker {
     this.trackEvent('Lead', {
       ...data,
       value: data.value || leadValue,
+      currency: 'GBP', // ALWAYS include 3-letter currency code
       em: data.email?.toLowerCase(),
       ph: data.phone?.replace(/\D/g, ''),
       fn: data.firstName?.toLowerCase(),
@@ -399,11 +400,12 @@ class AdvancedPixelTracker {
   }
 
   private generateDynamicLeadValue(contentCategory: string): number {
+    // Realistic lead values for Facebook Pixel (must be within reasonable range)
     const serviceValues: Record<string, number[]> = {
-      'eco4': [250, 300, 350, 400, 450, 500, 550, 600],
-      'solar': [800, 900, 1000, 1100, 1200, 1300, 1400, 1500],
-      'gas_boilers': [150, 200, 250, 300, 350, 400, 450, 500],
-      'home_improvements': [300, 400, 500, 600, 700, 800, 900, 1000]
+      'eco4': [15, 20, 25, 30, 35, 40],
+      'solar': [40, 50, 60, 70, 80, 90],
+      'gas_boilers': [20, 25, 30, 35, 40, 45],
+      'home_improvements': [25, 30, 35, 40, 45, 50]
     };
 
     const key = Object.keys(serviceValues).find(k => 

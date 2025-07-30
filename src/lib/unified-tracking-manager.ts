@@ -159,6 +159,9 @@ class UnifiedTrackingManager {
       // Track with Facebook Pixel (browser-side) with enhanced data
       if ((window as any).fbq && this.isInitialized) {
         const pixelData = {
+          // ALWAYS ensure value and currency are set for Lead events
+          value: data.customData?.value || (data.eventName === 'Lead' ? this.generateLeadValue(data.customData?.form_type || 'contact') : 1),
+          currency: data.customData?.currency || 'GBP',
           ...data.customData,
           eventID: eventId, // For deduplication
           // Advanced matching parameters
@@ -180,7 +183,9 @@ class UnifiedTrackingManager {
           hasName: !!(data.userData?.firstName || data.userData?.lastName),
           hasPostcode: !!data.userData?.postcode,
           fbCookies: fbCookies,
-          utmData: utmData
+          utmData: utmData,
+          value: pixelData.value,
+          currency: pixelData.currency
         });
         (window as any).fbq('track', data.eventName, pixelData);
         
@@ -208,10 +213,11 @@ class UnifiedTrackingManager {
           ...fbCookies
         },
         customData: {
-          value: 1,
-          currency: 'GBP',
-          content_name: 'Lead Generation',
-          content_category: 'conversion',
+          // ALWAYS ensure value and currency are set for Lead events
+          value: data.customData?.value || (data.eventName === 'Lead' ? this.generateLeadValue(data.customData?.form_type || 'contact') : 1),
+          currency: data.customData?.currency || 'GBP',
+          content_name: data.customData?.content_name || 'Lead Generation',
+          content_category: data.customData?.content_category || 'conversion',
           ...data.customData,
           event_id: eventId,
           page_type: this.getPageType()
