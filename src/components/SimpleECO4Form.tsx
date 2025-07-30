@@ -129,8 +129,10 @@ const SimpleECO4Form = () => {
               required
               value={formData.fullName}
               onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your full name"
+              enterKeyHint="next"
             />
           </div>
 
@@ -140,8 +142,10 @@ const SimpleECO4Form = () => {
               required
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
+              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your address"
+              enterKeyHint="next"
             />
           </div>
 
@@ -151,8 +155,10 @@ const SimpleECO4Form = () => {
               required
               value={formData.postCode}
               onChange={(e) => setFormData({...formData, postCode: e.target.value})}
+              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="G1 1AA"
+              enterKeyHint="next"
             />
           </div>
 
@@ -163,8 +169,10 @@ const SimpleECO4Form = () => {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="your.email@example.com"
+              enterKeyHint="next"
             />
           </div>
 
@@ -175,8 +183,10 @@ const SimpleECO4Form = () => {
               type="tel"
               value={formData.phone}
               onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="07xxx xxx xxx"
+              enterKeyHint="done"
             />
           </div>
 
