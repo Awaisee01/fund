@@ -171,10 +171,26 @@ export async function trackRobustEvent(
     const locationData = getLocationData();
     const pageType = getPageType();
     
+    // Generate realistic lead value for events
+    const generateEventValue = (eventName: string, pageType: string): number => {
+      if (eventName === 'Lead') {
+        const leadValues: Record<string, number[]> = {
+          'eco4': [15, 20, 25, 30, 35, 40],
+          'solar': [40, 50, 60, 70, 80, 90],
+          'gas_boilers': [20, 25, 30, 35, 40, 45],
+          'home_improvements': [25, 30, 35, 40, 45, 50],
+          'contact': [10, 15, 20, 25, 30],
+        };
+        const values = leadValues[pageType] || leadValues['contact'];
+        return values[Math.floor(Math.random() * values.length)];
+      }
+      return 1; // Default for other events
+    };
+
     // Build comprehensive event data
     const eventData: RobustPixelData = {
       // Required fields with defaults
-      value: customParameters.value || 1,
+      value: customParameters.value || generateEventValue(eventName, pageType),
       currency: customParameters.currency || 'GBP',
       content_name: customParameters.content_name || `${eventName} - ${pageType}`,
       content_category: customParameters.content_category || pageType,

@@ -304,6 +304,20 @@ class UnifiedTrackingManager {
     });
   }
 
+  // Generate realistic lead value based on service type
+  private generateLeadValue(formType: string): number {
+    const serviceValues: Record<string, number[]> = {
+      'eco4': [15, 20, 25, 30, 35, 40],
+      'solar': [40, 50, 60, 70, 80, 90],
+      'gas_boilers': [20, 25, 30, 35, 40, 45],
+      'home_improvements': [25, 30, 35, 40, 45, 50],
+      'contact': [10, 15, 20, 25, 30],
+    };
+    
+    const values = serviceValues[formType] || serviceValues['contact'];
+    return values[Math.floor(Math.random() * values.length)];
+  }
+
   // Public method to track form submissions
   async trackFormSubmission(formType: string, userData?: any): Promise<void> {
     await this.trackEvent({
@@ -313,7 +327,7 @@ class UnifiedTrackingManager {
         content_name: `${formType} Form Submission`,
         content_category: 'lead_generation',
         form_type: formType,
-        value: 10,
+        value: this.generateLeadValue(formType),
         currency: 'GBP'
       }
     });

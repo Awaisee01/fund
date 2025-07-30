@@ -200,13 +200,13 @@ export const trackPixelEventWithUTM = (
  * Generates realistic lead values based on service type to avoid Facebook's "same value" detection
  */
 const generateLeadValue = (contentCategory: string, contentName: string): number => {
-  // Base values for different service types
+  // Realistic lead values for Facebook Pixel (must be within reasonable range)
   const serviceValues: Record<string, number[]> = {
-    'eco4': [250, 300, 350, 400, 450, 500, 550, 600], // ECO4 scheme values
-    'solar': [800, 900, 1000, 1100, 1200, 1300, 1400, 1500], // Solar installation values  
-    'gas-boilers': [150, 200, 250, 300, 350, 400, 450, 500], // Gas boiler values
-    'home-improvements': [300, 400, 500, 600, 700, 800, 900, 1000], // General improvements
-    'contact': [100, 150, 200, 250, 300], // Contact form values
+    'eco4': [15, 20, 25, 30, 35, 40], // ECO4 scheme lead values
+    'solar': [40, 50, 60, 70, 80, 90], // Solar installation lead values  
+    'gas-boilers': [20, 25, 30, 35, 40, 45], // Gas boiler lead values
+    'home-improvements': [25, 30, 35, 40, 45, 50], // General improvements lead values
+    'contact': [10, 15, 20, 25, 30], // Contact form lead values
   };
 
   // Determine service type from category or content name
