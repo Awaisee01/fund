@@ -60,16 +60,16 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           onBlur={handleBlur}
           className={cn(
             className,
-            !isValid && "border-red-500 focus:border-red-500"
+            !isValid && "border-red-500 border-2 focus:border-red-500"
           )}
           placeholder="+44 7XXX XXX XXX"
           {...props}
         />
         {!isValid && (
-          <p className="text-sm text-red-500">Please enter a valid UK phone number</p>
+          <p className="text-sm text-red-500 font-bold">Please enter a valid UK phone number</p>
         )}
         {error && (
-          <p className="text-sm text-red-500">{error}</p>
+          <p className="text-sm text-red-500 font-bold">{error}</p>
         )}
       </div>
     );
