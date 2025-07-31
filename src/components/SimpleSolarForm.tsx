@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/unified-tracking-manager';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 const SimpleSolarForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,6 +25,21 @@ const SimpleSolarForm = () => {
     e.preventDefault();
     console.log('🚀 Solar form submitting:', formData);
     console.log('🌐 Current pathname:', window.location.pathname);
+    
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (!isValidPhoneNumber(formData.phone, 'GB')) {
+      toast.error("Please enter a valid UK phone number");
+      return;
+    }
+
+    if (!formData.understand) {
+      toast.error("Please confirm you understand the requirements");
+      return;
+    }
     
     setIsSubmitting(true);
     
@@ -167,12 +184,11 @@ const SimpleSolarForm = () => {
 
           <div>
             <label className="text-white text-xs block mb-1">Phone</label>
-            <Input 
-              type="tel"
+            <PhoneInput 
               value={formData.phone}
-              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              onChange={(value) => setFormData({...formData, phone: value})}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-              placeholder="07xxx xxx xxx"
+              placeholder="+44 7XXX XXX XXX"
             />
           </div>
 

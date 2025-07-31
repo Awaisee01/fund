@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { SquareCheckbox } from '@/components/ui/square-checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/unified-tracking-manager';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 
 const SimpleECO4Form = () => {
@@ -23,6 +25,21 @@ const SimpleECO4Form = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('ECO4 form submitting:', formData);
+    
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (!isValidPhoneNumber(formData.phone, 'GB')) {
+      toast.error("Please enter a valid UK phone number");
+      return;
+    }
+
+    if (!formData.understand) {
+      toast.error("Please confirm you understand the restriction");
+      return;
+    }
     
     setIsSubmitting(true);
     
@@ -178,15 +195,12 @@ const SimpleECO4Form = () => {
 
           <div>
             <label className="text-white text-xs block mb-1">Phone</label>
-            <Input 
+            <PhoneInput 
               required
-              type="tel"
               value={formData.phone}
-              onChange={(e) => setFormData({...formData, phone: e.target.value})}
-              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+              onChange={(value) => setFormData({...formData, phone: value})}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-              placeholder="07xxx xxx xxx"
-              enterKeyHint="done"
+              placeholder="+44 7XXX XXX XXX"
             />
           </div>
 

@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 const SimpleContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,6 +21,16 @@ const SimpleContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Contact form submitting:', formData);
+    
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (!isValidPhoneNumber(formData.phone, 'GB')) {
+      toast.error("Please enter a valid UK phone number");
+      return;
+    }
     
     setIsSubmitting(true);
     
@@ -118,12 +130,11 @@ const SimpleContactForm = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Phone Number *
             </label>
-            <Input
-              type="tel"
+            <PhoneInput
               value={formData.phone}
-              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              onChange={(value) => setFormData({...formData, phone: value})}
               className="w-full"
-              placeholder="Enter your phone number"
+              placeholder="+44 7XXX XXX XXX"
             />
           </div>
 
