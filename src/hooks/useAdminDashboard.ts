@@ -132,16 +132,32 @@ export const useAdminDashboard = () => {
         sanitizedUpdates.contacted_at = new Date().toISOString();
       }
 
-      console.log('📤 About to update submission with sanitized data:', sanitizedUpdates);
+      console.log('📤 About to update submission via edge function:', sanitizedUpdates);
       
-      const { error } = await supabase
-        .from('form_submissions')
-        .update(sanitizedUpdates)
-        .eq('id', id);
+      const sessionToken = localStorage.getItem('adminSessionToken');
+      if (!sessionToken) {
+        throw new Error('No session token found');
+      }
+      
+      // Use edge function for update to bypass RLS issues
+      const { data, error } = await supabase.functions.invoke('update-admin-submission', {
+        body: {
+          session_token: sessionToken,
+          submission_id: id,
+          updates: sanitizedUpdates
+        }
+      });
 
-      console.log('🔄 Supabase update result:', { error });
+      console.log('🔄 Edge function update result:', { data, error });
       
-      if (error) throw error;
+      if (error) {
+        console.error('💥 Edge function error:', error);
+        throw new Error(error.message || 'Failed to update submission');
+      }
+      
+      if (!data?.success) {
+        throw new Error(data?.error || 'Update failed');
+      }
 
       await fetchSubmissions();
       
