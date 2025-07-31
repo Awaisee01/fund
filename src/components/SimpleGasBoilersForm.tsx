@@ -176,7 +176,7 @@ const SimpleGasBoilersForm = () => {
               value={formData.phone}
               onChange={(value) => setFormData({...formData, phone: value})}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-              placeholder="+44 7XXX XXX XXX"
+              placeholder="07xxx xxx xxx"
             />
           </div>
 

@@ -62,7 +62,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             className,
             !isValid && "border-red-500 border-2 focus:border-red-500"
           )}
-          placeholder="+44 7XXX XXX XXX"
+          placeholder="07xxx xxx xxx"
           {...props}
         />
         {!isValid && (
