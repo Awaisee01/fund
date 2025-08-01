@@ -22,12 +22,23 @@ export const BulkDeleteDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
 
     setIsLoading(true);
     try {
-      const { error } = await supabase
-        .from('form_submissions')
-        .delete()
-        .in('id', selectedIds);
+      const sessionToken = localStorage.getItem('adminSessionToken');
+      if (!sessionToken) {
+        throw new Error('No session token found');
+      }
+
+      const { data, error } = await supabase.functions.invoke('bulk-delete-submissions', {
+        body: {
+          session_token: sessionToken,
+          submission_ids: selectedIds
+        }
+      });
 
       if (error) throw error;
+
+      if (!data?.success) {
+        throw new Error(data?.error || 'Delete failed');
+      }
 
       toast({
         title: "Success",

@@ -31,3 +31,9 @@ verify_jwt = false
 
 [functions.secure-form-submission]
 verify_jwt = false
+
+[functions.update-admin-submission]
+verify_jwt = false
+
+[functions.bulk-delete-submissions]
+verify_jwt = false
