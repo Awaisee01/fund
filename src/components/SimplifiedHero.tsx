@@ -1,5 +1,4 @@
 import { CheckCircle } from 'lucide-react';
-import OptimizedImage from '@/components/OptimizedImage';
 
 interface SimplifiedHeroProps {
   title: string;
@@ -29,8 +28,8 @@ const SimplifiedHero = ({
           src={heroImage}
           alt={altText}
           className="w-full h-full object-cover mix-blend-multiply opacity-30"
-          loading="eager"
           fetchPriority="high"
+          decoding="sync"
           width={1920}
           height={1080}
         />

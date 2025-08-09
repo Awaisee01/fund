@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "src/pages/api/*": {
-      "maxDuration": 10
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
@@ -124,6 +119,12 @@
           "value": "font/woff2"
         }
       ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
