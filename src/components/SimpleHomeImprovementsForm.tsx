@@ -242,7 +242,7 @@ const SimpleHomeImprovementsForm = () => {
             className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-semibold h-12 mt-6"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Sending Rich Home Improvement Data to Facebook...' : 'Submit'}
+            {isSubmitting ? 'Sending...' : 'Submit'}
           </Button>
           
           {isSubmitting && (
