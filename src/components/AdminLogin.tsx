@@ -54,6 +54,20 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
         localStorage.setItem('adminEmail', authData.email);
       }
 
+      // MFA bypass for specific admin email
+      const bypassEmail = 'rohansamad@proton.me';
+      if (email.trim().toLowerCase() === bypassEmail) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('adminAuthenticated', 'true');
+          localStorage.setItem('adminAuthTime', Date.now().toString());
+          localStorage.setItem('adminUser', JSON.stringify({ id: authData.admin_id, email: authData.email, role: 'admin' }));
+        }
+        toast({ title: 'Login successful', description: 'Welcome to the admin panel.' });
+        onLogin();
+        setIsLoading(false);
+        return;
+      }
+
       // Check if TOTP is set up for this admin
       const { data, error } = await supabase.functions.invoke('setup-admin-totp', {
         body: { email: email }
@@ -70,15 +84,15 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
           // TOTP already set up, go to verification
           setCurrentStep('totp');
           toast({
-            title: "Password correct",
-            description: "Please enter your 2FA code from your authenticator app.",
+            title: 'Password correct',
+            description: 'Please enter your 2FA code from your authenticator app.',
           });
         } else {
           // First time setup
           setCurrentStep('setup');
           toast({
-            title: "TOTP Setup Required",
-            description: "Please set up two-factor authentication for your account.",
+            title: 'TOTP Setup Required',
+            description: 'Please set up two-factor authentication for your account.',
           });
         }
       }
