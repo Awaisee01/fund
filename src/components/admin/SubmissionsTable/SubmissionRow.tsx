@@ -107,7 +107,7 @@ export const SubmissionRow = ({
         <LeadActions
           submission={submission}
           onViewDetails={onViewDetails}
-          onStatusUpdate={handleStatusUpdate}
+          onStatusUpdate={() => onStatusUpdate(submission.id, submission.status)}
           onDelete={onDelete}
         />
       </TableCell>
