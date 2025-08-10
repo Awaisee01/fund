@@ -6,8 +6,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from '@/components/ui/label';
 import { CheckSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
+import { supabase } from '@/integrations/supabase/client';
 
 type LeadStatus = Database['public']['Enums']['lead_status'];
 
@@ -26,19 +26,33 @@ export const BulkStatusDialog = ({ selectedIds, onSelectionChange, onBulkUpdate 
   const handleBulkStatusUpdate = async () => {
     setIsUpdating(true);
     try {
-      const updateData: any = { status: bulkStatus };
-      
-      // Update contacted_at for survey_booked status
-      if (bulkStatus === 'survey_booked') {
-        updateData.contacted_at = new Date().toISOString();
+      const sessionToken = localStorage.getItem('adminSessionToken');
+      if (!sessionToken) {
+        throw new Error('No admin session found');
       }
 
-      const { error } = await supabase
-        .from('form_submissions')
-        .update(updateData)
-        .in('id', selectedIds);
+      // Update each submission individually using the edge function
+      const updatePromises = selectedIds.map(async (submissionId) => {
+        const updateData: any = { status: bulkStatus };
+        
+        // Update contacted_at for survey_booked status
+        if (bulkStatus === 'survey_booked') {
+          updateData.contacted_at = new Date().toISOString();
+        }
 
-      if (error) throw error;
+        const { error } = await supabase.functions.invoke('update-admin-submission', {
+          body: {
+            session_token: sessionToken,
+            submission_id: submissionId,
+            updates: updateData
+          }
+        });
+
+        if (error) throw error;
+        return submissionId;
+      });
+
+      await Promise.all(updatePromises);
 
       toast({
         title: "Success",
