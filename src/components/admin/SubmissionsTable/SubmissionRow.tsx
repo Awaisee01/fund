@@ -62,9 +62,15 @@ export const SubmissionRow = ({
   const priority = getRowPriority(submission);
   const priorityClasses = getPriorityClasses(priority);
 
+  // Handle status update with immediate callback
+  const handleStatusUpdate = (status: string) => {
+    onStatusUpdate(submission.id, status);
+  };
+
   return (
     <TableRow 
       className={`${priorityClasses} ${priority === 'urgent' ? 'animate-pulse' : ''}`}
+      key={submission.id}
     >
       <TableCell>
         <Checkbox
@@ -101,7 +107,7 @@ export const SubmissionRow = ({
         <LeadActions
           submission={submission}
           onViewDetails={onViewDetails}
-          onStatusUpdate={onStatusUpdate}
+          onStatusUpdate={handleStatusUpdate}
           onDelete={onDelete}
         />
       </TableCell>

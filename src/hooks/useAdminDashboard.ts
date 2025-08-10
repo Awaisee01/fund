@@ -131,6 +131,14 @@ export const useAdminDashboard = () => {
         sanitizedUpdates.contacted_at = new Date().toISOString();
       }
 
+      // Optimistically update the local state first
+      setSubmissions(currentSubmissions => 
+        currentSubmissions.map(submission => 
+          submission.id === id 
+            ? { ...submission, ...sanitizedUpdates, updated_at: new Date().toISOString() }
+            : submission
+        )
+      );
       
       const sessionToken = localStorage.getItem('adminSessionToken');
       if (!sessionToken) {
@@ -149,14 +157,25 @@ export const useAdminDashboard = () => {
       
       if (error) {
         console.error('💥 Edge function error:', error);
+        // Revert optimistic update on error
+        await fetchSubmissions();
         throw new Error(error.message || 'Failed to update submission');
       }
       
       if (!data?.success) {
+        // Revert optimistic update on error
+        await fetchSubmissions();
         throw new Error(data?.error || 'Update failed');
       }
 
-      await fetchSubmissions();
+      // Update local state with the actual response from server
+      if (data.submission) {
+        setSubmissions(currentSubmissions => 
+          currentSubmissions.map(submission => 
+            submission.id === id ? data.submission : submission
+          )
+        );
+      }
       
       toast({
         title: "Success",
