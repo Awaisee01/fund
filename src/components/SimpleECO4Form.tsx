@@ -24,24 +24,40 @@ const SimpleECO4Form = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('📋 [FORM] Form submission started');
+    console.log('📋 [FORM] Form data:', {
+      hasFullName: !!formData.fullName,
+      hasAddress: !!formData.address,
+      hasPostCode: !!formData.postCode,
+      hasEmail: !!formData.email,
+      hasPhone: !!formData.phone,
+      understand: formData.understand,
+      fullData: formData // Be careful with this in production - contains PII
+    });
+    
     if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
+      console.warn('⚠️ [FORM] Validation failed: Missing required fields');
       toast.error("Please fill in all required fields");
       return;
     }
 
     if (!isValidPhoneNumber(formData.phone, 'GB')) {
+      console.warn('⚠️ [FORM] Validation failed: Invalid UK phone number:', formData.phone);
       toast.error("Please enter a valid UK phone number");
       return;
     }
 
     if (!formData.understand) {
+      console.warn('⚠️ [FORM] Validation failed: User did not confirm understanding');
       toast.error("Please confirm you understand the restriction");
       return;
     }
     
+    console.log('✅ [FORM] All validation passed, proceeding with submission');
     setIsSubmitting(true);
     
     try {
+      console.log('📤 [FORM] Starting database submission...');
       
       // Submit using secure form submission service (with notifications)
       const { data, error } = await supabase.functions.invoke('secure-form-submission', {
@@ -69,13 +85,16 @@ const SimpleECO4Form = () => {
       });
 
       if (error) {
+        console.error('❌ [FORM] Database submission failed:', error);
         throw new Error(`Submission failed: ${error.message}`);
       }
 
-      
+      console.log('✅ [FORM] Database submission successful:', data);
 
       // ENHANCED: Track with rich Facebook data using your enhanced tracking manager
-      await trackFormSubmission('eco4', {
+      console.log('🎯 [FORM] Starting Facebook tracking with rich data...');
+      
+      const trackingData = {
         // Basic data (your existing fields)
         email: formData.email,
         phone: formData.phone,
@@ -96,13 +115,36 @@ const SimpleECO4Form = () => {
         service_interest: 'eco4',
         property_type: 'residential', // Inferred from ECO4 form
         lead_tier: 'qualified'       // High-quality lead indicator
+      };
+
+      console.log('🎯 [FORM] Prepared tracking data:', {
+        email: trackingData.email,
+        hasPhone: !!trackingData.phone,
+        fullName: trackingData.fullName,
+        firstName: trackingData.firstName,
+        lastName: trackingData.lastName,
+        postcode: trackingData.postcode,
+        hasAddress: !!trackingData.address,
+        serviceInterest: trackingData.service_interest,
+        leadTier: trackingData.lead_tier,
+        dataSize: JSON.stringify(trackingData).length + ' bytes'
       });
 
-     
+      console.log('📤 [FORM] Calling trackFormSubmission...');
+      await trackFormSubmission('eco4', trackingData);
+      console.log('✅ [FORM] Facebook tracking completed successfully!');
 
       setIsSubmitting(false);
       setShowSuccess(true);
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours.");
+      
+      console.log('🎉 [FORM] Form submission process completed successfully!');
+      console.log('📊 [FORM] Summary:', {
+        databaseSubmission: 'SUCCESS',
+        facebookTracking: 'SUCCESS',
+        userNotification: 'SENT',
+        formReset: 'PENDING'
+      });
       
       // Reset form
       setFormData({
@@ -114,17 +156,35 @@ const SimpleECO4Form = () => {
         understand: false
       });
       
+      console.log('🔄 [FORM] Form data reset completed');
+      
       // Hide success after 10 seconds
-      setTimeout(() => setShowSuccess(false), 10000);
+      setTimeout(() => {
+        setShowSuccess(false);
+        console.log('👋 [FORM] Success message hidden after timeout');
+      }, 10000);
       
     } catch (error) {
-      console.error('❌ ECO4 enhanced form submission failed:', error);
+      console.error('❌ [FORM] Form submission failed:', error);
+      console.error('❌ [FORM] Error details:', {
+        message: error.message,
+        stack: error.stack,
+        formData: {
+          hasFullName: !!formData.fullName,
+          hasEmail: !!formData.email,
+          hasPhone: !!formData.phone,
+          hasPostCode: !!formData.postCode
+        }
+      });
+      
       setIsSubmitting(false);
       
       // Still show success to user even if there's an error
       setShowSuccess(true);
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours.");
       
+      console.log('⚠️ [FORM] Showing success message to user despite error (UX fallback)');
+      
       // Reset form
       setFormData({
         fullName: '',
@@ -135,11 +195,16 @@ const SimpleECO4Form = () => {
         understand: false
       });
       
-      setTimeout(() => setShowSuccess(false), 10000);
+      setTimeout(() => {
+        setShowSuccess(false);
+        console.log('👋 [FORM] Success message hidden after timeout (error case)');
+      }, 10000);
     }
   };
 
   if (showSuccess) {
+    console.log('✅ [FORM] Displaying success screen');
+    
     return (
       <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
         <CardContent className="p-6 text-center">
@@ -162,6 +227,8 @@ const SimpleECO4Form = () => {
     );
   }
 
+  console.log('📋 [FORM] Rendering form interface');
+
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
       <CardHeader className="text-center pb-2">
@@ -179,7 +246,10 @@ const SimpleECO4Form = () => {
             <Input 
               required
               value={formData.fullName}
-              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              onChange={(e) => {
+                setFormData({...formData, fullName: e.target.value});
+                console.log('📝 [FORM] Full name updated:', e.target.value);
+              }}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your full name"
@@ -192,7 +262,10 @@ const SimpleECO4Form = () => {
             <Input 
               required
               value={formData.address}
-              onChange={(e) => setFormData({...formData, address: e.target.value})}
+              onChange={(e) => {
+                setFormData({...formData, address: e.target.value});
+                console.log('📝 [FORM] Address updated:', e.target.value);
+              }}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your address"
@@ -205,7 +278,10 @@ const SimpleECO4Form = () => {
             <Input 
               required
               value={formData.postCode}
-              onChange={(e) => setFormData({...formData, postCode: e.target.value})}
+              onChange={(e) => {
+                setFormData({...formData, postCode: e.target.value});
+                console.log('📝 [FORM] Post code updated:', e.target.value);
+              }}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="G1 1AA"
@@ -219,7 +295,10 @@ const SimpleECO4Form = () => {
               required
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => {
+                setFormData({...formData, email: e.target.value});
+                console.log('📝 [FORM] Email updated:', e.target.value);
+              }}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="your.email@example.com"
@@ -232,7 +311,10 @@ const SimpleECO4Form = () => {
             <PhoneInput 
               required
               value={formData.phone}
-              onChange={(value) => setFormData({...formData, phone: value})}
+              onChange={(value) => {
+                setFormData({...formData, phone: value});
+                console.log('📝 [FORM] Phone updated:', value);
+              }}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="07xxx xxx xxx"
             />
@@ -247,11 +329,18 @@ const SimpleECO4Form = () => {
               <SquareCheckbox
                 required
                 checked={formData.understand}
-                onCheckedChange={(checked) => setFormData({...formData, understand: !!checked})}
+                onCheckedChange={(checked) => {
+                  setFormData({...formData, understand: !!checked});
+                  console.log('📝 [FORM] Understanding checkbox updated:', !!checked);
+                }}
               />
               <label 
                 className="text-white text-sm cursor-pointer"
-                onClick={() => setFormData({...formData, understand: !formData.understand})}
+                onClick={() => {
+                  const newValue = !formData.understand;
+                  setFormData({...formData, understand: newValue});
+                  console.log('📝 [FORM] Understanding checkbox clicked:', newValue);
+                }}
               >
                 I understand
               </label>
@@ -262,8 +351,9 @@ const SimpleECO4Form = () => {
             type="submit" 
             className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-semibold h-12 mt-6"
             disabled={isSubmitting}
+            onClick={() => console.log('🔘 [FORM] Submit button clicked')}
           >
-            {isSubmitting ? 'Sending Rich Data to Facebook...' : 'Submit'}
+            {isSubmitting ? 'Sending...' : 'Submit'}
           </Button>
           
           {isSubmitting && (
@@ -283,4 +373,3 @@ const SimpleECO4Form = () => {
 };
 
 export default SimpleECO4Form;
-
