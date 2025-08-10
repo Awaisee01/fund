@@ -37,7 +37,7 @@ export const StatusUpdateDialog = ({ submission, isOpen, onClose, onStatusUpdate
         updateData.contacted_at = new Date().toISOString();
       }
 
-      const { error } = await supabase.functions.invoke('update-admin-submission', {
+      const { data, error } = await supabase.functions.invoke('update-admin-submission', {
         body: {
           session_token: sessionToken,
           submission_id: submission.id,
@@ -45,7 +45,15 @@ export const StatusUpdateDialog = ({ submission, isOpen, onClose, onStatusUpdate
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Edge function error:', error);
+        throw error;
+      }
+
+      if (data?.error) {
+        console.error('Backend error:', data.error);
+        throw new Error(data.error);
+      }
 
       toast({
         title: "Success",
