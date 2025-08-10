@@ -11,7 +11,7 @@ type FormSubmission = Database['public']['Tables']['form_submissions']['Row'];
 interface LeadActionsProps {
   submission: FormSubmission;
   onViewDetails: (submission: FormSubmission) => void;
-  onStatusUpdate: () => void;
+  onStatusUpdate: (status: string) => Promise<void> | void;
   onDelete?: (submissionId: string) => void;
 }
 
