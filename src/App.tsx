@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { initializeTracking } from './lib/unified-tracking-manager';
+import { useGoogleAnalytics } from "./hooks/useGoogleAnalytics";
 
 // Critical above-the-fold components (loaded immediately)
 import Navigation from "./components/SimpleNav";
@@ -44,6 +45,7 @@ const PageLoadingSkeleton = () => (
 
 // App wrapper with unified tracking
 const AppWithTracking = () => {
+  useGoogleAnalytics("G-KHK6W3T9HZ");
   useEffect(() => {
     // Initialize tracking system on app start
     initializeTracking().catch(error => {

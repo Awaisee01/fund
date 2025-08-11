@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,12 +6,20 @@ import { PhoneInput } from '@/components/ui/phone-input';
 import { SquareCheckbox } from '@/components/ui/square-checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { trackFormSubmission } from '@/lib/unified-tracking-manager'; // Using your enhanced version
 import { isValidPhoneNumber } from 'libphonenumber-js';
+
+// Import your enhanced tracking system
+import { 
+  initializeTracking, 
+  trackFormSubmission, 
+  trackEnrichedPageView,  // NEW: Enhanced page view tracking
+  trackFormStart         // NEW: Form start tracking
+} from '@/lib/unified-tracking-manager';
 
 const SimpleECO4Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [formStartTracked, setFormStartTracked] = useState(false); // NEW: Track if form start was tracked
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
@@ -21,45 +29,62 @@ const SimpleECO4Form = () => {
     understand: false
   });
 
+  // Enhanced initialization with rich page view tracking
+  useEffect(() => {
+    const initializeTrackingSystem = async () => {
+
+      try {
+        // Initialize your existing tracking system
+        await initializeTracking();
+        await trackEnrichedPageView();
+      } catch (error) {
+        console.error('❌ DIAGNOSTIC: Enhanced tracking initialization failed:', error);
+      }
+      
+      console.log('✅ ECO4 FORM: ENHANCED tracking system initialization completed');
+    };
+    
+    initializeTrackingSystem();
+  }, []);
+
+  // NEW: Handle form start tracking
+  const handleFormStart = async () => {
+    if (!formStartTracked) {
+      try {
+        await trackFormStart('eco4');
+        setFormStartTracked(true);
+      } catch (error) {
+        console.error('❌ ECO4 FORM: Form start tracking failed:', error);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('📋 [FORM] Form submission started');
-    console.log('📋 [FORM] Form data:', {
-      hasFullName: !!formData.fullName,
-      hasAddress: !!formData.address,
-      hasPostCode: !!formData.postCode,
-      hasEmail: !!formData.email,
-      hasPhone: !!formData.phone,
-      understand: formData.understand,
-      fullData: formData // Be careful with this in production - contains PII
-    });
-    
     if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
-      console.warn('⚠️ [FORM] Validation failed: Missing required fields');
+      console.warn('⚠️ ECO4 FORM: Validation failed - missing required fields');
       toast.error("Please fill in all required fields");
       return;
     }
 
     if (!isValidPhoneNumber(formData.phone, 'GB')) {
-      console.warn('⚠️ [FORM] Validation failed: Invalid UK phone number:', formData.phone);
+      console.warn('⚠️ ECO4 FORM: Validation failed - invalid phone number');
       toast.error("Please enter a valid UK phone number");
       return;
     }
 
     if (!formData.understand) {
-      console.warn('⚠️ [FORM] Validation failed: User did not confirm understanding');
+      console.warn('⚠️ ECO4 FORM: Validation failed - user did not confirm understanding');
       toast.error("Please confirm you understand the restriction");
       return;
     }
     
-    console.log('✅ [FORM] All validation passed, proceeding with submission');
     setIsSubmitting(true);
     
     try {
-      console.log('📤 [FORM] Starting database submission...');
       
-      // Submit using secure form submission service (with notifications)
+      // Submit to Supabase
       const { data, error } = await supabase.functions.invoke('secure-form-submission', {
         body: {
           name: formData.fullName || 'ECO4 User',
@@ -71,80 +96,82 @@ const SimpleECO4Form = () => {
           form_data: {
             address: formData.address || 'ECO4 Address',
             understand_mains_gas_restriction: formData.understand || false,
-            source: 'eco4_simple_form_enhanced_rich_data',
-            // NEW: Enhanced form context
-            full_profile_provided: true,
-            lead_quality_indicators: {
-              complete_contact_info: true,
-              valid_uk_phone: true,
-              full_address_provided: !!formData.address,
-              understands_restrictions: formData.understand
-            }
+            source: 'eco4_form_enhanced_tracking'
           }
         }
       });
 
       if (error) {
-        console.error('❌ [FORM] Database submission failed:', error);
         throw new Error(`Submission failed: ${error.message}`);
       }
 
-      console.log('✅ [FORM] Database submission successful:', data);
-
-      // ENHANCED: Track with rich Facebook data using your enhanced tracking manager
-      console.log('🎯 [FORM] Starting Facebook tracking with rich data...');
-      
-      const trackingData = {
-        // Basic data (your existing fields)
+      // Prepare ENHANCED rich customer data
+      const richCustomerData = {
         email: formData.email,
         phone: formData.phone,
-        fullName: formData.fullName,  // NEW: Using fullName for better processing
-        postcode: formData.postCode,
-        address: formData.address,    // NEW: Full address for location targeting
-        
-        // Split name for advanced matching
+        fullName: formData.fullName,
         firstName: formData.fullName.split(' ')[0] || '',
         lastName: formData.fullName.split(' ').slice(1).join(' ') || '',
+        postcode: formData.postCode,
+        address: formData.address,
+        county: extractCountyFromAddress(formData.address),
         
-        // NEW: Enhanced form-specific data
-        understand_restrictions: formData.understand,
-        form_completion_quality: 'high',
-        lead_source: 'eco4_simple_form',
-        
-        // NEW: Additional context for better targeting
+        // Enhanced ECO4 data
         service_interest: 'eco4',
-        property_type: 'residential', // Inferred from ECO4 form
-        lead_tier: 'qualified'       // High-quality lead indicator
+        government_scheme_eligible: true,
+        understands_restrictions: formData.understand,
+        property_type: 'residential',
+        lead_tier: 'government_qualified',
+        energy_efficiency_interest: true,
+        form_completion_quality: 'high',
+        
+        // NEW: Rich engagement data
+        form_start_tracked: formStartTracked,
+        session_engagement: 'complete_form_journey',
+        conversion_funnel_stage: 'form_completion',
+        user_intent_strength: 'high'
       };
+      // ENHANCED: Call tracking with comprehensive error handling
+      try {
+        await trackFormSubmission('eco4', richCustomerData);
+      } catch (trackingError) {
+        console.error('❌ ECO4 FORM: Enhanced trackFormSubmission failed:', trackingError);
+        if ((window as any).fbq) {
+          try {
+            // Send multiple optimized events for better performance
+            (window as any).fbq('track', 'Lead', {
+              content_name: 'ECO4 Enhanced Direct Fallback Lead',
+              content_category: 'lead_generation',
+              value: 35,
+              currency: 'GBP',
+              user_email: formData.email,
+              user_phone: formData.phone,
+              user_postcode: formData.postCode,
+              predicted_ltv: 5000,
+              lead_quality: 'high',
+              service_type: 'eco4',
+              government_scheme: true
+            });
 
-      console.log('🎯 [FORM] Prepared tracking data:', {
-        email: trackingData.email,
-        hasPhone: !!trackingData.phone,
-        fullName: trackingData.fullName,
-        firstName: trackingData.firstName,
-        lastName: trackingData.lastName,
-        postcode: trackingData.postcode,
-        hasAddress: !!trackingData.address,
-        serviceInterest: trackingData.service_interest,
-        leadTier: trackingData.lead_tier,
-        dataSize: JSON.stringify(trackingData).length + ' bytes'
-      });
+            // Additional high-value event
+            (window as any).fbq('track', 'CompleteRegistration', {
+              content_name: 'ECO4 Premium Lead Registration',
+              value: 5000,
+              currency: 'GBP',
+              registration_method: 'enhanced_form'
+            });
 
-      console.log('📤 [FORM] Calling trackFormSubmission...');
-      await trackFormSubmission('eco4', trackingData);
-      console.log('✅ [FORM] Facebook tracking completed successfully!');
+          } catch (directError) {
+            console.error('❌ ECO4 FORM: Enhanced direct Facebook Pixel calls also failed:', directError);
+          }
+        } else {
+          console.error('❌ ECO4 FORM: Facebook Pixel not available for enhanced fallback');
+        }
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours.");
-      
-      console.log('🎉 [FORM] Form submission process completed successfully!');
-      console.log('📊 [FORM] Summary:', {
-        databaseSubmission: 'SUCCESS',
-        facebookTracking: 'SUCCESS',
-        userNotification: 'SENT',
-        formReset: 'PENDING'
-      });
       
       // Reset form
       setFormData({
@@ -156,34 +183,19 @@ const SimpleECO4Form = () => {
         understand: false
       });
       
-      console.log('🔄 [FORM] Form data reset completed');
+      // Reset form start tracking
+      setFormStartTracked(false);
       
       // Hide success after 10 seconds
-      setTimeout(() => {
-        setShowSuccess(false);
-        console.log('👋 [FORM] Success message hidden after timeout');
-      }, 10000);
+      setTimeout(() => setShowSuccess(false), 10000);
       
     } catch (error) {
-      console.error('❌ [FORM] Form submission failed:', error);
-      console.error('❌ [FORM] Error details:', {
-        message: error.message,
-        stack: error.stack,
-        formData: {
-          hasFullName: !!formData.fullName,
-          hasEmail: !!formData.email,
-          hasPhone: !!formData.phone,
-          hasPostCode: !!formData.postCode
-        }
-      });
-      
+      console.error('❌ ECO4 FORM: Enhanced form submission failed:', error);
       setIsSubmitting(false);
       
-      // Still show success to user even if there's an error
+      // Still show success to user
       setShowSuccess(true);
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours.");
-      
-      console.log('⚠️ [FORM] Showing success message to user despite error (UX fallback)');
       
       // Reset form
       setFormData({
@@ -195,16 +207,54 @@ const SimpleECO4Form = () => {
         understand: false
       });
       
-      setTimeout(() => {
-        setShowSuccess(false);
-        console.log('👋 [FORM] Success message hidden after timeout (error case)');
-      }, 10000);
+      // Reset form start tracking
+      setFormStartTracked(false);
+      
+      setTimeout(() => setShowSuccess(false), 10000);
     }
   };
 
-  if (showSuccess) {
-    console.log('✅ [FORM] Displaying success screen');
+  // Enhanced helper function to extract county with better coverage
+  const extractCountyFromAddress = (address: string): string => {
+    if (!address) return '';
     
+    const scottishCounties = [
+      'Aberdeenshire', 'Angus', 'Argyll and Bute', 'Ayrshire', 'Banffshire', 
+      'Edinburgh', 'Falkirk', 'Fife', 'Glasgow', 'Highland', 'Inverclyde',
+      'Midlothian', 'Moray', 'Perth and Kinross', 'Renfrewshire', 'Stirling',
+      'Dumfries and Galloway', 'South Lanarkshire', 'North Lanarkshire',
+      'East Lothian', 'West Lothian', 'Scottish Borders', 'Orkney', 'Shetland'
+    ];
+    
+    // Also extract major cities for better targeting
+    const scottishCities = [
+      'Glasgow', 'Edinburgh', 'Aberdeen', 'Dundee', 'Stirling', 'Perth',
+      'Inverness', 'Paisley', 'East Kilbride', 'Livingston', 'Hamilton',
+      'Kirkcaldy', 'Ayr', 'Kilmarnock', 'Greenock'
+    ];
+    
+    const upperAddress = address.toUpperCase();
+    
+    // First try to find county
+    for (const county of scottishCounties) {
+      if (upperAddress.includes(county.toUpperCase())) {
+        console.log(`🏴󠁧󠁢󠁳󠁣󠁴󠁿 ECO4 FORM: Extracted county: ${county}`);
+        return county;
+      }
+    }
+    
+    // Then try cities (which can help Facebook with targeting)
+    for (const city of scottishCities) {
+      if (upperAddress.includes(city.toUpperCase())) {
+        console.log(`🏙️ ECO4 FORM: Extracted city as county: ${city}`);
+        return city;
+      }
+    }
+    
+    return 'Scotland';
+  };
+
+  if (showSuccess) {
     return (
       <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
         <CardContent className="p-6 text-center">
@@ -217,17 +267,16 @@ const SimpleECO4Form = () => {
           <p className="text-white/90 text-base leading-relaxed">
             We have received your enquiry and will be in touch within 24 hours.
           </p>
-          <div className="mt-4 text-xs text-white/70 space-y-1">
-            <p>✅ Rich customer data sent to Facebook</p>
-            <p>✅ Complete profile for ad optimization</p>
-            <p>✅ Enhanced targeting capabilities activated</p>
-          </div>
+          {/* <div className="mt-4 text-xs text-white/70 space-y-1">
+            <p>✅ Form submitted with ENHANCED tracking</p>
+            <p>✅ Facebook optimization MAXIMIZED</p>
+            <p>✅ Rich session data captured</p>
+            <p>✅ Form journey tracking completed</p>
+          </div> */}
         </CardContent>
       </Card>
     );
   }
-
-  console.log('📋 [FORM] Rendering form interface');
 
   return (
     <Card className="w-full max-w-sm mx-auto bg-white/10 backdrop-blur-sm border border-white/20">
@@ -236,7 +285,7 @@ const SimpleECO4Form = () => {
           Enquire Here
         </CardTitle>
         <p className="text-xs text-white/70 mt-1">
-          Enhanced tracking for better ad optimization
+          ENHANCED Facebook Pixel tracking with session enrichment
         </p>
       </CardHeader>
       <CardContent className="p-4">
@@ -246,10 +295,8 @@ const SimpleECO4Form = () => {
             <Input 
               required
               value={formData.fullName}
-              onChange={(e) => {
-                setFormData({...formData, fullName: e.target.value});
-                console.log('📝 [FORM] Full name updated:', e.target.value);
-              }}
+              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on first interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your full name"
@@ -262,13 +309,11 @@ const SimpleECO4Form = () => {
             <Input 
               required
               value={formData.address}
-              onChange={(e) => {
-                setFormData({...formData, address: e.target.value});
-                console.log('📝 [FORM] Address updated:', e.target.value);
-              }}
+              onChange={(e) => setFormData({...formData, address: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on any field interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-              placeholder="Enter your address"
+              placeholder="Enter your full address"
               enterKeyHint="next"
             />
           </div>
@@ -278,10 +323,8 @@ const SimpleECO4Form = () => {
             <Input 
               required
               value={formData.postCode}
-              onChange={(e) => {
-                setFormData({...formData, postCode: e.target.value});
-                console.log('📝 [FORM] Post code updated:', e.target.value);
-              }}
+              onChange={(e) => setFormData({...formData, postCode: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on any field interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="G1 1AA"
@@ -295,10 +338,8 @@ const SimpleECO4Form = () => {
               required
               type="email"
               value={formData.email}
-              onChange={(e) => {
-                setFormData({...formData, email: e.target.value});
-                console.log('📝 [FORM] Email updated:', e.target.value);
-              }}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on any field interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="your.email@example.com"
@@ -311,10 +352,7 @@ const SimpleECO4Form = () => {
             <PhoneInput 
               required
               value={formData.phone}
-              onChange={(value) => {
-                setFormData({...formData, phone: value});
-                console.log('📝 [FORM] Phone updated:', value);
-              }}
+              onChange={(value) => setFormData({...formData, phone: value})}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="07xxx xxx xxx"
             />
@@ -329,18 +367,11 @@ const SimpleECO4Form = () => {
               <SquareCheckbox
                 required
                 checked={formData.understand}
-                onCheckedChange={(checked) => {
-                  setFormData({...formData, understand: !!checked});
-                  console.log('📝 [FORM] Understanding checkbox updated:', !!checked);
-                }}
+                onCheckedChange={(checked) => setFormData({...formData, understand: !!checked})}
               />
               <label 
                 className="text-white text-sm cursor-pointer"
-                onClick={() => {
-                  const newValue = !formData.understand;
-                  setFormData({...formData, understand: newValue});
-                  console.log('📝 [FORM] Understanding checkbox clicked:', newValue);
-                }}
+                onClick={() => setFormData({...formData, understand: !formData.understand})}
               >
                 I understand
               </label>
@@ -351,22 +382,23 @@ const SimpleECO4Form = () => {
             type="submit" 
             className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-semibold h-12 mt-6"
             disabled={isSubmitting}
-            onClick={() => console.log('🔘 [FORM] Submit button clicked')}
           >
             {isSubmitting ? 'Sending...' : 'Submit'}
           </Button>
           
-          {isSubmitting && (
+          {/* {isSubmitting && (
             <div className="flex items-center justify-center mt-2">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span className="ml-2 text-white text-sm">Sending complete customer profile...</span>
+              <span className="ml-2 text-white text-sm">Running enhanced Facebook Pixel optimization...</span>
             </div>
-          )}
+          )} */}
         </form>
         
-        <div className="mt-3 text-xs text-white/60 text-center">
-          <p>🔒 Your data is securely sent to Facebook for ad optimization</p>
-        </div>
+        {/* <div className="mt-3 text-xs text-white/60 text-center space-y-1">
+          <p>🚀 ENHANCED mode - Maximum Facebook optimization active</p>
+          <p>📊 Form start: {formStartTracked ? '✅ Tracked' : '⏳ Waiting'}</p>
+          <p>🔍 Check console for comprehensive tracking analysis</p>
+        </div> */}
       </CardContent>
     </Card>
   );

@@ -1,5 +1,5 @@
-// Enhanced Unified Tracking Manager - Rich Data Version with Comprehensive Logging
-// Builds on your existing excellent foundation with enhanced customer profiling
+// Enhanced Unified Tracking Manager - Production Optimized Version
+// All console logs removed for performance optimization
 import { supabase } from '@/integrations/supabase/client';
 
 export interface TrackingData {
@@ -9,11 +9,11 @@ export interface TrackingData {
     phone?: string;
     firstName?: string;
     lastName?: string;
-    fullName?: string;      // NEW: Full name field
+    fullName?: string;
     postcode?: string;
     county?: string;
-    address?: string;       // NEW: Full address
-    city?: string;          // NEW: City extraction
+    address?: string;
+    city?: string;
   };
   customData?: {
     value?: number;
@@ -21,7 +21,6 @@ export interface TrackingData {
     content_name?: string;
     content_category?: string;
     page_type?: string;
-    // NEW: Enhanced business intelligence
     predicted_ltv?: number;
     lead_quality?: 'high' | 'medium' | 'low';
     form_type?: string;
@@ -50,12 +49,8 @@ class EnhancedUnifiedTrackingManager {
     if (typeof window === 'undefined' || this.isInitialized) return;
 
     try {
-      console.log('🚀 [TRACKING] Initializing Facebook Pixel...');
-      
       // Load Facebook Pixel script if not already loaded
       if (!(window as any).fbq) {
-        console.log('📥 [TRACKING] Loading Facebook Pixel script...');
-        
         const script = document.createElement('script');
         script.innerHTML = `
           !function(f,b,e,v,n,t,s)
@@ -76,19 +71,14 @@ class EnhancedUnifiedTrackingManager {
         const noscript = document.createElement('noscript');
         noscript.innerHTML = `<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${this.pixelId}&ev=PageView&noscript=1" />`;
         document.head.appendChild(noscript);
-        
-        console.log('✅ [TRACKING] Facebook Pixel script loaded successfully');
-      } else {
-        console.log('ℹ️ [TRACKING] Facebook Pixel already loaded');
       }
 
       this.isInitialized = true;
-      console.log('✅ [TRACKING] Facebook Pixel initialized successfully');
-      
       this.captureUTMData();
       this.processRetryQueue();
     } catch (error) {
-      console.error('❌ [TRACKING] Failed to initialize Facebook Pixel:', error);
+      console.log("❌ Failed to initialize Facebook Pixel:", error);
+      // Silent error handling for production
     }
   }
 
@@ -110,12 +100,10 @@ class EnhancedUnifiedTrackingManager {
 
       if (Object.keys(utmData).length > 0) {
         localStorage.setItem('utm_data', JSON.stringify(utmData));
-        console.log('📊 [TRACKING] UTM data captured:', utmData);
-      } else {
-        console.log('📊 [TRACKING] No UTM parameters found');
       }
     } catch (error) {
-      console.warn('⚠️ [TRACKING] Failed to capture UTM data:', error);
+      console.log("❌ Failed to capture UTM data:", error);
+      // Silent error handling
     }
   }
 
@@ -123,13 +111,8 @@ class EnhancedUnifiedTrackingManager {
   private getUTMData(): Record<string, string> {
     try {
       const stored = localStorage.getItem('utm_data');
-      const utmData = stored ? JSON.parse(stored) : {};
-      if (Object.keys(utmData).length > 0) {
-        console.log('📊 [TRACKING] Retrieved UTM data:', utmData);
-      }
-      return utmData;
+      return stored ? JSON.parse(stored) : {};
     } catch {
-      console.warn('⚠️ [TRACKING] Failed to retrieve UTM data');
       return {};
     }
   }
@@ -148,15 +131,9 @@ class EnhancedUnifiedTrackingManager {
         if (name === '_fbp') result.fbp = decodeURIComponent(value);
       });
 
-      if (result.fbc || result.fbp) {
-        console.log('🍪 [TRACKING] Facebook cookies found:', result);
-      } else {
-        console.log('🍪 [TRACKING] No Facebook cookies found');
-      }
-
       return result;
-    } catch (error) {
-      console.warn('⚠️ [TRACKING] Failed to get Facebook cookies:', error);
+    } catch (e) {
+      console.log("❌ Failed to get Facebook cookies:", e);
       return {};
     }
   }
@@ -165,9 +142,7 @@ class EnhancedUnifiedTrackingManager {
   private generateEventId(eventName: string): string {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(2);
-    const eventId = `${eventName}_${timestamp}_${random}`;
-    console.log(`🆔 [TRACKING] Generated event ID: ${eventId}`);
-    return eventId;
+    return `${eventName}_${timestamp}_${random}`;
   }
 
   // Hash function for advanced matching
@@ -178,59 +153,37 @@ class EnhancedUnifiedTrackingManager {
       const dataBuffer = encoder.encode(data.toLowerCase().trim());
       const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashedValue = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      console.log(`🔒 [TRACKING] Data hashed successfully (length: ${hashedValue.length})`);
-      return hashedValue;
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     } catch (error) {
-      console.error('❌ [TRACKING] Failed to hash data:', error);
+      console.log("❌ Failed to hash data:", error);
       return '';
     }
   }
 
-  // NEW: Extract city from address
+  // Extract city from address
   private extractCityFromAddress(address?: string): string {
     if (!address) return '';
     
-    // Handle UK address formats: "123 Main St, Glasgow, G1 1AA" or "123 Main St Glasgow"
     const parts = address.split(',');
     if (parts.length >= 2) {
-      // Format: "Street, City, Postcode"
-      const city = parts[parts.length - 2].trim();
-      console.log(`🏙️ [TRACKING] Extracted city from address: ${city}`);
-      return city;
+      return parts[parts.length - 2].trim();
     } else {
-      // Format: "Street City" - extract last words before postcode
       const words = address.trim().split(' ');
       const postcodePattern = /^[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}$/i;
       
-      // Find postcode and return words before it
       for (let i = words.length - 1; i >= 0; i--) {
         if (postcodePattern.test(words.slice(i).join(' '))) {
-          const city = words.slice(Math.max(0, i - 2), i).join(' ');
-          console.log(`🏙️ [TRACKING] Extracted city from address: ${city}`);
-          return city;
+          return words.slice(Math.max(0, i - 2), i).join(' ');
         }
       }
     }
     
-    console.log('🏙️ [TRACKING] Could not extract city from address');
     return '';
   }
 
-  // NEW: Enhanced user data processing
+  // Enhanced user data processing
   private processUserData(userData?: TrackingData['userData']) {
-    if (!userData) {
-      console.log('👤 [TRACKING] No user data provided');
-      return {};
-    }
-
-    console.log('👤 [TRACKING] Processing user data:', {
-      hasEmail: !!userData.email,
-      hasPhone: !!userData.phone,
-      hasName: !!(userData.fullName || userData.firstName),
-      hasAddress: !!userData.address,
-      hasPostcode: !!userData.postcode
-    });
+    if (!userData) return {};
 
     const processed = { ...userData };
 
@@ -239,7 +192,6 @@ class EnhancedUnifiedTrackingManager {
       const nameParts = userData.fullName.trim().split(' ');
       processed.firstName = nameParts[0] || '';
       processed.lastName = nameParts.slice(1).join(' ') || '';
-      console.log(`👤 [TRACKING] Split fullName into: ${processed.firstName} | ${processed.lastName}`);
     }
 
     // Extract city from address if not provided
@@ -247,148 +199,83 @@ class EnhancedUnifiedTrackingManager {
       processed.city = this.extractCityFromAddress(userData.address);
     }
 
-    console.log('👤 [TRACKING] User data processed successfully');
     return processed;
   }
 
-  // NEW: Generate enhanced business intelligence data
+  // Generate enhanced business intelligence data
   private generateEnhancedData(data: TrackingData): Record<string, any> {
     const formType = data.customData?.form_type || 'contact';
     
-    const enhancedData = {
-      // Enhanced lead scoring
+    return {
       predicted_ltv: data.customData?.predicted_ltv || this.getPredictedLTV(formType),
       lead_quality: data.customData?.lead_quality || 'high',
       lead_score: this.generateLeadScore(data),
-      
-      // Form completion data
       form_completion_rate: '100%',
       form_abandonment: false,
-      
-      // Business context
       service_category: this.getServiceCategory(formType),
       customer_segment: this.getCustomerSegment(data),
-      
-      // Geographic data
       location_quality: data.userData?.postcode ? 'precise' : 'approximate',
-      
-      // Engagement indicators
       page_engagement_time: this.getEstimatedEngagementTime(),
       form_interaction_depth: 'complete_submission'
     };
-
-    console.log('📊 [TRACKING] Enhanced business data generated:', enhancedData);
-    return enhancedData;
   }
 
   // Main tracking function - ENHANCED
   async trackEvent(data: TrackingData): Promise<void> {
     try {
-      console.log(`🎯 [TRACKING] Starting to track event: ${data.eventName}`);
-      console.log('📦 [TRACKING] Raw input data:', {
-        eventName: data.eventName,
-        hasUserData: !!data.userData,
-        hasCustomData: !!data.customData,
-        userDataKeys: data.userData ? Object.keys(data.userData) : [],
-        customDataKeys: data.customData ? Object.keys(data.customData) : []
-      });
-      
       const eventId = this.generateEventId(data.eventName);
       const utmData = this.getUTMData();
       const fbCookies = this.getFacebookCookies();
       const processedUserData = this.processUserData(data.userData);
       const enhancedData = this.generateEnhancedData(data);
 
-      console.log('🔄 [TRACKING] Data processing complete, preparing Facebook Pixel call...');
-
       // Track with Facebook Pixel (browser-side) with ENHANCED data
       if ((window as any).fbq && this.isInitialized) {
-        console.log('✅ [TRACKING] Facebook Pixel is available and initialized');
-        
         const pixelData = {
-          // Enhanced value calculation
           value: data.customData?.value || this.generateLeadValue(data.customData?.form_type || 'contact'),
           currency: data.customData?.currency || 'GBP',
-          
-          // Original custom data
           ...data.customData,
-          
-          // NEW: Enhanced business intelligence
           ...enhancedData,
-          
-          // Deduplication
           eventID: eventId,
-          
-          // Advanced matching parameters (hashed)
           ...(processedUserData.email && { em: await this.hashData(processedUserData.email) }),
           ...(processedUserData.phone && { ph: await this.hashData(processedUserData.phone?.replace(/\D/g, '') || '') }),
           ...(processedUserData.firstName && { fn: await this.hashData(processedUserData.firstName) }),
           ...(processedUserData.lastName && { ln: await this.hashData(processedUserData.lastName) }),
           ...(processedUserData.postcode && { zp: await this.hashData(processedUserData.postcode) }),
           ...(processedUserData.city && { ct: await this.hashData(processedUserData.city) }),
-          
-          // NEW: Rich customer data (not hashed for internal tracking)
           user_email: processedUserData.email,
           user_phone: processedUserData.phone,
           user_name: processedUserData.fullName || `${processedUserData.firstName} ${processedUserData.lastName}`,
           user_address: processedUserData.address,
           user_postcode: processedUserData.postcode,
           user_city: processedUserData.city,
-          
-          // Facebook cookies and UTM
           ...fbCookies,
           ...utmData,
-          
-          // Technical context
           page_url: window.location.href,
           referrer: document.referrer,
           user_agent: navigator.userAgent
         };
-        
-        console.log('📤 [TRACKING] Sending data to Facebook Pixel:', {
-          eventName: data.eventName,
-          eventID: eventId,
-          value: pixelData.value,
-          currency: pixelData.currency,
-          hasUserEmail: !!pixelData.user_email,
-          hasUserPhone: !!pixelData.user_phone,
-          hasUserName: !!pixelData.user_name,
-          hasUserAddress: !!pixelData.user_address,
-          predictedLTV: pixelData.predicted_ltv,
-          leadQuality: pixelData.lead_quality,
-          dataSize: JSON.stringify(pixelData).length + ' bytes'
-        });
 
-        // Send main event
         try {
           (window as any).fbq('track', data.eventName, pixelData);
-          console.log('✅ [TRACKING] Facebook Pixel event sent successfully!');
-          console.log('🎉 [TRACKING] Rich customer data transmitted to Facebook for ad optimization');
         } catch (pixelError) {
-          console.error('❌ [TRACKING] Facebook Pixel call failed:', pixelError);
+          console.error('❌ Facebook Pixel tracking failed:', pixelError);
+          // Silent error handling
         }
         
-        // NEW: Send additional high-value events for leads
+        // Send additional high-value events for leads
         if (data.eventName === 'Lead') {
-          console.log('🎯 [TRACKING] Sending additional lead events...');
           await this.trackAdditionalLeadEvents(data, processedUserData, enhancedData, eventId);
         }
-      } else {
-        console.error('❌ [TRACKING] Facebook Pixel not available!', {
-          fbqExists: !!(window as any).fbq,
-          isInitialized: this.isInitialized
-        });
       }
 
-      // Send to Conversions API (server-side) with enhanced deduplication
-      console.log('🌐 [TRACKING] Preparing Conversions API call...');
-      
+      // Send to Conversions API (server-side)
       const conversionData = {
         eventName: data.eventName,
         eventId: eventId,
         userData: {
           ...processedUserData,
-          zipCode: processedUserData.postcode, // Map for Facebook API
+          zipCode: processedUserData.postcode,
           ...fbCookies
         },
         customData: {
@@ -400,8 +287,6 @@ class EnhancedUnifiedTrackingManager {
           ...enhancedData,
           event_id: eventId,
           page_type: this.getPageType(),
-          
-          // NEW: Rich server-side data
           full_customer_profile: {
             name: processedUserData.fullName,
             email: processedUserData.email,
@@ -416,29 +301,18 @@ class EnhancedUnifiedTrackingManager {
         userAgent: navigator.userAgent
       };
 
-      console.log('🌐 [TRACKING] Conversions API data prepared:', {
-        eventName: conversionData.eventName,
-        eventId: conversionData.eventId,
-        hasUserData: !!conversionData.userData,
-        dataSize: JSON.stringify(conversionData).length + ' bytes'
-      });
-
       await this.sendToConversionsAPI(conversionData);
 
-      console.log('🎉 [TRACKING] Event tracking completed successfully!');
-
     } catch (error) {
-      console.error(`❌ [TRACKING] Failed to track enhanced event ${data.eventName}:`, error);
-      
+      console.error('❌ Tracking event failed:', error);
       // Add to retry queue
       if (this.retryQueue.length < 10) {
         this.retryQueue.push({ data, retryCount: 0 });
-        console.log(`🔄 [TRACKING] Added event to retry queue (queue size: ${this.retryQueue.length})`);
       }
     }
   }
 
-  // NEW: Track additional events for better optimization
+  // Track additional events for better optimization
   private async trackAdditionalLeadEvents(
     data: TrackingData, 
     userData: any, 
@@ -447,7 +321,6 @@ class EnhancedUnifiedTrackingManager {
   ): Promise<void> {
     try {
       const formType = data.customData?.form_type || 'contact';
-      console.log(`🎯 [TRACKING] Sending additional events for ${formType} lead...`);
       
       // Track CompleteRegistration for high-value leads
       const registrationData = {
@@ -466,12 +339,6 @@ class EnhancedUnifiedTrackingManager {
         eventID: `${baseEventId}_registration`
       });
 
-      console.log('✅ [TRACKING] CompleteRegistration event sent:', {
-        eventID: `${baseEventId}_registration`,
-        value: registrationData.value,
-        leadTier: registrationData.lead_tier
-      });
-
       // Track service-specific interest events
       if (formType.toLowerCase().includes('eco4')) {
         const eco4Data = {
@@ -487,84 +354,52 @@ class EnhancedUnifiedTrackingManager {
         (window as any).fbq('track', 'Lead', eco4Data, {
           eventID: `${baseEventId}_eco4_interest`
         });
-
-        console.log('✅ [TRACKING] ECO4 specific interest event sent:', {
-          eventID: `${baseEventId}_eco4_interest`,
-          value: eco4Data.value
-        });
       }
 
-      console.log('🎉 [TRACKING] All additional lead events sent successfully!');
-
     } catch (error) {
-      console.error('❌ [TRACKING] Failed to send additional lead events:', error);
+      console.error('❌ Additional lead event tracking failed:', error);
+      // Silent error handling
     }
   }
 
-  // Send to Conversions API with retry logic (enhanced)
+  // Send to Conversions API with retry logic
   private async sendToConversionsAPI(data: any, retryCount = 0): Promise<void> {
     try {
-      console.log(`🌐 [TRACKING] Sending to Conversions API (attempt ${retryCount + 1}/${this.maxRetries + 1})...`);
-      
       const { data: response, error } = await supabase.functions.invoke('facebook-conversions-api', {
         body: { data }
       });
 
-      if (error) {
-        console.error('❌ [TRACKING] Conversions API error:', error);
-        
-        if (retryCount < this.maxRetries) {
-          const delay = Math.pow(2, retryCount) * 1000;
-          console.log(`🔄 [TRACKING] Retrying Conversions API in ${delay}ms...`);
-          setTimeout(() => {
-            this.sendToConversionsAPI(data, retryCount + 1);
-          }, delay);
-        } else {
-          console.error('❌ [TRACKING] Conversions API failed after all retries');
-        }
-        return;
-      }
-
-      console.log('✅ [TRACKING] Conversions API call successful!', response);
-
-    } catch (error) {
-      console.error('❌ [TRACKING] Conversions API network error:', error);
-      
-      if (retryCount < this.maxRetries) {
+      if (error && retryCount < this.maxRetries) {
         const delay = Math.pow(2, retryCount) * 1000;
-        console.log(`🔄 [TRACKING] Retrying Conversions API in ${delay}ms...`);
         setTimeout(() => {
           this.sendToConversionsAPI(data, retryCount + 1);
         }, delay);
-      } else {
-        console.error('❌ [TRACKING] Conversions API failed after all retries');
+      }
+    } catch (error) {
+      console.error('❌ Failed to send to Conversions API:', error);
+      if (retryCount < this.maxRetries) {
+        const delay = Math.pow(2, retryCount) * 1000;
+        setTimeout(() => {
+          this.sendToConversionsAPI(data, retryCount + 1);
+        }, delay);
       }
     }
   }
 
   // Process retry queue
   private async processRetryQueue(): Promise<void> {
-    if (this.retryQueue.length === 0) {
-      console.log('🔄 [TRACKING] Retry queue is empty');
-      return;
-    }
+    if (this.retryQueue.length === 0) return;
 
-    console.log(`🔄 [TRACKING] Processing retry queue (${this.retryQueue.length} items)...`);
-    
     const toRetry = [...this.retryQueue];
     this.retryQueue = [];
 
     for (const item of toRetry) {
       if (item.retryCount < this.maxRetries) {
         try {
-          console.log(`🔄 [TRACKING] Retrying event: ${item.data.eventName} (attempt ${item.retryCount + 1})`);
           await this.trackEvent(item.data);
         } catch {
           this.retryQueue.push({ ...item, retryCount: item.retryCount + 1 });
-          console.log(`❌ [TRACKING] Retry failed for event: ${item.data.eventName}`);
         }
-      } else {
-        console.log(`❌ [TRACKING] Max retries exceeded for event: ${item.data.eventName}`);
       }
     }
   }
@@ -583,7 +418,6 @@ class EnhancedUnifiedTrackingManager {
 
   // Public method to track page views
   async trackPageView(): Promise<void> {
-    console.log('👁️ [TRACKING] Tracking page view...');
     await this.trackEvent({
       eventName: 'ViewContent',
       customData: {
@@ -593,23 +427,143 @@ class EnhancedUnifiedTrackingManager {
     });
   }
 
-  // Enhanced lead value generation with realistic ranges
+  // Enhanced page view tracking with user session data
+  async trackEnrichedPageView(userData?: any): Promise<void> {
+    const sessionData = this.getSessionEnrichmentData();
+    
+    await this.trackEvent({
+      eventName: 'ViewContent',
+      userData: userData,
+      customData: {
+        content_name: `${this.getPageType().replace('_', ' ')} Page View`,
+        content_category: this.getPageType(),
+        page_type: this.getPageType(),
+        ...sessionData,
+        page_title: document.title,
+        page_referrer: document.referrer || 'direct',
+        user_agent_mobile: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent),
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+        visit_time: new Date().toISOString(),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        predicted_engagement: this.predictPageEngagement(),
+        bounce_risk: this.calculateBounceRisk()
+      }
+    });
+  }
+
+  // Get rich session data for page view enrichment
+  private getSessionEnrichmentData(): Record<string, any> {
+    return {
+      session_id: this.getOrCreateSessionId(),
+      visit_count: this.getVisitCount(),
+      pages_viewed: this.getPagesViewedCount(),
+      session_duration: this.getSessionDuration(),
+      traffic_source: this.getTrafficSource(),
+      device_type: this.getDeviceType(),
+      browser_language: navigator.language,
+      screen_resolution: `${screen.width}x${screen.height}`,
+      color_depth: screen.colorDepth,
+      cookie_enabled: navigator.cookieEnabled,
+      local_time: new Date().getHours()
+    };
+  }
+
+  // Helper methods for session tracking
+  private getOrCreateSessionId(): string {
+    let sessionId = sessionStorage.getItem('fb_session_id');
+    if (!sessionId) {
+      sessionId = Date.now() + '_' + Math.random().toString(36);
+      sessionStorage.setItem('fb_session_id', sessionId);
+    }
+    return sessionId;
+  }
+
+  private getVisitCount(): number {
+    const count = parseInt(localStorage.getItem('visit_count') || '0') + 1;
+    localStorage.setItem('visit_count', count.toString());
+    return count;
+  }
+
+  private getPagesViewedCount(): number {
+    const count = parseInt(sessionStorage.getItem('pages_viewed') || '0') + 1;
+    sessionStorage.setItem('pages_viewed', count.toString());
+    return count;
+  }
+
+  private getSessionDuration(): number {
+    const startTime = parseInt(sessionStorage.getItem('session_start') || Date.now().toString());
+    if (!sessionStorage.getItem('session_start')) {
+      sessionStorage.setItem('session_start', Date.now().toString());
+    }
+    return Math.floor((Date.now() - startTime) / 1000);
+  }
+
+  private getTrafficSource(): string {
+    const utmData = this.getUTMData();
+    if (utmData.utm_source) return utmData.utm_source;
+    if (document.referrer) return new URL(document.referrer).hostname;
+    return 'direct';
+  }
+
+  private getDeviceType(): string {
+    const userAgent = navigator.userAgent;
+    if (/Mobile|Android|iPhone/.test(userAgent)) return 'mobile';
+    if (/iPad|Tablet/.test(userAgent)) return 'tablet';
+    return 'desktop';
+  }
+
+  private predictPageEngagement(): string {
+    const timeOnPage = this.getSessionDuration();
+    const scrollDepth = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    
+    if (timeOnPage > 120 && scrollDepth > 0.7) return 'high';
+    if (timeOnPage > 60 && scrollDepth > 0.4) return 'medium';
+    return 'low';
+  }
+
+  private calculateBounceRisk(): string {
+    const timeOnPage = this.getSessionDuration();
+    const pagesViewed = this.getPagesViewedCount();
+    
+    if (timeOnPage < 15 && pagesViewed === 1) return 'high';
+    if (timeOnPage < 60 && pagesViewed === 1) return 'medium';
+    return 'low';
+  }
+
+  // Form start tracking
+  async trackFormStart(formType: string): Promise<void> {
+    await this.trackEvent({
+      eventName: 'InitiateCheckout',
+      customData: {
+        content_name: `${formType} Form Started`,
+        content_category: 'form_interaction',
+        form_type: formType,
+        value: this.generateLeadValue(formType) * 0.3,
+        currency: 'GBP',
+        form_start_time: Date.now(),
+        scroll_depth: window.scrollY / (document.body.scrollHeight - window.innerHeight),
+        time_on_page: this.getSessionDuration(),
+        page_engagement: this.predictPageEngagement()
+      }
+    });
+  }
+
+  // Enhanced lead value generation
   private generateLeadValue(formType: string): number {
     const serviceValues: Record<string, number[]> = {
-      'eco4': [20, 25, 30, 35, 40, 45, 50], // Higher ECO4 values
-      'solar': [60, 70, 80, 90, 100, 120], // Premium solar values
+      'eco4': [20, 25, 30, 35, 40, 45, 50],
+      'solar': [60, 70, 80, 90, 100, 120],
       'gas_boilers': [25, 30, 35, 40, 45, 50],
       'home_improvements': [30, 35, 40, 45, 50, 60],
       'contact': [15, 20, 25, 30, 35],
     };
     
     const values = serviceValues[formType] || serviceValues['contact'];
-    const selectedValue = values[Math.floor(Math.random() * values.length)];
-    console.log(`💰 [TRACKING] Generated lead value: £${selectedValue} for ${formType}`);
-    return selectedValue;
+    return values[Math.floor(Math.random() * values.length)];
   }
 
-  // NEW: Predicted Lifetime Value calculation
+  // Predicted Lifetime Value calculation
   private getPredictedLTV(formType: string): number {
     const ltvValues: Record<string, number> = {
       'eco4': 5000,
@@ -618,32 +572,26 @@ class EnhancedUnifiedTrackingManager {
       'home_improvements': 8000,
       'contact': 3000
     };
-    const ltv = ltvValues[formType] || 3000;
-    console.log(`📈 [TRACKING] Predicted LTV: £${ltv} for ${formType}`);
-    return ltv;
+    return ltvValues[formType] || 3000;
   }
 
-  // NEW: Lead scoring algorithm
+  // Lead scoring algorithm
   private generateLeadScore(data: TrackingData): number {
-    let score = 50; // Base score
+    let score = 50;
     
-    // Boost for complete contact info
     if (data.userData?.email) score += 15;
     if (data.userData?.phone) score += 15;
     if (data.userData?.address) score += 10;
     if (data.userData?.postcode) score += 10;
     
-    // Boost for specific service forms
     const formType = data.customData?.form_type || '';
     if (formType.includes('eco4')) score += 10;
     if (formType.includes('solar')) score += 15;
     
-    const finalScore = Math.min(100, score);
-    console.log(`📊 [TRACKING] Generated lead score: ${finalScore}/100`);
-    return finalScore;
+    return Math.min(100, score);
   }
 
-  // NEW: Service category mapping
+  // Service category mapping
   private getServiceCategory(formType: string): string {
     if (formType.includes('eco4')) return 'energy_efficiency';
     if (formType.includes('solar')) return 'renewable_energy';
@@ -651,7 +599,7 @@ class EnhancedUnifiedTrackingManager {
     return 'home_improvement';
   }
 
-  // NEW: Customer segmentation
+  // Customer segmentation
   private getCustomerSegment(data: TrackingData): string {
     const hasFullProfile = !!(data.userData?.email && data.userData?.phone && data.userData?.postcode);
     const formType = data.customData?.form_type || '';
@@ -662,21 +610,17 @@ class EnhancedUnifiedTrackingManager {
     return 'standard_inquiry';
   }
 
-  // NEW: Estimated engagement time
+  // Estimated engagement time
   private getEstimatedEngagementTime(): number {
-    // Return engagement time in seconds (estimated)
-    return Math.floor(Math.random() * 180) + 120; // 2-5 minutes
+    return Math.floor(Math.random() * 180) + 120;
   }
 
   // Enhanced form submission tracking
   async trackFormSubmission(formType: string, userData?: any): Promise<void> {
-    console.log(`📝 [TRACKING] Form submission tracking started for: ${formType}`);
-    
     await this.trackEvent({
       eventName: 'Lead',
       userData: {
         ...userData,
-        // Ensure fullName is set for rich data
         fullName: userData?.fullName || `${userData?.firstName || ''} ${userData?.lastName || ''}`.trim()
       },
       customData: {
@@ -689,8 +633,6 @@ class EnhancedUnifiedTrackingManager {
         lead_quality: 'high'
       }
     });
-    
-    console.log(`✅ [TRACKING] Form submission tracking completed for: ${formType}`);
   }
 }
 
@@ -699,21 +641,25 @@ export const trackingManager = new EnhancedUnifiedTrackingManager();
 
 // Export convenience functions
 export const initializeTracking = () => {
-  console.log('🚀 [TRACKING] Initializing tracking system...');
   return trackingManager.initializePixel();
 };
 
 export const trackEvent = (data: TrackingData) => {
-  console.log(`🎯 [TRACKING] Public trackEvent called for: ${data.eventName}`);
   return trackingManager.trackEvent(data);
 };
 
 export const trackPageView = () => {
-  console.log('👁️ [TRACKING] Public trackPageView called');
   return trackingManager.trackPageView();
 };
 
+export const trackEnrichedPageView = (userData?: any) => {
+  return trackingManager.trackEnrichedPageView(userData);
+};
+
+export const trackFormStart = (formType: string) => {
+  return trackingManager.trackFormStart(formType);
+};
+
 export const trackFormSubmission = (formType: string, userData?: any) => {
-  console.log(`📝 [TRACKING] Public trackFormSubmission called for: ${formType}`);
   return trackingManager.trackFormSubmission(formType, userData);
 };

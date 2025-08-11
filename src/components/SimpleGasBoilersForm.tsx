@@ -1,16 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { trackFormSubmission } from '@/lib/unified-tracking-manager';
 import { isValidPhoneNumber } from 'libphonenumber-js';
+
+// Import enhanced tracking system
+import { 
+  initializeTracking, 
+  trackFormSubmission, 
+  trackEnrichedPageView,
+  trackFormStart
+} from '@/lib/unified-tracking-manager';
 
 const SimpleGasBoilersForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [formStartTracked, setFormStartTracked] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
@@ -19,9 +27,34 @@ const SimpleGasBoilersForm = () => {
     phone: ''
   });
 
+  // Enhanced initialization with rich page view tracking
+  useEffect(() => {
+    const initializeTrackingSystem = async () => {
+      try {
+        await initializeTracking();
+        await trackEnrichedPageView();
+      } catch (error) {
+        // Silent error handling for production
+      }
+    };
+    
+    initializeTrackingSystem();
+  }, []);
+
+  // Handle form start tracking
+  const handleFormStart = async () => {
+    if (!formStartTracked) {
+      try {
+        await trackFormStart('gas_boilers');
+        setFormStartTracked(true);
+      } catch (error) {
+        // Silent error handling for production
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-   
     
     if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
       toast.error("Please fill in all required fields");
@@ -36,8 +69,7 @@ const SimpleGasBoilersForm = () => {
     setIsSubmitting(true);
     
     try {
-      
-      // Submit using secure form submission service (with notifications)
+      // Submit to Supabase
       const { data, error } = await supabase.functions.invoke('secure-form-submission', {
         body: {
           name: formData.fullName || 'Gas Boiler User',
@@ -47,8 +79,7 @@ const SimpleGasBoilersForm = () => {
           service_type: 'gas_boilers',
           form_data: {
             address: formData.address || 'Gas Boiler Address',
-            source: 'gas_boilers_form_enhanced_rich_data',
-            // NEW: Enhanced form context
+            source: 'gas_boilers_form_enhanced_tracking',
             full_profile_provided: true,
             lead_quality_indicators: {
               complete_contact_info: true,
@@ -65,31 +96,65 @@ const SimpleGasBoilersForm = () => {
         throw new Error(`Submission failed: ${error.message}`);
       }
 
-      
-
-      // ENHANCED: Track with rich Facebook data using enhanced tracking manager
-      await trackFormSubmission('gas_boilers', {
-        // Basic data (existing fields)
+      // Enhanced Facebook tracking with rich customer data
+      const richCustomerData = {
         email: formData.email,
         phone: formData.phone,
-        fullName: formData.fullName,  // Using fullName for better processing
-        postcode: formData.postCode,
-        address: formData.address,    // Full address for location targeting
-        
-        // Split name for advanced matching
+        fullName: formData.fullName,
         firstName: formData.fullName.split(' ')[0] || '',
         lastName: formData.fullName.split(' ').slice(1).join(' ') || '',
+        postcode: formData.postCode,
+        address: formData.address,
+        county: extractCountyFromAddress(formData.address),
         
-        // NEW: Enhanced form-specific data
+        // Enhanced Gas Boiler data
         service_interest: 'gas_boilers',
         heating_upgrade_needed: true,
         property_type: 'residential',
         lead_tier: 'qualified',
         form_completion_quality: 'high',
-        lead_source: 'gas_boilers_form'
-      });
+        lead_source: 'gas_boilers_form',
+        
+        // Rich engagement data
+        form_start_tracked: formStartTracked,
+        session_engagement: 'complete_form_journey',
+        conversion_funnel_stage: 'form_completion',
+        user_intent_strength: 'high',
+        customer_segment: 'heating_upgrade_customer'
+      };
 
-      
+      try {
+        await trackFormSubmission('gas_boilers', richCustomerData);
+      } catch (trackingError) {
+        console.error('❌ Enhanced tracking failed:', trackingError);
+        // Fallback: Direct Facebook Pixel call
+        if ((window as any).fbq) {
+          try {
+            (window as any).fbq('track', 'Lead', {
+              content_name: 'Gas Boilers Enhanced Lead',
+              content_category: 'lead_generation',
+              value: 40,
+              currency: 'GBP',
+              user_email: formData.email,
+              user_phone: formData.phone,
+              user_postcode: formData.postCode,
+              predicted_ltv: 6000,
+              lead_quality: 'high',
+              service_type: 'gas_boilers'
+            });
+
+            (window as any).fbq('track', 'CompleteRegistration', {
+              content_name: 'Gas Boilers Premium Lead Registration',
+              value: 6000,
+              currency: 'GBP',
+              registration_method: 'enhanced_form'
+            });
+          } catch (directError) {
+            console.error('❌ Direct Facebook Pixel tracking failed:', directError);
+            // Silent fallback error handling
+          }
+        }
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);
@@ -104,13 +169,14 @@ const SimpleGasBoilersForm = () => {
         phone: ''
       });
       
-      // Hide success after 10 seconds
+      setFormStartTracked(false);
       setTimeout(() => setShowSuccess(false), 10000);
+      
     } catch (error) {
-      console.error('❌ Gas boilers enhanced form submission failed:', error);
+      console.error('Error submitting form:', error);
       setIsSubmitting(false);
       
-      // Still show success to user even if there's an error
+      // Still show success to user
       setShowSuccess(true);
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours.");
       
@@ -123,8 +189,44 @@ const SimpleGasBoilersForm = () => {
         phone: ''
       });
       
+      setFormStartTracked(false);
       setTimeout(() => setShowSuccess(false), 10000);
     }
+  };
+
+  // Enhanced helper function to extract county
+  const extractCountyFromAddress = (address: string): string => {
+    if (!address) return '';
+    
+    const scottishCounties = [
+      'Aberdeenshire', 'Angus', 'Argyll and Bute', 'Ayrshire', 'Banffshire', 
+      'Edinburgh', 'Falkirk', 'Fife', 'Glasgow', 'Highland', 'Inverclyde',
+      'Midlothian', 'Moray', 'Perth and Kinross', 'Renfrewshire', 'Stirling',
+      'Dumfries and Galloway', 'South Lanarkshire', 'North Lanarkshire',
+      'East Lothian', 'West Lothian', 'Scottish Borders', 'Orkney', 'Shetland'
+    ];
+    
+    const scottishCities = [
+      'Glasgow', 'Edinburgh', 'Aberdeen', 'Dundee', 'Stirling', 'Perth',
+      'Inverness', 'Paisley', 'East Kilbride', 'Livingston', 'Hamilton',
+      'Kirkcaldy', 'Ayr', 'Kilmarnock', 'Greenock'
+    ];
+    
+    const upperAddress = address.toUpperCase();
+    
+    for (const county of scottishCounties) {
+      if (upperAddress.includes(county.toUpperCase())) {
+        return county;
+      }
+    }
+    
+    for (const city of scottishCities) {
+      if (upperAddress.includes(city.toUpperCase())) {
+        return city;
+      }
+    }
+    
+    return 'Scotland';
   };
 
   if (showSuccess) {
@@ -141,9 +243,9 @@ const SimpleGasBoilersForm = () => {
             We have received your enquiry and will be in touch within 24 hours.
           </p>
           <div className="mt-4 text-xs text-white/70 space-y-1">
-            <p>✅ Rich Gas Boiler customer data sent to Facebook</p>
-            <p>✅ £6,000 LTV profile for premium targeting</p>
-            <p>✅ Heating upgrade audience optimization activated</p>
+            <p>✅ Enhanced Gas Boiler tracking completed</p>
+            <p>✅ £6,000 LTV profile optimized</p>
+            <p>✅ Heating upgrade audience activated</p>
           </div>
         </CardContent>
       </Card>
@@ -168,6 +270,7 @@ const SimpleGasBoilersForm = () => {
               required
               value={formData.fullName}
               onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your full name"
@@ -181,6 +284,7 @@ const SimpleGasBoilersForm = () => {
               required
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your address"
@@ -194,6 +298,7 @@ const SimpleGasBoilersForm = () => {
               required
               value={formData.postCode}
               onChange={(e) => setFormData({...formData, postCode: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="G1 1AA"
@@ -208,6 +313,7 @@ const SimpleGasBoilersForm = () => {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="your.email@example.com"
@@ -234,22 +340,21 @@ const SimpleGasBoilersForm = () => {
             {isSubmitting ? 'Sending...' : 'Submit'}
           </Button>
           
-          {isSubmitting && (
+          {/* {isSubmitting && (
             <div className="flex items-center justify-center mt-2">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span className="ml-2 text-white text-sm">Sending Gas Boiler customer profile...</span>
+              <span className="ml-2 text-white text-sm">Sending enhanced customer profile...</span>
             </div>
-          )}
+          )} */}
         </form>
         
-        <div className="mt-3 text-xs text-white/60 text-center">
-          <p>🔥 Your heating upgrade data is securely sent to Facebook for ad optimization</p>
-        </div>
+        {/* <div className="mt-3 text-xs text-white/60 text-center space-y-1">
+          <p>🔥 Enhanced tracking: {formStartTracked ? '✅ Active' : '⏳ Ready'}</p>
+          <p>📊 Maximum Facebook optimization enabled</p>
+        </div> */}
       </CardContent>
     </Card>
   );
 };
 
 export default SimpleGasBoilersForm;
-
-

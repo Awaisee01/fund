@@ -1,17 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
+import { SquareCheckbox } from '@/components/ui/square-checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { trackFormSubmission } from '@/lib/unified-tracking-manager';
 import { isValidPhoneNumber } from 'libphonenumber-js';
-import { SquareCheckbox } from './ui/square-checkbox';
+
+// Import enhanced tracking system
+import { 
+  initializeTracking, 
+  trackFormSubmission, 
+  trackEnrichedPageView,
+  trackFormStart
+} from '@/lib/unified-tracking-manager';
 
 const SimpleSolarForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [formStartTracked, setFormStartTracked] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
@@ -21,9 +29,36 @@ const SimpleSolarForm = () => {
     understand: false
   });
 
+  // Enhanced initialization with rich page view tracking
+  useEffect(() => {
+    const initializeTrackingSystem = async () => {
+      try {
+        await initializeTracking();
+        await trackEnrichedPageView();
+      } catch (error) {
+        console.error('❌ Failed to initialize tracking system:', error);
+        // Silent error handling for production
+      }
+    };
+    
+    initializeTrackingSystem();
+  }, []);
+
+  // Handle form start tracking
+  const handleFormStart = async () => {
+    if (!formStartTracked) {
+      try {
+        await trackFormStart('solar');
+        setFormStartTracked(true);
+      } catch (error) {
+        console.error('❌ Failed to track form start:', error);
+        // Silent error handling for production
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     
     if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
       toast.error("Please fill in all required fields");
@@ -43,8 +78,7 @@ const SimpleSolarForm = () => {
     setIsSubmitting(true);
     
     try {
-      
-      // Submit using secure form submission service (with notifications)
+      // Submit to Supabase
       const { data, error } = await supabase.functions.invoke('secure-form-submission', {
         body: {
           name: formData.fullName || 'Solar Customer',
@@ -55,8 +89,7 @@ const SimpleSolarForm = () => {
           form_data: {
             address: formData.address || null,
             understand_roof_requirement: formData.understand || false,
-            source: 'solar_form_enhanced_rich_data',
-            // NEW: Enhanced form context
+            source: 'solar_form_enhanced_tracking',
             full_profile_provided: true,
             lead_quality_indicators: {
               complete_contact_info: true,
@@ -74,33 +107,67 @@ const SimpleSolarForm = () => {
         throw new Error(`Submission failed: ${error.message}`);
       }
 
-      
-
-      // ENHANCED: Track with rich Facebook data using enhanced tracking manager
-      await trackFormSubmission('solar', {
-        // Basic data (existing fields)
+      // Enhanced Facebook tracking with rich customer data
+      const richCustomerData = {
         email: formData.email,
         phone: formData.phone,
-        fullName: formData.fullName,  // Using fullName for better processing
-        postcode: formData.postCode,
-        address: formData.address,    // Full address for location targeting
-        
-        // Split name for advanced matching
+        fullName: formData.fullName,
         firstName: formData.fullName.split(' ')[0] || '',
         lastName: formData.fullName.split(' ').slice(1).join(' ') || '',
+        postcode: formData.postCode,
+        address: formData.address,
+        county: extractCountyFromAddress(formData.address),
         
-        // NEW: Enhanced form-specific data
+        // Enhanced Solar data
         service_interest: 'solar',
         understands_roof_requirements: formData.understand,
         renewable_energy_interest: true,
         property_type: 'residential_with_roof',
-        lead_tier: 'premium',        // Solar = premium customers
+        lead_tier: 'premium',
         form_completion_quality: 'high',
         lead_source: 'solar_form',
-        customer_segment: 'eco_conscious_homeowner'
-      });
+        customer_segment: 'eco_conscious_homeowner',
+        
+        // Rich engagement data
+        form_start_tracked: formStartTracked,
+        session_engagement: 'complete_form_journey',
+        conversion_funnel_stage: 'form_completion',
+        user_intent_strength: 'high',
+        investment_readiness: 'high'
+      };
 
-      
+      try {
+        await trackFormSubmission('solar', richCustomerData);
+      } catch (trackingError) {
+        console.error('❌ Enhanced tracking failed:', trackingError);
+        // Fallback: Direct Facebook Pixel call
+        if ((window as any).fbq) {
+          try {
+            (window as any).fbq('track', 'Lead', {
+              content_name: 'Solar Enhanced Premium Lead',
+              content_category: 'lead_generation',
+              value: 100,
+              currency: 'GBP',
+              user_email: formData.email,
+              user_phone: formData.phone,
+              user_postcode: formData.postCode,
+              predicted_ltv: 12000,
+              lead_quality: 'premium',
+              service_type: 'solar'
+            });
+
+            (window as any).fbq('track', 'CompleteRegistration', {
+              content_name: 'Solar Premium Lead Registration',
+              value: 12000,
+              currency: 'GBP',
+              registration_method: 'enhanced_form'
+            });
+          } catch (directError) {
+            console.error('❌ Direct Facebook Pixel tracking failed:', directError);
+            // Silent fallback error handling
+          }
+        }
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);
@@ -116,13 +183,14 @@ const SimpleSolarForm = () => {
         understand: false
       });
       
-      // Hide success after 10 seconds
+      setFormStartTracked(false);
       setTimeout(() => setShowSuccess(false), 10000);
+      
     } catch (error) {
-      console.error('❌ Solar enhanced form submission failed:', error);
+      console.error('Error submitting form:', error);
       setIsSubmitting(false);
       
-      // Still show success to user even if there's an error
+      // Still show success to user
       setShowSuccess(true);
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours.");
       
@@ -136,8 +204,44 @@ const SimpleSolarForm = () => {
         understand: false
       });
       
+      setFormStartTracked(false);
       setTimeout(() => setShowSuccess(false), 10000);
     }
+  };
+
+  // Enhanced helper function to extract county
+  const extractCountyFromAddress = (address: string): string => {
+    if (!address) return '';
+    
+    const scottishCounties = [
+      'Aberdeenshire', 'Angus', 'Argyll and Bute', 'Ayrshire', 'Banffshire', 
+      'Edinburgh', 'Falkirk', 'Fife', 'Glasgow', 'Highland', 'Inverclyde',
+      'Midlothian', 'Moray', 'Perth and Kinross', 'Renfrewshire', 'Stirling',
+      'Dumfries and Galloway', 'South Lanarkshire', 'North Lanarkshire',
+      'East Lothian', 'West Lothian', 'Scottish Borders', 'Orkney', 'Shetland'
+    ];
+    
+    const scottishCities = [
+      'Glasgow', 'Edinburgh', 'Aberdeen', 'Dundee', 'Stirling', 'Perth',
+      'Inverness', 'Paisley', 'East Kilbride', 'Livingston', 'Hamilton',
+      'Kirkcaldy', 'Ayr', 'Kilmarnock', 'Greenock'
+    ];
+    
+    const upperAddress = address.toUpperCase();
+    
+    for (const county of scottishCounties) {
+      if (upperAddress.includes(county.toUpperCase())) {
+        return county;
+      }
+    }
+    
+    for (const city of scottishCities) {
+      if (upperAddress.includes(city.toUpperCase())) {
+        return city;
+      }
+    }
+    
+    return 'Scotland';
   };
 
   if (showSuccess) {
@@ -154,9 +258,9 @@ const SimpleSolarForm = () => {
             We have received your enquiry and will be in touch within 24 hours.
           </p>
           <div className="mt-4 text-xs text-white/70 space-y-1">
-            <p>✅ Rich PREMIUM Solar customer data sent to Facebook</p>
-            <p>✅ £12,000 LTV profile for high-value targeting</p>
-            <p>✅ Renewable energy audience optimization activated</p>
+            <p>✅ Enhanced PREMIUM Solar tracking completed</p>
+            <p>✅ £12,000 LTV profile optimized</p>
+            <p>✅ Renewable energy audience activated</p>
           </div>
         </CardContent>
       </Card>
@@ -181,6 +285,7 @@ const SimpleSolarForm = () => {
               required
               value={formData.fullName}
               onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your full name"
@@ -194,6 +299,7 @@ const SimpleSolarForm = () => {
               required
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your address"
@@ -207,6 +313,7 @@ const SimpleSolarForm = () => {
               required
               value={formData.postCode}
               onChange={(e) => setFormData({...formData, postCode: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="G1 1AA"
@@ -221,6 +328,7 @@ const SimpleSolarForm = () => {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onFocus={handleFormStart}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="your.email@example.com"
@@ -249,7 +357,6 @@ const SimpleSolarForm = () => {
                 required
                 checked={formData.understand}
                 onCheckedChange={(checked) => setFormData({...formData, understand: !!checked})}
-                className="!h-5 !w-5 border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-gray-900"
               />
               <label 
                 className="text-white text-sm cursor-pointer"
@@ -268,17 +375,18 @@ const SimpleSolarForm = () => {
             {isSubmitting ? 'Sending...' : 'Submit'}
           </Button>
           
-          {isSubmitting && (
+          {/* {isSubmitting && (
             <div className="flex items-center justify-center mt-2">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span className="ml-2 text-white text-sm">Sending premium Solar customer profile...</span>
+              <span className="ml-2 text-white text-sm">Sending premium customer profile...</span>
             </div>
-          )}
+          )} */}
         </form>
         
-        <div className="mt-3 text-xs text-white/60 text-center">
-          <p>☀️ Your renewable energy data is securely sent to Facebook for premium ad optimization</p>
-        </div>
+        {/* <div className="mt-3 text-xs text-white/60 text-center space-y-1">
+          <p>☀️ Enhanced tracking: {formStartTracked ? '✅ Active' : '⏳ Ready'}</p>
+          <p>📊 Maximum Facebook optimization enabled</p>
+        </div> */}
       </CardContent>
     </Card>
   );
