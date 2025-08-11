@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+
 import type { Database } from '@/integrations/supabase/types';
 
 type LeadStatus = Database['public']['Enums']['lead_status'];
@@ -14,7 +14,7 @@ interface StatusUpdateDialogProps {
   submission: FormSubmission;
   isOpen: boolean;
   onClose: () => void;
-  onStatusUpdate: () => void;
+  onStatusUpdate: (status: string) => Promise<void> | void;
 }
 
 export const StatusUpdateDialog = ({ submission, isOpen, onClose, onStatusUpdate }: StatusUpdateDialogProps) => {
@@ -25,35 +25,8 @@ export const StatusUpdateDialog = ({ submission, isOpen, onClose, onStatusUpdate
   const handleStatusUpdate = async () => {
     setIsUpdating(true);
     try {
-      const sessionToken = localStorage.getItem('adminSessionToken');
-      if (!sessionToken) {
-        throw new Error('No admin session found');
-      }
-
-      const updateData: any = { status: newStatus };
-      
-      // Update contacted_at for survey_booked status
-      if (newStatus === 'survey_booked') {
-        updateData.contacted_at = new Date().toISOString();
-      }
-
-      const { data, error } = await supabase.functions.invoke('update-admin-submission', {
-        body: {
-          session_token: sessionToken,
-          submission_id: submission.id,
-          updates: updateData
-        }
-      });
-
-      if (error) {
-        console.error('Edge function error:', error);
-        throw error;
-      }
-
-      if (data?.error) {
-        console.error('Backend error:', data.error);
-        throw new Error(data.error);
-      }
+      // Delegate the update to parent hook (centralized logic & optimistic UI)
+      await Promise.resolve(onStatusUpdate(newStatus));
 
       toast({
         title: "Success",
@@ -61,7 +34,6 @@ export const StatusUpdateDialog = ({ submission, isOpen, onClose, onStatusUpdate
       });
 
       onClose();
-      onStatusUpdate();
     } catch (error) {
       console.error('Error updating submission:', error);
       toast({

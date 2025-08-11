@@ -62,10 +62,6 @@ export const SubmissionRow = ({
   const priority = getRowPriority(submission);
   const priorityClasses = getPriorityClasses(priority);
 
-  // Handle status update with immediate callback
-  const handleStatusUpdate = (status: string) => {
-    onStatusUpdate(submission.id, status);
-  };
 
   return (
     <TableRow 
@@ -107,7 +103,7 @@ export const SubmissionRow = ({
         <LeadActions
           submission={submission}
           onViewDetails={onViewDetails}
-          onStatusUpdate={() => onStatusUpdate(submission.id, submission.status)}
+          onStatusUpdate={(status) => onStatusUpdate(submission.id, status)}
           onDelete={onDelete}
         />
       </TableCell>
