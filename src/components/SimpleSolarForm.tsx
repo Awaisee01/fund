@@ -257,11 +257,6 @@ const SimpleSolarForm = () => {
           <p className="text-white/90 text-base leading-relaxed">
             We have received your enquiry and will be in touch within 24 hours.
           </p>
-          <div className="mt-4 text-xs text-white/70 space-y-1">
-            <p>✅ Enhanced PREMIUM Solar tracking completed</p>
-            <p>✅ £12,000 LTV profile optimized</p>
-            <p>✅ Renewable energy audience activated</p>
-          </div>
         </CardContent>
       </Card>
     );
@@ -274,7 +269,7 @@ const SimpleSolarForm = () => {
           Enquire Here
         </CardTitle>
         <p className="text-xs text-white/70 mt-1">
-          Enhanced Solar tracking for premium customer optimization
+          Free solar panels to cut bills and boost value.
         </p>
       </CardHeader>
       <CardContent className="p-4">

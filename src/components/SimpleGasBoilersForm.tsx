@@ -242,11 +242,6 @@ const SimpleGasBoilersForm = () => {
           <p className="text-white/90 text-base leading-relaxed">
             We have received your enquiry and will be in touch within 24 hours.
           </p>
-          <div className="mt-4 text-xs text-white/70 space-y-1">
-            <p>✅ Enhanced Gas Boiler tracking completed</p>
-            <p>✅ £6,000 LTV profile optimized</p>
-            <p>✅ Heating upgrade audience activated</p>
-          </div>
         </CardContent>
       </Card>
     );
@@ -259,7 +254,7 @@ const SimpleGasBoilersForm = () => {
           Enquire Here
         </CardTitle>
         <p className="text-xs text-white/70 mt-1">
-          Enhanced Gas Boiler tracking for better ad optimization
+          Free boiler upgrade to save money and energy.
         </p>
       </CardHeader>
       <CardContent className="p-4">

@@ -267,12 +267,6 @@ const SimpleECO4Form = () => {
           <p className="text-white/90 text-base leading-relaxed">
             We have received your enquiry and will be in touch within 24 hours.
           </p>
-          {/* <div className="mt-4 text-xs text-white/70 space-y-1">
-            <p>✅ Form submitted with ENHANCED tracking</p>
-            <p>✅ Facebook optimization MAXIMIZED</p>
-            <p>✅ Rich session data captured</p>
-            <p>✅ Form journey tracking completed</p>
-          </div> */}
         </CardContent>
       </Card>
     );
@@ -285,7 +279,7 @@ const SimpleECO4Form = () => {
           Enquire Here
         </CardTitle>
         <p className="text-xs text-white/70 mt-1">
-          ENHANCED Facebook Pixel tracking with session enrichment
+Free heating, solar, and insulation for eligible Scots.
         </p>
       </CardHeader>
       <CardContent className="p-4">

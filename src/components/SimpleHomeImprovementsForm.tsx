@@ -245,11 +245,6 @@ const SimpleHomeImprovementsForm = () => {
           <p className="text-white/90 text-base leading-relaxed">
             We have received your enquiry and will be in touch within 24 hours.
           </p>
-          <div className="mt-4 text-xs text-white/70 space-y-1">
-            <p>✅ Enhanced Home Improvement tracking completed</p>
-            <p>✅ £8,000 LTV profile optimized</p>
-            <p>✅ Property enhancement audience activated</p>
-          </div>
         </CardContent>
       </Card>
     );
@@ -262,7 +257,7 @@ const SimpleHomeImprovementsForm = () => {
           Enquire Here
         </CardTitle>
         <p className="text-xs text-white/70 mt-1">
-          Enhanced Home Improvement tracking for better ad optimization
+          Free wall & roof upgrades for efficiency and style.
         </p>
       </CardHeader>
       <CardContent className="p-4">
