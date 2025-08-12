@@ -1,5 +1,4 @@
-
-import { useEffect, useState, Suspense, lazy } from 'react';
+  import { useEffect, useState, Suspense, lazy } from 'react';
 import { trackPageView } from '@/lib/unified-tracking-manager';
 import SimpleSolarForm from '@/components/SimpleSolarForm';
 import SimplifiedHero from '@/components/SimplifiedHero';

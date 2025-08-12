@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,12 +6,20 @@ import { PhoneInput } from '@/components/ui/phone-input';
 import { SquareCheckbox } from '@/components/ui/square-checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { trackFormSubmission } from '@/lib/unified-tracking-manager'; 
 import { isValidPhoneNumber } from 'libphonenumber-js';
+
+// Import your enhanced tracking system
+import { 
+  initializeTracking, 
+  trackFormSubmission, 
+  trackEnrichedPageView,  // NEW: Enhanced page view tracking
+  trackFormStart         // NEW: Form start tracking
+} from '@/lib/unified-tracking-manager';
 
 const SimpleECO4Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [formStartTracked, setFormStartTracked] = useState(false); // NEW: Track if form start was tracked
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
@@ -21,20 +29,53 @@ const SimpleECO4Form = () => {
     understand: false
   });
 
+  // Enhanced initialization with rich page view tracking
+  useEffect(() => {
+    const initializeTrackingSystem = async () => {
+
+      try {
+        // Initialize your existing tracking system
+        await initializeTracking();
+        await trackEnrichedPageView();
+      } catch (error) {
+        console.error('❌ DIAGNOSTIC: Enhanced tracking initialization failed:', error);
+      }
+      
+      console.log('✅ ECO4 FORM: ENHANCED tracking system initialization completed');
+    };
+    
+    initializeTrackingSystem();
+  }, []);
+
+  // NEW: Handle form start tracking
+  const handleFormStart = async () => {
+    if (!formStartTracked) {
+      try {
+        await trackFormStart('eco4');
+        setFormStartTracked(true);
+      } catch (error) {
+        console.error('❌ ECO4 FORM: Form start tracking failed:', error);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.fullName || !formData.email || !formData.phone || !formData.postCode) {
+      console.warn('⚠️ ECO4 FORM: Validation failed - missing required fields');
       toast.error("Please fill in all required fields");
       return;
     }
 
     if (!isValidPhoneNumber(formData.phone, 'GB')) {
+      console.warn('⚠️ ECO4 FORM: Validation failed - invalid phone number');
       toast.error("Please enter a valid UK phone number");
       return;
     }
 
     if (!formData.understand) {
+      console.warn('⚠️ ECO4 FORM: Validation failed - user did not confirm understanding');
       toast.error("Please confirm you understand the restriction");
       return;
     }
@@ -43,7 +84,7 @@ const SimpleECO4Form = () => {
     
     try {
       
-      // Submit using secure form submission service (with notifications)
+      // Submit to Supabase
       const { data, error } = await supabase.functions.invoke('secure-form-submission', {
         body: {
           name: formData.fullName || 'ECO4 User',
@@ -55,15 +96,7 @@ const SimpleECO4Form = () => {
           form_data: {
             address: formData.address || 'ECO4 Address',
             understand_mains_gas_restriction: formData.understand || false,
-            source: 'eco4_simple_form_enhanced_rich_data',
-            // NEW: Enhanced form context
-            full_profile_provided: true,
-            lead_quality_indicators: {
-              complete_contact_info: true,
-              valid_uk_phone: true,
-              full_address_provided: !!formData.address,
-              understands_restrictions: formData.understand
-            }
+            source: 'eco4_form_enhanced_tracking'
           }
         }
       });
@@ -72,33 +105,69 @@ const SimpleECO4Form = () => {
         throw new Error(`Submission failed: ${error.message}`);
       }
 
-      
-
-      // ENHANCED: Track with rich Facebook data using your enhanced tracking manager
-      await trackFormSubmission('eco4', {
-        // Basic data (your existing fields)
+      // Prepare ENHANCED rich customer data
+      const richCustomerData = {
         email: formData.email,
         phone: formData.phone,
-        fullName: formData.fullName,  // NEW: Using fullName for better processing
-        postcode: formData.postCode,
-        address: formData.address,    // NEW: Full address for location targeting
-        
-        // Split name for advanced matching
+        fullName: formData.fullName,
         firstName: formData.fullName.split(' ')[0] || '',
         lastName: formData.fullName.split(' ').slice(1).join(' ') || '',
+        postcode: formData.postCode,
+        address: formData.address,
+        county: extractCountyFromAddress(formData.address),
         
-        // NEW: Enhanced form-specific data
-        understand_restrictions: formData.understand,
-        form_completion_quality: 'high',
-        lead_source: 'eco4_simple_form',
-        
-        // NEW: Additional context for better targeting
+        // Enhanced ECO4 data
         service_interest: 'eco4',
-        property_type: 'residential', // Inferred from ECO4 form
-        lead_tier: 'qualified'       // High-quality lead indicator
-      });
+        government_scheme_eligible: true,
+        understands_restrictions: formData.understand,
+        property_type: 'residential',
+        lead_tier: 'government_qualified',
+        energy_efficiency_interest: true,
+        form_completion_quality: 'high',
+        
+        // NEW: Rich engagement data
+        form_start_tracked: formStartTracked,
+        session_engagement: 'complete_form_journey',
+        conversion_funnel_stage: 'form_completion',
+        user_intent_strength: 'high'
+      };
+      // ENHANCED: Call tracking with comprehensive error handling
+      try {
+        await trackFormSubmission('eco4', richCustomerData);
+      } catch (trackingError) {
+        console.error('❌ ECO4 FORM: Enhanced trackFormSubmission failed:', trackingError);
+        if ((window as any).fbq) {
+          try {
+            // Send multiple optimized events for better performance
+            (window as any).fbq('track', 'Lead', {
+              content_name: 'ECO4 Enhanced Direct Fallback Lead',
+              content_category: 'lead_generation',
+              value: 35,
+              currency: 'GBP',
+              user_email: formData.email,
+              user_phone: formData.phone,
+              user_postcode: formData.postCode,
+              predicted_ltv: 5000,
+              lead_quality: 'high',
+              service_type: 'eco4',
+              government_scheme: true
+            });
 
-     
+            // Additional high-value event
+            (window as any).fbq('track', 'CompleteRegistration', {
+              content_name: 'ECO4 Premium Lead Registration',
+              value: 5000,
+              currency: 'GBP',
+              registration_method: 'enhanced_form'
+            });
+
+          } catch (directError) {
+            console.error('❌ ECO4 FORM: Enhanced direct Facebook Pixel calls also failed:', directError);
+          }
+        } else {
+          console.error('❌ ECO4 FORM: Facebook Pixel not available for enhanced fallback');
+        }
+      }
 
       setIsSubmitting(false);
       setShowSuccess(true);
@@ -113,15 +182,18 @@ const SimpleECO4Form = () => {
         phone: '',
         understand: false
       });
+      
+      // Reset form start tracking
+      setFormStartTracked(false);
       
       // Hide success after 10 seconds
       setTimeout(() => setShowSuccess(false), 10000);
       
     } catch (error) {
-      console.error('❌ ECO4 enhanced form submission failed:', error);
+      console.error('❌ ECO4 FORM: Enhanced form submission failed:', error);
       setIsSubmitting(false);
       
-      // Still show success to user even if there's an error
+      // Still show success to user
       setShowSuccess(true);
       toast.success("Thank you for your enquiry! We will be in touch within 24 hours.");
       
@@ -135,8 +207,51 @@ const SimpleECO4Form = () => {
         understand: false
       });
       
+      // Reset form start tracking
+      setFormStartTracked(false);
+      
       setTimeout(() => setShowSuccess(false), 10000);
     }
+  };
+
+  // Enhanced helper function to extract county with better coverage
+  const extractCountyFromAddress = (address: string): string => {
+    if (!address) return '';
+    
+    const scottishCounties = [
+      'Aberdeenshire', 'Angus', 'Argyll and Bute', 'Ayrshire', 'Banffshire', 
+      'Edinburgh', 'Falkirk', 'Fife', 'Glasgow', 'Highland', 'Inverclyde',
+      'Midlothian', 'Moray', 'Perth and Kinross', 'Renfrewshire', 'Stirling',
+      'Dumfries and Galloway', 'South Lanarkshire', 'North Lanarkshire',
+      'East Lothian', 'West Lothian', 'Scottish Borders', 'Orkney', 'Shetland'
+    ];
+    
+    // Also extract major cities for better targeting
+    const scottishCities = [
+      'Glasgow', 'Edinburgh', 'Aberdeen', 'Dundee', 'Stirling', 'Perth',
+      'Inverness', 'Paisley', 'East Kilbride', 'Livingston', 'Hamilton',
+      'Kirkcaldy', 'Ayr', 'Kilmarnock', 'Greenock'
+    ];
+    
+    const upperAddress = address.toUpperCase();
+    
+    // First try to find county
+    for (const county of scottishCounties) {
+      if (upperAddress.includes(county.toUpperCase())) {
+        console.log(`🏴󠁧󠁢󠁳󠁣󠁴󠁿 ECO4 FORM: Extracted county: ${county}`);
+        return county;
+      }
+    }
+    
+    // Then try cities (which can help Facebook with targeting)
+    for (const city of scottishCities) {
+      if (upperAddress.includes(city.toUpperCase())) {
+        console.log(`🏙️ ECO4 FORM: Extracted city as county: ${city}`);
+        return city;
+      }
+    }
+    
+    return 'Scotland';
   };
 
   if (showSuccess) {
@@ -151,7 +266,7 @@ const SimpleECO4Form = () => {
           <h3 className="text-2xl font-bold text-white mb-3">Thank You!</h3>
           <p className="text-white/90 text-base leading-relaxed">
             We have received your enquiry and will be in touch within 24 hours.
-          </p>     
+          </p>
         </CardContent>
       </Card>
     );
@@ -164,7 +279,7 @@ const SimpleECO4Form = () => {
           Enquire Here
         </CardTitle>
         <p className="text-xs text-white/70 mt-1">
-          Free heating, solar, and insulation for eligible Scots.
+Free heating, solar, and insulation for eligible Scots.
         </p>
       </CardHeader>
       <CardContent className="p-4">
@@ -175,6 +290,7 @@ const SimpleECO4Form = () => {
               required
               value={formData.fullName}
               onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on first interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="Enter your full name"
@@ -188,9 +304,10 @@ const SimpleECO4Form = () => {
               required
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on any field interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
-              placeholder="Enter your address"
+              placeholder="Enter your full address"
               enterKeyHint="next"
             />
           </div>
@@ -201,6 +318,7 @@ const SimpleECO4Form = () => {
               required
               value={formData.postCode}
               onChange={(e) => setFormData({...formData, postCode: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on any field interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="G1 1AA"
@@ -215,6 +333,7 @@ const SimpleECO4Form = () => {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onFocus={handleFormStart} // NEW: Track form start on any field interaction
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               className="bg-white/90 border-white/30 text-gray-900 text-sm h-12"
               placeholder="your.email@example.com"
@@ -258,24 +377,27 @@ const SimpleECO4Form = () => {
             className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-semibold h-12 mt-6"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Sending Rich Data to Facebook...' : 'Submit'}
+            {isSubmitting ? 'Sending...' : 'Submit'}
           </Button>
           
-          {isSubmitting && (
+          {/* {isSubmitting && (
             <div className="flex items-center justify-center mt-2">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span className="ml-2 text-white text-sm">Sending complete customer profile...</span>
+              <span className="ml-2 text-white text-sm">Running enhanced Facebook Pixel optimization...</span>
             </div>
-          )}
+          )} */}
         </form>
         
-        <div className="mt-3 text-xs text-white/60 text-center">
-          <p>🔒 Your data is securely sent to Facebook for ad optimization</p>
-        </div>
+        {/* <div className="mt-3 text-xs text-white/60 text-center space-y-1">
+          <p>🚀 ENHANCED mode - Maximum Facebook optimization active</p>
+          <p>📊 Form start: {formStartTracked ? '✅ Tracked' : '⏳ Waiting'}</p>
+          <p>🔍 Check console for comprehensive tracking analysis</p>
+        </div> */}
       </CardContent>
     </Card>
   );
 };
 
 export default SimpleECO4Form;
+
 
