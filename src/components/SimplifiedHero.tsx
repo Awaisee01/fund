@@ -29,7 +29,7 @@ const SimplifiedHero = ({
           alt={altText}
           className="w-full h-full object-cover mix-blend-multiply opacity-30"
           fetchPriority="high"
-          decoding="sync"
+          decoding="async"
           width={1920}
           height={1080}
         />
