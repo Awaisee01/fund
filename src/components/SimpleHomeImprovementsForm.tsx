@@ -338,18 +338,10 @@ const SimpleHomeImprovementsForm = () => {
             {isSubmitting ? 'Sending...' : 'Submit'}
           </Button>
           
-          {/* {isSubmitting && (
-            <div className="flex items-center justify-center mt-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span className="ml-2 text-white text-sm">Sending enhanced customer profile...</span>
-            </div>
-          )} */}
+          =
         </form>
         
-        {/* <div className="mt-3 text-xs text-white/60 text-center space-y-1">
-          <p>🏠 Enhanced tracking: {formStartTracked ? '✅ Active' : '⏳ Ready'}</p>
-          <p>📊 Maximum Facebook optimization enabled</p>
-        </div> */}
+       =
       </CardContent>
     </Card>
   );
