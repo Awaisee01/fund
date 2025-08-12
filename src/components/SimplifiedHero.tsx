@@ -25,14 +25,19 @@ const SimplifiedHero = ({
       {/* Simplified background with single overlay */}
       <div className="absolute inset-0 bg-black/20">
         <img
-          src={heroImage}
-          alt={altText}
-          className="w-full h-full object-cover mix-blend-multiply opacity-30"
-          fetchPriority="high"
-          decoding="async"
-          width={1920}
-          height={1080}
-        />
+  src="/lovable-uploads/solar.webp"
+  srcSet="/lovable-uploads/solar.webp 640w,
+          /lovable-uploads/solar.webp 1280w,
+          /lovable-uploads/solar.webp 1920w"
+  sizes="100vw"
+  alt={altText}
+  className="w-full h-full object-cover mix-blend-multiply opacity-30"
+  fetchPriority="high"
+  decoding="async"
+  width={1920}
+  height={1080}
+/>
+
       </div>
       
       {/* Simplified content structure */}
