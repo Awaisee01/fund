@@ -6,7 +6,7 @@ import { PhoneInput } from '@/components/ui/phone-input';
 import { SquareCheckbox } from '@/components/ui/square-checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { trackFormSubmission } from '@/lib/unified-tracking-manager'; // Using your enhanced version
+import { trackFormSubmission } from '@/lib/unified-tracking-manager'; 
 import { isValidPhoneNumber } from 'libphonenumber-js';
 
 const SimpleECO4Form = () => {
