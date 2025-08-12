@@ -68,8 +68,7 @@ const BeforeAfterCarousel = () => {
                           alt={image.alt}
                           loading="lazy"
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                          width={300}
-                          height={225}
+                         
                         />
                       </div>
                     </CardContent>
