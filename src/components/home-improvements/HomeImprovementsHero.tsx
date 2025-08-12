@@ -1,34 +1,38 @@
-
-import { CheckCircle } from 'lucide-react';
-import SimpleHomeImprovementsForm from '@/components/SimpleHomeImprovementsForm';
+import { CheckCircle } from "lucide-react";
+import SimpleHomeImprovementsForm from "@/components/SimpleHomeImprovementsForm";
 
 const HomeImprovementsHero = () => {
   const benefits = [
     "Repair broken/missing areas",
-    "Fully breathable & hydrophobic system", 
+    "Fully breathable & hydrophobic system",
     "10 year Guarantee",
-    "Approved Installers"
+    "Approved Installers",
   ];
 
   return (
     <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 text-white overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-20"></div>
-      
+
       {/* Static background image without parallax */}
       <div className="absolute inset-0 opacity-30">
         <img
           src="/lovable-uploads/home2.webp"
+          srcSet="
+    /lovable-uploads/home2.webp 640w,
+    /lovable-uploads/home2.webp 1280w,
+    /lovable-uploads/home2.webp 1920w
+  "
           alt="Home Improvements Background - Modern house exterior with driveway"
           className="w-full h-full object-cover mix-blend-multiply"
-          loading='eager'
+          loading="eager"
           fetchPriority="high"
-          decoding="sync"
+          decoding="async"
           width={1920}
           height={1080}
           sizes="100vw"
         />
       </div>
-      
+
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
         {/* Mobile: Form first, Desktop: Content first */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -36,19 +40,21 @@ const HomeImprovementsHero = () => {
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
             <SimpleHomeImprovementsForm />
           </div>
-          
+
           {/* Content Section - Second on mobile, first on desktop */}
-          <div className="order-2 lg:order-1">{/* ... keep existing code */}
+          <div className="order-2 lg:order-1">
+            {/* ... keep existing code */}
             <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
               Wall and Roof Renovations
             </h1>
             <p className="text-xl lg:text-2xl mb-6 text-blue-100 font-medium">
-              Transform the look of your property while improving energy efficiency
+              Transform the look of your property while improving energy
+              efficiency
             </p>
             <p className="text-lg mb-8 text-blue-50 leading-relaxed">
               Huge range of colour options. Get your free quote today.
             </p>
-            
+
             <div className="mb-8">
               <ul className="space-y-3">
                 {benefits.map((benefit, index) => (
