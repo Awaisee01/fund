@@ -20,6 +20,27 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" crossorigin></noscript>
 
+  <!-- ✅ Preconnect to critical origins -->
+<link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+<link rel="preconnect" href="https://www.facebook.com" crossorigin>
+<link rel="preconnect" href="https://nncpapnlnrtssbruzkla.supabase.co" crossorigin>
+
+<!-- ✅ Preload critical LCP image -->
+<link rel="preload" as="image" href="/lovable-uploads/eco.webp" fetchpriority="high">
+
+<!-- ✅ Preload and async-load critical CSS -->
+<link rel="preload" href="/assets/index-qG49V8j5.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/assets/index-qG49V8j5.css"></noscript>
+
+<!-- ✅ Defer non-critical JS -->
+<script src="/assets/index-Br86hHik.js" defer></script>
+<script src="/assets/ui-5-eDzVjw.js" defer></script>
+<script src="/assets/vendor-B8h31Ehh.js" defer></script>
+<script src="/assets/supabase-Dqc0M91B.js" defer></script>
+
+<!-- ✅ Facebook pixel scripts should load after main content -->
+<script async src="https://connect.facebook.net/en_US/fbevents.js"></script>
+
   <!-- Critical CSS only -->
   <style>
     html,body{margin:0;padding:0;font-family:Inter,sans-serif;background:#fff;color:#1a1a1a;line-height:1.6;}
@@ -28,6 +49,10 @@
     .items-center{align-items:center}
     .justify-center{justify-content:center}
   </style>
+
+
+  <!-- Preload main app entry only
+  <link rel="modulepreload" href="/src/main.tsx"> -->
 
   <!-- Security Headers -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
